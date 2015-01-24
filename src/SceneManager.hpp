@@ -15,8 +15,6 @@ private:
 	sf::Texture tileTexture;
 	sf::Texture playerTexture;
 	sf::Texture itemTexture;
-	sf::Texture timeBarTexture;
-	sf::Texture coinTexture;
 	sf::Vector2i getRandomGrassPosition();
 
 public:
