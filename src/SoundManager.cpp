@@ -21,6 +21,9 @@ void SoundManager::loadSound(std::string sndName)
 
 const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 {
+	if (!enableAudio) {
+		return nullptr;
+	}
 	std::map<std::string, sf::SoundBuffer *>::const_iterator conIt = bufferedSounds.find(sndName);
 	if (conIt == bufferedSounds.end())
 	{
