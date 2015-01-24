@@ -10,14 +10,18 @@ public:
 	void applyTimeBufff(float progress);
 	void update(sf::Time deltaTime);
 	void resetCoins();
+	void resetKeys();
 	void addCoins(int amount);
+	void addKeys(int amount);
 private:
 	sf::Clock timeoutClock;
 	sf::Sprite* timeSprite;
 	sf::Sprite* coinSprite;
+	sf::Sprite* keySprite;
 	sf::Texture timeBarTexture;
-	sf::Texture coinTexture;
+	sf::Texture itemTexture;
 	float timeoutSeconds;
 	float timeBuff;
 	int coins;
+	int keys;
 };

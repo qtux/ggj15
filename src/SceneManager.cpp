@@ -44,6 +44,8 @@ SceneManager::SceneManager(){
 	
 	
 	loadScene(std::string(PATH) + "levels/level000");
+	currentLevelNumber = 0;
+	nextLevel();
 }
 
 sf::Vector2i SceneManager::getTilePosition(sf::Uint32 color)
@@ -100,8 +102,9 @@ void SceneManager::update(sf::Time deltaT) {
 
 void SceneManager::loadScene(std::string fileName)
 {
+	scene = Scene();
 	// load textures for level
-	std::cout << std::string(PATH) << std::endl;
+	std::cout << fileName<< std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
 	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
@@ -190,6 +193,15 @@ void SceneManager::processEditMode()
 			scene.setTile(newTile,tmpPos.x, tmpPos.y);
 		}
 	}
+}
+
+void SceneManager::nextLevel(){
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	currentLevelNumber++;
+}
+
+void SceneManager::restartLevel(){
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 }
 
 Scene& SceneManager::getCurrentScene()
