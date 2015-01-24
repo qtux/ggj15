@@ -1,6 +1,17 @@
 #include "Player.hpp"
 #include <iostream>
 
+bool Player::intersects(const GameObject& cmp)
+{
+	sf::FloatRect tmpRect = mySprite->getLocalBounds();
+	tmpRect.top += 32 - 10;
+	tmpRect.left += 3;
+	tmpRect.width = 10;
+	tmpRect.height = 10;
+	
+	return cmp.mySprite->getLocalBounds().intersects(tmpRect);
+}
+
 void Player::update (sf::Time deltaTime) {
 	
 	// get input from globals and process:
@@ -25,10 +36,7 @@ void Player::update (sf::Time deltaTime) {
 	if (tmpPos.y > screenHeight) tmpPos.y -= screenHeight;
 	if (tmpPos.y + height < 0)  tmpPos.y += screenHeight;
 	
-	setPosition(tmpPos.x, tmpPos.y);
-	if (!positionQueue.empty()){
-		doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18);
-	}
+	
 	if (dir > -1) 
 	{
 		animationStep += 1;
@@ -41,8 +49,23 @@ void Player::update (sf::Time deltaTime) {
 	if (animationStep / slowFactor > 3) animationStep = 0; // animationStep wird immer um 1 hochgezählt, aber effektiv um den Faktor slowFactor verlangsamt
 	if (doggieStep / slowFactor > 5) doggieStep = 0;
 	
+	bool collides = false;
 	//check for collisions:
-	
+	/*for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().getGameBoard().begin(); tileIt != sceneManager.getCurrentScene().getGameBoard().end(); tileIt++)
+	{
+		sf::Vector2f distVec = ((*tileIt)->getPosition() - getPosition());
+		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 && intersects(**tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
+		{
+			collides = true;
+		}
+	}*/
+	if (!collides)
+	{
+		setPosition(tmpPos.x, tmpPos.y);
+		if (!positionQueue.empty()){
+			doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18);
+		}
+	}
 	
 	if (mySprite != 0 && doggieSprite != 0)
 	{		

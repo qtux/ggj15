@@ -24,6 +24,7 @@ public:
 	void setGUI(GUI* obj);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
 	void update(sf::Time deltaT);
+	void leave();
 	// hack hier, ne doch nicht xD
 	const static int sizeX = 8;
 	const static int sizeY = 6;
@@ -31,6 +32,10 @@ public:
 	const static int largeTileSizeY = 6;
 	GameObject * player;
 	GUI* gui;
+	
+	const std::vector<GameObject*> getGameBoard() const;
+/*private:
+	std::vector<GameObject*> gameBoard;*/
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
 	std::vector<Item> items;

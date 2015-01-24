@@ -10,6 +10,8 @@ public:
 	int animationStep;
 	int direction;
 	int doggieStep;
+	
+	virtual bool intersects(const GameObject& cmp);
 
 	Player(): direction(0),animationStep(0),doggieStep(0) {};
 
@@ -17,7 +19,6 @@ public:
 	
 	// TODO put doggieSprite in here and not in GameObject
 	// TODO delete doggieSprites
-	// TODO Player und Doggie nicht mitten im Schritt anhalten
 	
 private:
 	std::queue<sf::Vector2f> positionQueue;

@@ -35,8 +35,8 @@ SceneManager::SceneManager(){
 	tmpVector = new std::vector<sf::Vector2i>();
 	tmpVector->push_back(sf::Vector2i(2,9));
 	colorToTilePositionMap[0x000100ff] = tmpVector; // wall
-	
-	loadScene(std::string(PATH) + "levels/level000");
+	currentLevelNumber = 0;
+	nextLevel();
 }
 
 sf::Vector2i SceneManager::getTilePosition(sf::Uint32 color)
@@ -93,11 +93,12 @@ void SceneManager::update(sf::Time deltaT) {
 
 void SceneManager::loadScene(std::string fileName)
 {
-	// load textures for level
-	std::cout << std::string(PATH) << std::endl;
-//	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
-//	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
-//	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
+	scene = Scene();
+
+	std::cout << fileName<< std::endl;
+	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
+	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
+	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
 	// load and set timebar
 	GUI* gui = new GUI();
 	gui->setTimeout(20);
@@ -184,7 +185,16 @@ void SceneManager::processEditMode()
 	}
 }
 
-Scene SceneManager::getCurrentScene()
+void SceneManager::nextLevel(){
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	currentLevelNumber++;
+}
+
+void SceneManager::restartLevel(){
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+}
+
+Scene& SceneManager::getCurrentScene()
 {
 	return scene;
 }

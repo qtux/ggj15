@@ -12,10 +12,12 @@
 #include "GUI.hpp"
 #include <math.h>
 #include "globals.hpp"
+#include "KeyItem.hpp"
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
+
 }
 
 Scene::~Scene() {
@@ -43,9 +45,13 @@ void Scene::setGUI(GUI* obj)
 	gui = obj;
 }
 
+const std::vector<GameObject*> Scene::getGameBoard() const
+{
+	return gameBoard;
+}
+
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 {
-	GameObject* tmpObj;
 	int startX1 = x1*largeTileSizeX;
 	int startY1 = y1*largeTileSizeY;
 	int startX2 = x2*largeTileSizeX;
@@ -92,5 +98,59 @@ void Scene::update(sf::Time deltaT)
 	{
 		gui->update(deltaT);
 	}
+	
+	/*
+	// Text TEST
+	sf::Vector2f textPos(32.0f, 32.0f);
+	int charSize = 30;
+	
+	sf::Font font;
+	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	
+	sf::Text Text;
+	Text.setFont(font);
+	
+	Text.setColor(sf::Color(210, 210, 255));
+	Text.setCharacterSize(charSize);
+	Text.setPosition(textPos);
+	
+	sf::RectangleShape textRect;
+	textRect.setOutlineColor(sf::Color::Blue);
+	textRect.setOutlineThickness(5);
+	textRect.setPosition(textPos.x - 5, textPos.y - 5);
+	textRect.setSize(sf::Vector2f(screenWidth - 2* textPos.x + 10, 2 * charSize + 30));
+	textRect.setFillColor(sf::Color(0, 0, 250, 50));
+	window.draw(textRect);
+	
+	Text.setStyle(sf::Text::Bold);
+	Text.setString("Oh no...");
+	Text.setStyle(sf::Text::Regular);
+	Text.setString("The time machine is broken, doggie!");
+	Text.setString("...");
+	Text.setString("What do we do now?");
+	Text.setColor(sf::Color(210, 255, 210));
+	Text.setString("SQOLRK");
+	Text.setColor(sf::Color(210, 210, 255));
+	
+	window.draw(Text);*/
 }
 
+void Scene::leave()
+{
+	int size = items.size();
+	int keysInLevel = 0;
+	for(int i = 0;i < size;i++)
+	{
+		if (dynamic_cast<KeyItem*>(&items[i]))
+		{
+			keysInLevel++;
+		}
+	}
+	if (keysInLevel > 0)
+	{
+		return;
+	}
+	gui->resetCoins();
+	gui->resetKeys();
+	sceneManager.nextLevel();
+}
