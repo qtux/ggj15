@@ -58,7 +58,7 @@ void SceneManager::loadScene(std::string file)
 	sf::Sprite *guiSprite = new sf::Sprite();
 	guiSprite->setTexture(timeBarTexture);
 	GUI* gui = new GUI(guiSprite);
-	gui->setTimeout(230);
+	gui->setTimeout(20);
 	scene.setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;

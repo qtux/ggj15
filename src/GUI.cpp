@@ -11,10 +11,16 @@ void GUI::setTimeout(int seconds)
 {
 	timeoutClock.restart();
 	timeoutSeconds = seconds;
+	timeBuff = 0;
 }
+void GUI::applyTimeBufff(float seconds)
+{
+	timeBuff += seconds;
+}
+
 void GUI::update (sf::Time deltaTime) {
 	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
-	float elapsedSeconds = timeoutClock.getElapsedTime().asSeconds();
+	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff);
 	float progress = 1-(elapsedSeconds / timeoutSeconds);
 	//TODO: use min, max
 	if (progress > 1)
