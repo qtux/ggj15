@@ -26,7 +26,7 @@ void SceneManager::loadScene(std::string name)
 {
 	Scene* tmpScene = new Scene();
 	sf::Texture tmpTexture = textureManager.getTexture("./img/TileMap.png");
-	sf::Texture leveltexture = textureManager.getTexture("./levels/colorCode.png");
+	sf::Texture leveltexture = textureManager.getTexture(name);
 	sf::Image levelImg = leveltexture.copyToImage();
 
 	for (int x=0;x<Scene::sizeX;x++)
