@@ -32,6 +32,8 @@ public:
 	GUI* gui;
 private:
 	std::vector<GameObject*> gameBoard;
+	sf::Vector2i startPos;
+	std::vector<Item> items;
 };
 
 #endif /* SCENE_HPP_ */

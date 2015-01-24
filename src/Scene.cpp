@@ -10,6 +10,9 @@
 #include "globals.hpp"
 #include <iostream>
 #include "GUI.hpp"
+#include <math.h>
+#include "globals.hpp"
+
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
@@ -62,6 +65,15 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 void Scene::update(sf::Time deltaT)
 {
+//	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+//	{
+//		sf::Vector2i globalPosition = sf::Mouse::getPosition(window);
+//
+//		sf::Vector2f localPosition;
+//		localPosition.x = 1.f*globalPosition.x/(Tile::pixelSizeX*Tile::tileScaleFactor);
+//		localPosition.y = 1.f*globalPosition.y/(Tile::pixelSizeY*Tile::tileScaleFactor);
+//		std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
+//	}
 	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
 	{
 		(*it)->update(deltaT);
