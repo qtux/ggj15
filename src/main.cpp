@@ -1,12 +1,19 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Game.hpp"
 
 int main() {
 	// window settings
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Galactic Irrweg");
 	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(30); // avoid noise ;)
+	
 	bool focus = true;
+	// define a clock to measure time
+	sf::Clock clock;
+	sf::Time deltaT = clock.restart();;
+	
+	Game game(&window);
 	
 	// main loop
 	while (window.isOpen()) {
@@ -24,6 +31,11 @@ int main() {
 			}
 		}
 		window.clear();
+		deltaT = clock.restart();
+		if (focus) {
+			game.update(deltaT);
+		}
+		
 		window.display();
 	}
 }
