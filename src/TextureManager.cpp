@@ -6,6 +6,7 @@
  */
 
 #include "TextureManager.hpp"
+#include "Tile.hpp"
 #include <iostream>
 
 TextureManager::TextureManager() {

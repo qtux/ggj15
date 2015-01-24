@@ -29,3 +29,6 @@ $(BUILDDIR)/%.o: %.cpp
 clean:
 	@rm -rf $(BUILDDIR)
 	@rm -rf $(BINARYDIR)
+
+png:
+	cd img && mogrify -layers merge -format png *.xcf

@@ -5,7 +5,6 @@
  *      Author: sartz
  */
 #pragma once
-#include "GameObjectComponent.hpp"
 #include <SFML/System.hpp>
 #include <vector>
 

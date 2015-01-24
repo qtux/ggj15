@@ -10,10 +10,6 @@
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
-	sizeX = 8;
-	sizeY = 6;
-	largeTileSizeX = 6;
-	largeTileSizeY = 6;
 
 	for (int x=0;x<sizeX;x++)
 	{
