@@ -5,6 +5,7 @@
 #include "Player.hpp"
 #include <string>
 #include <sstream>
+#include "TextFileParser.hpp"
 
 SceneManager::SceneManager(){
 	std::vector<sf::Vector2i> *tmpVector = new std::vector<sf::Vector2i>();
@@ -155,24 +156,7 @@ void SceneManager::loadScene(std::string fileName)
 	scene.player->doggieSprite = doggieSprite;
 
 	// read text file
-	std::string textFileName = fileName + ".txt";
-	std::ifstream infile(textFileName);
-	std::string line;
-	while (std::getline(infile, line))
-	{
-	    std::istringstream iss(line);
-	    std::string part;
-	    iss >> part;
-
-	    if (part == "start")
-	    {
-	    	std::cout<<"start found"<<std::endl;
-	    }
-
-	    std::cout<<line<<std::endl;
-
-	    // process pair (a,b)
-	}
+	TextFileParser::loadTextFile(scene, fileName + ".txt");
 
 }
 
