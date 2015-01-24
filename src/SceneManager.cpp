@@ -51,14 +51,17 @@ void SceneManager::loadScene(std::string file)
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
 	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
-	
+	coinTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
 	// load and set timebar
 	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
+
 	timeBarTexture.setRepeated(true);
 	sf::Sprite *guiSprite = new sf::Sprite();
 	guiSprite->setTexture(timeBarTexture);
-	GUI* gui = new GUI(guiSprite);
-	gui->setTimeout(230);
+	sf::Sprite *coinSprite = new sf::Sprite();
+	coinSprite->setTexture(coinTexture);
+	GUI* gui = new GUI(guiSprite,coinSprite);
+	gui->setTimeout(20);
 	scene.setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;
@@ -104,6 +107,14 @@ void SceneManager::loadScene(std::string file)
 	}
 	scene.player = new Player();
 	sf::Sprite *playerSprite = new sf::Sprite();
+	sf::Sprite *doggieSprite = new sf::Sprite();
 	playerSprite->setTexture(playerTexture);
+	doggieSprite->setTexture(playerTexture);
 	scene.player->mySprite = playerSprite;
+	scene.player->doggieSprite = playerSprite;
+}
+
+Scene SceneManager::getCurrentScene()
+{
+	return scene;
 }

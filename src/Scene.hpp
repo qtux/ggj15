@@ -29,9 +29,9 @@ public:
 	const static int largeTileSizeX = 6;
 	const static int largeTileSizeY = 6;
 	GameObject * player;
+	GUI* gui;
 private:
 	std::vector<GameObject*> gameBoard;
-	GUI* gui;
 };
 
 #endif /* SCENE_HPP_ */

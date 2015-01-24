@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GameObject.hpp"
+#include "globals.hpp"
+#include <queue>
 
 class Player : public GameObject
 {
@@ -12,6 +14,12 @@ public:
 
 	virtual void update(sf::Time deltaTime);
 	
+	// TODO put doggieSprite in here and not in GameObject
+	// TODO delete doggieSprites
+	
+private:
+	std::queue<int> animationQueue;
+	std::queue<int> directionQueue;
 	
 };
 

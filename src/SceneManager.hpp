@@ -16,7 +16,7 @@ private:
 	sf::Texture playerTexture;
 	sf::Texture itemTexture;
 	sf::Texture timeBarTexture;
-	
+	sf::Texture coinTexture;
 	sf::Vector2i getRandomGrassPosition();
 
 public:
@@ -24,6 +24,6 @@ public:
 	void showScene(std::string sceneName);
 	void update(sf::Time deltaT);
 	void loadScene(std::string name);
-	
+	Scene getCurrentScene();
 //	Scene currentScene;
 };
