@@ -10,15 +10,7 @@
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
-
-	for (int x=0;x<sizeX * largeTileSizeX;x++)
-	{
-		for (int y=0;y<sizeY * largeTileSizeY;y++)
-		{
-			gameBoard.push_back(new Tile());
-		}
-	}
-
+	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
 }
 
 Scene::~Scene() {
@@ -62,8 +54,12 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 void Scene::update(sf::Time deltaT)
 {
-	for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
+	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
 	{
 		(*it)->update(deltaT);
+		std::cout << (*it) << std::endl;
+	}*/
+	for(auto& obj: gameBoard) {
+		obj->update(deltaT);
 	}
 }
