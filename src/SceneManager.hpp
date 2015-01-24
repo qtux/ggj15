@@ -2,12 +2,14 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "Scene.hpp"
 
 class SceneManager {
 private:
 	// SceneLoader loader;
 	Scene scene;
+	std::map<sf::Uint32, sf::Vector2i> colorToTilePositionMap;
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
