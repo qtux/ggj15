@@ -12,7 +12,7 @@ class SoundManager : public AbstractManager
 {
 private:
 	std::map<std::string, sf::SoundBuffer *> bufferedSounds;
-	void load(std::string sndName);
+	void loadSound(std::string sndName);
 	
 public:
 	void init(std::string preloadFileName);

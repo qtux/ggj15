@@ -3,7 +3,7 @@
 #include <SFML/Audio.hpp>
 #include <exception>
 
-void SoundManager::load(std::string sndName)
+void SoundManager::loadSound(std::string sndName)
 {
 	sf::SoundBuffer *myBuf = new sf::SoundBuffer();
 	if (!myBuf->loadFromFile(sndName))
@@ -19,7 +19,7 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 	std::map<std::string, sf::SoundBuffer *>::const_iterator conIt = bufferedSounds.find(sndName);
 	if (conIt == bufferedSounds.end())
 	{
-		load(sndName);
+		loadSound(sndName);
 	}
 	return *bufferedSounds[sndName];
 }
