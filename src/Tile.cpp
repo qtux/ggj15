@@ -1,7 +1,10 @@
 #include "globals.hpp"
 #include "Tile.hpp"
 
-Tile::Tile() {};
+Tile::Tile(){
+	pixelSizeX = 16;
+	pixelSizeY = 16;
+};
 
 
 void Tile::update (sf::Time deltaTime) {

@@ -7,11 +7,12 @@
 class SceneManager {
 private:
 	// SceneLoader loader;
-	std::vector<Scene> scene;
+	Scene scene;
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
 	void update(sf::Time deltaT);
+	void loadScene(std::string name);
 	
-	Scene currentScene;
+//	Scene currentScene;
 };

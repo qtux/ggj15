@@ -13,6 +13,7 @@ extern sf::Keyboard::Key keyboardBinding[INPUT_SIZE];
 extern sf::RenderWindow window;
 extern SceneManager sceneManager;
 extern SoundManager soundManager;
+extern SoundManager textureManager;
 
 extern bool focus;
 extern InputType input;

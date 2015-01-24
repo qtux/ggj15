@@ -21,9 +21,9 @@ public:
 	void setTile(GameObject* obj, int x, int y);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
 	void update(sf::Time deltaT);
+	static int sizeX, sizeY, largeTileSizeX, largeTileSizeY;
 
 private:
-	int sizeX, sizeY, largeTileSizeX, largeTileSizeY;
 	std::vector<GameObject*> gameBoard;
 };
 
