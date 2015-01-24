@@ -16,7 +16,7 @@ int main() {
 	globalClock.restart();
 	
 	#ifdef DEBUG
-	if (Config::enableAudio){
+	if (enableAudio){
 		sf::Sound snd;
 		snd.setBuffer(soundManager.getSound("sound/test.wav"));
 		snd.play();
