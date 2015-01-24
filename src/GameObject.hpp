@@ -17,7 +17,7 @@ public:
 	template<class t> t addComponent(){
 		if (componentExits<t>())
 		{
-			return null;
+			return 0;
 		}
 		t* result = new t(this);
 		components.insert(result);
@@ -43,10 +43,10 @@ public:
 				return components[i];
 			}
 		}
-		return null;
+		return 0;
 	}
 	template<class t> t removeComponent(){
-		vector<GameObjectComponent*>::iterator it = components.begin();
+		std::vector<GameObjectComponent*>::iterator it = components.begin();
 		for( ; it != components.end(); it++)
 		{
 			if (dynamic_cast<t*>(*it))
