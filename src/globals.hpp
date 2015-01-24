@@ -24,7 +24,7 @@ extern InputType input;
 extern sf::Clock globalClock;
 
 // use absolute paths on windows and disable audio (strange behaviour)
-#ifndef OS_WINDOWS
+#ifndef _WIN32
 	static const std::string path =  "./";
 	static const bool enableAudio = true;
 #else
