@@ -89,7 +89,6 @@ void Scene::update(sf::Time deltaT)
 		obj->update(deltaT);
 	}
 
-	std::cout<<items.size()<<std::endl;
 	for(auto& obj: items) {
 		obj.update(deltaT);
 	}
