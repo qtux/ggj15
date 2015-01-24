@@ -93,7 +93,7 @@ void SceneManager::update(sf::Time deltaT) {
 }
 
 void SceneManager::loadScene(std::string fileName)
-{
+{	
 	// load textures for level
 	std::cout << std::string(PATH) << std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
