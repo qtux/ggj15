@@ -4,11 +4,11 @@
 #include <iostream>
 
 SceneManager::SceneManager(){
-	colorToTilePositionMap[0x11941b00] = getRandomGrassPosition(); // grass
-	colorToTilePositionMap[0x98989800] = sf::Vector2i(0,3); // stone
-	colorToTilePositionMap[0x9c6d2700] = sf::Vector2i(0,1); // dirt
-	colorToTilePositionMap[0x5f5f5f00] = sf::Vector2i(0,2); // wet stone
-	colorToTilePositionMap[0x00000000] = sf::Vector2i(2,9); // wall
+	colorToTilePositionMap[0x11941bff] = getRandomGrassPosition(); // grass
+	colorToTilePositionMap[0x989898ff] = sf::Vector2i(0,3); // stone
+	colorToTilePositionMap[0x9c6d27ff] = sf::Vector2i(0,1); // dirt
+	colorToTilePositionMap[0x5f5f5fff] = sf::Vector2i(0,2); // wet stone
+	colorToTilePositionMap[0x000000ff] = sf::Vector2i(2,9); // wall
 	
 	loadScene("levels/level000.png");
 }
@@ -56,10 +56,10 @@ void SceneManager::loadScene(std::string file)
 			sf::Color tmpColor = levelImg.getPixel(x, y);
 			sf::Uint32 colorKey = 0;
 
-			colorKey &= tmpColor.r << 3*8;
-			colorKey &= tmpColor.g << 2*8;
-			colorKey &= tmpColor.b << 1*8;
-			colorKey &= tmpColor.a << 0*8;
+			colorKey |= tmpColor.r << 3*8;
+			colorKey |= tmpColor.g << 2*8;
+			colorKey |= tmpColor.b << 1*8;
+			colorKey |= tmpColor.a << 0*8;
 
 			// resolve the correct tile based on the color code (and set correct texture rect)
 			sf::Vector2i tmpPos;
@@ -71,6 +71,8 @@ void SceneManager::loadScene(std::string file)
 			{
 				tmpPos = sf::Vector2i(0, 13);
 			}
+
+//			tmpPos = sf::Vector2i(0, 3);
 			sprite->setTextureRect(sf::IntRect(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY, Tile::pixelSizeX, Tile::pixelSizeY));
 			// set position of the sprite inside the map
 			sprite->setPosition(x*Tile::pixelSizeX, y*Tile::pixelSizeY);
