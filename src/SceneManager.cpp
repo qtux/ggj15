@@ -35,8 +35,8 @@ SceneManager::SceneManager(){
 	tmpVector = new std::vector<sf::Vector2i>();
 	tmpVector->push_back(sf::Vector2i(2,9));
 	colorToTilePositionMap[0x000100ff] = tmpVector; // wall
-	
-	loadScene(std::string(PATH) + "levels/level000");
+	currentLevelNumber = 0;
+	nextLevel();
 }
 
 sf::Vector2i SceneManager::getTilePosition(sf::Uint32 color)
@@ -182,6 +182,11 @@ void SceneManager::processEditMode()
 			scene.setTile(newTile,tmpPos.x, tmpPos.y);
 		}
 	}
+}
+
+void SceneManager::nextLevel(){
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	currentLevelNumber++;
 }
 
 Scene& SceneManager::getCurrentScene()

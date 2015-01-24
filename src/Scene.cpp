@@ -12,10 +12,12 @@
 #include "GUI.hpp"
 #include <math.h>
 #include "globals.hpp"
+#include "KeyItem.hpp"
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
+
 }
 
 Scene::~Scene() {
@@ -129,3 +131,22 @@ void Scene::update(sf::Time deltaT)
 	window.draw(Text);*/
 }
 
+void Scene::leave()
+{
+	int size = items.size();
+	int keysInLevel = 0;
+	for(int i = 0;i < size;i++)
+	{
+		if (dynamic_cast<KeyItem*>(&items[i]))
+		{
+			keysInLevel++;
+		}
+	}
+	if (keysInLevel > 0)
+	{
+		return;
+	}
+	gui->resetCoins();
+	gui->resetKeys();
+	sceneManager.nextLevel();
+}

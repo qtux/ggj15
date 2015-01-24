@@ -51,14 +51,14 @@ void Player::update (sf::Time deltaTime) {
 	
 	bool collides = false;
 	//check for collisions:
-	for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().getGameBoard().begin(); tileIt != sceneManager.getCurrentScene().getGameBoard().end(); tileIt++)
+	/*for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().getGameBoard().begin(); tileIt != sceneManager.getCurrentScene().getGameBoard().end(); tileIt++)
 	{
 		sf::Vector2f distVec = ((*tileIt)->getPosition() - getPosition());
 		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 && intersects(**tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
 		{
 			collides = true;
 		}
-	}
+	}*/
 	if (!collides)
 	{
 		setPosition(tmpPos.x, tmpPos.y);

@@ -16,13 +16,14 @@ private:
 	sf::Texture playerTexture;
 	sf::Texture itemTexture;
 	sf::Vector2i getRandomGrassPosition();
-
+	int currentLevelNumber;
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
 	void update(sf::Time deltaT);
 	void loadScene(std::string name);
 	void processEditMode();
+	void nextLevel();
 	sf::Vector2i getTilePosition(sf::Uint32 color);
 	
 	Scene& getCurrentScene();
