@@ -12,6 +12,9 @@
 #include "AbstractManager.hpp"
 
 class TextureManager : public AbstractManager{
+private:
+	std::map<std::string, sf::Texture *> bufferedTextures;
+	void loadTexture(std::string name);
 public:
 	TextureManager();
 	virtual ~TextureManager();

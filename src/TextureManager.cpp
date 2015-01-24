@@ -17,13 +17,24 @@ TextureManager::~TextureManager() {
 	// TODO Auto-generated destructor stub
 }
 
-const sf::Texture &TextureManager::getTexture(std::string name)
+
+void TextureManager::loadTexture(std::string name)
 {
 	sf::Texture* texture = new sf::Texture();
 	if (!texture->loadFromFile(name))
 	{
-		std::cerr<<"could not load texture file "<<name<<std::endl;
+		//std::cerr<<"could not load texture file "<<name<<std::endl;
+		throw std::runtime_error("Texture file not found!");
 	}
+	bufferedTextures.insert(std::pair<std::string, sf::Texture *>(name, texture));
+}
 
-	return *texture;
+const sf::Texture &TextureManager::getTexture(std::string name)
+{
+	std::map<std::string, sf::Texture *>::const_iterator conIt = bufferedTextures.find(name);
+	if (conIt == bufferedTextures.end())
+	{
+		loadTexture(name);
+	}
+	return *bufferedTextures[name];
 }
