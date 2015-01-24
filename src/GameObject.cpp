@@ -10,3 +10,16 @@ void GameObject::setPosition(int x, int y)
 {
 	mySprite->setPosition(x, y);
 }
+
+
+int GameObject::getHeight() const
+{
+	const sf::IntRect& tmp = mySprite->getTextureRect();
+	return int(tmp.height);
+}
+
+int GameObject::getWidth() const
+{
+	const sf::IntRect& tmp = mySprite->getTextureRect();
+	return int(tmp.width);
+}

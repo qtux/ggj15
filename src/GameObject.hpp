@@ -21,6 +21,10 @@ public:
 	const sf::Vector2f& getPosition() const;
 	
 	void setPosition(int x, int y);
+	
+	int getWidth() const;
+	
+	int getHeight() const;
 
 	//GameObject() {};
 
