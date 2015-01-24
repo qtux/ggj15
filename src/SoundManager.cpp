@@ -1,12 +1,12 @@
 
 #include "SoundManager.hpp"
-#include "config.hpp"
+#include "globals.hpp"
 #include <SFML/Audio.hpp>
 #include <exception>
 
 void SoundManager::loadSound(std::string sndName)
 {
-	if (!Config::enableAudio)
+	if (!enableAudio)
 	{
 		return;
 	}
@@ -32,7 +32,7 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 
 void SoundManager::init(std::string preloadFileName)
 {
-	if (!Config::enableAudio)
+	if (!enableAudio)
 	{
 		return;
 	}
