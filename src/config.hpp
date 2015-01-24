@@ -1,7 +1,10 @@
 #pragma once
 
 #include <string>
-
-static const std::string  imagePrefix = "./img/";
-static const std::string levelPrefix = "./levels/";
-static const bool enableAudio = true;
+class Config
+{
+public:
+	static std::string  imagePrefix;
+	static std::string levelPrefix;
+	static const bool enableAudio = true;
+};
