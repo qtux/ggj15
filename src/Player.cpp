@@ -32,6 +32,9 @@ void Player::update (sf::Time deltaTime) {
 		animationStep += 1;
 		doggieStep += 1;
 		direction = dir;
+	} else {
+		animationStep = 0;
+		doggieStep = 0;
 	}
 	if (animationStep / slowFactor > 3) animationStep = 0; // animationStep wird immer um 1 hochgezählt, aber effektiv um den Faktor slowFactor verlangsamt
 	if (doggieStep / slowFactor > 5) doggieStep = 0;
