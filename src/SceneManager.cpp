@@ -57,7 +57,8 @@ void SceneManager::loadScene(std::string file)
 	timeBarTexture.setRepeated(true);
 	sf::Sprite *guiSprite = new sf::Sprite();
 	guiSprite->setTexture(timeBarTexture);
-	
+	GUI* gui = new GUI(guiSprite);
+	scene.setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;
 	levelImg.loadFromFile(file);

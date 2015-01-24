@@ -18,6 +18,7 @@ public:
 	void init(std::string preloadFileName);
 	const sf::SoundBuffer &getSound(std::string sndName);
 	SoundManager(bool enableAudio = true);
+	void playSound(std::string name);
 };
 
 #endif
