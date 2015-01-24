@@ -1,11 +1,11 @@
 #include "GUI.hpp"
 #include "globals.hpp"
-
 GUI::GUI(sf::Sprite* sprite)
 {
 	mySprite = sprite;
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
+	mySprite->setPosition(0,screenHeight-30);
 }
 void GUI::setTimeout(int seconds)
 {
@@ -15,8 +15,18 @@ void GUI::setTimeout(int seconds)
 void GUI::update (sf::Time deltaTime) {
 	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
 	float elapsedSeconds = timeoutClock.getElapsedTime().asSeconds();
-	int width = 0;//max(elapsedSeconds / timeoutSeconds,1)
-	mySprite->setTextureRect(sf::IntRect(0, screenHeight-20, screenWidth, 30));
+	float progress = 1-(elapsedSeconds / timeoutSeconds);
+	//TODO: use min, max
+	if (progress > 1)
+	{
+		progress = 1;
+	}
+	if (progress < 0)
+	{
+		progress = 0;
+	}
+	int width = (progress* screenWidth);
+	mySprite->setTextureRect(sf::IntRect(0, 0, width, 30));
 	if (mySprite != 0)
 	{
 		window.draw(*mySprite);
