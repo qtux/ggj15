@@ -33,3 +33,6 @@ clean:
 png:
 	cd img && mogrify -layers merge -format png *.xcf
 	cd levels && mogrify -layers merge -format png *.xcf
+
+ogg:
+	for input in *.wav; do ffmpeg -i $input -acodec libvorbis ${input%.*}.ogg; done
