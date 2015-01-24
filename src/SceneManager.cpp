@@ -10,7 +10,7 @@ SceneManager::SceneManager(){
 	colorToTilePositionMap[0x5f5f5f] = sf::Vector2i(0,2); // wet stone
 	colorToTilePositionMap[0x000000] = sf::Vector2i(2,9); // wall
 	
-	loadScene("levels/level000.bmp");
+	loadScene("levels/level000.png");
 
 }
 
