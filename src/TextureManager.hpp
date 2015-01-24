@@ -17,5 +17,5 @@ public:
 	sf::Texture tileTexture;
 	sf::Texture itemsTexture;
 	sf::Texture playerTexture;
-	sf::Texture itemTexture;
+	sf::Texture timeBarTexture;
 };
