@@ -152,6 +152,8 @@ void SceneManager::loadScene(std::string fileName)
 	doggieSprite->setTexture(playerTexture);
 	scene.player->mySprite = playerSprite;
 
+	scene.player->doggieSprite = doggieSprite;
+
 	// read text file
 	std::string textFileName = fileName + ".txt";
 	std::ifstream infile(textFileName);
@@ -202,7 +204,6 @@ void SceneManager::processEditMode()
 			scene.setTile(newTile,tmpPos.x, tmpPos.y);
 		}
 	}
-	scene.player->doggieSprite = doggieSprite;
 }
 
 Scene SceneManager::getCurrentScene()

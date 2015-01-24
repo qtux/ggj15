@@ -12,6 +12,7 @@
 #include <vector>
 #include "GameObject.hpp"
 #include "GUI.hpp"
+#include "Item.hpp"
 
 class Scene {
 public:
