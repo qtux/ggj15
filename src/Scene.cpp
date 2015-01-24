@@ -7,13 +7,9 @@
 
 #include "Scene.hpp"
 #include "Tile.hpp"
-<<<<<<< HEAD
 #include "globals.hpp"
 #include <iostream>
-=======
 #include "GUI.hpp"
->>>>>>> 79c8d5e86cf69741426fbc24ea4e744b031ed1c2
-
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
