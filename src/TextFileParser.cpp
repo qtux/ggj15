@@ -36,7 +36,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 //	itemsTexture->loadFromFile(std::string(PATH) + "img/items.png");
 	sf::Sprite *itemSprite = new sf::Sprite();
 	itemSprite->setTexture(textureManager.itemsTexture);
-	ItemFactory tmpFactory(itemSprite);
+	ItemFactory tmpFactory = ItemFactory();
 
 	while (std::getline(infile, line))
 	{

@@ -5,8 +5,6 @@
 class ItemFactory
 {
 public:
-	ItemFactory(sf::Sprite* sprite);
+	ItemFactory();
 	Item* getItem(std::string name);
-private:
-	sf::Sprite* sprite;
 };

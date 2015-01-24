@@ -3,13 +3,19 @@
 #include "CoinItem.hpp"
 #include "TriggerItem.hpp"
 #include "KeyItem.hpp"
+#include "globals.hpp"
+#include <SFML/Graphics.hpp>
 
-ItemFactory::ItemFactory(sf::Sprite* sprite) {
-	this->sprite = sprite;
+
+ItemFactory::ItemFactory() {
 }
 
 Item* ItemFactory::getItem(std::string name)
 {
+	sf::Sprite* sprite = new sf::Sprite();
+	sprite->setTexture(textureManager.itemsTexture);
+	sprite->setPosition(10,screenHeight-30);
+	
 	if (name == "Time")
 	{
 		return new TimeItem(sprite);
