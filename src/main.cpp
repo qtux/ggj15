@@ -33,9 +33,24 @@ int main() {
 			}
 		}
 		
-		// retrieve current input
-		for (int i = 0; i < INPUT_SIZE; ++i) {
-			input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
+
+		// retrieve input (either gamepad or keyboard)
+		if (sf::Joystick::isConnected(0)) {
+			// retrieve current gamepad input
+			input[0] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == -100;
+			input[1] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == 100;
+			input[2] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == -100;
+			input[3] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == 100;
+			// TODO input 4 - 7 buggy?
+			for (int i = 0; i < 3; ++i) {
+				input[i + 4] = sf::Joystick::isButtonPressed(0, i);
+			}
+		}
+		else {
+			// retrieve current keyboard input
+			for (int i = 0; i < INPUT_SIZE; ++i) {
+				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
+			}
 		}
 		
 		#ifdef DEBUG
