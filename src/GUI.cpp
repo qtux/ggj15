@@ -46,7 +46,7 @@ void GUI::update (sf::Time deltaTime) {
 		progress = 0;
 	}
 	int width = (progress* (screenWidth-20));
-	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % width, 0, width, 20));
+	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % 46, 0, width, 20));
 	window.draw(*timeSprite);
 
 	for (int i = 0;i < coins;i++)
