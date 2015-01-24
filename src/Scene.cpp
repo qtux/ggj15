@@ -156,9 +156,9 @@ void Scene::update(sf::Time deltaT)
 	Text.setColor(sf::Color(210, 255, 210));
 	Text.setString("Frravt");
 	Text.setColor(sf::Color(210, 210, 255));
-	*/
 	
 	window.draw(Text);
+	*/
 }
 
 void Scene::leave()
