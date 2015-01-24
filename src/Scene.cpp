@@ -88,6 +88,10 @@ void Scene::update(sf::Time deltaT)
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
 	}
+
+	for(auto& obj: items) {
+		obj.update(deltaT);
+	}
 	player->update(deltaT);
 	if (gui != 0)
 	{

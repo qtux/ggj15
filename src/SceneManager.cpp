@@ -103,7 +103,7 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string fileName)
 {
 	scene = Scene();
-	// load textures for level
+
 	std::cout << fileName<< std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
@@ -123,7 +123,7 @@ void SceneManager::loadScene(std::string fileName)
 		{
 			// set tile sprite texture
 			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(tileTexture);
+			sprite->setTexture(textureManager.tileTexture);
 			// get level code (from bitmap)
 			sf::Color tmpColor = levelImg.getPixel(x, y);
 			sf::Uint32 colorKey = 0;
@@ -152,9 +152,9 @@ void SceneManager::loadScene(std::string fileName)
 	scene.player = new Player();
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
-	playerSprite->setTexture(playerTexture);
+	playerSprite->setTexture(textureManager.playerTexture);
 	playerSprite->setPosition(90,90);
-	doggieSprite->setTexture(playerTexture);
+	doggieSprite->setTexture(textureManager.playerTexture);
 	doggieSprite->setPosition(90,90);
 	scene.player->mySprite = playerSprite;
 
