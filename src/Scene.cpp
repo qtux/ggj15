@@ -6,9 +6,8 @@
  */
 
 #include "Scene.hpp"
-#include "GameObject.hpp"
 
-Scene::Scene() {
+Scene::Scene(Game* game): game(game) {
 	// TODO Auto-generated constructor stub
 	sizeX = 8;
 	sizeY = 6;
