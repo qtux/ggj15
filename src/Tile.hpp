@@ -8,7 +8,8 @@ public:
 	Tile();
 	
 	virtual void update(sf::Time deltaTime);
-	const static int pixelSizeX = 16;
-	const static int pixelSizeY = 16;
+	const static int pixelSizeX = 8;
+	const static int pixelSizeY = 8;
+	const static int tileScaleFactor = 2;
 	
 };
