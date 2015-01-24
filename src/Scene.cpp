@@ -43,7 +43,7 @@ void Scene::setGUI(GUI* obj)
 	gui = obj;
 }
 
-const std::vector<GameObject*> Scene::getGameBoard() const
+const std::vector<GameObject*> &Scene::getGameBoard() const
 {
 	return gameBoard;
 }

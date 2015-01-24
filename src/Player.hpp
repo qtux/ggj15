@@ -12,6 +12,7 @@ public:
 	int doggieStep;
 	
 	virtual bool intersects(const GameObject& cmp);
+	virtual bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
 
 	Player(): direction(0),animationStep(0),doggieStep(0) {};
 

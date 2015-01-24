@@ -36,6 +36,13 @@ SceneManager::SceneManager(){
 	tmpVector->push_back(sf::Vector2i(2,9));
 	colorToTilePositionMap[0x000100ff] = tmpVector; // wall
 	
+	walkableTileState[0x000100ff] = false;
+	walkableTileState[0x5f5f5fff] = true;
+	walkableTileState[0x9b6d27ff] = true;
+	walkableTileState[0x969896ff] = true;
+	walkableTileState[0x11941bff] = true;
+	
+	
 	loadScene(std::string(PATH) + "levels/level000");
 }
 
@@ -133,6 +140,7 @@ void SceneManager::loadScene(std::string fileName)
 			sprite->setPosition(Tile::tileScaleFactor*x*Tile::pixelSizeX, Tile::tileScaleFactor*y*Tile::pixelSizeY);
 			// create the tile and add it to the scene
 			Tile* tmpTile = new Tile();
+			tmpTile->walkable = walkableTileState[colorKey];
 			sprite->setScale(Tile::tileScaleFactor, Tile::tileScaleFactor);
 			tmpTile->mySprite = sprite;
 			scene.setTile(tmpTile, x, y);
@@ -142,9 +150,9 @@ void SceneManager::loadScene(std::string fileName)
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
 	playerSprite->setTexture(playerTexture);
-	playerSprite->setPosition(0,0);
+	playerSprite->setPosition(90,90);
 	doggieSprite->setTexture(playerTexture);
-	doggieSprite->setPosition(0,0);
+	doggieSprite->setPosition(90,90);
 	scene.player->mySprite = playerSprite;
 
 	scene.player->doggieSprite = doggieSprite;

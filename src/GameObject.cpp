@@ -18,7 +18,7 @@ void GameObject::setPosition(float x, float y)
 
 bool GameObject::intersects(const GameObject& cmp)
 {
-	return cmp.mySprite->getLocalBounds().intersects(mySprite->getLocalBounds());
+	return cmp.mySprite->getGlobalBounds().intersects(mySprite->getGlobalBounds());
 }
 
 
