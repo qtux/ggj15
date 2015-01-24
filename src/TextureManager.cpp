@@ -38,3 +38,15 @@ const sf::Texture &TextureManager::getTexture(std::string name)
 	}
 	return *bufferedTextures[name];
 }
+
+
+void TextureManager::init(std::string preloadFileName)
+{
+	bufferedTextures.clear(); //TODO: doesn't tidy up!
+	std::vector<std::string> loadFnList;
+	readResourcesFileNameList(preloadFileName, loadFnList);
+	for (std::vector<std::string>::iterator ldIt = loadFnList.begin(); ldIt != loadFnList.end(); ldIt++)
+	{
+		loadTexture(*ldIt);
+	}
+}

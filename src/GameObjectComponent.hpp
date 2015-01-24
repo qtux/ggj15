@@ -14,6 +14,6 @@ public:
 	GameObjectComponent(GameObject* object);
 	virtual ~GameObjectComponent();
 	virtual  void update(sf::Time deltaTime);
-protected:
+//protected:
 	GameObject* owner;
 };

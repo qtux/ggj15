@@ -10,7 +10,19 @@
 #include <vector>
 
 class GameObject {
+
 public:
+	//GameObject() {};
+
+	virtual void update(sf::Time deltaTime) = 0;
+	
+	virtual ~GameObject() {};
+	
+/*
+public:
+	int xPos;
+	int yPos;
+	
 	GameObject();
 	virtual ~GameObject();
 	void update(sf::Time deltaT);
@@ -57,5 +69,5 @@ public:
 	}
 
 private:
-	std::vector<GameObjectComponent*> components;
+	std::vector<GameObjectComponent*> components;*/
 };

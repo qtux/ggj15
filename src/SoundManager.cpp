@@ -23,3 +23,15 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 	}
 	return *bufferedSounds[sndName];
 }
+
+
+void SoundManager::init(std::string preloadFileName)
+{
+	bufferedSounds.clear(); // doesn't tidy up!
+	std::vector<std::string> loadFnList;
+	readResourcesFileNameList(preloadFileName, loadFnList);
+	for (std::vector<std::string>::iterator ldIt = loadFnList.begin(); ldIt != loadFnList.end(); ldIt++)
+	{
+		loadSound(*ldIt);
+	}
+}

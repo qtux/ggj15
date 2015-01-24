@@ -6,6 +6,7 @@
  */
 
 #include "Scene.hpp"
+#include "Tile.hpp"
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
@@ -18,7 +19,7 @@ Scene::Scene() {
 	{
 		for (int y=0;y<sizeY;y++)
 		{
-			gameBoard.push_back(new GameObject());
+			gameBoard.push_back(new Tile());
 		}
 	}
 

@@ -19,6 +19,7 @@ public:
 	TextureManager();
 	virtual ~TextureManager();
 
+	void init(std::string preloadFileName);
 	const sf::Texture &getTexture(std::string name);
 };
 
