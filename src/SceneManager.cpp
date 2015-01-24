@@ -10,11 +10,6 @@ SceneManager::SceneManager(){
 	colorToTilePositionMap[0x5f5f5f] = sf::Vector2i(0,2); // wet stone
 	colorToTilePositionMap[0x000000] = sf::Vector2i(2,9); // wall
 	
-	// load textures
-	tileTexture.loadFromFile("./img/TileMap.png");
-	playerTexture.loadFromFile("./img/player.png");
-	itemTexture.loadFromFile("./img/items.png");
-
 	loadScene("levels/level000.bmp");
 
 }
@@ -29,6 +24,14 @@ void SceneManager::update(sf::Time deltaT) {
 
 void SceneManager::loadScene(std::string name)
 {
+	// load textures
+	sf::Texture tileTexture;
+	sf::Texture playerTexture;
+	sf::Texture itemTexture;
+	tileTexture.loadFromFile("./img/TileMap.png");
+	playerTexture.loadFromFile("./img/player.png");
+	itemTexture.loadFromFile("./img/items.png");
+
 	// new code
 	sf::Texture texture;
 	texture.loadFromFile("./img/TileMap.png");

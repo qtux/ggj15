@@ -17,8 +17,3 @@ TextureManager textureManager;
 bool focus = true;
 InputType input = {};
 sf::Clock globalClock;
-
-// textures
-sf::Texture tileTexture;
-sf::Texture playerTexture;
-sf::Texture itemTexture;
