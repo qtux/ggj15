@@ -2,6 +2,7 @@
 #include "Tile.hpp"
 #include <SFML/Graphics.hpp>
 #include "globals.hpp"
+#include <iostream>
 
 SceneManager::SceneManager(){
 	colorToTilePositionMap[0x11941b00] = getRandomGrassPosition(); // grass
@@ -49,9 +50,9 @@ void SceneManager::loadScene(std::string file)
 	levelImg.loadFromFile(file);
 	
 	// create sprites for each tile
-	for (int x=0;x<Scene::sizeX;x++)
+	for (int x=0;x<Scene::sizeX * Scene::largeTileSizeX;x++)
 	{
-		for (int y=0;y<Scene::sizeY;y++)
+		for (int y=0;y<Scene::sizeY * Scene::largeTileSizeY;y++)
 		{
 			// set tile sprite texture
 			sf::Sprite* sprite = new sf::Sprite();
@@ -59,10 +60,18 @@ void SceneManager::loadScene(std::string file)
 			// get level code (from bitmap)
 			sf::Color tmpColor = levelImg.getPixel(x, y);
 			sf::Uint32 colorKey = 0;
+<<<<<<< HEAD
 			colorKey &= tmpColor.r << 3*8;
 			colorKey &= tmpColor.g << 2*8;
 			colorKey &= tmpColor.b << 1*8;
 			colorKey &= tmpColor.a << 0*8;
+=======
+			colorKey |= tmpColor.r << 3*8;
+			colorKey |= tmpColor.g << 2*8;
+			colorKey |= tmpColor.b << 1*8;
+			colorKey |= tmpColor.a << 0*8;
+			std::cout << std::hex << colorKey << std::endl;
+>>>>>>> 09b25f8ced76bdf4a59357f6b6d68f682dded9f1
 			// resolve the correct tile based on the color code (and set correct texture rect)
 			sf::Vector2i tmpPos;
 			std::map<sf::Uint32, sf::Vector2i>::const_iterator conIt = colorToTilePositionMap.find(colorKey);

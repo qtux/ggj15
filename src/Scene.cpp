@@ -11,9 +11,9 @@
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 
-	for (int x=0;x<sizeX;x++)
+	for (int x=0;x<sizeX * largeTileSizeX;x++)
 	{
-		for (int y=0;y<sizeY;y++)
+		for (int y=0;y<sizeY * largeTileSizeY;y++)
 		{
 			gameBoard.push_back(new Tile());
 		}
