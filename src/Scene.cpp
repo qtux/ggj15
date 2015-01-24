@@ -52,7 +52,6 @@ const std::vector<GameObject*> Scene::getGameBoard() const
 
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 {
-	GameObject* tmpObj;
 	int startX1 = x1*largeTileSizeX;
 	int startY1 = y1*largeTileSizeY;
 	int startX2 = x2*largeTileSizeX;

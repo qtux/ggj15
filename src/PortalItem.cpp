@@ -1,5 +1,5 @@
-#include "globals.hpp";
-#include "PortalItem.hpp";
+#include "globals.hpp"
+#include "PortalItem.hpp"
 #include <cmath>
 PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,16,16,16){
 }
