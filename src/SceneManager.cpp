@@ -2,6 +2,7 @@
 #include "Tile.hpp"
 #include "globals.hpp"
 #include <iostream>
+#include "Player.hpp"
 #include <string>
 
 SceneManager::SceneManager(){
@@ -11,7 +12,7 @@ SceneManager::SceneManager(){
 	colorToTilePositionMap[0x5f5f5fff] = sf::Vector2i(0,2); // wet stone
 	colorToTilePositionMap[0x000100ff] = sf::Vector2i(2,9); // wall
 	
-	loadScene(Config::levelPrefix+"level000.png");
+	loadScene(std::string(PATH) + "levels/level000.png");
 }
 
 
@@ -46,17 +47,19 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string file)
 {
 	// load textures for level
-	std::string bla = Config::imagePrefix+"TileMap.png";
-	tileTexture.loadFromFile(Config::imagePrefix+"TileMap.png");
-	playerTexture.loadFromFile(Config::imagePrefix+"player.png");
-	itemTexture.loadFromFile(Config::imagePrefix+"items.png");
+	std::cout << std::string(PATH) << std::endl;
+	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
+	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
+	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
 	
 	// load and set timebar
-	timeBarTexture.loadFromFile(Config::imagePrefix+"timeBar.png");
+	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
 	timeBarTexture.setRepeated(true);
 	sf::Sprite *guiSprite = new sf::Sprite();
 	guiSprite->setTexture(timeBarTexture);
-	
+	GUI* gui = new GUI(guiSprite);
+	gui->setTimeout(230);
+	scene.setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;
 	levelImg.loadFromFile(file);
@@ -99,4 +102,8 @@ void SceneManager::loadScene(std::string file)
 			scene.setTile(tmpTile, x, y);
 		}
 	}
+	scene.player = new Player();
+	sf::Sprite *playerSprite = new sf::Sprite();
+	playerSprite->setTexture(playerTexture);
+	scene.player->mySprite = playerSprite;
 }

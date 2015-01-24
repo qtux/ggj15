@@ -7,8 +7,12 @@
 
 #include "Scene.hpp"
 #include "Tile.hpp"
+<<<<<<< HEAD
 #include "globals.hpp"
 #include <iostream>
+=======
+#include "GUI.hpp"
+>>>>>>> 79c8d5e86cf69741426fbc24ea4e744b031ed1c2
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
@@ -35,7 +39,15 @@ void Scene::setTile(GameObject* obj, int x, int y)
 	gameBoard[x + y * sizeX * largeTileSizeX] = obj;
 }
 
+<<<<<<< HEAD
 // tested :)
+=======
+void Scene::setGUI(GUI* obj)
+{
+	gui = obj;
+}
+
+>>>>>>> 79c8d5e86cf69741426fbc24ea4e744b031ed1c2
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 {
 	GameObject* tmpObj;
@@ -65,5 +77,10 @@ void Scene::update(sf::Time deltaT)
 	}*/
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
+	}
+	player->update(deltaT);
+	if (gui != 0)
+	{
+		gui->update(deltaT);
 	}
 }

@@ -2,13 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include <bitset>
-#include "config.hpp"
+#include <string>
 #include "SceneManager.hpp"
 #include "SoundManager.hpp"
 
+// window properties
 static const int screenWidth = 800;
 static const int screenHeight = 600;
-
 
 // define number of keyboards binding 
 #define INPUT_SIZE 5
@@ -22,3 +22,10 @@ extern SoundManager soundManager;
 extern bool focus;
 extern InputType input;
 extern sf::Clock globalClock;
+
+// use absolute paths on windows (strange behaviour)
+#ifndef _WIN32
+	#define PATH "./"
+#else
+	#define PATH "C:/GalacticIrrweg/trunk/VSPROJ/Project1/Debug/"
+#endif

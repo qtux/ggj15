@@ -15,13 +15,7 @@ int main() {
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
 	
-	#ifdef DEBUG
-	if (Config::enableAudio){
-		sf::Sound snd;
-		snd.setBuffer(soundManager.getSound("sound/test.wav"));
-		snd.play();
-	}
-	#endif
+	soundManager.playSound("sound/test.wav");
 	
 	// main loop
 	while (window.isOpen()) {

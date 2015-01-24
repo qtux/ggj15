@@ -11,6 +11,7 @@
 #include <SFML/System.hpp>
 #include <vector>
 #include "GameObject.hpp"
+#include "GUI.hpp"
 
 class Scene {
 public:
@@ -19,6 +20,7 @@ public:
 
 	GameObject* getTile(int x, int y);
 	void setTile(GameObject* obj, int x, int y);
+	void setGUI(GUI* obj);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
 	void update(sf::Time deltaT);
 	// hack hier, ne doch nicht xD
@@ -26,9 +28,10 @@ public:
 	const static int sizeY = 6;
 	const static int largeTileSizeX = 6;
 	const static int largeTileSizeY = 6;
-
+	GameObject * player;
 private:
 	std::vector<GameObject*> gameBoard;
+	GUI* gui;
 };
 
 #endif /* SCENE_HPP_ */

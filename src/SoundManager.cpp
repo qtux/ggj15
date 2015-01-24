@@ -1,12 +1,12 @@
 
 #include "SoundManager.hpp"
-#include "config.hpp"
+#include "globals.hpp"
 #include <SFML/Audio.hpp>
 #include <exception>
 
 void SoundManager::loadSound(std::string sndName)
 {
-	if (!Config::enableAudio)
+	if (!enableAudio)
 	{
 		return;
 	}
@@ -21,6 +21,9 @@ void SoundManager::loadSound(std::string sndName)
 
 const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 {
+	if (!enableAudio) {
+		return sf::SoundBuffer();
+	}
 	std::map<std::string, sf::SoundBuffer *>::const_iterator conIt = bufferedSounds.find(sndName);
 	if (conIt == bufferedSounds.end())
 	{
@@ -28,11 +31,20 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 	}
 	return *bufferedSounds[sndName];
 }
+void SoundManager::playSound(std::string name)
+{
+	if (!enableAudio) {
+		return;
+	}
+	sf::Sound snd;
+	snd.setBuffer(soundManager.getSound(name));
+	snd.play();
+}
 
 
 void SoundManager::init(std::string preloadFileName)
 {
-	if (!Config::enableAudio)
+	if (!enableAudio)
 	{
 		return;
 	}
@@ -44,3 +56,5 @@ void SoundManager::init(std::string preloadFileName)
 		loadSound(*ldIt);
 	}
 }
+
+SoundManager::SoundManager(bool enableAudio): enableAudio(enableAudio) {}
