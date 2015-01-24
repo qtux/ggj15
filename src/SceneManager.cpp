@@ -2,6 +2,7 @@
 #include "Tile.hpp"
 #include "globals.hpp"
 #include <iostream>
+#include "Player.hpp"
 
 SceneManager::SceneManager(){
 	colorToTilePositionMap[0x11941bff] = sf::Vector2i(0,0);; // grass
@@ -97,4 +98,8 @@ void SceneManager::loadScene(std::string file)
 			scene.setTile(tmpTile, x, y);
 		}
 	}
+	scene.player = new Player();
+	sf::Sprite *playerSprite = new sf::Sprite();
+	playerSprite->setTexture(playerTexture);
+	scene.player->mySprite = playerSprite;
 }
