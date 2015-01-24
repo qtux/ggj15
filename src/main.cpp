@@ -5,6 +5,7 @@
 
 #define DEBUG
 
+
 int main() {
 	// window settings
 	//window.setVerticalSyncEnabled(true);
@@ -14,7 +15,7 @@ int main() {
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
-	
+
 	soundManager.playSound("sound/test.wav");
 	
 	// main loop

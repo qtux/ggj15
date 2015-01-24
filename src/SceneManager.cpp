@@ -95,9 +95,9 @@ void SceneManager::loadScene(std::string fileName)
 {
 	// load textures for level
 	std::cout << std::string(PATH) << std::endl;
-	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
-	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
-	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
+//	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
+//	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
+//	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
 	// load and set timebar
 	GUI* gui = new GUI();
 	gui->setTimeout(20);
@@ -113,7 +113,7 @@ void SceneManager::loadScene(std::string fileName)
 		{
 			// set tile sprite texture
 			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(tileTexture);
+			sprite->setTexture(textureManager.tileTexture);
 			// get level code (from bitmap)
 			sf::Color tmpColor = levelImg.getPixel(x, y);
 			sf::Uint32 colorKey = 0;
@@ -141,9 +141,9 @@ void SceneManager::loadScene(std::string fileName)
 	scene.player = new Player();
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
-	playerSprite->setTexture(playerTexture);
+	playerSprite->setTexture(textureManager.playerTexture);
 	playerSprite->setPosition(0,0);
-	doggieSprite->setTexture(playerTexture);
+	doggieSprite->setTexture(textureManager.playerTexture);
 	doggieSprite->setPosition(0,0);
 	scene.player->mySprite = playerSprite;
 

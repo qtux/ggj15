@@ -82,6 +82,11 @@ void Scene::update(sf::Time deltaT)
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
 	}
+
+	std::cout<<items.size()<<std::endl;
+	for(auto& obj: items) {
+		obj.update(deltaT);
+	}
 	player->update(deltaT);
 	if (gui != 0)
 	{

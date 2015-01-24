@@ -15,6 +15,7 @@
 #include "KeyItem.hpp"
 #include "ItemFactory.hpp"
 #include "globals.hpp"
+#include "TextureManager.hpp"
 
 TextFileParser::TextFileParser() {
 	// TODO Auto-generated constructor stub
@@ -31,11 +32,11 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 //	infile.open(fileName.c_str());
 	std::string line;
 
-	sf::Texture itemsTexture;
-	itemsTexture.loadFromFile(std::string(PATH) + "img/items.png");
-	sf::Sprite itemSprite;
-	itemSprite.setTexture(itemsTexture);
-	ItemFactory tmpFactory(&itemSprite);
+//	sf::Texture *itemsTexture;
+//	itemsTexture->loadFromFile(std::string(PATH) + "img/items.png");
+	sf::Sprite *itemSprite = new sf::Sprite();
+	itemSprite->setTexture(textureManager.itemsTexture);
+	ItemFactory tmpFactory(itemSprite);
 
 	while (std::getline(infile, line))
 	{
@@ -71,8 +72,6 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			Item *tmpItem = tmpFactory.getItem(second);
 			tmpItem->setPosition(x, y);
-			scene.portalPos.x = x;
-			scene.portalPos.y = y;
 			scene.items.push_back(*tmpItem);
 		}
 
