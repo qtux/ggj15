@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <bitset>
+#include "config.hpp"
 #include "SceneManager.hpp"
 #include "SoundManager.hpp"
 

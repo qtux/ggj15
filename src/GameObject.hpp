@@ -15,7 +15,7 @@ namespace sf{
 class GameObject {
 
 public:
-	sf::Sprite * mySprite = 0;
+	sf::Sprite * mySprite;
 	
 	const sf::Vector2f& getPosition() const;
 	
