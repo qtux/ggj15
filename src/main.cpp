@@ -2,23 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <bitset>
 #include "SceneManager.hpp"
+#include "SoundManager.hpp"
+#include "globals.hpp"
 
-// define number of keyboards binding 
-#define INPUT_SIZE 5
-typedef std::bitset<INPUT_SIZE> InputType;
-static sf::Keyboard::Key keyboardBinding[INPUT_SIZE] = {
-	sf::Keyboard::Left,
-	sf::Keyboard::Right,
-	sf::Keyboard::Up,
-	sf::Keyboard::Down,
-	sf::Keyboard::A
-};
-
-static sf::RenderWindow window(sf::VideoMode(800, 600), "Galactic Irrweg");
-static SceneManager sceneManager;
-
-static bool focus = true;
-static InputType input;
+#define DEBUG
 
 int main() {
 	// window settings
@@ -28,6 +15,12 @@ int main() {
 	// define a clock to measure time
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
+	
+	#ifdef DEBUG
+		sf::Sound snd;
+		snd.setBuffer(soundManager.getSound("sound/test.wav"));
+		snd.play();
+	#endif
 	
 	// main loop
 	while (window.isOpen()) {
@@ -48,13 +41,20 @@ int main() {
 		// retrieve current input
 		for (int i = 0; i < INPUT_SIZE; ++i) {
 			input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
-			std::cout << i << std::endl;
 		}
+		
+		#ifdef DEBUG
+			// show input bitstring if any key is pressed
+			if (input.any()) {
+				std::cout << input << std::endl;
+			}
+		#endif
+		
 		// clear window content
 		window.clear();
 		// reset clock and determine elapsed time since last frame
 		deltaT = clock.restart();
-		// TODO update game with deltaT when focus
+		// update game with deltaT when focused
 		if (focus) {
 			sceneManager.update(deltaT);
 		}
