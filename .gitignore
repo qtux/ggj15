@@ -1,4 +1,3 @@
 build/
 bin/
 *.wav
-src/Config.cpp
