@@ -14,7 +14,8 @@ TextureManager::TextureManager()
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	itemsTexture.loadFromFile(std::string(PATH) + "img/items.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
-	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
+	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
+	timeBarTexture.setRepeated(true);
 }
 
 TextureManager::~TextureManager() {

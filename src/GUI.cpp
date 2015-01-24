@@ -2,19 +2,16 @@
 #include "globals.hpp"
 GUI::GUI()
 {
-	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
-	timeBarTexture.setRepeated(true);
 	timeSprite = new sf::Sprite();
-	timeSprite->setTexture(timeBarTexture);
+	timeSprite->setTexture(textureManager.timeBarTexture);
 	timeSprite->setPosition(10,screenHeight-30);
 
-	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
 	coinSprite = new sf::Sprite();
-	coinSprite->setTexture(itemTexture);
+	coinSprite->setTexture(textureManager.itemsTexture);
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
 
 	keySprite = new sf::Sprite();
-	keySprite->setTexture(itemTexture);
+	keySprite->setTexture(textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
 
 	timeoutClock = sf::Clock();
@@ -41,9 +38,10 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		progress = 1;
 	}
-	if (progress < 0)
+	if (progress <= 0)
 	{
 		progress = 0;
+		//sceneManager.restartLevel();
 	}
 	int width = (progress* (screenWidth-20));
 	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % width, 0, width, 20));
