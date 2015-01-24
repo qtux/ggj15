@@ -5,10 +5,10 @@
 
 SceneManager::SceneManager(){
 	colorToTilePositionMap[0x11941bff] = sf::Vector2i(0,0);; // grass
-	colorToTilePositionMap[0x989898ff] = sf::Vector2i(0,3); // stone
-	colorToTilePositionMap[0x9c6d27ff] = sf::Vector2i(0,1); // dirt
+	colorToTilePositionMap[0x969896ff] = sf::Vector2i(0,3); // stone
+	colorToTilePositionMap[0x9b6d27ff] = sf::Vector2i(0,1); // dirt
 	colorToTilePositionMap[0x5f5f5fff] = sf::Vector2i(0,2); // wet stone
-	colorToTilePositionMap[0x000000ff] = sf::Vector2i(2,9); // wall
+	colorToTilePositionMap[0x000100ff] = sf::Vector2i(2,9); // wall
 	
 	loadScene("levels/level000.png");
 }
