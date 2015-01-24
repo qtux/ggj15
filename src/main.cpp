@@ -3,6 +3,8 @@
 #include <bitset>
 #include "SceneManager.hpp"
 #include "SoundManager.hpp"
+
+// last include (requires previous includes)
 #include "globals.hpp"
 
 #define DEBUG
