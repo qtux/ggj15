@@ -14,5 +14,5 @@ SceneManager sceneManager;
 SoundManager soundManager;
 
 bool focus = true;
-InputType input = {};
+InputType input;
 sf::Clock globalClock;
