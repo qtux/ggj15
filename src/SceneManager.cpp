@@ -4,7 +4,7 @@
 #include <iostream>
 
 SceneManager::SceneManager(){
-	colorToTilePositionMap[0x11941bff] = getRandomGrassPosition(); // grass
+	colorToTilePositionMap[0x11941bff] = sf::Vector2i(0,0);; // grass
 	colorToTilePositionMap[0x989898ff] = sf::Vector2i(0,3); // stone
 	colorToTilePositionMap[0x9c6d27ff] = sf::Vector2i(0,1); // dirt
 	colorToTilePositionMap[0x5f5f5fff] = sf::Vector2i(0,2); // wet stone
@@ -16,7 +16,22 @@ SceneManager::SceneManager(){
 
 sf::Vector2i SceneManager::getRandomGrassPosition()
 {
-	return sf::Vector2i(0,0);
+	float rnd = rand() / RAND_MAX;
+	int grassCount = 4;
+	if (rnd < 1./grassCount)
+	{
+		return sf::Vector2i(0,0);
+	}
+	if (rnd < 2./grassCount)
+	{
+		return sf::Vector2i(1,0);
+	}
+	if (rnd < 3./grassCount)
+	{
+		return sf::Vector2i(2,0);
+	}
+
+	return sf::Vector2i(3,0);
 }
 
 void SceneManager::showScene(std::string sceneName) {
@@ -60,7 +75,6 @@ void SceneManager::loadScene(std::string file)
 			colorKey |= tmpColor.g << 2*8;
 			colorKey |= tmpColor.b << 1*8;
 			colorKey |= tmpColor.a << 0*8;
-
 			// resolve the correct tile based on the color code (and set correct texture rect)
 			sf::Vector2i tmpPos;
 			std::map<sf::Uint32, sf::Vector2i>::const_iterator conIt = colorToTilePositionMap.find(colorKey);
@@ -75,9 +89,10 @@ void SceneManager::loadScene(std::string file)
 //			tmpPos = sf::Vector2i(0, 3);
 			sprite->setTextureRect(sf::IntRect(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY, Tile::pixelSizeX, Tile::pixelSizeY));
 			// set position of the sprite inside the map
-			sprite->setPosition(x*Tile::pixelSizeX, y*Tile::pixelSizeY);
+			sprite->setPosition(Tile::tileScaleFactor*x*Tile::pixelSizeX, Tile::tileScaleFactor*y*Tile::pixelSizeY);
 			// create the tile and add it to the scene
 			Tile* tmpTile = new Tile();
+			sprite->setScale(Tile::tileScaleFactor, Tile::tileScaleFactor);
 			tmpTile->mySprite = sprite;
 			scene.setTile(tmpTile, x, y);
 		}
