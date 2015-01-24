@@ -34,4 +34,4 @@ png:
 	cd img && mogrify -layers merge -format png *.xcf
 
 ogg:
-	for input in *.wav; do ffmpeg -i $input -acodec libvorbis ${input%.*}.ogg; done
+	cd sound && for input in *.wav; do if [ ! -f $${input%.*}.ogg ]; then ffmpeg -i $$input -acodec libvorbis $${input%.*}.ogg; fi done
