@@ -5,8 +5,7 @@
 #include "Player.hpp"
 #include <string>
 #include <sstream>
-#include <cmath>
-
+#include "TextFileParser.hpp"
 
 SceneManager::SceneManager(){
 	std::vector<sf::Vector2i> *tmpVector = new std::vector<sf::Vector2i>();
@@ -99,16 +98,8 @@ void SceneManager::loadScene(std::string fileName)
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
 	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
-	coinTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
 	// load and set timebar
-	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
-
-	timeBarTexture.setRepeated(true);
-	sf::Sprite *guiSprite = new sf::Sprite();
-	guiSprite->setTexture(timeBarTexture);
-	sf::Sprite *coinSprite = new sf::Sprite();
-	coinSprite->setTexture(coinTexture);
-	GUI* gui = new GUI(guiSprite,coinSprite);
+	GUI* gui = new GUI();
 	gui->setTimeout(20);
 	scene.setGUI(gui);
 	// load image bitmapt file
@@ -159,24 +150,7 @@ void SceneManager::loadScene(std::string fileName)
 	scene.player->doggieSprite = doggieSprite;
 
 	// read text file
-	std::string textFileName = fileName + ".txt";
-	std::ifstream infile(textFileName);
-	std::string line;
-	while (std::getline(infile, line))
-	{
-	    std::istringstream iss(line);
-	    std::string part;
-	    iss >> part;
-
-	    if (part == "start")
-	    {
-	    	std::cout<<"start found"<<std::endl;
-	    }
-
-	    std::cout<<line<<std::endl;
-
-	    // process pair (a,b)
-	}
+	TextFileParser::loadTextFile(scene, fileName + ".txt");
 
 }
 
@@ -210,7 +184,7 @@ void SceneManager::processEditMode()
 	}
 }
 
-Scene SceneManager::getCurrentScene()
+Scene& SceneManager::getCurrentScene()
 {
 	return scene;
 }

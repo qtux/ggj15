@@ -43,6 +43,11 @@ void Scene::setGUI(GUI* obj)
 	gui = obj;
 }
 
+const std::vector<GameObject*> Scene::getGameBoard() const
+{
+	return gameBoard;
+}
+
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 {
 	GameObject* tmpObj;
@@ -123,3 +128,4 @@ void Scene::update(sf::Time deltaT)
 	
 	window.draw(Text);*/
 }
+
