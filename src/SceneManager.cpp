@@ -10,6 +10,8 @@ SceneManager::SceneManager(){
 	colorToTilePositionMap[0x5f5f5f] = sf::Vector2i(0,2); // wet stone
 	colorToTilePositionMap[0x000000] = sf::Vector2i(2,9); // wall
 
+	loadScene("levels/level000.bmp");
+
 }
 
 void SceneManager::showScene(std::string sceneName) {
@@ -23,8 +25,8 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string name)
 {
 	Scene* tmpScene = new Scene();
-	sf::Texture tmpTexture = textureManager.getTexture("./img/tilemap.png");
-	sf::Texture leveltexture = textureManager.getTexture("./levels/colorCode.png");
+	sf::Texture tmpTexture = textureManager.getTexture("./img/TileMap.png");
+	sf::Texture leveltexture = textureManager.getTexture(name);
 	sf::Image levelImg = leveltexture.copyToImage();
 
 	for (int x=0;x<Scene::sizeX;x++)
@@ -48,10 +50,11 @@ void SceneManager::loadScene(std::string name)
 				tmpPos = colorToTilePositionMap[colorKey];
 			} else
 			{
-				tmpPos = sf::Vector2i(0, 0);
+				tmpPos = sf::Vector2i(0, 13);
 			}
 
 			sprite->setTextureRect(sf::IntRect(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY, Tile::pixelSizeX, Tile::pixelSizeY));
+			sprite->setPosition(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY);
 			Tile* tmpTile = new Tile();
 			tmpTile->mySprite = sprite;
 			tmpScene->setTile(tmpTile, x, y);

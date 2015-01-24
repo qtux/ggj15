@@ -22,3 +22,4 @@ extern TextureManager textureManager;
 
 extern bool focus;
 extern InputType input;
+extern sf::Clock globalClock;
