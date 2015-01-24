@@ -16,7 +16,7 @@ private:
 	sf::Texture playerTexture;
 	sf::Texture itemTexture;
 	sf::Texture timeBarTexture;
-	
+	sf::Texture coinTexture;
 	sf::Vector2i getRandomGrassPosition();
 
 public:
@@ -27,5 +27,6 @@ public:
 	void processEditMode();
 	sf::Vector2i getTilePosition(sf::Uint32 color);
 	
+	Scene getCurrentScene();
 //	Scene currentScene;
 };

@@ -16,6 +16,7 @@ class GameObject {
 
 public:
 	sf::Sprite * mySprite;
+	sf::Sprite * doggieSprite;
 	
 	const sf::Vector2f& getPosition() const;
 	

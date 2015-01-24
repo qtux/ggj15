@@ -1,7 +1,8 @@
 #include "Player.hpp"
-#include "globals.hpp"
+#include <iostream>
 
 void Player::update (sf::Time deltaTime) {
+	
 	// get input from globals and process:
 	sf::Vector2f tmpPos = getPosition();
 	int width = getWidth();
@@ -12,24 +13,43 @@ void Player::update (sf::Time deltaTime) {
 	if (input[2]) { tmpPos.y -= 1; dir = 1; }
 	if (input[3]) { tmpPos.y += 1; dir = 0; }
 	
+	// doggie follows the hero
+	if (dir > -1)
+	{
+		positionQueue.push(tmpPos);
+		directionQueue.push(direction);
+	}
+	
 	if (tmpPos.x > screenWidth) tmpPos.x -= screenWidth;
 	if (tmpPos.x + width < 0)  tmpPos.x += screenWidth;
 	if (tmpPos.y > screenHeight) tmpPos.y -= screenHeight;
 	if (tmpPos.y + height < 0)  tmpPos.y += screenHeight;
 	
 	setPosition(tmpPos.x, tmpPos.y);
+	doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18);
 	if (dir > -1) 
 	{
 		animationStep += 1;
+		doggieStep += 1;
 		direction = dir;
 	}
-	if (animationStep / slowFactor > 2) animationStep = 0; // animationStep wird immer um 1 hochgezählt, aber effektiv um den Faktor slowFactor verlangsamt
+	if (animationStep / slowFactor > 3) animationStep = 0; // animationStep wird immer um 1 hochgezählt, aber effektiv um den Faktor slowFactor verlangsamt
+	if (doggieStep / slowFactor > 5) doggieStep = 0;
+	
 	//check for collisions:
 	
 	
-	if (mySprite != 0)
-	{
-		mySprite->setTextureRect(sf::IntRect(0,0, 16, 32));
+	if (mySprite != 0 && doggieSprite != 0)
+	{		
+		doggieSprite->setTextureRect(sf::IntRect((directionQueue.front() + 4) * 16, DoggieAnimState[doggieStep / slowFactor] * 16, 16, 16));
+		window.draw(*doggieSprite);
+		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 16) // delay of doggie movement
+		{
+			directionQueue.pop();
+			positionQueue.pop();
+		}
+		
+		mySprite->setTextureRect(sf::IntRect(direction * 16, PlayerAnimState[animationStep / slowFactor] * 32, 16, 32));
 		window.draw(*mySprite);
 	}
 }
