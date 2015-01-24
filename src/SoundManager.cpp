@@ -1,10 +1,15 @@
 
 #include "SoundManager.hpp"
+#include "globals.hpp"
 #include <SFML/Audio.hpp>
 #include <exception>
 
 void SoundManager::loadSound(std::string sndName)
 {
+	if (!enableAudio)
+	{
+		return;
+	}
 	sf::SoundBuffer *myBuf = new sf::SoundBuffer();
 	if (!myBuf->loadFromFile(sndName))
 	{
@@ -27,6 +32,10 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 
 void SoundManager::init(std::string preloadFileName)
 {
+	if (!enableAudio)
+	{
+		return;
+	}
 	bufferedSounds.clear(); // doesn't tidy up!
 	std::vector<std::string> loadFnList;
 	readResourcesFileNameList(preloadFileName, loadFnList);
