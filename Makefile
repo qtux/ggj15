@@ -32,6 +32,4 @@ clean:
 
 png:
 	cd img && mogrify -layers merge -format png *.xcf
-
-bmp:
-	cd levels && mogrify -layers merge -format bmp *.xcf
+	cd levels && mogrify -layers merge -format png *.xcf

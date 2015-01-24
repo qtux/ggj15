@@ -13,6 +13,7 @@ SceneManager::SceneManager(){
 	loadScene("levels/level000.bmp");
 }
 
+
 sf::Vector2i SceneManager::getRandomGrassPosition()
 {
 	return sf::Vector2i(0,0);
