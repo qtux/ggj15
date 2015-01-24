@@ -31,10 +31,11 @@ public:
 	const static int largeTileSizeY = 6;
 	GameObject * player;
 	GUI* gui;
+	sf::Vector2i startPos;
+	sf::Vector2i portalPos;
+	std::vector<Item> items;
 private:
 	std::vector<GameObject*> gameBoard;
-	sf::Vector2i startPos;
-	std::vector<Item> items;
 };
 
 #endif /* SCENE_HPP_ */
