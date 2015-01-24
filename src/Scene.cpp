@@ -7,8 +7,9 @@
 
 #include "Scene.hpp"
 #include "Tile.hpp"
+#include "globals.hpp"
+#include <iostream>
 #include "GUI.hpp"
-
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
@@ -49,11 +50,12 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 	for (int x=0;x<largeTileSizeX;x++)
 	{
-		for (int y=0;largeTileSizeY;y++)
+		for (int y=0;y<largeTileSizeY;y++)
 		{
-			tmpObj = getTile(startX1+x, startY1+y);
-			setTile(getTile(startX2+x, startY2+y), startX1+x, startY1+y);
-			setTile(tmpObj, startX2+x, startY2+y);
+			sf::Vector2f tmpPos = getTile(startX1+x, startY1+y)->getPosition();
+			sf::Vector2f tmpPos2 = getTile(startX2+x, startY2+y)->getPosition();
+			getTile(startX2+x, startY2+y)->setPosition(tmpPos.x, tmpPos.y);
+			getTile(startX1+x, startY1+y)->setPosition(tmpPos2.x, tmpPos2.y);
 		}
 	}
 }
