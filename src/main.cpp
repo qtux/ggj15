@@ -1,5 +1,4 @@
 #include <iostream>
-#include <bitset>
 
 // last include (requires previous includes)
 #include "globals.hpp"
