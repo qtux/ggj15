@@ -1,8 +1,5 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <bitset>
-#include "SceneManager.hpp"
-#include "SoundManager.hpp"
 
 // last include (requires previous includes)
 #include "globals.hpp"

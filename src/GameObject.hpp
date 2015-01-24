@@ -9,9 +9,19 @@
 #include <SFML/System.hpp>
 #include <vector>
 
+namespace sf{
+	class Sprite;
+}
+
 class GameObject {
 
 public:
+	sf::Sprite * mySprite = 0;
+	
+	const sf::Vector2f& getPosition() const;
+	
+	void setPosition(int x, int y);
+
 	//GameObject() {};
 
 	virtual void update(sf::Time deltaTime) = 0;

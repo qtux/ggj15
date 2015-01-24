@@ -1,5 +1,10 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include <bitset>
+#include "SceneManager.hpp"
+#include "SoundManager.hpp"
+
 // define number of keyboards binding 
 #define INPUT_SIZE 5
 typedef std::bitset<INPUT_SIZE> InputType;
