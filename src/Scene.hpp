@@ -8,6 +8,7 @@
 #ifndef SCENE_HPP_
 #define SCENE_HPP_
 
+#include <SFML/System.hpp>
 #include <vector>
 
 class GameObject;
@@ -19,9 +20,11 @@ public:
 
 	GameObject* getTile(int x, int y);
 	void setTile(GameObject* obj, int x, int y);
+	void switchLargeTile(int x1, int y1, int x2, int y2);
+	void update(sf::Time deltaT);
 
 private:
-	int sizeX, sizeY;
+	int sizeX, sizeY, largeTileSizeX, largeTileSizeY;
 	std::vector<GameObject*> gameBoard;
 };
 

@@ -8,11 +8,13 @@
 #ifndef GAMEOBJECT_HPP_
 #define GAMEOBJECT_HPP_
 
+#include <SFML/System.hpp>
 
 class GameObject {
 public:
 	GameObject();
 	virtual ~GameObject();
+	void update(sf::Time deltaT);
 
 };
 
