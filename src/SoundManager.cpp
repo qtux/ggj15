@@ -6,7 +6,7 @@
 
 void SoundManager::loadSound(std::string sndName)
 {
-	if (!enableAudio)
+	if (!Config::enableAudio)
 	{
 		return;
 	}
@@ -32,7 +32,7 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 
 void SoundManager::init(std::string preloadFileName)
 {
-	if (!enableAudio)
+	if (!Config::enableAudio)
 	{
 		return;
 	}
