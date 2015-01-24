@@ -11,7 +11,11 @@ sf::Keyboard::Key keyboardBinding[] = {
 
 sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
 SceneManager sceneManager;
-SoundManager soundManager;
+#ifndef _WIN32
+	SoundManager soundManager;
+#else
+	SoundManager soundManager(false);
+#endif
 
 bool focus = true;
 InputType input;

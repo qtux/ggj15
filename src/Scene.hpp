@@ -26,6 +26,7 @@ public:
 	const static int sizeY = 6;
 	const static int largeTileSizeX = 6;
 	const static int largeTileSizeY = 6;
+	GameObject * player;
 
 private:
 	std::vector<GameObject*> gameBoard;
