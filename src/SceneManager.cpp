@@ -64,4 +64,11 @@ void SceneManager::loadScene(std::string name)
 
 
 //	tmpTile->mySprite->setTexture()
+
+	const sf::Texture &tmpGui = textureManager.getTexture("./img/timeBar.png");
+	//tmpGui.setRepeated(true);
+	
+	sf::Sprite *guiSprite = new sf::Sprite();
+	guiSprite->setTexture(tmpGui);
+	
 }
