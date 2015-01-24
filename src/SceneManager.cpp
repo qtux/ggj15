@@ -1,4 +1,7 @@
 #include "SceneManager.hpp"
+#include "Tile.hpp"
+#include <SFML/Graphics.hpp>
+#include "globals.hpp"
 
 //SceneManager::SceneManager(): currentScene(Scene()) {
 //}
@@ -18,15 +21,15 @@ void SceneManager::loadScene(std::string name)
 
 	for (int x=0;x<Scene::sizeX;x++)
 	{
-		for (int y=0;y<Scene::size;y++)
+		for (int y=0;y<Scene::sizeY;y++)
 		{
-
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(tmpTexture);
+			sprite->setTextureRect(sf::IntRect(10, 10, 32, 32));
 		}
 	}
 
-	sf::Sprite* sprite = new sf::Sprite();
-	sprite->setTexture(tmpTexture);
-	sprite->setTextureRect(sf::IntRect(10, 10, 32, 32));
+
 
 //	tmpTile->mySprite->setTexture()
 }
