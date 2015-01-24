@@ -11,6 +11,11 @@ void GameObject::setPosition(int x, int y)
 	mySprite->setPosition(x, y);
 }
 
+void GameObject::setPosition(float x, float y)
+{
+	mySprite->setPosition(x, y);
+}
+
 
 int GameObject::getHeight() const
 {

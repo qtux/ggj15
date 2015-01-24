@@ -11,7 +11,7 @@ public:
 	int direction;
 	int doggieStep;
 
-	Player(): direction(0) {};
+	Player(): direction(0),animationStep(0),doggieStep(0) {};
 
 	virtual void update(sf::Time deltaTime);
 	
