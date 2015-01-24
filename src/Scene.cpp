@@ -54,6 +54,10 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 void Scene::update(sf::Time deltaT)
 {
+	if (InputType[4] == true)
+	{
+		switchLargeTile(2, 2, 2, 3);
+	}
 	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
 	{
 		(*it)->update(deltaT);
