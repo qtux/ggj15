@@ -11,10 +11,14 @@ private:
 	// SceneLoader loader;
 	Scene scene;
 	std::map<sf::Uint32, sf::Vector2i> colorToTilePositionMap;
+	
 	sf::Texture tileTexture;
 	sf::Texture playerTexture;
 	sf::Texture itemTexture;
 	sf::Texture timeBarTexture;
+	
+	sf::Vector2i getRandomGrassPosition();
+
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
