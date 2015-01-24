@@ -8,9 +8,8 @@ class SceneManager {
 private:
 	// SceneLoader loader;
 	std::vector<Scene> scene;
-	Game* game;
 public:
-	SceneManager(Game* game);
+	SceneManager();
 	void showScene(std::string sceneName);
 	void update(sf::Time deltaT);
 	

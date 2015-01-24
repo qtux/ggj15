@@ -1,6 +1,6 @@
 #include "SceneManager.hpp"
 
-SceneManager::SceneManager(Game* game): game(game), currentScene(game) {
+SceneManager::SceneManager(): currentScene(Scene()) {
 }
 
 void SceneManager::showScene(std::string sceneName) {
