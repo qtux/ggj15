@@ -24,6 +24,7 @@ public:
 	void loadScene(std::string name);
 	void processEditMode();
 	void nextLevel();
+	void restartLevel();
 	sf::Vector2i getTilePosition(sf::Uint32 color);
 	
 	Scene& getCurrentScene();

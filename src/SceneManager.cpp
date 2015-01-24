@@ -92,7 +92,8 @@ void SceneManager::update(sf::Time deltaT) {
 }
 
 void SceneManager::loadScene(std::string fileName)
-{	
+{
+	scene = Scene();
 	// load textures for level
 	std::cout << fileName<< std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
@@ -187,6 +188,10 @@ void SceneManager::processEditMode()
 void SceneManager::nextLevel(){
 	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 	currentLevelNumber++;
+}
+
+void SceneManager::restartLevel(){
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 }
 
 Scene& SceneManager::getCurrentScene()

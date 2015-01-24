@@ -41,7 +41,6 @@ public:
 	std::vector<Item> items;
 private:
 	std::vector<GameObject*> gameBoard;
-	int keys;
 };
 
 #endif /* SCENE_HPP_ */
