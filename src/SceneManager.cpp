@@ -25,9 +25,9 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string name)
 {
 	Scene* tmpScene = new Scene();
-	sf::Texture tmpTexture = textureManager.getTexture("./img/TileMap.png");
-	sf::Texture leveltexture = textureManager.getTexture(name);
-	sf::Image levelImg = leveltexture.copyToImage();
+	const sf::Texture &tmpTexture = textureManager.getTexture("./img/TileMap.png");
+	const sf::Texture &levelTexture = textureManager.getTexture(name);
+	sf::Image levelImg = levelTexture.copyToImage();
 
 	for (int x=0;x<Scene::sizeX;x++)
 	{
