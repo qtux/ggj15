@@ -1,12 +1,21 @@
 #include "GUI.hpp"
 #include "globals.hpp"
-GUI::GUI(sf::Sprite* timeSprite,sf::Sprite* coin)
+GUI::GUI()
 {
-	mySprite = timeSprite;
-	cointSprite = coin;
+	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
+	timeBarTexture.setRepeated(true);
+	timeSprite = new sf::Sprite();
+	timeSprite->setTexture(timeBarTexture);
+	timeSprite->setPosition(10,screenHeight-30);
+
+	coinTexture.loadFromFile(std::string(PATH) + "img/items.png");
+	coinSprite = new sf::Sprite();
+	coinSprite->setTexture(coinTexture);
+	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
+
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
-	mySprite->setPosition(10,screenHeight-30);
+
 }
 void GUI::setTimeout(int seconds)
 {
@@ -33,16 +42,14 @@ void GUI::update (sf::Time deltaTime) {
 		progress = 0;
 	}
 	int width = (progress* (screenWidth-20));
-	mySprite->setTextureRect(sf::IntRect(0, 0, width, 20));
-	if (mySprite != 0)
-	{
-		window.draw(*mySprite);
-	}
+	timeSprite->setTextureRect(sf::IntRect(0, 0, width, 20));
+	window.draw(*timeSprite);
+
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		cointSprite->setPosition(screenWidth-16,10+(i*16));
-		window.draw(*cointSprite);
+		coinSprite->setPosition(screenWidth-16,10+(i*16));
+		window.draw(*coinSprite);
 	}
 }
 
