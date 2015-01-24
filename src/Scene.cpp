@@ -30,7 +30,7 @@ GameObject* Scene::getTile(int x, int y)
 {
 	if (x + y*sizeX < (int)gameBoard.size())
 	{
-		return gameBoard[x + y*sizeX];
+		return gameBoard[x + y * sizeX * largeTileSizeX];
 	}
 	return 0;
 }
@@ -38,7 +38,7 @@ GameObject* Scene::getTile(int x, int y)
 
 void Scene::setTile(GameObject* obj, int x, int y)
 {
-	gameBoard[x + y*sizeX] = obj;
+	gameBoard[x + y * sizeX * largeTileSizeX] = obj;
 }
 
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
