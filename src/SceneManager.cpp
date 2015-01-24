@@ -22,49 +22,44 @@ void SceneManager::update(sf::Time deltaT) {
 	scene.update(deltaT);
 }
 
-void SceneManager::loadScene(std::string name)
+void SceneManager::loadScene(std::string file)
 {
-	// load textures
+	// load textures for level
 	sf::Texture tileTexture;
 	sf::Texture playerTexture;
 	sf::Texture itemTexture;
+	sf::Texture timeBarTexture;
 	tileTexture.loadFromFile("./img/TileMap.png");
 	playerTexture.loadFromFile("./img/player.png");
 	itemTexture.loadFromFile("./img/items.png");
-
-	// new code
-	sf::Texture texture;
-	texture.loadFromFile("./img/TileMap.png");
-	// Create a sprite
-	/*sf::Sprite sprite;
-	sprite.setTexture(texture);
-	sprite.setTextureRect(sf::IntRect(10, 10, 50, 30));
-	sprite.setColor(sf::Color(255, 255, 255, 200));
-	sprite.setPosition(100, 25);*/
-	// Draw it
-	// old code
-	/*
-	Scene* tmpScene = new Scene();
-	const sf::Texture &tmpTexture = textureManager.getTexture("./img/TileMap.png");
 	
-	const sf::Texture &levelTexture = textureManager.getTexture(name);
-	sf::Image levelImg = levelTexture.copyToImage();
-
+	// load and set timebar
+	timeBarTexture.loadFromFile("./img/timeBar.png");
+	timeBarTexture.setRepeated(true);
+	sf::Sprite *guiSprite = new sf::Sprite();
+	guiSprite->setTexture(timeBarTexture);
+	
+	// load image bitmapt file
+	sf::Image levelImg;
+	levelImg.loadFromFile(file);
+	
+	// create sprites for each tile
 	for (int x=0;x<Scene::sizeX;x++)
 	{
 		for (int y=0;y<Scene::sizeY;y++)
 		{
+			// set tile sprite texture
 			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(tmpTexture);
+			sprite->setTexture(tileTexture);
+			// get level code (from bitmap)
 			sf::Color tmpColor = levelImg.getPixel(x, y);
 			sf::Uint32 colorKey = 0;
 			colorKey &= tmpColor.r << 3*8;
 			colorKey &= tmpColor.g << 1*8;
 			colorKey &= tmpColor.b << 2*8;
 			colorKey &= tmpColor.a << 0*8;
-
+			// resolve the correct tile based on the color code (and set correct texture rect)
 			sf::Vector2i tmpPos;
-
 			std::map<sf::Uint32, sf::Vector2i>::const_iterator conIt = colorToTilePositionMap.find(colorKey);
 			if (conIt != colorToTilePositionMap.end())
 			{
@@ -73,23 +68,13 @@ void SceneManager::loadScene(std::string name)
 			{
 				tmpPos = sf::Vector2i(0, 13);
 			}
-
 			sprite->setTextureRect(sf::IntRect(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY, Tile::pixelSizeX, Tile::pixelSizeY));
+			// set position of the sprite inside the map
 			sprite->setPosition(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY);
+			// create the tile and add it to the scene
 			Tile* tmpTile = new Tile();
 			tmpTile->mySprite = sprite;
-			tmpScene->setTile(tmpTile, x, y);
+			scene.setTile(tmpTile, x, y);
 		}
 	}
-
-
-
-//	tmpTile->mySprite->setTexture()
-
-	const sf::Texture &tmpGui = textureManager.getTexture("./img/timeBar.png");
-	//tmpGui.setRepeated(true);
-	
-	sf::Sprite *guiSprite = new sf::Sprite();
-	guiSprite->setTexture(tmpGui);*/
-	
 }
