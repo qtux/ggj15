@@ -12,7 +12,7 @@ SceneManager::SceneManager(){
 	colorToTilePositionMap[0x5f5f5fff] = sf::Vector2i(0,2); // wet stone
 	colorToTilePositionMap[0x000100ff] = sf::Vector2i(2,9); // wall
 	
-	loadScene(path + "levels/level000.png");
+	loadScene(std::string(PATH) + "levels/level000.png");
 }
 
 
@@ -47,12 +47,13 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string file)
 {
 	// load textures for level
-	tileTexture.loadFromFile(path + "img/TileMap.png");
-	playerTexture.loadFromFile(path + "img/player.png");
-	itemTexture.loadFromFile(path + "img/items.png");
+	std::cout << std::string(PATH) << std::endl;
+	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
+	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
+	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
 	
 	// load and set timebar
-	timeBarTexture.loadFromFile(path + "img/timeBar.png");
+	timeBarTexture.loadFromFile(std::string(PATH) + "img/timeBar.png");
 	timeBarTexture.setRepeated(true);
 	sf::Sprite *guiSprite = new sf::Sprite();
 	guiSprite->setTexture(timeBarTexture);

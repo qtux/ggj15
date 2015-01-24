@@ -13,11 +13,11 @@ class SoundManager : public AbstractManager
 private:
 	std::map<std::string, sf::SoundBuffer *> bufferedSounds;
 	void loadSound(std::string sndName);
-	
+	bool enableAudio;
 public:
 	void init(std::string preloadFileName);
 	const sf::SoundBuffer &getSound(std::string sndName);
-	
+	SoundManager(bool enableAudio = true);
 };
 
 #endif

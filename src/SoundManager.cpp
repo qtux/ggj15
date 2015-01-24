@@ -44,3 +44,5 @@ void SoundManager::init(std::string preloadFileName)
 		loadSound(*ldIt);
 	}
 }
+
+SoundManager::SoundManager(bool enableAudio): enableAudio(enableAudio) {}

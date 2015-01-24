@@ -23,11 +23,9 @@ extern bool focus;
 extern InputType input;
 extern sf::Clock globalClock;
 
-// use absolute paths on windows and disable audio (strange behaviour)
+// use absolute paths on windows (strange behaviour)
 #ifndef _WIN32
-	static const std::string path =  "./";
-	static const bool enableAudio = true;
+	#define PATH "./"
 #else
-	static const std::string path =  "C:/GalacticIrrweg/trunk/VSPROJ/Project1/Debug/";
-	static const bool enableAudio = false;
+	#define PATH "C:/GalacticIrrweg/trunk/VSPROJ/Project1/Debug/"
 #endif
