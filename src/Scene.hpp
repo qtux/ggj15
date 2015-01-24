@@ -10,12 +10,12 @@
 
 #include <SFML/System.hpp>
 #include <vector>
-
-class GameObject;
+#include "GameObject.hpp"
+class Game;
 
 class Scene {
 public:
-	Scene();
+	Scene(Game* game);
 	virtual ~Scene();
 
 	GameObject* getTile(int x, int y);
@@ -26,6 +26,7 @@ public:
 private:
 	int sizeX, sizeY, largeTileSizeX, largeTileSizeY;
 	std::vector<GameObject*> gameBoard;
+	Game* game;
 };
 
 #endif /* SCENE_HPP_ */
