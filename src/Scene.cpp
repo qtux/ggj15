@@ -7,6 +7,8 @@
 
 #include "Scene.hpp"
 #include "Tile.hpp"
+#include "globals.hpp"
+#include <iostream>
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
@@ -33,6 +35,7 @@ void Scene::setTile(GameObject* obj, int x, int y)
 	gameBoard[x + y * sizeX * largeTileSizeX] = obj;
 }
 
+// tested :)
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 {
 	GameObject* tmpObj;
@@ -43,21 +46,18 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 	for (int x=0;x<largeTileSizeX;x++)
 	{
-		for (int y=0;largeTileSizeY;y++)
+		for (int y=0;y<largeTileSizeY;y++)
 		{
-			tmpObj = getTile(startX1+x, startY1+y);
-			setTile(getTile(startX2+x, startY2+y), startX1+x, startY1+y);
-			setTile(tmpObj, startX2+x, startY2+y);
+			sf::Vector2f tmpPos = getTile(startX1+x, startY1+y)->getPosition();
+			sf::Vector2f tmpPos2 = getTile(startX2+x, startY2+y)->getPosition();
+			getTile(startX2+x, startY2+y)->setPosition(tmpPos.x, tmpPos.y);
+			getTile(startX1+x, startY1+y)->setPosition(tmpPos2.x, tmpPos2.y);
 		}
 	}
 }
 
 void Scene::update(sf::Time deltaT)
 {
-	if (InputType[4] == true)
-	{
-		switchLargeTile(2, 2, 2, 3);
-	}
 	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
 	{
 		(*it)->update(deltaT);
