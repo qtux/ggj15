@@ -19,7 +19,7 @@ public:
 		{
 			return null;
 		}
-		t result = t(this);
+		t* result = new t(this);
 		components.insert(result);
 		return result;
 	}
@@ -27,7 +27,7 @@ public:
 		int size = components.size();
 		for(int i = 0;i < size;++i)
 		{
-			if (typename components[i] == typename t)
+			if (dynamic_cast<t*>(components[i]))
 			{
 				return true;
 			}
@@ -38,7 +38,7 @@ public:
 		int size = components.size();
 		for(int i = 0;i < size;++i)
 		{
-			if (typename components[i] == typename t)
+			if (dynamic_cast<t*>(components[i]))
 			{
 				return components[i];
 			}
@@ -46,10 +46,16 @@ public:
 		return null;
 	}
 	template<class t> t removeComponent(){
-		int index = 0;
-		components.erase(components.begin()+index);
+		vector<GameObjectComponent*>::iterator it = components.begin();
+		for( ; it != components.end(); it++)
+		{
+			if (dynamic_cast<t*>(*it))
+			{
+				it = components.erase(it);
+			}
+		}
 	}
 
 private:
-	std::vector<GameObjectComponent> components;
+	std::vector<GameObjectComponent*> components;
 };

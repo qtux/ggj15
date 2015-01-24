@@ -24,6 +24,6 @@ void GameObject::update(sf::Time deltaT)
 	int size = components.size();
 	for(int i = 0;i < size;++i)
 	{
-		components[i].update(deltaT);
+		components[i]->update(deltaT);
 	}
 }
