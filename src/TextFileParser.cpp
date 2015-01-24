@@ -9,6 +9,12 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "CoinItem.hpp"
+#include "TimeItem.hpp"
+#include "TriggerItem.hpp"
+#include "KeyItem.hpp"
+#include "ItemFactory.hpp"
+#include "globals.hpp"
 
 TextFileParser::TextFileParser() {
 	// TODO Auto-generated constructor stub
@@ -24,15 +30,21 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 	std::ifstream infile(fileName);
 //	infile.open(fileName.c_str());
 	std::string line;
+
+	sf::Texture itemsTexture;
+	itemsTexture.loadFromFile(std::string(PATH) + "img/items.png");
+	sf::Sprite itemSprite;
+	itemSprite.setTexture(itemsTexture);
+	ItemFactory tmpFactory(&itemSprite);
+
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
 		std::string first;
 		iss >> first;
 
-		if (first == "start")
+		if (first == "Start")
 		{
-			std::cout<<"start found"<<std::endl;
 			int x,y;
 			iss >> x;
 			iss >> y;
@@ -40,9 +52,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			scene.startPos.y = y;
 		}
 
-		if (first == "portal")
+		if (first == "Portal")
 		{
-			std::cout<<"portal found"<<std::endl;
 			int x,y;
 			iss >> x;
 			iss >> y;
@@ -50,8 +61,33 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			scene.portalPos.y = y;
 		}
 
-//		std::cout<<line<<std::endl;
+		if (first == "Item")
+		{
+			std::string second;
+			iss >> second;
+			int x,y;
+			iss >> x;
+			iss >> y;
 
-		// process pair (a,b)
+			Item *tmpItem = tmpFactory.getItem(second);
+			tmpItem->setPosition(x, y);
+			scene.portalPos.x = x;
+			scene.portalPos.y = y;
+			scene.items.push_back(*tmpItem);
+		}
+
+		if (first == "TriggerItem")
+		{
+			int x1, x2, y1, y2;
+			iss >> x1;
+			iss >> y1;
+			iss >> x2;
+			iss >> y2;
+
+			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
+			tmpItem->setSwitchPos(x1, y1, x2, y2);
+			scene.items.push_back(*tmpItem);
+		}
+
 	}
 }

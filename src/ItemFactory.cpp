@@ -26,5 +26,10 @@ Item* ItemFactory::getItem(std::string name)
 	{
 		return new KeyItem(sprite);
 	}
+
+	if (name == "TriggerItem")
+	{
+		return new TriggerItem(sprite);
+	}
 	return 0;
 }

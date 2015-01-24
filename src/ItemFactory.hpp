@@ -2,7 +2,7 @@
 #include <string>
 #include "Item.hpp"
 
-class ItemFactory : public GameObject
+class ItemFactory
 {
 public:
 	ItemFactory(sf::Sprite* sprite);
