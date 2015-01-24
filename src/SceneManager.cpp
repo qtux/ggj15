@@ -4,7 +4,7 @@
 #include "globals.hpp"
 
 SceneManager::SceneManager(){
-	colorToTilePositionMap[0x11941b] = getRandomGrassPosition; // grass
+	colorToTilePositionMap[0x11941b] = getRandomGrassPosition(); // grass
 	colorToTilePositionMap[0x989898] = sf::Vector2i(0,3); // stone
 	colorToTilePositionMap[0x9c6d27] = sf::Vector2i(0,1); // dirt
 	colorToTilePositionMap[0x5f5f5f] = sf::Vector2i(0,2); // wet stone
