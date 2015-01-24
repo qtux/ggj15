@@ -9,6 +9,11 @@ SceneManager::SceneManager(){
 	colorToTilePositionMap[0x9c6d27] = sf::Vector2i(0,1); // dirt
 	colorToTilePositionMap[0x5f5f5f] = sf::Vector2i(0,2); // wet stone
 	colorToTilePositionMap[0x000000] = sf::Vector2i(2,9); // wall
+	
+	// load textures
+	tileTexture.loadFromFile("./img/TileMap.png");
+	playerTexture.loadFromFile("./img/player.png");
+	itemTexture.loadFromFile("./img/items.png");
 
 	loadScene("levels/level000.bmp");
 
@@ -24,8 +29,21 @@ void SceneManager::update(sf::Time deltaT) {
 
 void SceneManager::loadScene(std::string name)
 {
+	// new code
+	sf::Texture texture;
+	texture.loadFromFile("./img/TileMap.png");
+	// Create a sprite
+	/*sf::Sprite sprite;
+	sprite.setTexture(texture);
+	sprite.setTextureRect(sf::IntRect(10, 10, 50, 30));
+	sprite.setColor(sf::Color(255, 255, 255, 200));
+	sprite.setPosition(100, 25);*/
+	// Draw it
+	// old code
+	/*
 	Scene* tmpScene = new Scene();
 	const sf::Texture &tmpTexture = textureManager.getTexture("./img/TileMap.png");
+	
 	const sf::Texture &levelTexture = textureManager.getTexture(name);
 	sf::Image levelImg = levelTexture.copyToImage();
 
@@ -69,6 +87,6 @@ void SceneManager::loadScene(std::string name)
 	//tmpGui.setRepeated(true);
 	
 	sf::Sprite *guiSprite = new sf::Sprite();
-	guiSprite->setTexture(tmpGui);
+	guiSprite->setTexture(tmpGui);*/
 	
 }
