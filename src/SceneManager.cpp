@@ -5,6 +5,8 @@
 #include "Player.hpp"
 #include <string>
 #include <sstream>
+#include <cmath>
+
 
 SceneManager::SceneManager(){
 	std::vector<sf::Vector2i> *tmpVector = new std::vector<sf::Vector2i>();
@@ -149,7 +151,9 @@ void SceneManager::loadScene(std::string fileName)
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
 	playerSprite->setTexture(playerTexture);
+	playerSprite->setPosition(0,0);
 	doggieSprite->setTexture(playerTexture);
+	doggieSprite->setPosition(0,0);
 	scene.player->mySprite = playerSprite;
 
 	scene.player->doggieSprite = doggieSprite;
@@ -191,8 +195,8 @@ void SceneManager::processEditMode()
 
 
 			sf::Vector2i tmpPos;
-			tmpPos.x = round(localPosition.x);
-			tmpPos.y = round(localPosition.y);
+			tmpPos.x = (int)(localPosition.x);
+			tmpPos.y = (int)(localPosition.y);
 
 			GameObject* tmpTile = scene.getTile(tmpPos.x, tmpPos.y);
 			Tile* newTile = new Tile();
