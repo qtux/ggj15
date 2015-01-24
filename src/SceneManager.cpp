@@ -42,8 +42,6 @@ SceneManager::SceneManager(){
 	walkableTileState[0x969896ff] = true;
 	walkableTileState[0x11941bff] = true;
 	
-	
-	loadScene(std::string(PATH) + "levels/level000");
 	currentLevelNumber = 0;
 	nextLevel();
 }
