@@ -1,6 +1,5 @@
 #include "SceneManager.hpp"
 #include "Tile.hpp"
-#include <SFML/Graphics.hpp>
 #include "globals.hpp"
 #include <iostream>
 
@@ -26,10 +25,6 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string file)
 {
 	// load textures for level
-	sf::Texture tileTexture;
-	sf::Texture playerTexture;
-	sf::Texture itemTexture;
-	sf::Texture timeBarTexture;
 	tileTexture.loadFromFile("./img/TileMap.png");
 	playerTexture.loadFromFile("./img/player.png");
 	itemTexture.loadFromFile("./img/items.png");
@@ -72,7 +67,7 @@ void SceneManager::loadScene(std::string file)
 			}
 			sprite->setTextureRect(sf::IntRect(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY, Tile::pixelSizeX, Tile::pixelSizeY));
 			// set position of the sprite inside the map
-			sprite->setPosition(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY);
+			sprite->setPosition(x*Tile::pixelSizeX, y*Tile::pixelSizeY);
 			// create the tile and add it to the scene
 			Tile* tmpTile = new Tile();
 			tmpTile->mySprite = sprite;
