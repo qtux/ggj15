@@ -35,8 +35,7 @@ void Player::update (sf::Time deltaTime) {
 	
 	
 	if (mySprite != 0 && doggieSprite != 0)
-	{
-		
+	{		
 		
 		mySprite->setTextureRect(sf::IntRect(direction * 16, animationStep / slowFactor * 32, 16, 32));
 		window.draw(*mySprite);

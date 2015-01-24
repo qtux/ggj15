@@ -57,7 +57,9 @@ void SceneManager::loadScene(std::string file)
 	timeBarTexture.setRepeated(true);
 	sf::Sprite *guiSprite = new sf::Sprite();
 	guiSprite->setTexture(timeBarTexture);
-	
+	GUI* gui = new GUI(guiSprite);
+	gui->setTimeout(20);
+	scene.setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;
 	levelImg.loadFromFile(file);
@@ -107,4 +109,9 @@ void SceneManager::loadScene(std::string file)
 	doggieSprite->setTexture(playerTexture);
 	scene.player->mySprite = playerSprite;
 	scene.player->doggieSprite = playerSprite;
+}
+
+Scene SceneManager::getCurrentScene()
+{
+	return scene;
 }

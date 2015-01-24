@@ -15,18 +15,14 @@ int main() {
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
 	
-	#ifdef DEBUG
-		sf::Sound snd;
-		snd.setBuffer(soundManager.getSound("sound/test.wav"));
-		snd.play();
-	#endif
+	soundManager.playSound("sound/test.wav");
 	
 	// main loop
 	while (window.isOpen()) {
 		// poll events (do not use for input handling)
 		sf::Event event;
 		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
+			if (event.type == sf::Event::Closed  || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))) {
 				window.close();
 			}
 			if (event.type == sf::Event::LostFocus) {
