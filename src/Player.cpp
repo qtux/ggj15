@@ -1,7 +1,14 @@
 #include "Player.hpp"
-#include "globals.hpp"
+#include <iostream>
 
 void Player::update (sf::Time deltaTime) {
+	// doggie follows the hero
+	if (!animationQueue.empty() && animationQueue.front() != animationStep)
+	{
+		animationQueue.push(animationStep);
+		directionQueue.push(direction);
+	}
+	
 	// get input from globals and process:
 	sf::Vector2f tmpPos = getPosition();
 	int width = getWidth();
@@ -27,9 +34,20 @@ void Player::update (sf::Time deltaTime) {
 	//check for collisions:
 	
 	
-	if (mySprite != 0)
+	if (mySprite != 0 && doggieSprite != 0)
 	{
+		
+		
 		mySprite->setTextureRect(sf::IntRect(direction * 16, animationStep / slowFactor * 32, 16, 32));
 		window.draw(*mySprite);
+		
+		std::cout << animationQueue.front() << std::endl;
+		doggieSprite->setTextureRect(sf::IntRect((directionQueue.front() + 4) * 16, animationQueue.front() / slowFactor * 32, 16, 16));
+		window.draw(*doggieSprite);
+		if (!animationQueue.empty() && !directionQueue.empty() && animationQueue.size() > 16) // delay of doggie movement
+		{
+			directionQueue.pop();
+			animationQueue.pop();
+		}
 	}
 }
