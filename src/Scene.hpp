@@ -21,6 +21,7 @@ public:
 	void setTile(GameObject* obj, int x, int y);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
 	void update(sf::Time deltaT);
+	// hack hier, ne doch nicht xD
 	const static int sizeX = 8;
 	const static int sizeY = 6;
 	const static int largeTileSizeX = 6;
