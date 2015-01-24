@@ -10,6 +10,9 @@ private:
 	// SceneLoader loader;
 	Scene scene;
 	std::map<sf::Uint32, sf::Vector2i> colorToTilePositionMap;
+
+	sf::Vector2i getRandomGrassPosition();
+
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
