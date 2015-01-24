@@ -13,6 +13,7 @@ int main() {
 	// define a clock to measure time
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
+	globalClock.restart();
 	
 	#ifdef DEBUG
 		sf::Sound snd;

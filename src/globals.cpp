@@ -16,3 +16,4 @@ TextureManager textureManager;
 
 bool focus = true;
 InputType input = {};
+sf::Clock globalClock;
