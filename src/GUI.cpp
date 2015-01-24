@@ -37,4 +37,18 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		window.draw(*mySprite);
 	}
+	for (int i = 0;i < coins;i++)
+	{
+		//TODO: Draw coins
+	}
+}
+
+void GUI::resetCoins()
+{
+	coins = 0;
+}
+
+void GUI::addCoins(int amount)
+{
+	coins += amount;
 }

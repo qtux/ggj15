@@ -107,3 +107,8 @@ void SceneManager::loadScene(std::string file)
 	playerSprite->setTexture(playerTexture);
 	scene.player->mySprite = playerSprite;
 }
+
+Scene SceneManager::getCurrentScene()
+{
+	return scene;
+}

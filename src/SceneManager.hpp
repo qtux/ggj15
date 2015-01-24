@@ -24,6 +24,6 @@ public:
 	void showScene(std::string sceneName);
 	void update(sf::Time deltaT);
 	void loadScene(std::string name);
-	
+	Scene getCurrentScene();
 //	Scene currentScene;
 };
