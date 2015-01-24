@@ -6,6 +6,10 @@
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
 
+static const int screenWidth = 800;
+static const int screenHeight = 600;
+
+
 // define number of keyboards binding 
 #define INPUT_SIZE 5
 typedef std::bitset<INPUT_SIZE> InputType;

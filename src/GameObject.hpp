@@ -5,7 +5,6 @@
  *      Author: sartz
  */
 #pragma once
-#include "GameObjectComponent.hpp"
 #include <SFML/System.hpp>
 #include <vector>
 
@@ -21,6 +20,10 @@ public:
 	const sf::Vector2f& getPosition() const;
 	
 	void setPosition(int x, int y);
+	
+	int getWidth() const;
+	
+	int getHeight() const;
 
 	//GameObject() {};
 
