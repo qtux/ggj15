@@ -11,6 +11,7 @@ private:
 	// SceneLoader loader;
 	Scene scene;
 	std::map<sf::Uint32, std::vector<sf::Vector2i>*> colorToTilePositionMap;
+	std::map<sf::Uint32, bool> walkableTileState;
 	
 	sf::Texture tileTexture;
 	sf::Texture playerTexture;

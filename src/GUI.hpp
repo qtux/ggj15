@@ -18,8 +18,7 @@ private:
 	sf::Sprite* timeSprite;
 	sf::Sprite* coinSprite;
 	sf::Sprite* keySprite;
-	sf::Texture timeBarTexture;
-	sf::Texture itemTexture;
+
 	float timeoutSeconds;
 	float timeBuff;
 	int coins;

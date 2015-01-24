@@ -33,13 +33,13 @@ public:
 	GameObject * player;
 	GUI* gui;
 	
-	const std::vector<GameObject*> getGameBoard() const;
+	const std::vector<GameObject*> & getGameBoard() const;
 /*private:
 	std::vector<GameObject*> gameBoard;*/
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
 	std::vector<Item> items;
-private:
+//private:
 	std::vector<GameObject*> gameBoard;
 };
 

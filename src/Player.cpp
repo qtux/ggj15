@@ -1,15 +1,27 @@
 #include "Player.hpp"
 #include <iostream>
+#include "Tile.hpp"
 
 bool Player::intersects(const GameObject& cmp)
 {
-	sf::FloatRect tmpRect = mySprite->getLocalBounds();
+	sf::FloatRect tmpRect = mySprite->getGlobalBounds();
+	sf::Vector2f tmpPos(tmpRect.left, tmpRect.top);
+	return intersects(tmpPos, cmp);
+}
+
+bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
+{
+	if (dynamic_cast<const Tile*>(&cmp)->walkable) return false;
+	sf::FloatRect tmpRect(testPos.x + 3 , testPos.y + 32 - 10, 10, 10);
+	
+	/*
 	tmpRect.top += 32 - 10;
 	tmpRect.left += 3;
 	tmpRect.width = 10;
-	tmpRect.height = 10;
+	tmpRect.height = 10;*/
 	
-	return cmp.mySprite->getLocalBounds().intersects(tmpRect);
+	if (cmp.mySprite == 0) return false;
+	return cmp.mySprite->getGlobalBounds().intersects(tmpRect);
 }
 
 void Player::update (sf::Time deltaTime) {
@@ -24,12 +36,7 @@ void Player::update (sf::Time deltaTime) {
 	if (input[2]) { tmpPos.y -= 0.08f*deltaTime.asMilliseconds(); dir = 1; }
 	if (input[3]) { tmpPos.y += 0.08f*deltaTime.asMilliseconds(); dir = 0; }
 	
-	// doggie follows the hero
-	if (dir > -1)
-	{
-		positionQueue.push(tmpPos);
-		directionQueue.push(direction);
-	}
+
 	
 	if (tmpPos.x > screenWidth) tmpPos.x -= screenWidth;
 	if (tmpPos.x + width < 0)  tmpPos.x += screenWidth;
@@ -51,16 +58,26 @@ void Player::update (sf::Time deltaTime) {
 	
 	bool collides = false;
 	//check for collisions:
-	/*for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().getGameBoard().begin(); tileIt != sceneManager.getCurrentScene().getGameBoard().end(); tileIt++)
+
+	for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().gameBoard.begin(); tileIt != sceneManager.getCurrentScene().gameBoard.end(); tileIt++)
 	{
 		sf::Vector2f distVec = ((*tileIt)->getPosition() - getPosition());
-		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 && intersects(**tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
+		// ... 
+		//std::cout<<(*tileIt)->mySprite->getGlobalBounds().left<<" , "<<(*tileIt)->mySprite->getGlobalBounds().top<<" , "<<mySprite->getGlobalBounds().left<<" , "<<mySprite->getGlobalBounds().left<<" , "<<std::endl;
+		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
 		{
 			collides = true;
 		}
-	}*/
+	}
 	if (!collides)
 	{
+		// doggie follows the hero
+		if (dir > -1)
+		{
+			positionQueue.push(tmpPos);
+			directionQueue.push(direction);
+		}
+		
 		setPosition(tmpPos.x, tmpPos.y);
 		if (!positionQueue.empty()){
 			doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18);
@@ -70,7 +87,7 @@ void Player::update (sf::Time deltaTime) {
 	if (mySprite != 0 && doggieSprite != 0)
 	{		
 		if (!directionQueue.empty()){
-			doggieSprite->setTextureRect(sf::IntRect((directionQueue.front() + 4) * 16, DoggieAnimState[doggieStep / slowFactor] * 16, 16, 16));
+			doggieSprite->setTextureRect(sf::IntRect((directionQueue.front() + 4) * 16, DoggieAnimState[int(doggieStep / (slowFactor * 0.08f*deltaTime.asMilliseconds()))] * 16, 16, 16));
 		}
 		else
 		{
@@ -83,7 +100,7 @@ void Player::update (sf::Time deltaTime) {
 			positionQueue.pop();
 		}
 		
-		mySprite->setTextureRect(sf::IntRect(direction * 16, PlayerAnimState[animationStep / slowFactor] * 32, 16, 32));
+		mySprite->setTextureRect(sf::IntRect(direction * 16, PlayerAnimState[int(animationStep / (slowFactor * 0.08f*deltaTime.asMilliseconds()))] * 32, 16, 32));
 		window.draw(*mySprite);
 	}
 }

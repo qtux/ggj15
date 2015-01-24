@@ -1,7 +1,7 @@
 #include "globals.hpp"
 #include "Tile.hpp"
 
-Tile::Tile(){};
+Tile::Tile() : walkable(false) {};
 
 
 void Tile::update (sf::Time deltaTime) {

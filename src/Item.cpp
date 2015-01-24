@@ -1,5 +1,6 @@
 #include "globals.hpp"
 #include "Item.hpp"
+#include <iostream>
 
 Item::Item(sf::Sprite* sprite,int x,int y,int w,int h){
 	mySprite = sprite;

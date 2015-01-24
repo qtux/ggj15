@@ -21,6 +21,7 @@ sf::Keyboard::Key keyboardBinding[] = {
 
 sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
 SceneManager sceneManager;
+TextureManager textureManager;
 #ifndef _WIN32
 	SoundManager soundManager;
 #else
