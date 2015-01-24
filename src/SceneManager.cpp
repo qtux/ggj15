@@ -94,7 +94,7 @@ void SceneManager::update(sf::Time deltaT) {
 void SceneManager::loadScene(std::string fileName)
 {	
 	// load textures for level
-	std::cout << std::string(PATH) << std::endl;
+	std::cout << fileName<< std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
 	itemTexture.loadFromFile(std::string(PATH) + "img/items.png");
