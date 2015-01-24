@@ -16,6 +16,8 @@ GUI::GUI()
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
+	coins=0;
+	keys=0;
 
 }
 void GUI::setTimeout(int seconds)
