@@ -31,6 +31,8 @@ public:
 	const static int largeTileSizeY = 6;
 	GameObject * player;
 	GUI* gui;
+	
+	const std::vector<GameObject*> getGameBoard() const;
 private:
 	std::vector<GameObject*> gameBoard;
 	sf::Vector2i startPos;

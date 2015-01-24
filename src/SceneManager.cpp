@@ -210,7 +210,7 @@ void SceneManager::processEditMode()
 	}
 }
 
-Scene SceneManager::getCurrentScene()
+Scene& SceneManager::getCurrentScene()
 {
 	return scene;
 }

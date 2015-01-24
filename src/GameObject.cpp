@@ -16,6 +16,11 @@ void GameObject::setPosition(float x, float y)
 	mySprite->setPosition(x, y);
 }
 
+bool GameObject::intersects(const GameObject& cmp)
+{
+	return cmp.mySprite->getLocalBounds().intersects(mySprite->getLocalBounds());
+}
+
 
 int GameObject::getHeight() const
 {

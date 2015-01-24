@@ -27,6 +27,6 @@ public:
 	void processEditMode();
 	sf::Vector2i getTilePosition(sf::Uint32 color);
 	
-	Scene getCurrentScene();
+	Scene& getCurrentScene();
 //	Scene currentScene;
 };
