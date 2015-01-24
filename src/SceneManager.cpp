@@ -2,6 +2,7 @@
 #include "Tile.hpp"
 #include "globals.hpp"
 #include <iostream>
+#include "Player.hpp"
 #include <string>
 
 SceneManager::SceneManager(){
@@ -98,4 +99,8 @@ void SceneManager::loadScene(std::string file)
 			scene.setTile(tmpTile, x, y);
 		}
 	}
+	scene.player = new Player();
+	sf::Sprite *playerSprite = new sf::Sprite();
+	playerSprite->setTexture(playerTexture);
+	scene.player->mySprite = playerSprite;
 }

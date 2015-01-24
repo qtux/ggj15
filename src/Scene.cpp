@@ -62,4 +62,6 @@ void Scene::update(sf::Time deltaT)
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
 	}
+	
+	player->update(deltaT);
 }
