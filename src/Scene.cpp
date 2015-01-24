@@ -117,6 +117,7 @@ void Scene::update(sf::Time deltaT)
 	textRect.setFillColor(sf::Color(0, 0, 250, 50));
 	window.draw(textRect);
 	
+	// zu Anfang:
 	Text.setStyle(sf::Text::Bold);
 	Text.setString("Oh no...");
 	Text.setStyle(sf::Text::Regular);
@@ -127,7 +128,33 @@ void Scene::update(sf::Time deltaT)
 	Text.setString("SQOLRK");
 	Text.setColor(sf::Color(210, 210, 255));
 	
-	window.draw(Text);*/
+	// Zeit wird knapp:
+	Text.setColor(sf::Color(210, 255, 210));
+	Text.setString("LURMK");
+	Text.setColor(sf::Color(210, 210, 255));
+	Text.setString("You are right we should hurry. The pizza is going cold.");
+	
+	// Key aufgesammelt (erstes Level):
+	Text.setColor(sf::Color(210, 210, 210));
+	Text.setString("A key to another dimension!");
+	Text.setColor(sf::Color(210, 210, 255));
+	
+	// Uhr aufgesammelt (erstes Level):
+	Text.setColor(sf::Color(210, 210, 210));
+	Text.setString("When do we do now?");
+	Text.setColor(sf::Color(210, 210, 255));
+	
+	// Ziel erreicht, kein Key (erstes Level):
+	Text.setString("We need a key for this dimension hole!");
+	
+	// Ziel erreicht (erstes Level):
+	Text.setString("Do you want to leave, Doggie?");
+	Text.setColor(sf::Color(210, 255, 210));
+	Text.setString("Frravt");
+	Text.setColor(sf::Color(210, 210, 255));
+	*/
+	
+	window.draw(Text);
 }
 
 void Scene::leave()
