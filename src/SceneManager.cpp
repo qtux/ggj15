@@ -111,7 +111,7 @@ void SceneManager::loadScene(std::string file)
 	playerSprite->setTexture(playerTexture);
 	doggieSprite->setTexture(playerTexture);
 	scene.player->mySprite = playerSprite;
-	scene.player->doggieSprite = playerSprite;
+	scene.player->doggieSprite = doggieSprite;
 }
 
 Scene SceneManager::getCurrentScene()

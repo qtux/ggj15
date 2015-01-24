@@ -9,6 +9,7 @@ class Player : public GameObject
 public:
 	int animationStep;
 	int direction;
+	int doggieStep;
 
 	Player(): direction(0) {};
 
@@ -16,9 +17,10 @@ public:
 	
 	// TODO put doggieSprite in here and not in GameObject
 	// TODO delete doggieSprites
+	// TODO Player und Doggie nicht mitten im Schritt anhalten
 	
 private:
-	std::queue<int> animationQueue;
+	std::queue<sf::Vector2f> positionQueue;
 	std::queue<int> directionQueue;
 	
 };
