@@ -24,14 +24,28 @@ void Highscore::update(sf::Time deltaT)
 
 void Highscore::save()
 {
+	std::vector<std::string> hsFile;
+	std::ifstream infile("hs.txt");
+	std::string line;
+	while (std::getline(infile, line))
+	{
+		hsFile.push_back(line);
+	}
+	infile.close();
 
-	 std::ofstream out;
-	 
-	 out.open(std::string(PATH) + "hs.hus", std::ios::app);
-	 out << sceneManager.getCurrentScene().gui->coins;
-	 out << sceneManager.getCurrentScene().gui->timeLeft();
-	 out << sceneManager.getCurrentScene().gui->timeoutSeconds;
-	 out << sceneManager.restards;
+	std::stringstream hsLineStr;
+	hsLineStr << sceneManager.getCurrentScene().gui->coins << " ";
+	hsLineStr << sceneManager.getCurrentScene().gui->timeLeft() << " ";
+	hsLineStr << sceneManager.getCurrentScene().gui->timeoutSeconds;
+	
+	std::ofstream out("hs.txt");
+	out << hsLineStr.str() << "\n";
+	for (std::vector<std::string>::iterator lineIt = hsFile.begin() ; lineIt != hsFile.end() ; lineIt++)
+	{
+		out << (*lineIt) << "\n";
+	}
+	out.close();
+
 }
 
 void Highscore::load()
