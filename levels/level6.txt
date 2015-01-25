@@ -1,0 +1,23 @@
+Timebuff 5
+Timeout 5
+Start 7 14
+Portal 11 9
+Item CoinItem 7 7
+Item CoinItem 19 2
+Item CoinItem 29 14
+Item CoinItem 27 2
+#Item KeyItem 15 2
+Item TimeItem 4 9
+Item TimeItem 8 21
+Item TimeItem 23 6
+Item TimeItem 25 19
+Item DecorationItem 19 18 1 0 112 16 16     Kristall
+Item DecorationItem 11 16 1 0 112 16 16     Kristall
+Item DecorationItem 1 3 1 0 112 16 16     Kristall
+Item DecorationItem 27 18 1 0 112 16 16     Kristall
+#Item DecorationItem 25 19 1 16 96 16 16    Tiberium
+Item DecorationItem 11 13 1 16 112 16 16    Fels
+Item DecorationItem 15 20 0 16 80 16 16     Pilz
+Item DecorationItem 6 22 0 16 80 16 16
+#TriggerItem 21 17 3 0 0 3
+#TriggerItem 28 18 3 0 2 0

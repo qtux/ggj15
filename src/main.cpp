@@ -3,9 +3,10 @@
 // last include (requires previous includes)
 #include "globals.hpp"
 
+sf::RectangleShape menu;
 sf::RectangleShape background;
 sf::RectangleShape outline;
-
+sf::Text speech;
 
 void resize(int width, int height) {
 	// get ratio based on the original size
@@ -36,6 +37,9 @@ void resize(int width, int height) {
 	// resize outline
 	outline.setPosition(0, 0);
 	outline.setSize(sf::Vector2f(width/ratio - 2 * widthOffset, height/ratio - 2 * heightOffset));
+	// resize menu
+	menu.setPosition(-widthOffset, -heightOffset);
+	menu.setSize(sf::Vector2f(width/ratio, height/ratio));
 }
 
 int main() {
@@ -44,6 +48,20 @@ int main() {
 	backgroundTexture.loadFromFile(std::string(PATH) + "img/background.png");
 	backgroundTexture.setRepeated(true);
 	background.setTexture(&backgroundTexture);
+	
+	// define menu texture (to be used with the background)
+	sf::Texture menuTexture;
+	menuTexture.loadFromFile(std::string(PATH) + "img/titleScreen.png");
+	menu.setTexture(&menuTexture);
+	
+	// define menu variables
+	unsigned int currentLevel = 0;
+	sf::Font font;
+	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	speech.setFont(font);
+	speech.setColor(sf::Color(0x00, 0x00, 0x00));
+	speech.setCharacterSize(16);
+	speech.setPosition(sf::Vector2f(16, 16));
 	
 	// define outline
 	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
@@ -70,7 +88,12 @@ int main() {
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed  || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))) {
-				window.close();
+				if (inMenu) {
+					window.close();
+				}
+				else {
+					inMenu = true;
+				}
 			}
 			if (event.type == sf::Event::LostFocus) {
 				focus = false;
@@ -83,6 +106,18 @@ int main() {
 				int width = event.size.width;
 				int height = event.size.height;
 				resize(width, height);
+			}
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+				--currentLevel;
+				currentLevel %= numLevels;
+			}
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
+				++currentLevel;
+				currentLevel %= numLevels;
+			}
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+				inMenu = false;
+				sceneManager.nextLevel(currentLevel);
 			}
 		}
 
@@ -110,10 +145,30 @@ int main() {
 		// reset clock and determine elapsed time since last frame
 		deltaT = clock.restart();
 		// update game with deltaT when focused
-		window.draw(background);
-		window.draw(outline);
-		if (focus) {
-			sceneManager.update(deltaT);
+		
+		if (inMenu) {
+			// do menu logic here
+			speech.setString(
+				"Current Level: " + std::to_string(currentLevel) +
+				"\nLEFT, RIGHT ARROW - choose level"+
+				"\nRETURN - start the game" +
+				"\n\n\nIngame usage:" +
+				"\nARROW keys - move the character" +
+				"\nA key - proceed with dialogue" +
+				"\nB key- skip dialogue" +
+				"\n(You may use a gamepad instead)" +
+				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
+			);
+			// draw menu and level number
+			window.draw(menu);
+			window.draw(speech);
+		}
+		else {
+			window.draw(background);
+			window.draw(outline);
+			if (focus) {
+				sceneManager.update(deltaT);
+			}
 		}
 		window.display();
 	}

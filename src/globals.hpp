@@ -7,6 +7,8 @@
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
 
+static const int numLevels = 8;
+
 // use absolute paths on windows (strange behaviour)
 #ifndef _WIN32
 	#define PATH "./"
@@ -37,5 +39,6 @@ extern SoundManager soundManager;
 extern TextureManager textureManager;
 
 extern bool focus;
+extern bool inMenu;
 extern InputType input;
 extern sf::Clock globalClock;

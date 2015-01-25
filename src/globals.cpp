@@ -20,5 +20,6 @@ TextureManager textureManager;
 #endif
 
 bool focus = true;
+bool inMenu = true;
 InputType input;
 sf::Clock globalClock;
