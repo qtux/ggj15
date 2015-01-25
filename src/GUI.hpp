@@ -13,6 +13,7 @@ public:
 	void resetKeys();
 	void addCoins(int amount);
 	void addKeys(int amount);
+	void setTimebuffFactor(float factor);
 private:
 	sf::Clock timeoutClock;
 	sf::Sprite* timeSprite;
@@ -25,6 +26,7 @@ private:
 	bool lastEnable;
 	bool loosed;
 	bool smallTime;
+	float buffFactor;
 	int coins;
 	int keys;
 };

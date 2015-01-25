@@ -182,7 +182,7 @@ void Scene::update(sf::Time deltaT)
 	
 	sf::Text level;
 	level.setFont(font);
-	level.setPosition(gridWidth - 30, gridHeight - 70);
+	level.setPosition(gridWidth, gridHeight - 32);
 	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
 	window.draw(level);
 	

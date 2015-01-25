@@ -4,7 +4,7 @@ GUI::GUI()
 {
 	timeSprite = new sf::Sprite();
 	timeSprite->setTexture(textureManager.timeBarTexture);
-	timeSprite->setPosition(10,gridHeight-30);
+	timeSprite->setPosition(10, gridHeight-20);
 
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(textureManager.itemsTexture);
@@ -22,6 +22,7 @@ GUI::GUI()
 	loosed = false;
 	lastEnable = false;
 	smallTime = false;
+	buffFactor = 20;
 }
 void GUI::setTimeout(int seconds)
 {
@@ -29,9 +30,13 @@ void GUI::setTimeout(int seconds)
 	timeoutSeconds = seconds;
 	timeBuff = 0;
 }
+void GUI::setTimebuffFactor(float factor)
+{
+	buffFactor = factor;
+}
 void GUI::applyTimeBufff(float seconds)
 {
-	timeBuff += seconds;
+	timeBuff += seconds*buffFactor;
 }
 
 void GUI::update (sf::Time deltaTime) {
@@ -49,7 +54,7 @@ void GUI::update (sf::Time deltaTime) {
 	}
 	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
 	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
-	float progress = 1-(elapsedSeconds / timeoutSeconds);
+	float progress = 1 - (elapsedSeconds / timeoutSeconds);
 	//TODO: use min, max
 	if (progress > 1)
 	{
@@ -75,21 +80,22 @@ void GUI::update (sf::Time deltaTime) {
 		}
 		smallTime = true;
 	}
-	int width = (progress* (gridWidth-20));
-	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % 46, 0, width, 20));
+	int height = (1 - progress) * (gridHeight);
+	timeSprite->setPosition(-15 , height);
+	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, gridHeight - height));
 	window.draw(*timeSprite);
 
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(gridWidth-30,10+(i*16));
+		coinSprite->setPosition(gridWidth, - i * 16);
 		window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(i*16+40,gridHeight-60);
+		keySprite->setPosition(gridWidth, gridHeight - 42 + i*16);
 		window.draw(*keySprite);
 	}
 }
