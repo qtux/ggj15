@@ -219,7 +219,7 @@ void Scene::update(sf::Time deltaT)
 }
 void Scene::finishLevel()
 {
-	highscore = new Highscore(1);
+	highscore = new Highscore(sceneManager.getCurrentLevelNumber()+1);
 	highscore->save();
 	highscore->load();
 }
