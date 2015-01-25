@@ -11,7 +11,7 @@ Item DecorationItem 26 11 0 16 80 16 16
 TriggerItem 5 5 2 2 2 3
 TriggerItem 7 4 3 2 2 1
 Text start 0 210 210 255
-... (Press A to continue, B to skip)
+... (Press SPACE to continue, ENTER to skip)
 Text start 0 210 210 255
 The time machine is ruined, doggie.
 Text start 0 210 210 255
@@ -33,12 +33,18 @@ Text smalltime 0 210 210 210
 Text smalltime 0 210 210 210
 You might as well eat and watch your universe dissolve.
 Text loose 0 210 210 210
-Time IS fragile. Obviously it is now before just now. Lucky you.
+Time IS fragile. Obviously it is now before just now.
+Text loose 0 210 210 210
+Lucky you.
 Text loose 0 210 210 210
 Also clocks seem to run backwards.
 Text end 0 210 210 210
-A dimension hole! Dimension holes can be used to travel through time.
+A dimension hole!
+Text end 0 210 210 210
+Dimension holes can be used to travel through time.
 Text end 0 210 210 210
 If it lets you.
 Text end 0 210 210 210
-You can try. Everything is possible, including the good things.
+You can try. Everything is possible.
+Text end 0 210 210 210
+Including the good things.
