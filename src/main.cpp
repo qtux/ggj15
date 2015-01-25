@@ -5,12 +5,28 @@
 
 #define DEBUG
 
+void resize(int width, int height) {
+	// get ratio based on the original size
+	float widthRatio = (float) window.getSize().x / gridWidth;	// TODO add bar widths
+	float heightRatio = (float) window.getSize().y / gridHeight;
+	// use the smaller ratio to update the window size
+	if (heightRatio > widthRatio) {
+		// black border up and down (undesirable)
+		int offset = (height - width * sizeY / sizeX) / widthRatio / 2;
+		window.setView(sf::View(sf::FloatRect(0, -offset, width / widthRatio, height / widthRatio)));
+	}
+	else {
+		// black border left and right
+		int offset = (width - height * sizeX / sizeY) / heightRatio / 2;
+		window.setView(sf::View(sf::FloatRect(-offset, 0, width / heightRatio, height / heightRatio)));
+	}
+}
+
 int main() {
 	// window settings
 	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(30); // avoid noise ;)
-	// view
-	window.setView(sf::View(sf::FloatRect(0, 0, gridWidth, gridHeight)));
+	resize(screenWidth, screenHeight);
 	
 	// define a clock to measure time
 	sf::Clock clock;
@@ -36,17 +52,9 @@ int main() {
 			}
 			// maintain aspect ratio
 			if (event.type == sf::Event::Resized) {
-				// get ratio based on the original size
-				float widthRatio = (float) window.getSize().x / gridWidth;
-				float heightRatio = (float) window.getSize().y / gridHeight;
-				// use the smaller ratio to update the window size
-				//window.waitEvent(sf::Event::Resized);
-				if (heightRatio > widthRatio) {
-					window.setView(sf::View(sf::FloatRect(0, 0, event.size.width / widthRatio, event.size.height / widthRatio)));
-				}
-				else {
-					window.setView(sf::View(sf::FloatRect(0, 0, event.size.width / heightRatio, event.size.height / heightRatio)));
-				}
+				int width = event.size.width;
+				int height = event.size.height;
+				resize(width, height);
 			}
 		}
 		
