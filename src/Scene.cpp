@@ -19,6 +19,7 @@ Scene::Scene() {
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
+	highscore  = 0;
 }
 
 Scene::~Scene() {
@@ -159,9 +160,14 @@ void Scene::update(sf::Time deltaT)
 		(*it)->update(deltaT);
 		std::cout << (*it) << std::endl;
 	}*/
+	if (highscore != 0)
+	{
+		highscore->update(deltaT);
+		return;
+	}
 	if (leaved && !textBox->enabled())
 	{
-		sceneManager.nextLevel();
+		finishLevel();
 	}
 
 	updateTileAnimation(deltaT);
@@ -211,6 +217,12 @@ void Scene::update(sf::Time deltaT)
 	}
 	textBox->update(deltaT);
 }
+void Scene::finishLevel()
+{
+	highscore = new Highscore(1);
+	highscore->save();
+	highscore->load();
+}
 
 
 bool Scene::readyToLeave() const
@@ -235,6 +247,6 @@ void Scene::leave()
 	textBox->triggerText("end");
 	if (!textBox->enabled())
 	{
-		sceneManager.nextLevel();
+		finishLevel();
 	}
 }

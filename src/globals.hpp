@@ -40,5 +40,6 @@ extern TextureManager textureManager;
 
 extern bool focus;
 extern bool inMenu;
+extern bool showOutline;
 extern InputType input;
 extern sf::Clock globalClock;

@@ -30,8 +30,10 @@ public:
 	void nextLevel(int number);
 	void restartLevel();
 	int getCurrentLevelNumber();
+	int restards;
 	sf::Vector2i getTilePosition(sf::Uint32 color, int x, int y, sf::Image levelImg);
 	
 	Scene& getCurrentScene();
+
 //	Scene currentScene;
 };
