@@ -44,6 +44,4 @@ public:
 	std::vector<GameObject*> gameBoard;
 };
 
-static int levelCounter = 0;
-
 #endif /* SCENE_HPP_ */
