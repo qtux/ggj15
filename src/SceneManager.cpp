@@ -42,7 +42,7 @@ SceneManager::SceneManager(){
 	walkableTileState[0x969896ff] = true;
 	walkableTileState[0x11941bff] = true;
 	
-	currentLevelNumber = 0;
+	currentLevelNumber = -1;
 	nextLevel();
 }
 
@@ -196,8 +196,8 @@ void SceneManager::processEditMode()
 }
 
 void SceneManager::nextLevel(){
-	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 	currentLevelNumber++;
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 }
 
 void SceneManager::restartLevel(){
