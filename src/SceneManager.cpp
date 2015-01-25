@@ -159,7 +159,7 @@ void SceneManager::loadScene(std::string fileName)
 
 	// read text file
 	TextFileParser::loadTextFile(scene, fileName + ".txt");
-
+	scene.textBox->triggerText("start");
 }
 
 void SceneManager::processEditMode()

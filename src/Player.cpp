@@ -36,11 +36,12 @@ void Player::update (sf::Time deltaTime) {
 	int width = getWidth();
 	int height = getHeight();
 	int dir = -1;
-	if (input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
-	if (input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
-	if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
-	if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
-	
+	if (!sceneManager.getCurrentScene().textBox->enabled()){
+		if (input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
+		if (input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
+		if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
+		if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
+	}
 	int viewWidth = sizeX * largeTileSizeX * pixelSizeX;
 	int viewHeight = sizeY * largeTileSizeY * pixelSizeY;
 	
