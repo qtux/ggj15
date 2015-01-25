@@ -14,6 +14,7 @@ GUI::GUI()
 	keySprite = new sf::Sprite();
 	keySprite->setTexture(textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
+	keySprite->scale(1.5f,1.5f);
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
@@ -60,7 +61,7 @@ void GUI::update (sf::Time deltaTime) {
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(i*16+40,screenHeight-50);
+		keySprite->setPosition(i*16+40,screenHeight-60);
 		window.draw(*keySprite);
 	}
 }

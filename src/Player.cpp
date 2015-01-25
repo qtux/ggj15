@@ -27,17 +27,17 @@ bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 void Player::update (sf::Time deltaTime) {
 	
 	float dT = float(deltaTime.asMilliseconds());
-	float currTime = globalClock.getElapsedTime().asSeconds()*40;
+	float currTime = globalClock.getElapsedTime().asSeconds();
 	
 	// get input from globals and process:
 	sf::Vector2f tmpPos = getPosition();
 	int width = getWidth();
 	int height = getHeight();
 	int dir = -1;
-	if (input[0]) { tmpPos.x -= 0.08 * dT* (.75+.25*(sin(currTime)+1)); dir = 3; }
-	if (input[1]) { tmpPos.x += 0.08 * dT*(.75+.25*(sin(currTime)+1)); dir = 2; }
-	if (input[2]) { tmpPos.y -= 0.08 * dT*(.75+.25*(sin(currTime)+1)); dir = 1; }
-	if (input[3]) { tmpPos.y += 0.08 * dT*(.75+.25*(sin(currTime)+1)); dir = 0; }
+	if (input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*(sin(currTime*40)+1)); dir = 3; }
+	if (input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*(sin(currTime*40)+1)); dir = 2; }
+	if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*(sin(currTime*40)+1)); dir = 1; }
+	if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*(sin(currTime*40)+1)); dir = 0; }
 	
 
 	
@@ -87,6 +87,7 @@ void Player::update (sf::Time deltaTime) {
 		}
 	}
 	
+	//std::cout<<"1/dT "<<.256/dT<<std::endl;
 	if (mySprite != 0 && doggieSprite != 0)
 	{		
 		if (!directionQueue.empty()){
@@ -97,7 +98,7 @@ void Player::update (sf::Time deltaTime) {
 			doggieSprite->setTextureRect(sf::IntRect(4*16,0, 16, 16));
 		}
 		window.draw(*doggieSprite);
-		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 16) // delay of doggie movement
+		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 256./dT) // delay of doggie movement
 		{
 			directionQueue.pop();
 			positionQueue.pop();
