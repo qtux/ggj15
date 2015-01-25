@@ -146,5 +146,21 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			scene.items.push_back(tmpItem);
 		}
 
+		if (first == "TriggerTrapItem")
+		{
+			int x, y, x1, x2, y1, y2;
+			iss >> x;
+			iss >> y;
+			iss >> x1;
+			iss >> y1;
+			iss >> x2;
+			iss >> y2;
+
+			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
+			tmpItem->setSwitchPos(x1, y1, x2, y2);
+			tmpItem->setPosition(x * pixelSizeX, y * pixelSizeY);
+			scene.items.push_back(tmpItem);
+		}
+
 	}
 }
