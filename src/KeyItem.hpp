@@ -6,5 +6,5 @@ class KeyItem : public Item
 {
 public:
 	KeyItem(sf::Sprite* sprite);
-	void applyEffect();
+	bool applyEffect();
 };
