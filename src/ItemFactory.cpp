@@ -16,7 +16,7 @@ Item* ItemFactory::getItem(std::string name)
 	sprite->setTexture(textureManager.itemsTexture);
 	sprite->setPosition(10,screenHeight-30);
 	
-	if (name == "Time")
+	if (name == "TimeItem")
 	{
 		return new TimeItem(sprite);
 	}

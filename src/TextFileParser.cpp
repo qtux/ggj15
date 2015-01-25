@@ -16,6 +16,7 @@
 #include "ItemFactory.hpp"
 #include "globals.hpp"
 #include "TextureManager.hpp"
+#include "Tile.hpp"
 
 TextFileParser::TextFileParser() {
 	// TODO Auto-generated constructor stub
@@ -49,8 +50,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.startPos.x = x;
-			scene.startPos.y = y;
+			scene.startPos.x = x*Tile::pixelSizeX*Tile::tileScaleFactor;
+			scene.startPos.y = y*Tile::pixelSizeY*Tile::tileScaleFactor;
 		}
 
 		if (first == "Portal")
@@ -58,8 +59,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.portalPos.x = x;
-			scene.portalPos.y = y;
+			scene.portalPos.x = x*Tile::pixelSizeX*Tile::tileScaleFactor;
+			scene.portalPos.y = y*Tile::pixelSizeY*Tile::tileScaleFactor;
 		}
 
 		if (first == "Item")
@@ -71,7 +72,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			iss >> y;
 
 			Item *tmpItem = tmpFactory.getItem(second);
-			tmpItem->setPosition(x, y);
+			tmpItem->setPosition(x*Tile::pixelSizeX*Tile::tileScaleFactor, y*Tile::pixelSizeY*Tile::tileScaleFactor);
 			scene.items.push_back(*tmpItem);
 		}
 
@@ -84,7 +85,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			iss >> y2;
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
-			tmpItem->setSwitchPos(x1, y1, x2, y2);
+			tmpItem->setSwitchPos(x1*Tile::pixelSizeX*Tile::tileScaleFactor, y1*Tile::pixelSizeY*Tile::tileScaleFactor, x2*Tile::pixelSizeX*Tile::tileScaleFactor, y2*Tile::pixelSizeY*Tile::tileScaleFactor);
 			scene.items.push_back(*tmpItem);
 		}
 
