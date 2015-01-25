@@ -3,6 +3,8 @@
 #include <cmath>
 PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,16,16,16){
 }
+PortalItem::~PortalItem(){
+}
 
 void PortalItem::applyEffect()
 {

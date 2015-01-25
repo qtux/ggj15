@@ -6,6 +6,7 @@ class PortalItem : public Item
 {
 public:
 	PortalItem(sf::Sprite* sprite);
+	virtual ~PortalItem();
 	void applyEffect();
-	void update(sf::Time deltaTime);
+	virtual void update(sf::Time deltaTime);
 };

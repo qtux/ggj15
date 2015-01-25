@@ -2,6 +2,7 @@
 #include "TimeItem.hpp"
 #include "CoinItem.hpp"
 #include "TriggerItem.hpp"
+#include "PortalItem.hpp"
 #include "KeyItem.hpp"
 #include "globals.hpp"
 #include <SFML/Graphics.hpp>
@@ -38,6 +39,10 @@ Item* ItemFactory::getItem(std::string name)
 	if (name == "TriggerItem")
 	{
 		return new TriggerItem(sprite);
+	}
+	if (name == "PortalItem")
+	{
+		return new PortalItem(sprite);
 	}
 	return 0;
 }
