@@ -9,4 +9,4 @@ Item DecorationItem 13 5 1 0 112 16 16
 Item DecorationItem 4 14 1 0 112 16 16
 Item DecorationItem 16 3 1 16 112 16 16
 Item DecorationItem 3 22 1 16 112 16 16
-#TriggerItem 9 15 2 2 2 5
+TriggerItem 9 15 1 1 4 1
