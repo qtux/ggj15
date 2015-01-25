@@ -119,10 +119,10 @@ void Scene::update(sf::Time deltaT)
 		}
 	}
 	
-	/*
+	
 	// Text TEST
 	sf::Vector2f textPos(32.0f, 32.0f);
-	* int charSize = 30;
+	int charSize = 30;
 	
 	sf::Text speech;
 	speech.setFont(font);
@@ -176,14 +176,14 @@ void Scene::update(sf::Time deltaT)
 	speech.setColor(sf::Color(210, 210, 255));
 	
 	// Spielende:
-	schwarzer Bildschirm
+	//schwarzer Bildschirm
 	speech.setColor(sf::Color(210, 255, 210));
 	speech.setString("SQOLRK");
 	speech.setColor(sf::Color(210, 210, 255));
-	schwarzer Bildschirm
+	//schwarzer Bildschirm
 	
 	window.draw(speech);
-	*/
+	
 }
 
 void Scene::leave()
