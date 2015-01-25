@@ -13,6 +13,7 @@ PortalItem::~PortalItem(){
 
 bool PortalItem::applyEffect()
 {
+	soundManager.playSound("sound/won.ogg");
 	sceneManager.getCurrentScene().leave();
 	return true;
 };
