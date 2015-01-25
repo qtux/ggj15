@@ -57,7 +57,7 @@ int main() {
 		#ifdef DEBUG
 			// show input bitstring if any key is pressed
 			if (input.any()) {
-				std::cout << input << std::endl;
+//				std::cout << input << std::endl;
 			}
 		#endif
 		

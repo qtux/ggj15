@@ -15,4 +15,6 @@ private:
 	int drawY;
 	int drawW;
 	int drawH;
+	float offset;
+	sf::Clock waveClock;
 };
