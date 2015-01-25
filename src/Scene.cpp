@@ -193,6 +193,7 @@ void Scene::update(sf::Time deltaT)
 	level.setPosition(gridWidth + 2, gridHeight - 32);
 	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
 	window.draw(level);
+	textBox->update(deltaT);
 	
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
@@ -215,7 +216,6 @@ void Scene::update(sf::Time deltaT)
 			itIt ++;
 		}
 	}
-	textBox->update(deltaT);
 }
 void Scene::finishLevel()
 {

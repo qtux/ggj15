@@ -33,7 +33,13 @@ void TextBox::pushText()
 	for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ ) {
 		if ((*itIt)->eventType == currentEvent)
 		{
-			currentElement = (*itIt);
+			currentElement = new TextElement();
+			currentElement->eventType = (*itIt)->eventType;
+			currentElement->bold = (*itIt)->bold;
+			currentElement->r = (*itIt)->r;
+			currentElement->g = (*itIt)->g;
+			currentElement->b = (*itIt)->b;
+			currentElement->text = (*itIt)->text;
 			itIt = elements.erase(itIt);
 			return;
 		} 
