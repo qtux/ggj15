@@ -1,5 +1,6 @@
 #include "GameObject.hpp"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 const sf::Vector2f& GameObject::getPosition() const
 {

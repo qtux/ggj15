@@ -105,12 +105,14 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 			tileAnimationPos.push_back(tmp);
 		}
 	}
+	tileAnimationTime = 1.5f;
 
 }
 
 void Scene::updateTileAnimation(sf::Time deltaT)
 {
 	float dt = deltaT.asMilliseconds();
+	tileAnimationTime -= dt / 1000;
 	float scaleMax = 1.4;
 		for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
 			TileFlightData &tmpObj = (*itIt);
@@ -128,7 +130,7 @@ void Scene::updateTileAnimation(sf::Time deltaT)
 			tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
 
 			// delete animation if target is reached
-			if (dir.x*dir.x+dir.y*dir.y < 10)
+			if (dir.x*dir.x+dir.y*dir.y < 10 || tileAnimationTime < 0)
 			{
 				tmpObj.tile->setPosition(tmpObj.targetPos.x, tmpObj.targetPos.y);
 				tmpObj.tile->mySprite->setScale(1, 1);

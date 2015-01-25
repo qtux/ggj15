@@ -50,6 +50,7 @@ public:
 //private:
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
+	float tileAnimationTime;
 	void updateTileAnimation(sf::Time deltaT);
 private:
 	bool leaved;
