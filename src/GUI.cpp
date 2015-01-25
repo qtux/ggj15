@@ -61,6 +61,9 @@ void GUI::update (sf::Time deltaTime) {
 	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
 	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
 	float progress = 1 - (elapsedSeconds / timeoutSeconds);
+	if (progress < 0.3 && progress > 0.28) {
+		soundManager.playSound("sound/timeShort.ogg");
+	}
 	//TODO: use min, max
 	if (progress > 1)
 	{
