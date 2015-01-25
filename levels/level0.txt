@@ -11,7 +11,7 @@ Item DecorationItem 26 11 0 16 80 16 16
 TriggerItem 5 5 2 2 2 3
 TriggerItem 7 4 3 2 2 1
 Text start 0 210 210 255
-... (Press SPACE to continue, ENTER to skip)
+... (Press SPACE to continue, S to skip)
 Text start 0 210 210 255
 The time machine is ruined, doggie.
 Text start 0 210 210 255
