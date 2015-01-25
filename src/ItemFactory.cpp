@@ -16,8 +16,6 @@ Item* ItemFactory::getItem(std::string name)
 	sf::Sprite* sprite = new sf::Sprite();
 	sprite->setTexture(textureManager.itemsTexture);
 	sprite->setPosition(10,screenHeight-30);
-	float itemScaleFactor = 2.f;
-	sprite->setScale(itemScaleFactor, itemScaleFactor);
 	
 	if (name == "TimeItem")
 	{

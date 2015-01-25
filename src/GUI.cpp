@@ -9,12 +9,10 @@ GUI::GUI()
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(textureManager.itemsTexture);
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
-	coinSprite->scale(1.5f,1.5f);
 
 	keySprite = new sf::Sprite();
 	keySprite->setTexture(textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
-	keySprite->scale(1.5f,1.5f);
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();

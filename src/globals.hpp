@@ -15,8 +15,8 @@
 #endif
 
 // window properties
-static const int screenWidth = 800;
-static const int screenHeight = 600;
+static const int screenWidth = 6*5*16;
+static const int screenHeight = 6*4*16;
 
 // define number of keyboards binding 
 #define INPUT_SIZE 5
