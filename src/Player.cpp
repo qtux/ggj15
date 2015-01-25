@@ -45,8 +45,8 @@ void Player::update (sf::Time deltaTime) {
 	
 	if (tmpPos.x > viewWidth) tmpPos.x -= viewWidth;
 	if (tmpPos.x + width < 0)  tmpPos.x += viewWidth;
-	if (tmpPos.y > viewHeight) tmpPos.y -= viewHeight;
-	if (tmpPos.y + height < 0)  tmpPos.y += viewHeight;
+	if (tmpPos.y + 28*mySprite->getScale().y > viewHeight) tmpPos.y -= viewHeight;
+	if (tmpPos.y + height - 8  *mySprite->getScale().y < 0)  tmpPos.y += viewHeight;
 	
 	
 	if (dir > -1) 
@@ -66,7 +66,7 @@ void Player::update (sf::Time deltaTime) {
 
 	for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().gameBoard.begin(); tileIt != sceneManager.getCurrentScene().gameBoard.end(); tileIt++)
 	{
-		sf::Vector2f distVec = ((*tileIt)->getPosition() - getPosition());
+		sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
 		// ... 
 		//std::cout<<(*tileIt)->mySprite->getGlobalBounds().left<<" , "<<(*tileIt)->mySprite->getGlobalBounds().top<<" , "<<mySprite->getGlobalBounds().left<<" , "<<mySprite->getGlobalBounds().left<<" , "<<std::endl;
 		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
