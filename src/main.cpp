@@ -32,6 +32,20 @@ int main() {
 			if (event.type == sf::Event::GainedFocus) {
 				focus = true;
 			}
+			// maintain aspect ratio
+			if (event.type == sf::Event::Resized) {
+				// get ratio based on the original size
+				float widthRatio = (float) window.getSize().x / screenWidth;
+				float heightRatio = (float) window.getSize().y / screenHeight;
+				// use the smaller ratio to update the window size
+				//window.waitEvent(sf::Event::Resized);
+				if (heightRatio > widthRatio) {
+					window.setView(sf::View(sf::FloatRect(0, 0, event.size.width / widthRatio, event.size.height / widthRatio)));
+				}
+				else {
+					window.setView(sf::View(sf::FloatRect(0, 0, event.size.width / heightRatio, event.size.height / heightRatio)));
+				}
+			}
 		}
 		
 
