@@ -184,9 +184,9 @@ void Scene::update(sf::Time deltaT)
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
+			(*itIt)->applyEffect();
 			if ((*itIt)->collectable)
 			{
-				(*itIt)->applyEffect();
 				itIt = items.erase(itIt);
 			}		
 			else
