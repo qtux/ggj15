@@ -18,6 +18,7 @@ GUI::GUI()
 	timeoutClock.restart();
 	coins=0;
 	keys=0;
+	timeoutSeconds=0;
 	pauseOffset = 0;
 	loosed = false;
 	lastEnable = false;
