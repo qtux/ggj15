@@ -2,6 +2,7 @@
 #include "TimeItem.hpp"
 #include "CoinItem.hpp"
 #include "TriggerItem.hpp"
+#include "PortalItem.hpp"
 #include "KeyItem.hpp"
 #include "globals.hpp"
 #include <SFML/Graphics.hpp>
@@ -15,6 +16,8 @@ Item* ItemFactory::getItem(std::string name)
 	sf::Sprite* sprite = new sf::Sprite();
 	sprite->setTexture(textureManager.itemsTexture);
 	sprite->setPosition(10,screenHeight-30);
+	float itemScaleFactor = 2.f;
+	sprite->setScale(itemScaleFactor, itemScaleFactor);
 	
 	if (name == "TimeItem")
 	{
@@ -36,6 +39,10 @@ Item* ItemFactory::getItem(std::string name)
 	if (name == "TriggerItem")
 	{
 		return new TriggerItem(sprite);
+	}
+	if (name == "PortalItem")
+	{
+		return new PortalItem(sprite);
 	}
 	return 0;
 }

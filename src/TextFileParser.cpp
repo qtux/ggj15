@@ -61,6 +61,9 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			iss >> y;
 			scene.portalPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
 			scene.portalPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
+			Item *tmpItem = tmpFactory.getItem("PortalItem");
+			tmpItem->setPosition(x, y);
+			scene.items.push_back(*tmpItem);
 		}
 
 		if (first == "Item")

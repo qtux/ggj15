@@ -9,6 +9,9 @@ Item::Item(sf::Sprite* sprite,int x,int y,int w,int h){
 	drawW = w;
 	drawH = h;
 };
+Item::~Item()
+{
+}
 
 
 void Item::update (sf::Time deltaTime) {
