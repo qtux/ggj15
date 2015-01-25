@@ -7,7 +7,7 @@
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
 
-static const int numLevels = 6;
+static const int numLevels = 8;
 
 // use absolute paths on windows (strange behaviour)
 #ifndef _WIN32
