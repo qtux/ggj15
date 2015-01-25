@@ -26,6 +26,7 @@ int main() {
 	// window settings
 	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(30); // avoid noise ;)
+	window.setMouseCursorVisible(false);
 	resize(screenWidth, screenHeight);
 	
 	// define a clock to measure time
