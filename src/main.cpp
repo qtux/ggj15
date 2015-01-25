@@ -40,7 +40,6 @@ void resize(int width, int height) {
 	// resize menu
 	menu.setPosition(-widthOffset, -heightOffset);
 	menu.setSize(sf::Vector2f(width/ratio, height/ratio));
-	menu.setTextureRect(sf::IntRect(0, 0, width/ratio, height/ratio));
 }
 
 int main() {
@@ -52,8 +51,8 @@ int main() {
 	
 	// define menu texture (to be used with the background)
 	sf::Texture menuTexture;
-	menuTexture.loadFromFile(std::string(PATH) + "img/background.png");
-	menu.setTexture(&menuTexture, true);
+	menuTexture.loadFromFile(std::string(PATH) + "img/titleScreen.png");
+	menu.setTexture(&menuTexture);
 	
 	// define menu variables
 	int currentLevel = 0;
