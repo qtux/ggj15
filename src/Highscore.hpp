@@ -1,10 +1,10 @@
 #pragma once
-#include "globals.hpp";
 #include <SFML/Graphics.hpp>
 class Highscore
 {
 public:
 	Highscore(int level);
+	virtual ~Highscore();
 	void update(sf::Time deltaT);
 	void save();
 	void load();
