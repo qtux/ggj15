@@ -7,14 +7,14 @@
 class Player : public GameObject
 {
 public:
-	int animationStep;
+	float animationStep;
 	int direction;
-	int doggieStep;
+	float doggieStep;
 	
 	virtual bool intersects(const GameObject& cmp);
 	virtual bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
 
-	Player(): animationStep(0), direction(0),doggieStep(0) {};
+	Player(): animationStep(0.), direction(0),doggieStep(0.) {};
 
 	virtual void update(sf::Time deltaTime);
 	
@@ -30,4 +30,4 @@ private:
 const static int PlayerAnimState[] = {0, 1, 0, 2};
 const static int DoggieAnimState[] = {0,2,1,3,1,4};
 
-const static int slowFactor = 10;
+const static int slowFactor = 15;
