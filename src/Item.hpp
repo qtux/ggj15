@@ -6,7 +6,8 @@ class Item : public GameObject
 {
 public:
 	Item(sf::Sprite* sprite,int x,int y,int w,int h);
-	
+	virtual ~Item();
+
 	virtual void update(sf::Time deltaTime);
 	virtual void applyEffect();
 private:

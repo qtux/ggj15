@@ -50,8 +50,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.startPos.x = x*Tile::pixelSizeX*Tile::tileScaleFactor;
-			scene.startPos.y = y*Tile::pixelSizeY*Tile::tileScaleFactor;
+			scene.startPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
+			scene.startPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
 		}
 
 		if (first == "Portal")
@@ -59,8 +59,11 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.portalPos.x = x*Tile::pixelSizeX*Tile::tileScaleFactor;
-			scene.portalPos.y = y*Tile::pixelSizeY*Tile::tileScaleFactor;
+			scene.portalPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
+			scene.portalPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
+			Item *tmpItem = tmpFactory.getItem("PortalItem");
+			tmpItem->setPosition(x, y);
+			scene.items.push_back(*tmpItem);
 		}
 
 		if (first == "Item")
@@ -72,7 +75,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			iss >> y;
 
 			Item *tmpItem = tmpFactory.getItem(second);
-			tmpItem->setPosition(x*Tile::pixelSizeX*Tile::tileScaleFactor, y*Tile::pixelSizeY*Tile::tileScaleFactor);
+			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
 			scene.items.push_back(*tmpItem);
 		}
 
@@ -85,7 +88,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			iss >> y2;
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
-			tmpItem->setSwitchPos(x1*Tile::pixelSizeX*Tile::tileScaleFactor, y1*Tile::pixelSizeY*Tile::tileScaleFactor, x2*Tile::pixelSizeX*Tile::tileScaleFactor, y2*Tile::pixelSizeY*Tile::tileScaleFactor);
+			tmpItem->setSwitchPos(x1*Tile::pixelSizeX*Scene::tileScaleFactor, y1*Tile::pixelSizeY*Scene::tileScaleFactor, x2*Tile::pixelSizeX*Scene::tileScaleFactor, y2*Tile::pixelSizeY*Scene::tileScaleFactor);
 			scene.items.push_back(*tmpItem);
 		}
 

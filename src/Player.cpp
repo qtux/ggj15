@@ -80,7 +80,7 @@ void Player::update (sf::Time deltaTime) {
 		
 		setPosition(tmpPos.x, tmpPos.y);
 		if (!positionQueue.empty()){
-			doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18);
+			doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18*mySprite->getScale().y);
 		}
 	}
 	
