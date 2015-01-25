@@ -377,7 +377,12 @@ void SceneManager::loadScene(std::string fileName)
 	scene.setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;
-	levelImg.loadFromFile(fileName+".png");
+	
+	// try to load the file
+	if (!levelImg.loadFromFile(fileName+".png")) {
+		inMenu = true;
+		return;
+	}
 	
 	// create sprites for each tile
 	for (int x = 0; x < sizeX * largeTileSizeX; ++x)
@@ -454,6 +459,11 @@ void SceneManager::processEditMode()
 
 void SceneManager::nextLevel(){
 	currentLevelNumber++;
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+}
+
+void SceneManager::nextLevel(int number){
+	currentLevelNumber = number;
 	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 }
 

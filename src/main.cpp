@@ -3,9 +3,10 @@
 // last include (requires previous includes)
 #include "globals.hpp"
 
+sf::RectangleShape menu;
 sf::RectangleShape background;
 sf::RectangleShape outline;
-
+sf::Text speech;
 
 void resize(int width, int height) {
 	// get ratio based on the original size
@@ -36,6 +37,10 @@ void resize(int width, int height) {
 	// resize outline
 	outline.setPosition(0, 0);
 	outline.setSize(sf::Vector2f(width/ratio - 2 * widthOffset, height/ratio - 2 * heightOffset));
+	// resize menu
+	menu.setPosition(-widthOffset, -heightOffset);
+	menu.setSize(sf::Vector2f(width/ratio, height/ratio));
+	menu.setTextureRect(sf::IntRect(0, 0, width/ratio, height/ratio));
 }
 
 int main() {
@@ -44,6 +49,21 @@ int main() {
 	backgroundTexture.loadFromFile(std::string(PATH) + "img/background.png");
 	backgroundTexture.setRepeated(true);
 	background.setTexture(&backgroundTexture);
+	
+	// define menu texture (to be used with the background)
+	sf::Texture menuTexture;
+	menuTexture.loadFromFile(std::string(PATH) + "img/background.png");
+	menu.setTexture(&menuTexture, true);
+	
+	// define menu variables
+	int currentLevel = 0;
+	sf::Font font;
+	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	speech.setFont(font);
+	speech.setColor(sf::Color(0xff, 0xff, 0xff));
+	speech.setCharacterSize(24);
+	speech.setStyle(sf::Text::Bold);
+	speech.setPosition(sf::Vector2f(32, 32));
 	
 	// define outline
 	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
@@ -70,7 +90,12 @@ int main() {
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed  || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))) {
-				window.close();
+				if (inMenu) {
+					window.close();
+				}
+				else {
+					inMenu = true;
+				}
 			}
 			if (event.type == sf::Event::LostFocus) {
 				focus = false;
@@ -83,6 +108,14 @@ int main() {
 				int width = event.size.width;
 				int height = event.size.height;
 				resize(width, height);
+			}
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+				++currentLevel;
+				currentLevel %= numLevels;
+			}
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+				inMenu = false;
+				sceneManager.nextLevel(currentLevel);
 			}
 		}
 
@@ -110,10 +143,20 @@ int main() {
 		// reset clock and determine elapsed time since last frame
 		deltaT = clock.restart();
 		// update game with deltaT when focused
-		window.draw(background);
-		window.draw(outline);
-		if (focus) {
-			sceneManager.update(deltaT);
+		
+		if (inMenu) {
+			// do menu logic here
+			speech.setString("Current Level: " + std::to_string(currentLevel) + "\nPress SPACE to choose the level\nand RETURN to start the game.");
+			// draw menu and level number
+			window.draw(menu);
+			window.draw(speech);
+		}
+		else {
+			window.draw(background);
+			window.draw(outline);
+			if (focus) {
+				sceneManager.update(deltaT);
+			}
 		}
 		window.display();
 	}
