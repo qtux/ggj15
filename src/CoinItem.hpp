@@ -6,5 +6,5 @@ class CoinItem : public Item
 {
 public:
 	CoinItem(sf::Sprite* sprite);
-	void applyEffect();
+	bool applyEffect();
 };

@@ -4,9 +4,10 @@
 KeyItem::KeyItem(sf::Sprite* sprite):Item(sprite,0,32,16,16){
 }
 
-void KeyItem::applyEffect()
+bool KeyItem::applyEffect()
 {
 	soundManager.playSound("sound/keyCollected.ogg");
 	sceneManager.getCurrentScene().gui->addKeys(1);
 	sceneManager.getCurrentScene().textBox->triggerText("key");
+	return false;
 };

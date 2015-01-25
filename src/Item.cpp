@@ -28,7 +28,7 @@ void Item::update (sf::Time deltaTime) {
 	}
 };
 
-void Item::applyEffect()
+bool Item::applyEffect()
 {
-		
+	return false;
 };
