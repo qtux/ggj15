@@ -76,6 +76,13 @@ void Player::update (sf::Time deltaTime) {
 			collides = true;
 		}
 	}
+	for (std::vector<Item*>::iterator itIt = sceneManager.getCurrentScene().items.begin() ; itIt != sceneManager.getCurrentScene().items.end() ; itIt++)
+	{
+		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
+		{
+			collides = true;
+		}
+	}
 	if (!collides)
 	{
 		// doggie follows the hero
