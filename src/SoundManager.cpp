@@ -14,7 +14,10 @@ SoundManager::~SoundManager()
 void SoundManager::playMusic(std::string fileName)
 {
 	if(bkgMusic.openFromFile(fileName))
+	{
+		bkgMusic.setLoop(true);
 		bkgMusic.play();
+	}
 }
 
 
