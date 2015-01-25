@@ -25,11 +25,11 @@ bool GameObject::intersects(const GameObject& cmp)
 int GameObject::getHeight() const
 {
 	const sf::IntRect& tmp = mySprite->getTextureRect();
-	return int(tmp.height);
+	return int(tmp.height * mySprite->getScale().y);
 }
 
 int GameObject::getWidth() const
 {
 	const sf::IntRect& tmp = mySprite->getTextureRect();
-	return int(tmp.width);
+	return int(tmp.width * mySprite->getScale().x);
 }

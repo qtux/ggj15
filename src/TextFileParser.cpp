@@ -81,6 +81,13 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			scene.items.push_back(tmpItem);
 		}
 
+		if (first == "Timeout")
+		{
+			int time;
+			iss >> time;
+			scene.gui->setTimeout(time);
+		}
+
 		if (first == "TriggerItem")
 		{
 			int x, y, x1, x2, y1, y2;

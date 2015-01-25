@@ -94,7 +94,7 @@ void SceneManager::showScene(std::string sceneName) {
 }
 
 void SceneManager::update(sf::Time deltaT) {
-	processEditMode();	// only for edit mode
+	//processEditMode();	// only for edit mode
 	scene.update(deltaT);
 }
 
