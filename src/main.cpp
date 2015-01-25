@@ -55,14 +55,13 @@ int main() {
 	menu.setTexture(&menuTexture);
 	
 	// define menu variables
-	int currentLevel = 0;
+	unsigned int currentLevel = 0;
 	sf::Font font;
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
 	speech.setFont(font);
-	speech.setColor(sf::Color(0xff, 0xff, 0xff));
-	speech.setCharacterSize(24);
-	speech.setStyle(sf::Text::Bold);
-	speech.setPosition(sf::Vector2f(32, 32));
+	speech.setColor(sf::Color(0x00, 0x00, 0x00));
+	speech.setCharacterSize(16);
+	speech.setPosition(sf::Vector2f(16, 16));
 	
 	// define outline
 	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
@@ -108,7 +107,11 @@ int main() {
 				int height = event.size.height;
 				resize(width, height);
 			}
-			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+				--currentLevel;
+				currentLevel %= numLevels;
+			}
+			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
 				++currentLevel;
 				currentLevel %= numLevels;
 			}
@@ -145,7 +148,17 @@ int main() {
 		
 		if (inMenu) {
 			// do menu logic here
-			speech.setString("Current Level: " + std::to_string(currentLevel) + "\nPress SPACE to choose the level\nand RETURN to start the game.");
+			speech.setString(
+				"Current Level: " + std::to_string(currentLevel) +
+				"\nLEFT, RIGHT ARROW - choose level"+
+				"\nRETURN - start the game" +
+				"\n\n\nIngame usage:" +
+				"\nARROW keys - move the character" +
+				"\nA key - proceed with dialogue" +
+				"\nB key- skip dialogue" +
+				"\n(You may use a gamepad instead)" +
+				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
+			);
 			// draw menu and level number
 			window.draw(menu);
 			window.draw(speech);
