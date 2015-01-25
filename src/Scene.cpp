@@ -127,8 +127,10 @@ void Scene::updateTileAnimation(sf::Time deltaT)
 			tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
 
 			// delete animation if target is reached
-			if (dir.x*dir.x+dir.y*dir.y == 0)
+			if (dir.x*dir.x+dir.y*dir.y < 10)
 			{
+				tmpObj.tile->setPosition(tmpObj.targetPos.x, tmpObj.targetPos.y);
+				tmpObj.tile->mySprite->setScale(1, 1);
 				itIt = tileAnimationPos.erase(itIt);
 			}
 			else
