@@ -58,7 +58,7 @@ SceneManager::SceneManager(){
 	walkableTileState[0x969896ff] = true;
 	walkableTileState[0x11941bff] = true;
 	
-	currentLevelNumber = 3;
+	currentLevelNumber = -1;
 	nextLevel();
 }
 
