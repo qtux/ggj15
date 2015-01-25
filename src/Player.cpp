@@ -4,15 +4,15 @@
 
 bool Player::intersects(const GameObject& cmp)
 {
-	sf::FloatRect tmpRect = mySprite->getGlobalBounds();
+	const sf::FloatRect &tmpRect = mySprite->getGlobalBounds();
 	sf::Vector2f tmpPos(tmpRect.left, tmpRect.top);
 	return intersects(tmpPos, cmp);
 }
 
 bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 {
-	if (dynamic_cast<const Tile*>(&cmp)->walkable) return false;
-	sf::FloatRect tmpRect(testPos.x + 3 , testPos.y + 32 - 10, 10, 10);
+	if (dynamic_cast<const Tile*>(&cmp) && dynamic_cast<const Tile*>(&cmp)->walkable) return false; // TODO: aus intersect in allgemeineren Teil verschieben
+	sf::FloatRect tmpRect(testPos.x + 3 * mySprite->getScale().x, testPos.y + (32 - 10) * mySprite->getScale().y, 10* mySprite->getScale().x, 10* mySprite->getScale().y);
 	
 	/*
 	tmpRect.top += 32 - 10;

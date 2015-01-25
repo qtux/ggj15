@@ -98,6 +98,15 @@ void Scene::update(sf::Time deltaT)
 		gui->update(deltaT);
 	}
 	
+	
+	for(std::vector<Item>::iterator itIt = items.begin() ; itIt != items.end() ; itIt++) {
+		if (player->intersects(*itIt))
+		{
+			itIt->applyEffect();
+			itIt = items.erase(itIt);
+		} 
+	}
+	
 	/*
 	// Text TEST
 	sf::Vector2f textPos(32.0f, 32.0f);
