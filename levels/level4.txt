@@ -1,30 +1,13 @@
-Start 15 21
-Portal 2 2
-Timeout 50
-Timebuff 5
-Item CoinItem 5 5
-Item KeyItem 27 1
-Item KeyItem 20 13
-Item KeyItem 26 9
-Item CoinItem 21 13
-Item CoinItem 19 13
-Item CoinItem 20 12
-Item CoinItem 20 14
-Item CoinItem 8 20
-Item CoinItem 13 17
-Item TimeItem 2 13
-#Item DecorationItem 14 14 1 0 112 16 16 #crystal
-Item DecorationItem 1 1 1 16 96 16 16 #tiberium
-Item DecorationItem 7 11 1 16 96 16 16 #tiberium
-Item DecorationItem 20 16 1 16 96 16 16 #tiberium
-Item DecorationItem 19 14 1 16 112 16 16 #rock
-#Item DecorationItem 26 11 0 16 80 16 16 #mushroom
-TriggerItem 15 16 3 3 3 2
-TriggerItem 22 22 4 3 4 2
-TriggerItem 28 21 4 3 4 2
-TriggerItem 3 14 0 2 0 1
-TriggerItem 9 13 2 2 2 3
-TriggerItem 27 5 4 1 0 1
-TriggerItem 18 1 1 0 2 0
-TriggerItem 1 8 4 1 0 1
-#240, 256
+Start 23 14
+Portal 3 3
+Item CoinItem 28 21
+Item CoinItem 28 1
+Item KeyItem 1 22
+Item TimeItem 22 5
+#Item DecorationItem 26 3 1 0 112 16 16
+Item DecorationItem 8 5 0 16 80 16 16
+Item DecorationItem 14 20 0 16 80 16 16
+Item DecorationItem 20 12 1 16 112 16 16
+Item DecorationItem 2 2 1 16 112 16 16
+TriggerItem 21 17 3 0 0 3
+TriggerItem 28 18 3 0 2 0
