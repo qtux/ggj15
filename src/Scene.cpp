@@ -176,6 +176,13 @@ void Scene::update(sf::Time deltaT)
 	speech.setString("Frravt");
 	speech.setColor(sf::Color(210, 210, 255));
 	
+	// Spielende:
+	schwarzer Bildschirm
+	speech.setColor(sf::Color(210, 255, 210));
+	speech.setString("SQOLRK");
+	speech.setColor(sf::Color(210, 210, 255));
+	schwarzer Bildschirm
+	
 	window.draw(speech);
 	*/
 }
