@@ -154,8 +154,8 @@ int main() {
 				"\nRETURN - start the game" +
 				"\n\n\nIngame usage:" +
 				"\nARROW keys - move the character" +
-				"\nA key - proceed with dialogue" +
-				"\nB key- skip dialogue" +
+				"\nSPACE key - proceed with dialogue" +
+				"\nRETURN key- skip dialogue" +
 				"\n(You may use a gamepad instead)" +
 				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
 			);
