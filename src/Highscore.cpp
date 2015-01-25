@@ -30,12 +30,12 @@ void Highscore::update(sf::Time deltaT)
 	textRect.setOutlineColor(sf::Color::White);
 	textRect.setOutlineThickness(2);
 	textRect.setPosition(30, 30);
-	textRect.setSize(sf::Vector2f(gridWidth - 30, gridHeight - 60));
+	textRect.setSize(sf::Vector2f(gridWidth - 60, gridHeight - 60));
 	textRect.setFillColor(sf::Color(0, 0, 250, 50));
 	window.draw(textRect);
 	textRect.setOutlineThickness(1);
 	textRect.setPosition(30, 99);
-	textRect.setSize(sf::Vector2f(gridWidth - 30, 15));
+	textRect.setSize(sf::Vector2f(gridWidth - 60, 15));
 	window.draw(textRect);
 	sf::Text speech;
 	speech.setFont(font);

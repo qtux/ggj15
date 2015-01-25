@@ -136,7 +136,7 @@ int main() {
 		else {
 			// retrieve current keyboard input
 			for (int i = 0; i < INPUT_SIZE; ++i) {
-				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus && !inMenu;
+				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
 			}
 		}
 		

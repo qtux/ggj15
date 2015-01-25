@@ -5,8 +5,8 @@ sf::Keyboard::Key keyboardBinding[] = {
 	sf::Keyboard::Right,
 	sf::Keyboard::Up,
 	sf::Keyboard::Down,
-	sf::Keyboard::S,
-	sf::Keyboard::Space
+	sf::Keyboard::Space,
+	sf::Keyboard::S
 };
 
 
