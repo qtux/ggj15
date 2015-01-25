@@ -2,12 +2,16 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
+#include "globals.hpp"
 
 Highscore::Highscore(int level)
 {
 	this->level = level;
+	actionPressed = false;
 }
-
+Highscore::~Highscore()
+{
+}
 void Highscore::update(sf::Time deltaT)
 {
 	if (!input[4] && actionPressed)
