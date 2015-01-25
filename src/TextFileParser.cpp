@@ -53,6 +53,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			scene.startPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
 			scene.startPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
 			scene.player->setPosition(scene.startPos.x, scene.startPos.y);
+			scene.player->doggieSprite->setPosition(scene.startPos.x, scene.startPos.y);
 		}
 
 		if (first == "Portal")
