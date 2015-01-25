@@ -107,6 +107,37 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 }
 
+void Scene::updateTileAnimation(sf::Time deltaT)
+{
+	float dt = deltaT.asMilliseconds();
+	float scaleMax = 1.4;
+		for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
+			TileFlightData &tmpObj = (*itIt);
+			tmpObj.momentum = tmpObj.momentum * 0.95f + (tmpObj.targetPos - tmpObj.currentPos)* 0.02f;
+			sf::Vector2f dir = tmpObj.momentum;
+			tmpObj.currentPos += dt*dir * 0.01f;
+			sf::Vector2f distVec1 = tmpObj.currentPos- tmpObj.startPos;
+			sf::Vector2f distVec2 = tmpObj.currentPos- tmpObj.targetPos;
+			sf::Vector2f distTotalVec = tmpObj.startPos- tmpObj.targetPos;
+			float dist1 = sqrt(distVec1.x*distVec1.x+distVec1.y*distVec1.y);
+			float dist2 = sqrt(distVec2.x*distVec2.x+distVec2.y*distVec2.y);
+			float distTotal = sqrt(distTotalVec.x*distTotalVec.x+distTotalVec.y*distTotalVec.y);
+			tmpObj.scale = (std::min(dist1,dist2)+distTotal) / distTotal;
+			tmpObj.tile->mySprite->setScale(scaleMax*tmpObj.scale, scaleMax*tmpObj.scale);
+			tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
+
+			// delete animation if target is reached
+			if (dir.x*dir.x+dir.y*dir.y == 0)
+			{
+				itIt = tileAnimationPos.erase(itIt);
+			}
+			else
+			{
+				itIt ++;
+			}
+		}
+}
+
 void Scene::update(sf::Time deltaT)
 {
 //	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -124,32 +155,7 @@ void Scene::update(sf::Time deltaT)
 		std::cout << (*it) << std::endl;
 	}*/
 
-	float scaleMax = 1.4;
-	for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
-		TileFlightData &tmpObj = (*itIt);
-		tmpObj.momentum = tmpObj.momentum * 0.97f + (tmpObj.targetPos - tmpObj.currentPos)* 0.02f;
-		sf::Vector2f dir = tmpObj.momentum;
-		tmpObj.currentPos += dir * 0.01f;
-		sf::Vector2f distVec1 = tmpObj.currentPos- tmpObj.startPos;
-		sf::Vector2f distVec2 = tmpObj.currentPos- tmpObj.targetPos;
-		sf::Vector2f distTotalVec = tmpObj.startPos- tmpObj.targetPos;
-		float dist1 = sqrt(distVec1.x*distVec1.x+distVec1.y*distVec1.y);
-		float dist2 = sqrt(distVec2.x*distVec2.x+distVec2.y*distVec2.y);
-		float distTotal = sqrt(distTotalVec.x*distTotalVec.x+distTotalVec.y*distTotalVec.y);
-		tmpObj.scale = (std::min(dist1,dist2)+distTotal) / distTotal;
-		tmpObj.tile->mySprite->setScale(scaleMax*tmpObj.scale, scaleMax*tmpObj.scale);
-		tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
-
-		// delete animation if target is reached
-		if (dir.x*dir.x+dir.y*dir.y == 0)
-		{
-			itIt = tileAnimationPos.erase(itIt);
-		}
-		else
-		{
-			itIt ++;
-		}
-	}
+	updateTileAnimation(deltaT);
 
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
