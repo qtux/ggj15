@@ -8,4 +8,5 @@ void KeyItem::applyEffect()
 {
 	soundManager.playSound("sound/keyCollected.ogg");
 	sceneManager.getCurrentScene().gui->addKeys(1);
+	sceneManager.getCurrentScene().textBox->triggerText("key");
 };

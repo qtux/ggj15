@@ -14,6 +14,7 @@
 #include "GUI.hpp"
 #include "Item.hpp"
 #include "GameObject.hpp"
+#include "TextBox.hpp"
 
 struct TileFlightData
 {
@@ -39,7 +40,7 @@ public:
 	// hack hier, ne doch nicht xD
 	GameObject * player;
 	GUI* gui;
-	
+	TextBox* textBox;
 	const std::vector<GameObject*> & getGameBoard() const;
 /*private:
 	std::vector<GameObject*> gameBoard;*/

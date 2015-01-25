@@ -17,7 +17,7 @@
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
-
+	textBox = new TextBox();
 }
 
 Scene::~Scene() {
@@ -184,80 +184,22 @@ void Scene::update(sf::Time deltaT)
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
-			(*itIt)->applyEffect();
-			itIt = items.erase(itIt);
+			if ((*itIt)->collectable)
+			{
+				(*itIt)->applyEffect();
+				itIt = items.erase(itIt);
+			}		
+			else
+			{
+				itIt ++;
+			}
 		} 
 		else
 		{
 			itIt ++;
 		}
 	}
-	
-	
-	// Text TEST
-	sf::Vector2f textPos(32.0f, 32.0f);
-	int charSize = 30;
-	
-	sf::Text speech;
-	speech.setFont(font);
-	
-	speech.setColor(sf::Color(210, 210, 255));
-	speech.setCharacterSize(charSize);
-	speech.setPosition(textPos);
-	
-	sf::RectangleShape textRect;
-	textRect.setOutlineColor(sf::Color::Blue);
-	textRect.setOutlineThickness(5);
-	textRect.setPosition(textPos.x - 5, textPos.y - 5);
-	textRect.setSize(sf::Vector2f(gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
-	textRect.setFillColor(sf::Color(0, 0, 250, 50));
-	window.draw(textRect);
-	
-	// zu Anfang:
-	speech.setStyle(sf::Text::Bold);
-	speech.setString("Oh no...");
-	speech.setStyle(sf::Text::Regular);
-	speech.setString("The time machine is broken, doggie!");
-	speech.setString("...");
-	speech.setString("What do we do now?");
-	speech.setColor(sf::Color(210, 255, 210));
-	speech.setString("SQOLRK");
-	speech.setColor(sf::Color(210, 210, 255));
-	
-	// Zeit wird knapp:
-	speech.setColor(sf::Color(210, 255, 210));
-	speech.setString("LURMK");
-	speech.setColor(sf::Color(210, 210, 255));
-	speech.setString("You are right we should hurry. The pizza is going cold.");
-	
-	// Key aufgesammelt (erstes Level):
-	speech.setColor(sf::Color(210, 210, 210));
-	speech.setString("A key to another dimension!");
-	speech.setColor(sf::Color(210, 210, 255));
-	
-	// Uhr aufgesammelt (erstes Level):
-	speech.setColor(sf::Color(210, 210, 210));
-	speech.setString("When do we do now?");
-	speech.setColor(sf::Color(210, 210, 255));
-	
-	// Ziel erreicht, kein Key (erstes Level):
-	speech.setString("We need a key for this dimension hole!");
-	
-	// Ziel erreicht (erstes Level):
-	speech.setString("Do you want to leave, Doggie?");
-	speech.setColor(sf::Color(210, 255, 210));
-	speech.setString("Frravt");
-	speech.setColor(sf::Color(210, 210, 255));
-	
-	// Spielende:
-	//schwarzer Bildschirm
-	speech.setColor(sf::Color(210, 255, 210));
-	speech.setString("SQOLRK");
-	speech.setColor(sf::Color(210, 210, 255));
-	//schwarzer Bildschirm
-	
-	window.draw(speech);
-	
+	textBox->update(deltaT);
 }
 
 void Scene::leave()
@@ -275,6 +217,7 @@ void Scene::leave()
 	{
 		return;
 	}
+	textBox->triggerText("end");
 	gui->resetCoins();
 	gui->resetKeys();
 	sceneManager.nextLevel();

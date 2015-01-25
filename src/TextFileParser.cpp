@@ -17,6 +17,7 @@
 #include "globals.hpp"
 #include "TextureManager.hpp"
 #include "Tile.hpp"
+#include "TextElement.hpp"
 
 TextFileParser::TextFileParser() {
 	// TODO Auto-generated constructor stub
@@ -101,6 +102,25 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int time;
 			iss >> time;
 			scene.gui->setTimeout(time);
+		}
+
+		if (first == "Text")
+		{
+			TextElement* element = new TextElement();
+			std::string boldText = "";
+			iss >> element->eventType;
+			iss >> boldText;
+			iss >> element->r;
+			iss >> element->g;
+			iss >> element->b;
+			std::getline(infile, line);
+			element->text = line;
+			if (boldText=="bold")
+			{
+				element->bold = true;
+			}
+			scene.textBox->appendText(element);
+
 		}
 
 		if (first == "TriggerItem")
