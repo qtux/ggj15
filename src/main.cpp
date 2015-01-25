@@ -5,11 +5,12 @@
 
 #define DEBUG
 
-
 int main() {
 	// window settings
 	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(30); // avoid noise ;)
+	// view
+	window.setView(sf::View(sf::FloatRect(0, 0, gridWidth, gridHeight)));
 	
 	// define a clock to measure time
 	sf::Clock clock;
@@ -35,8 +36,8 @@ int main() {
 			// maintain aspect ratio
 			if (event.type == sf::Event::Resized) {
 				// get ratio based on the original size
-				float widthRatio = (float) window.getSize().x / screenWidth;
-				float heightRatio = (float) window.getSize().y / screenHeight;
+				float widthRatio = (float) window.getSize().x / gridWidth;
+				float heightRatio = (float) window.getSize().y / gridHeight;
 				// use the smaller ratio to update the window size
 				//window.waitEvent(sf::Event::Resized);
 				if (heightRatio > widthRatio) {

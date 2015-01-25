@@ -103,7 +103,7 @@ void Scene::update(sf::Time deltaT)
 	
 	sf::Text level;
 	level.setFont(font);
-	level.setPosition(screenWidth - 30, screenHeight - 70);
+	level.setPosition(gridWidth - 30, gridHeight - 70);
 	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
 	window.draw(level);
 	
@@ -135,7 +135,7 @@ void Scene::update(sf::Time deltaT)
 	textRect.setOutlineColor(sf::Color::Blue);
 	textRect.setOutlineThickness(5);
 	textRect.setPosition(textPos.x - 5, textPos.y - 5);
-	textRect.setSize(sf::Vector2f(screenWidth - 2* textPos.x + 10, 2 * charSize + 30));
+	textRect.setSize(sf::Vector2f(gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
 	textRect.setFillColor(sf::Color(0, 0, 250, 50));
 	window.draw(textRect);
 	
