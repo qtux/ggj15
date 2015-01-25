@@ -19,7 +19,9 @@ GUI::GUI()
 	coins=0;
 	keys=0;
 	pauseOffset = 0;
+	loosed = false;
 	lastEnable = false;
+	smallTime = false;
 }
 void GUI::setTimeout(int seconds)
 {
@@ -56,7 +58,22 @@ void GUI::update (sf::Time deltaTime) {
 	if (progress <= 0)
 	{
 		progress = 0;
-		sceneManager.restartLevel();
+		if (!loosed){
+			sceneManager.getCurrentScene().textBox->triggerText("loose");
+		}
+		loosed = true;
+		if (!sceneManager.getCurrentScene().textBox->enabled())
+		{
+			sceneManager.restartLevel();
+		}
+	}
+	if (progress < 0.3)
+	{
+		if (!smallTime)
+		{
+			sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+		}
+		smallTime = true;
 	}
 	int width = (progress* (gridWidth-20));
 	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % 46, 0, width, 20));
