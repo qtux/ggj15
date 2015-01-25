@@ -6,18 +6,17 @@
 #include "KeyItem.hpp"
 #include "globals.hpp"
 #include <SFML/Graphics.hpp>
+#include "DecorationItem.hpp"
 
 
 ItemFactory::ItemFactory() {
 }
 
-Item* ItemFactory::getItem(std::string name)
+Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int texPosY, int texW, int texH)
 {
 	sf::Sprite* sprite = new sf::Sprite();
 	sprite->setTexture(textureManager.itemsTexture);
-	sprite->setPosition(10,screenHeight-30);
-	float itemScaleFactor = 2.f;
-	sprite->setScale(itemScaleFactor, itemScaleFactor);
+	sprite->setPosition(10,gridHeight-30);
 	
 	if (name == "TimeItem")
 	{
@@ -36,13 +35,18 @@ Item* ItemFactory::getItem(std::string name)
 		return new KeyItem(sprite);
 	}
 
-	if (name == "TriggerItem")
+	/*if (name == "TriggerItem")
 	{
 		return new TriggerItem(sprite);
-	}
+	}*/
 	if (name == "PortalItem")
 	{
 		return new PortalItem(sprite);
+	}
+	
+	if (name == "DecorationItem")
+	{
+		return new DecorationItem(sprite, blocksPath, texPosX, texPosY, texW, texH);
 	}
 	return 0;
 }

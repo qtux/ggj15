@@ -21,6 +21,10 @@ private:
 
 	float timeoutSeconds;
 	float timeBuff;
+	float pauseOffset;
+	bool lastEnable;
+	bool loosed;
+	bool smallTime;
 	int coins;
 	int keys;
 };

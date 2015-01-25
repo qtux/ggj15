@@ -4,23 +4,24 @@ GUI::GUI()
 {
 	timeSprite = new sf::Sprite();
 	timeSprite->setTexture(textureManager.timeBarTexture);
-	timeSprite->setPosition(10,screenHeight-30);
+	timeSprite->setPosition(10,gridHeight-30);
 
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(textureManager.itemsTexture);
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
-	coinSprite->scale(1.5f,1.5f);
 
 	keySprite = new sf::Sprite();
 	keySprite->setTexture(textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
-	keySprite->scale(1.5f,1.5f);
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
 	coins=0;
 	keys=0;
-
+	pauseOffset = 0;
+	loosed = false;
+	lastEnable = false;
+	smallTime = false;
 }
 void GUI::setTimeout(int seconds)
 {
@@ -34,8 +35,20 @@ void GUI::applyTimeBufff(float seconds)
 }
 
 void GUI::update (sf::Time deltaTime) {
+	if (sceneManager.getCurrentScene().textBox->enabled()){
+		if (!lastEnable)
+		{
+			pauseOffset += timeoutClock.getElapsedTime().asSeconds();
+		}
+		timeoutClock.restart();
+		lastEnable = true;
+	}
+	else
+	{
+		lastEnable = false;
+	}
 	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
-	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff);
+	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
 	float progress = 1-(elapsedSeconds / timeoutSeconds);
 	//TODO: use min, max
 	if (progress > 1)
@@ -45,23 +58,38 @@ void GUI::update (sf::Time deltaTime) {
 	if (progress <= 0)
 	{
 		progress = 0;
-		sceneManager.restartLevel();
+		if (!loosed){
+			sceneManager.getCurrentScene().textBox->triggerText("loose");
+		}
+		loosed = true;
+		if (!sceneManager.getCurrentScene().textBox->enabled())
+		{
+			sceneManager.restartLevel();
+		}
 	}
-	int width = (progress* (screenWidth-20));
+	if (progress < 0.3)
+	{
+		if (!smallTime)
+		{
+			sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+		}
+		smallTime = true;
+	}
+	int width = (progress* (gridWidth-20));
 	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % 46, 0, width, 20));
 	window.draw(*timeSprite);
 
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(screenWidth-30,10+(i*16));
+		coinSprite->setPosition(gridWidth-30,10+(i*16));
 		window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(i*16+40,screenHeight-60);
+		keySprite->setPosition(i*16+40,gridHeight-60);
 		window.draw(*keySprite);
 	}
 }

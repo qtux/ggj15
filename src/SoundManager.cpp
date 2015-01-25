@@ -3,6 +3,23 @@
 #include "globals.hpp"
 #include <SFML/Audio.hpp>
 #include <exception>
+#include <iostream>
+
+SoundManager::~SoundManager()
+{
+	//std::cout<<"SoundManager says good bye!"<<std::endl;
+	tidyUp();
+}
+
+void SoundManager::playMusic(std::string fileName)
+{
+	if(bkgMusic.openFromFile(fileName))
+	{
+		bkgMusic.setLoop(true);
+		bkgMusic.play();
+	}
+}
+
 
 void SoundManager::loadSound(std::string sndName)
 {
@@ -19,6 +36,14 @@ void SoundManager::loadSound(std::string sndName)
 }
 
 
+void SoundManager::tidyUp()
+{
+	for (std::vector<sf::Sound*>::iterator sndIt = playingSound.begin(); sndIt != playingSound.end(); )
+	{
+		if ((*sndIt)->getStatus() == sf::Sound::Stopped) sndIt = playingSound.erase(sndIt) ; else sndIt ++;
+	}
+}
+
 const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 {
 	if (!enableAudio) {
@@ -33,11 +58,16 @@ const sf::SoundBuffer &SoundManager::getSound(std::string sndName)
 }
 void SoundManager::playSound(std::string name)
 {
+	//std::cout<<"playSound start"<<std::endl;
+	
 	if (!enableAudio) {
 		return;
 	}
-	sf::Sound snd;
+	tidyUp();
+	playingSound.push_back(new sf::Sound());
+	sf::Sound &snd = *(playingSound.back());
 	snd.setBuffer(soundManager.getSound(name));
+	//std::cout<<"playSound start"<<std::endl;
 	snd.play();
 }
 
@@ -57,4 +87,4 @@ void SoundManager::init(std::string preloadFileName)
 	}
 }
 
-SoundManager::SoundManager(bool enableAudio): enableAudio(enableAudio) {}
+SoundManager::SoundManager(bool enableAudio): enableAudio(enableAudio) { std::cout<<"enableAudio"<<enableAudio<<std::endl;}

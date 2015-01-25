@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Tile.hpp"
 #include "Scene.hpp"
+#include <math.h>
 
 bool Player::intersects(const GameObject& cmp)
 {
@@ -35,13 +36,14 @@ void Player::update (sf::Time deltaTime) {
 	int width = getWidth();
 	int height = getHeight();
 	int dir = -1;
-	if (input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*(sin(currTime*40)+1)); dir = 3; }
-	if (input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*(sin(currTime*40)+1)); dir = 2; }
-	if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*(sin(currTime*40)+1)); dir = 1; }
-	if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*(sin(currTime*40)+1)); dir = 0; }
-	
-	int viewWidth = Scene::sizeX * Scene::largeTileSizeX * Tile::pixelSizeX * Scene::tileScaleFactor;
-	int viewHeight = Scene::sizeY * Scene::largeTileSizeY * Tile::pixelSizeY * Scene::tileScaleFactor;
+	if (!sceneManager.getCurrentScene().textBox->enabled()){
+		if (input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
+		if (input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
+		if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
+		if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
+	}
+	int viewWidth = sizeX * largeTileSizeX * pixelSizeX;
+	int viewHeight = sizeY * largeTileSizeY * pixelSizeY;
 	
 	if (tmpPos.x > viewWidth) tmpPos.x -= viewWidth;
 	if (tmpPos.x + width < 0)  tmpPos.x += viewWidth;
@@ -51,15 +53,15 @@ void Player::update (sf::Time deltaTime) {
 	
 	if (dir > -1) 
 	{
-		animationStep += 0.08*dT / slowFactor;
-		doggieStep += 0.08*dT / slowFactor;
+		animationStep += 0.12*dT / slowFactor;
+		doggieStep += 0.12*dT / slowFactor;
 		direction = dir;
 	} else {
 		animationStep = 0.;
 		doggieStep = 0.;
 	}
-	if (animationStep >= 4.) animationStep -= 3;
-	if (doggieStep >= 6.) doggieStep -= 5;
+	if (animationStep >= 6.) animationStep -= 6;
+	if (doggieStep >= 6.) doggieStep -= 6;
 	
 	bool collides = false;
 	//check for collisions:
@@ -70,6 +72,13 @@ void Player::update (sf::Time deltaTime) {
 		// ... 
 		//std::cout<<(*tileIt)->mySprite->getGlobalBounds().left<<" , "<<(*tileIt)->mySprite->getGlobalBounds().top<<" , "<<mySprite->getGlobalBounds().left<<" , "<<mySprite->getGlobalBounds().left<<" , "<<std::endl;
 		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
+		{
+			collides = true;
+		}
+	}
+	for (std::vector<Item*>::iterator itIt = sceneManager.getCurrentScene().items.begin() ; itIt != sceneManager.getCurrentScene().items.end() ; itIt++)
+	{
+		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
 		{
 			collides = true;
 		}

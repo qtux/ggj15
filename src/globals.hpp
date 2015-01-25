@@ -15,11 +15,19 @@
 #endif
 
 // window properties
+static const int pixelSizeX = 16;
+static const int pixelSizeY = 16;
+static const int sizeX = 5;
+static const int sizeY = 4;
+static const int largeTileSizeX = 6;
+static const int largeTileSizeY = 6;
+static const int gridWidth = largeTileSizeX * sizeX * pixelSizeX;
+static const int gridHeight = largeTileSizeY * sizeY * pixelSizeY;
 static const int screenWidth = 800;
 static const int screenHeight = 600;
 
 // define number of keyboards binding 
-#define INPUT_SIZE 5
+#define INPUT_SIZE 6
 typedef std::bitset<INPUT_SIZE> InputType;
 extern sf::Keyboard::Key keyboardBinding[INPUT_SIZE];
 

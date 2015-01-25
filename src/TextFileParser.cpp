@@ -17,6 +17,7 @@
 #include "globals.hpp"
 #include "TextureManager.hpp"
 #include "Tile.hpp"
+#include "TextElement.hpp"
 
 TextFileParser::TextFileParser() {
 	// TODO Auto-generated constructor stub
@@ -50,8 +51,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.startPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
-			scene.startPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
+			scene.startPos.x = x * pixelSizeX;
+			scene.startPos.y = y * pixelSizeY;
 			scene.player->setPosition(scene.startPos.x, scene.startPos.y);
 			scene.player->doggieSprite->setPosition(scene.startPos.x, scene.startPos.y);
 		}
@@ -61,10 +62,10 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.portalPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
-			scene.portalPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
+			scene.portalPos.x = x * pixelSizeX;
+			scene.portalPos.y = y * pixelSizeY;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
-			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
+			tmpItem->setPosition(x * pixelSizeX, y * pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -75,9 +76,24 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-
-			Item *tmpItem = tmpFactory.getItem(second);
-			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
+			
+			Item *tmpItem = 0;
+			if (second == "DecorationItem")
+			{
+				bool blocksPath;
+				int texPosX, texPosY, texW, texH;
+				iss >> blocksPath;
+				iss >> texPosX;
+				iss >> texPosY;
+				iss >> texW;
+				iss >> texH;
+				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
+			}
+			else
+			{
+				tmpItem = tmpFactory.getItem(second);
+			}
+			tmpItem->setPosition(x * pixelSizeX, y * pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -86,6 +102,25 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int time;
 			iss >> time;
 			scene.gui->setTimeout(time);
+		}
+
+		if (first == "Text")
+		{
+			TextElement* element = new TextElement();
+			std::string boldText = "";
+			iss >> element->eventType;
+			iss >> boldText;
+			iss >> element->r;
+			iss >> element->g;
+			iss >> element->b;
+			std::getline(infile, line);
+			element->text = line;
+			if (boldText=="bold")
+			{
+				element->bold = true;
+			}
+			scene.textBox->appendText(element);
+
 		}
 
 		if (first == "TriggerItem")
@@ -100,7 +135,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
-			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
+			tmpItem->setPosition(x * pixelSizeX, y * pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 

@@ -5,18 +5,36 @@
 
 #define DEBUG
 
+void resize(int width, int height) {
+	// get ratio based on the original size
+	float widthRatio = (float) window.getSize().x / gridWidth;	// TODO add bar widths
+	float heightRatio = (float) window.getSize().y / gridHeight;
+	// use the smaller ratio to update the window size
+	if (heightRatio > widthRatio) {
+		// black border up and down (undesirable)
+		int offset = (height - width * sizeY / sizeX) / widthRatio / 2;
+		window.setView(sf::View(sf::FloatRect(0, -offset, width / widthRatio, height / widthRatio)));
+	}
+	else {
+		// black border left and right
+		int offset = (width - height * sizeX / sizeY) / heightRatio / 2;
+		window.setView(sf::View(sf::FloatRect(-offset, 0, width / heightRatio, height / heightRatio)));
+	}
+}
 
 int main() {
 	// window settings
 	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(30); // avoid noise ;)
+	resize(screenWidth, screenHeight);
 	
 	// define a clock to measure time
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
 
-	soundManager.playSound("sound/test.wav");
+	soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
+	//soundManager.playSound("sound/test.wav");
 	
 	// main loop
 	while (window.isOpen()) {
@@ -31,6 +49,12 @@ int main() {
 			}
 			if (event.type == sf::Event::GainedFocus) {
 				focus = true;
+			}
+			// maintain aspect ratio
+			if (event.type == sf::Event::Resized) {
+				int width = event.size.width;
+				int height = event.size.height;
+				resize(width, height);
 			}
 		}
 		
