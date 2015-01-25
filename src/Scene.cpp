@@ -98,13 +98,19 @@ void Scene::update(sf::Time deltaT)
 		gui->update(deltaT);
 	}
 	
+	sf::Font font;
+	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	
+	sf::Text level;
+	level.setFont(font);
+	level.setPosition(screenWidth - 30, screenHeight - 70);
+	level.setString(std::to_string(levelCounter));
+	window.draw(level);
+	
 	/*
 	// Text TEST
 	sf::Vector2f textPos(32.0f, 32.0f);
-	int charSize = 30;
-	
-	sf::Font font;
-	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	* int charSize = 30;
 	
 	sf::Text speech;
 	speech.setFont(font);
@@ -178,5 +184,6 @@ void Scene::leave()
 	}
 	gui->resetCoins();
 	gui->resetKeys();
+	levelCounter += 1;
 	sceneManager.nextLevel();
 }
