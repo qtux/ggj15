@@ -38,7 +38,7 @@ public:
 	std::vector<GameObject*> gameBoard;*/
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
-	std::vector<Item> items;
+	std::vector<Item*> items;
 //private:
 	std::vector<GameObject*> gameBoard;
 };

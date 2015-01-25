@@ -73,7 +73,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			Item *tmpItem = tmpFactory.getItem(second);
 			tmpItem->setPosition(x*Tile::pixelSizeX*Tile::tileScaleFactor, y*Tile::pixelSizeY*Tile::tileScaleFactor);
-			scene.items.push_back(*tmpItem);
+			scene.items.push_back(tmpItem);
 		}
 
 		if (first == "TriggerItem")
@@ -86,7 +86,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1*Tile::pixelSizeX*Tile::tileScaleFactor, y1*Tile::pixelSizeY*Tile::tileScaleFactor, x2*Tile::pixelSizeX*Tile::tileScaleFactor, y2*Tile::pixelSizeY*Tile::tileScaleFactor);
-			scene.items.push_back(*tmpItem);
+			scene.items.push_back(tmpItem);
 		}
 
 	}

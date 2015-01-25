@@ -90,7 +90,7 @@ void Scene::update(sf::Time deltaT)
 	}
 
 	for(auto& obj: items) {
-		obj.update(deltaT);
+		obj->update(deltaT);
 	}
 	player->update(deltaT);
 	if (gui != 0)
@@ -107,10 +107,10 @@ void Scene::update(sf::Time deltaT)
 	level.setString(std::to_string(levelCounter));
 	window.draw(level);
 	
-	for(std::vector<Item>::iterator itIt = items.begin() ; itIt != items.end() ; itIt++) {
-		if (player->intersects(*itIt))
+	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; itIt++) {
+		if (player->intersects(**itIt))
 		{
-			itIt->applyEffect();
+			(*itIt)->applyEffect();
 			itIt = items.erase(itIt);
 		} 
 	}
@@ -181,7 +181,7 @@ void Scene::leave()
 	int keysInLevel = 0;
 	for(int i = 0;i < size;i++)
 	{
-		if (dynamic_cast<KeyItem*>(&items[i]))
+		if (dynamic_cast<KeyItem*>(items[i]))
 		{
 			keysInLevel++;
 		}
