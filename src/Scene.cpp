@@ -104,7 +104,7 @@ void Scene::update(sf::Time deltaT)
 	sf::Text level;
 	level.setFont(font);
 	level.setPosition(screenWidth - 30, screenHeight - 70);
-	level.setString(std::to_string(levelCounter));
+	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()));
 	window.draw(level);
 	
 	for(std::vector<Item>::iterator itIt = items.begin() ; itIt != items.end() ; itIt++) {
@@ -192,6 +192,5 @@ void Scene::leave()
 	}
 	gui->resetCoins();
 	gui->resetKeys();
-	levelCounter += 1;
 	sceneManager.nextLevel();
 }
