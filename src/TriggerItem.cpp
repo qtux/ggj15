@@ -1,11 +1,13 @@
 #include "globals.hpp"
 #include "TriggerItem.hpp"
+#include <iostream>
 
 TriggerItem::TriggerItem(sf::Sprite* sprite):Item(sprite,0,16,16,16){
 }
 
 void TriggerItem::applyEffect()
 {
+	sceneManager.getCurrentScene().switchLargeTile(switchPos1.x, switchPos1.y, switchPos2.x, switchPos2.y);
 };
 
 void TriggerItem::setSwitchPos(int x1, int y1, int x2, int y2)

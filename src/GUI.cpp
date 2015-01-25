@@ -9,10 +9,12 @@ GUI::GUI()
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(textureManager.itemsTexture);
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
+	coinSprite->scale(1.5f,1.5f);
 
 	keySprite = new sf::Sprite();
 	keySprite->setTexture(textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
+	keySprite->scale(1.5f,1.5f);
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
@@ -52,14 +54,14 @@ void GUI::update (sf::Time deltaTime) {
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(screenWidth-25,10+(i*16));
+		coinSprite->setPosition(screenWidth-30,10+(i*16));
 		window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(i*16+40,screenHeight-50);
+		keySprite->setPosition(i*16+40,screenHeight-60);
 		window.draw(*keySprite);
 	}
 }
