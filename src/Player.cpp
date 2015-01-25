@@ -33,6 +33,7 @@ void Player::update (sf::Time deltaTime) {
 	
 	// get input from globals and process:
 	sf::Vector2f tmpPos = getPosition();
+	sf::Vector2f oldPos(tmpPos);
 	int width = getWidth();
 	int height = getHeight();
 	int dir = -1;
@@ -45,8 +46,8 @@ void Player::update (sf::Time deltaTime) {
 	int viewWidth = sizeX * largeTileSizeX * pixelSizeX;
 	int viewHeight = sizeY * largeTileSizeY * pixelSizeY;
 	
-	if (tmpPos.x > viewWidth) tmpPos.x -= viewWidth;
-	if (tmpPos.x + width < 0)  tmpPos.x += viewWidth;
+	if (tmpPos.x + 8 > viewWidth) tmpPos.x -= viewWidth;
+	if (tmpPos.x + width - 8 < 0)  tmpPos.x += viewWidth;
 	if (tmpPos.y + 28*mySprite->getScale().y > viewHeight) tmpPos.y -= viewHeight;
 	if (tmpPos.y + height - 8  *mySprite->getScale().y < 0)  tmpPos.y += viewHeight;
 	
@@ -73,14 +74,50 @@ void Player::update (sf::Time deltaTime) {
 		//std::cout<<(*tileIt)->mySprite->getGlobalBounds().left<<" , "<<(*tileIt)->mySprite->getGlobalBounds().top<<" , "<<mySprite->getGlobalBounds().left<<" , "<<mySprite->getGlobalBounds().left<<" , "<<std::endl;
 		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
 		{
-			collides = true;
+			sf::Vector2f testPos(tmpPos);	// run additional tests for 1D movements if 2D movement is not possible
+			testPos.x = oldPos.x;
+			if (!intersects(testPos, **tileIt)) 
+			{
+				tmpPos = testPos;
+			}
+			else
+			{
+				testPos.x = tmpPos.x;
+				testPos.y = oldPos.y;
+				if(!intersects(testPos, **tileIt))
+				{
+					tmpPos = testPos;
+				}
+				else
+				{
+					collides = true;
+				}
+			}
 		}
 	}
 	for (std::vector<Item*>::iterator itIt = sceneManager.getCurrentScene().items.begin() ; itIt != sceneManager.getCurrentScene().items.end() ; itIt++)
 	{
 		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
 		{
-			collides = true;
+			sf::Vector2f testPos(tmpPos);	// run additional tests for 1D movements if 2D movement is not possible
+			testPos.x = oldPos.x;
+			if (!intersects(testPos, **itIt)) 
+			{
+				tmpPos = testPos;
+			}
+			else
+			{
+				testPos.x = tmpPos.x;
+				testPos.y = oldPos.y;
+				if(!intersects(testPos, **itIt))
+				{
+					tmpPos = testPos;
+				}
+				else
+				{
+					collides = true;
+				}
+			}
 		}
 	}
 	if (!collides)
