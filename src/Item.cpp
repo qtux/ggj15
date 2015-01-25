@@ -11,6 +11,7 @@ Item::Item(sf::Sprite* sprite,int x,int y,int w,int h){
 	drawH = h;
 	waveClock = sf::Clock();
 	waveClock.restart();
+	offset = rand();
 };
 Item::~Item()
 {
@@ -22,7 +23,7 @@ void Item::update (sf::Time deltaTime) {
 	{
 		mySprite->setTextureRect(sf::IntRect(drawX,drawY,drawW,drawH));
 		sf::Vector2f vec = getPosition();
-		setPosition(vec.x,vec.y+(std::sin(waveClock.getElapsedTime().asMilliseconds()/300)+0)*0.05);
+		setPosition(vec.x,vec.y+(std::sin((waveClock.getElapsedTime().asMilliseconds()+offset)/300)+0)*0.05);
 		window.draw(*mySprite);
 	}
 };
