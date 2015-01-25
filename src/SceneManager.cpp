@@ -59,6 +59,7 @@ SceneManager::SceneManager(){
 	walkableTileState[0x11941bff] = true;
 	
 	currentLevelNumber = -1;
+	restards = 0;
 	nextLevel();
 }
 
@@ -366,7 +367,7 @@ sf::Uint32 SceneManager::createColorKey(sf::Color color) {
 void SceneManager::loadScene(std::string fileName)
 {
 	scene = Scene();
-
+	showOutline = true;
 	std::cout << fileName<< std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
@@ -460,6 +461,7 @@ void SceneManager::processEditMode()
 void SceneManager::nextLevel(){
 	currentLevelNumber++;
 	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	restards = 0;
 }
 
 void SceneManager::nextLevel(int number){
@@ -469,6 +471,7 @@ void SceneManager::nextLevel(int number){
 
 void SceneManager::restartLevel(){
 	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	restards++;
 }
 
 Scene& SceneManager::getCurrentScene()

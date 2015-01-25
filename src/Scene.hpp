@@ -15,6 +15,7 @@
 #include "Item.hpp"
 #include "GameObject.hpp"
 #include "TextBox.hpp"
+#include "Highscore.hpp"
 
 struct TileFlightData
 {
@@ -53,8 +54,10 @@ public:
 	float tileAnimationTime;
 	void updateTileAnimation(sf::Time deltaT);
 	bool readyToLeave() const;
+	void finishLevel();
 private:
 	bool leaved;
+	Highscore *highscore;
 };
 
 #endif /* SCENE_HPP_ */
