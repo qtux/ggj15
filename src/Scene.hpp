@@ -13,6 +13,17 @@
 #include "GameObject.hpp"
 #include "GUI.hpp"
 #include "Item.hpp"
+#include "GameObject.hpp"
+
+struct TileFlightData
+{
+	GameObject *tile;
+	sf::Vector2f currentPos;
+	sf::Vector2f targetPos;
+	sf::Vector2f momentum;
+	sf::Vector2f startPos;
+	float scale;
+};
 
 class Scene {
 public:
@@ -26,10 +37,6 @@ public:
 	void update(sf::Time deltaT);
 	void leave();
 	// hack hier, ne doch nicht xD
-	const static int sizeX = 5;
-	const static int sizeY = 4;
-	const static int largeTileSizeX = 6;
-	const static int largeTileSizeY = 6;
 	GameObject * player;
 	GUI* gui;
 	
@@ -41,6 +48,7 @@ public:
 	std::vector<Item*> items;
 //private:
 	std::vector<GameObject*> gameBoard;
+	std::vector<TileFlightData> tileAnimationPos;
 };
 
 #endif /* SCENE_HPP_ */
