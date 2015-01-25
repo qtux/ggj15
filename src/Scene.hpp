@@ -37,10 +37,6 @@ public:
 	void update(sf::Time deltaT);
 	void leave();
 	// hack hier, ne doch nicht xD
-	const static int sizeX = 5;
-	const static int sizeY = 4;
-	const static int largeTileSizeX = 6;
-	const static int largeTileSizeY = 6;
 	GameObject * player;
 	GUI* gui;
 	

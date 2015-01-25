@@ -41,8 +41,8 @@ void Player::update (sf::Time deltaTime) {
 	if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
 	if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
 	
-	int viewWidth = Scene::sizeX * Scene::largeTileSizeX * Tile::pixelSizeX;
-	int viewHeight = Scene::sizeY * Scene::largeTileSizeY * Tile::pixelSizeY;
+	int viewWidth = sizeX * largeTileSizeX * pixelSizeX;
+	int viewHeight = sizeY * largeTileSizeY * pixelSizeY;
 	
 	if (tmpPos.x > viewWidth) tmpPos.x -= viewWidth;
 	if (tmpPos.x + width < 0)  tmpPos.x += viewWidth;
