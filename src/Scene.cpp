@@ -98,6 +98,14 @@ void Scene::update(sf::Time deltaT)
 		gui->update(deltaT);
 	}
 	
+	sf::Font font;
+	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	
+	sf::Text level;
+	level.setFont(font);
+	level.setPosition(screenWidth - 30, screenHeight - 70);
+	level.setString(std::to_string(levelCounter));
+	window.draw(level);
 	
 	for(std::vector<Item>::iterator itIt = items.begin() ; itIt != items.end() ; itIt++) {
 		if (player->intersects(*itIt))
@@ -110,17 +118,14 @@ void Scene::update(sf::Time deltaT)
 	/*
 	// Text TEST
 	sf::Vector2f textPos(32.0f, 32.0f);
-	int charSize = 30;
+	* int charSize = 30;
 	
-	sf::Font font;
-	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	sf::Text speech;
+	speech.setFont(font);
 	
-	sf::Text Text;
-	Text.setFont(font);
-	
-	Text.setColor(sf::Color(210, 210, 255));
-	Text.setCharacterSize(charSize);
-	Text.setPosition(textPos);
+	speech.setColor(sf::Color(210, 210, 255));
+	speech.setCharacterSize(charSize);
+	speech.setPosition(textPos);
 	
 	sf::RectangleShape textRect;
 	textRect.setOutlineColor(sf::Color::Blue);
@@ -131,42 +136,42 @@ void Scene::update(sf::Time deltaT)
 	window.draw(textRect);
 	
 	// zu Anfang:
-	Text.setStyle(sf::Text::Bold);
-	Text.setString("Oh no...");
-	Text.setStyle(sf::Text::Regular);
-	Text.setString("The time machine is broken, doggie!");
-	Text.setString("...");
-	Text.setString("What do we do now?");
-	Text.setColor(sf::Color(210, 255, 210));
-	Text.setString("SQOLRK");
-	Text.setColor(sf::Color(210, 210, 255));
+	speech.setStyle(sf::Text::Bold);
+	speech.setString("Oh no...");
+	speech.setStyle(sf::Text::Regular);
+	speech.setString("The time machine is broken, doggie!");
+	speech.setString("...");
+	speech.setString("What do we do now?");
+	speech.setColor(sf::Color(210, 255, 210));
+	speech.setString("SQOLRK");
+	speech.setColor(sf::Color(210, 210, 255));
 	
 	// Zeit wird knapp:
-	Text.setColor(sf::Color(210, 255, 210));
-	Text.setString("LURMK");
-	Text.setColor(sf::Color(210, 210, 255));
-	Text.setString("You are right we should hurry. The pizza is going cold.");
+	speech.setColor(sf::Color(210, 255, 210));
+	speech.setString("LURMK");
+	speech.setColor(sf::Color(210, 210, 255));
+	speech.setString("You are right we should hurry. The pizza is going cold.");
 	
 	// Key aufgesammelt (erstes Level):
-	Text.setColor(sf::Color(210, 210, 210));
-	Text.setString("A key to another dimension!");
-	Text.setColor(sf::Color(210, 210, 255));
+	speech.setColor(sf::Color(210, 210, 210));
+	speech.setString("A key to another dimension!");
+	speech.setColor(sf::Color(210, 210, 255));
 	
 	// Uhr aufgesammelt (erstes Level):
-	Text.setColor(sf::Color(210, 210, 210));
-	Text.setString("When do we do now?");
-	Text.setColor(sf::Color(210, 210, 255));
+	speech.setColor(sf::Color(210, 210, 210));
+	speech.setString("When do we do now?");
+	speech.setColor(sf::Color(210, 210, 255));
 	
 	// Ziel erreicht, kein Key (erstes Level):
-	Text.setString("We need a key for this dimension hole!");
+	speech.setString("We need a key for this dimension hole!");
 	
 	// Ziel erreicht (erstes Level):
-	Text.setString("Do you want to leave, Doggie?");
-	Text.setColor(sf::Color(210, 255, 210));
-	Text.setString("Frravt");
-	Text.setColor(sf::Color(210, 210, 255));
+	speech.setString("Do you want to leave, Doggie?");
+	speech.setColor(sf::Color(210, 255, 210));
+	speech.setString("Frravt");
+	speech.setColor(sf::Color(210, 210, 255));
 	
-	window.draw(Text);
+	window.draw(speech);
 	*/
 }
 
@@ -187,5 +192,6 @@ void Scene::leave()
 	}
 	gui->resetCoins();
 	gui->resetKeys();
+	levelCounter += 1;
 	sceneManager.nextLevel();
 }
