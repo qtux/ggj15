@@ -136,7 +136,7 @@ int main() {
 		else {
 			// retrieve current keyboard input
 			for (int i = 0; i < INPUT_SIZE; ++i) {
-				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
+				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus && !inMenu;
 			}
 		}
 		
@@ -152,10 +152,11 @@ int main() {
 				"Current Level: " + std::to_string(currentLevel) +
 				"\nLEFT, RIGHT ARROW - choose level"+
 				"\nRETURN - start the game" +
+				"\nESC - return/quit" +
 				"\n\n\nIngame usage:" +
 				"\nARROW keys - move the character" +
 				"\nSPACE key - proceed with dialogue" +
-				"\nRETURN key- skip dialogue" +
+				"\nS key- skip dialogue" +
 				"\n(You may use a gamepad instead)" +
 				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
 			);
