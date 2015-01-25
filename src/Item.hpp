@@ -10,6 +10,9 @@ public:
 
 	virtual void update(sf::Time deltaTime);
 	virtual void applyEffect();
+	
+	bool collectable;
+	bool blocksPath;
 private:
 	int drawX;
 	int drawY;

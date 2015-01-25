@@ -75,8 +75,23 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-
-			Item *tmpItem = tmpFactory.getItem(second);
+			
+			Item *tmpItem = 0;
+			if (second == "DecorationItem")
+			{
+				bool blocksPath;
+				int texPosX, texPosY, texW, texH;
+				iss >> blocksPath;
+				iss >> texPosX;
+				iss >> texPosY;
+				iss >> texW;
+				iss >> texH;
+				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
+			}
+			else
+			{
+				tmpItem = tmpFactory.getItem(second);
+			}
 			tmpItem->setPosition(x * pixelSizeX, y * pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
