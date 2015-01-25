@@ -5,41 +5,57 @@
 
 #define DEBUG
 
+sf::RectangleShape background;
+sf::RectangleShape outline;
+
+
 void resize(int width, int height) {
 	// get ratio based on the original size
 	float widthRatio = (float) window.getSize().x / gridWidth;	// TODO add bar widths
 	float heightRatio = (float) window.getSize().y / gridHeight;
+	int heightOffset = 0;
+	int widthOffset = 0;
+	float ratio = 1;
 	
 	// use the smaller ratio to update the window size
 	if (heightRatio > widthRatio) {
 		// black border up and down (undesirable)
-		int offset = (height - width * sizeY / sizeX) / widthRatio / 2;
-		window.setView(sf::View(sf::FloatRect(0, -offset, width / widthRatio, height / widthRatio)));
-		background.setPosition(0, -offset);
-		// resize background
-		background.setSize(sf::Vector2f(width / widthRatio, height / widthRatio));
-		background.setTextureRect(sf::IntRect(0, 0, width / widthRatio, height / widthRatio));
+		heightOffset = (height - width * sizeY / sizeX) / widthRatio / 2;
+		ratio = widthRatio;
 	}
 	else {
 		// black border left and right
-		int offset = (width - height * sizeX / sizeY) / heightRatio / 2;
-		window.setView(sf::View(sf::FloatRect(-offset, 0, width / heightRatio, height / heightRatio)));
-		background.setPosition(-offset, 0);
-		// resize background
-		background.setSize(sf::Vector2f(width / heightRatio, height / heightRatio));
-		background.setTextureRect(sf::IntRect(0, 0, width / heightRatio, height / heightRatio));
+		widthOffset = (width - height * sizeX / sizeY) / heightRatio / 2;
+		ratio = heightRatio;
 	}
+	
+	// set view
+	window.setView(sf::View(sf::FloatRect(-widthOffset, -heightOffset, width/ratio, height/ratio)));
+	// resize background
+	background.setPosition(-widthOffset, -heightOffset);
+	background.setSize(sf::Vector2f(width/ratio, height/ratio));
+	background.setTextureRect(sf::IntRect(0, 0, width/ratio, height/ratio));
+	// resize outline
+	outline.setPosition(0, 0);
+	outline.setSize(sf::Vector2f(width/ratio - 2 * widthOffset, height/ratio - 2 * heightOffset));
 }
 
 int main() {
-	// window settings
-	//window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(30); // avoid noise ;)
-	window.setMouseCursorVisible(false);
+	// define background
 	sf::Texture backgroundTexture;
 	backgroundTexture.loadFromFile(std::string(PATH) + "img/background.png");
 	backgroundTexture.setRepeated(true);
 	background.setTexture(&backgroundTexture);
+	
+	// define outline
+	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
+	outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
+	outline.setOutlineThickness(2.0f);
+	
+	// window settings
+	//window.setVerticalSyncEnabled(true);
+	//window.setFramerateLimit(30); // avoid noise ;)
+	window.setMouseCursorVisible(false);
 	resize(screenWidth, screenHeight);
 	
 	// define a clock to measure time
@@ -107,6 +123,7 @@ int main() {
 		deltaT = clock.restart();
 		// update game with deltaT when focused
 		window.draw(background);
+		window.draw(outline);
 		if (focus) {
 			sceneManager.update(deltaT);
 		}
