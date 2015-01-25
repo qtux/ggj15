@@ -12,6 +12,7 @@ Item::Item(sf::Sprite* sprite,int x,int y,int w,int h) : collectable(true), bloc
 	waveClock = sf::Clock();
 	waveClock.restart();
 	offset = rand();
+	mySprite->setTextureRect(sf::IntRect(drawX,drawY,drawW,drawH));
 };
 Item::~Item()
 {

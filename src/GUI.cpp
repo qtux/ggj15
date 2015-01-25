@@ -38,6 +38,12 @@ void GUI::applyTimeBufff(float seconds)
 {
 	timeBuff += seconds*buffFactor;
 }
+float GUI::timeLeft()
+{
+	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
+	float timeLeft = timeoutSeconds - elapsedSeconds;
+	return timeLeft < 0 ? 0 : timeLeft;
+}
 
 void GUI::update (sf::Time deltaTime) {
 	if (sceneManager.getCurrentScene().textBox->enabled()){
