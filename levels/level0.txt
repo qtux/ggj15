@@ -4,3 +4,4 @@ Item CoinItem 5 5
 Item KeyItem 10 15
 Item TimeItem 5 15
 TriggerItem 5 5 2 2 2 3
+TriggerItem 7 4 3 2 2 1

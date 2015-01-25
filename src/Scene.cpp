@@ -57,16 +57,85 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 	int startX2 = x2*largeTileSizeX;
 	int startY2 = y2*largeTileSizeY;
 
+	sf::Vector2f orthogonal, dir;
+	float length;
+	float momMax = 80.f;
+
 	for (int x=0;x<largeTileSizeX;x++)
 	{
 		for (int y=0;y<largeTileSizeY;y++)
 		{
 			sf::Vector2f tmpPos = getTile(startX1+x, startY1+y)->getPosition();
 			sf::Vector2f tmpPos2 = getTile(startX2+x, startY2+y)->getPosition();
-			getTile(startX2+x, startY2+y)->setPosition(tmpPos.x, tmpPos.y);
-			getTile(startX1+x, startY1+y)->setPosition(tmpPos2.x, tmpPos2.y);
+//			getTile(startX2+x, startY2+y)->setPosition(tmpPos.x, tmpPos.y);
+//			getTile(startX1+x, startY1+y)->setPosition(tmpPos2.x, tmpPos2.y);
+
+			TileFlightData tmp;
+			tmp.startPos = tmpPos;
+			tmp.currentPos = tmpPos;
+			tmp.targetPos = tmpPos2;
+			tmp.tile = getTile(startX1+x, startY1+y);
+			dir = tmp.targetPos -tmp.currentPos;
+			dir *= 0.2f;
+			orthogonal.x = -dir.y;
+			orthogonal.y = dir.x;
+			length = sqrt(orthogonal.x*orthogonal.x+orthogonal.y*orthogonal.y);
+			orthogonal = orthogonal * 1.f/length;
+			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.scale = 1.f;
+			tileAnimationPos.push_back(tmp);
+
+			tmp.startPos = tmpPos2;
+			tmp.currentPos = tmpPos2;
+			tmp.targetPos = tmpPos;
+			tmp.tile = getTile(startX2+x, startY2+y);
+			dir = tmp.targetPos -tmp.currentPos;
+			length = sqrt(dir.x*dir.x+dir.y*dir.y);
+			dir = dir * 1.f/length;
+			orthogonal.x = -dir.y;
+			orthogonal.y = dir.x;
+//			length = sqrt(orthogonal.x*orthogonal.x+orthogonal.y*orthogonal.y);
+//			orthogonal = orthogonal * 1.f/length;
+			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.scale = 1.f;
+//			tmp.momentum = orthogonal * 40.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tileAnimationPos.push_back(tmp);
 		}
 	}
+
+}
+
+void Scene::updateTileAnimation(sf::Time deltaT)
+{
+	float dt = deltaT.asMilliseconds();
+	float scaleMax = 1.4;
+		for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
+			TileFlightData &tmpObj = (*itIt);
+			tmpObj.momentum = tmpObj.momentum * 0.95f + (tmpObj.targetPos - tmpObj.currentPos)* 0.02f;
+			sf::Vector2f dir = tmpObj.momentum;
+			tmpObj.currentPos += dt*dir * 0.01f;
+			sf::Vector2f distVec1 = tmpObj.currentPos- tmpObj.startPos;
+			sf::Vector2f distVec2 = tmpObj.currentPos- tmpObj.targetPos;
+			sf::Vector2f distTotalVec = tmpObj.startPos- tmpObj.targetPos;
+			float dist1 = sqrt(distVec1.x*distVec1.x+distVec1.y*distVec1.y);
+			float dist2 = sqrt(distVec2.x*distVec2.x+distVec2.y*distVec2.y);
+			float distTotal = sqrt(distTotalVec.x*distTotalVec.x+distTotalVec.y*distTotalVec.y);
+			tmpObj.scale = (std::min(dist1,dist2)+distTotal) / distTotal;
+			tmpObj.tile->mySprite->setScale(scaleMax*tmpObj.scale, scaleMax*tmpObj.scale);
+			tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
+
+			// delete animation if target is reached
+			if (dir.x*dir.x+dir.y*dir.y == 0)
+			{
+				itIt = tileAnimationPos.erase(itIt);
+			}
+			else
+			{
+				itIt ++;
+			}
+		}
 }
 
 void Scene::update(sf::Time deltaT)
@@ -85,6 +154,9 @@ void Scene::update(sf::Time deltaT)
 		(*it)->update(deltaT);
 		std::cout << (*it) << std::endl;
 	}*/
+
+	updateTileAnimation(deltaT);
+
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
 	}

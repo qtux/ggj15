@@ -17,7 +17,8 @@ int main() {
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
 
-	soundManager.playSound("sound/test.wav");
+	soundManager.playMusic("sound/backgroundFast.ogg");
+	//soundManager.playSound("sound/test.wav");
 	
 	// main loop
 	while (window.isOpen()) {
