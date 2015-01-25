@@ -1,5 +1,5 @@
-Start 10 5
-Portal 7 26
+Start 24 3
+Portal 4 17
 Item CoinItem 5 5
 Item KeyItem 10 15
 Item TimeItem 5 15
