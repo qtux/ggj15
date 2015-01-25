@@ -9,4 +9,6 @@ public:
 	virtual ~PortalItem();
 	void applyEffect();
 	virtual void update(sf::Time deltaTime);
+private:
+	sf::Clock animClock;
 };
