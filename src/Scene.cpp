@@ -18,6 +18,7 @@ Scene::Scene() {
 	// TODO Auto-generated constructor stub
 	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
 	textBox = new TextBox();
+	leaved = false;
 }
 
 Scene::~Scene() {
@@ -156,6 +157,10 @@ void Scene::update(sf::Time deltaT)
 		(*it)->update(deltaT);
 		std::cout << (*it) << std::endl;
 	}*/
+	if (leaved && !textBox->enabled())
+	{
+		sceneManager.nextLevel();
+	}
 
 	updateTileAnimation(deltaT);
 
@@ -177,16 +182,19 @@ void Scene::update(sf::Time deltaT)
 	
 	sf::Text level;
 	level.setFont(font);
-	level.setPosition(gridWidth - 30, gridHeight - 70);
+	level.setPosition(gridWidth, gridHeight - 32);
 	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
 	window.draw(level);
 	
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
+			if ((*itIt)->applyEffect())
+			{
+				return;
+			}
 			if ((*itIt)->collectable)
 			{
-				(*itIt)->applyEffect();
 				itIt = items.erase(itIt);
 			}		
 			else
@@ -217,8 +225,10 @@ void Scene::leave()
 	{
 		return;
 	}
+	leaved = true;
 	textBox->triggerText("end");
-	gui->resetCoins();
-	gui->resetKeys();
-	sceneManager.nextLevel();
+	if (!textBox->enabled())
+	{
+		sceneManager.nextLevel();
+	}
 }

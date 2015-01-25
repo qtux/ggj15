@@ -26,6 +26,7 @@ int main() {
 	// window settings
 	//window.setVerticalSyncEnabled(true);
 	//window.setFramerateLimit(30); // avoid noise ;)
+	window.setMouseCursorVisible(false);
 	resize(screenWidth, screenHeight);
 	
 	// define a clock to measure time
@@ -33,7 +34,7 @@ int main() {
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
 
-	soundManager.playMusic("sound/backgroundFast.ogg");
+	soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
 	//soundManager.playSound("sound/test.wav");
 	
 	// main loop

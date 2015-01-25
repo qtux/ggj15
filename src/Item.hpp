@@ -9,7 +9,7 @@ public:
 	virtual ~Item();
 
 	virtual void update(sf::Time deltaTime);
-	virtual void applyEffect();
+	virtual bool applyEffect();
 	
 	bool collectable;
 	bool blocksPath;

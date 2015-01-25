@@ -18,6 +18,8 @@ private:
 	sf::Texture itemTexture;
 	sf::Vector2i getRandomGrassPosition();
 	int currentLevelNumber;
+	sf::Uint32 createColorKey(sf::Color color);
+	std::vector<sf::Vector2i>* checkNeighbours(sf::Uint32 color, int x, int y, sf::Image levelImg);
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
@@ -27,7 +29,7 @@ public:
 	void nextLevel();
 	void restartLevel();
 	int getCurrentLevelNumber();
-	sf::Vector2i getTilePosition(sf::Uint32 color);
+	sf::Vector2i getTilePosition(sf::Uint32 color, int x, int y, sf::Image levelImg);
 	
 	Scene& getCurrentScene();
 //	Scene currentScene;

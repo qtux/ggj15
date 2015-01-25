@@ -3,6 +3,8 @@
 
 TextBox::TextBox(){
 	currentElement = 0;
+	skipPressed = false;
+	actionPressed = false;
 }
 
 void TextBox::appendText(TextElement* item)

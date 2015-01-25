@@ -51,6 +51,8 @@ public:
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
 	void updateTileAnimation(sf::Time deltaT);
+private:
+	bool leaved;
 };
 
 #endif /* SCENE_HPP_ */
