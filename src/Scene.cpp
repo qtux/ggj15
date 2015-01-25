@@ -212,7 +212,8 @@ void Scene::update(sf::Time deltaT)
 	textBox->update(deltaT);
 }
 
-void Scene::leave()
+
+bool Scene::readyToLeave() const
 {
 	int size = items.size();
 	int keysInLevel = 0;
@@ -223,10 +224,13 @@ void Scene::leave()
 			keysInLevel++;
 		}
 	}
-	if (keysInLevel > 0)
-	{
-		return;
-	}
+	return (keysInLevel == 0);
+}
+
+ 
+void Scene::leave()
+{
+	if (!readyToLeave()) return;
 	leaved = true;
 	textBox->triggerText("end");
 	if (!textBox->enabled())

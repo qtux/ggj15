@@ -52,6 +52,7 @@ public:
 	std::vector<TileFlightData> tileAnimationPos;
 	float tileAnimationTime;
 	void updateTileAnimation(sf::Time deltaT);
+	bool readyToLeave() const;
 private:
 	bool leaved;
 };
