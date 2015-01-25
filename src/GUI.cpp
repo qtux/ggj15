@@ -19,7 +19,10 @@ GUI::GUI()
 	coins=0;
 	keys=0;
 	pauseOffset = 0;
+	loosed = false;
 	lastEnable = false;
+	smallTime = false;
+	buffFactor = 20;
 }
 void GUI::setTimeout(int seconds)
 {
@@ -27,9 +30,13 @@ void GUI::setTimeout(int seconds)
 	timeoutSeconds = seconds;
 	timeBuff = 0;
 }
+void GUI::setTimebuffFactor(float factor)
+{
+	buffFactor = factor;
+}
 void GUI::applyTimeBufff(float seconds)
 {
-	timeBuff += seconds;
+	timeBuff += seconds*buffFactor;
 }
 
 void GUI::update (sf::Time deltaTime) {
@@ -56,7 +63,22 @@ void GUI::update (sf::Time deltaTime) {
 	if (progress <= 0)
 	{
 		progress = 0;
-		sceneManager.restartLevel();
+		if (!loosed){
+			sceneManager.getCurrentScene().textBox->triggerText("loose");
+		}
+		loosed = true;
+		if (!sceneManager.getCurrentScene().textBox->enabled())
+		{
+			sceneManager.restartLevel();
+		}
+	}
+	if (progress < 0.3)
+	{
+		if (!smallTime)
+		{
+			sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+		}
+		smallTime = true;
 	}
 	int height = (1 - progress) * (gridHeight);
 	timeSprite->setPosition(-15 , height);

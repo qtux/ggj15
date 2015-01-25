@@ -4,6 +4,7 @@
 #include <iostream>
 
 PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32){
+	collectable = false;
 	animClock = sf::Clock();
 	animClock.restart();
 }

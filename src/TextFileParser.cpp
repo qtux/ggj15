@@ -104,6 +104,13 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			scene.gui->setTimeout(time);
 		}
 
+		if (first == "Timebuff")
+		{
+			int time;
+			iss >> time;
+			scene.gui->setTimebuffFactor(time);
+		}
+
 		if (first == "Text")
 		{
 			TextElement* element = new TextElement();

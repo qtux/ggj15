@@ -33,7 +33,7 @@ int main() {
 	sf::Time deltaT = clock.restart();
 	globalClock.restart();
 
-	soundManager.playMusic("sound/backgroundFast.ogg");
+	soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
 	//soundManager.playSound("sound/test.wav");
 	
 	// main loop
