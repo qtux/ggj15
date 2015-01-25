@@ -50,8 +50,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.startPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
-			scene.startPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
+			scene.startPos.x = x*Tile::pixelSizeX;
+			scene.startPos.y = y*Tile::pixelSizeY;
 			scene.player->setPosition(scene.startPos.x, scene.startPos.y);
 			scene.player->doggieSprite->setPosition(scene.startPos.x, scene.startPos.y);
 		}
@@ -61,10 +61,10 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.portalPos.x = x*Tile::pixelSizeX*Scene::tileScaleFactor;
-			scene.portalPos.y = y*Tile::pixelSizeY*Scene::tileScaleFactor;
+			scene.portalPos.x = x*Tile::pixelSizeX;
+			scene.portalPos.y = y*Tile::pixelSizeY;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
-			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
+			tmpItem->setPosition(x*Tile::pixelSizeX, y*Tile::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -77,7 +77,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			iss >> y;
 
 			Item *tmpItem = tmpFactory.getItem(second);
-			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
+			tmpItem->setPosition(x*Tile::pixelSizeX, y*Tile::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -100,7 +100,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
-			tmpItem->setPosition(x*Tile::pixelSizeX*Scene::tileScaleFactor, y*Tile::pixelSizeY*Scene::tileScaleFactor);
+			tmpItem->setPosition(x*Tile::pixelSizeX, y*Tile::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
