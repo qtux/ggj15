@@ -3,8 +3,6 @@
 // last include (requires previous includes)
 #include "globals.hpp"
 
-#define DEBUG
-
 sf::RectangleShape background;
 sf::RectangleShape outline;
 
@@ -66,8 +64,6 @@ int main() {
 	soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
 	//soundManager.playSound("sound/test.wav");
 	
-	
-	
 	// main loop
 	while (window.isOpen()) {
 		// poll events (do not use for input handling)
@@ -89,7 +85,6 @@ int main() {
 				resize(width, height);
 			}
 		}
-		
 
 		// retrieve input (either gamepad or keyboard)
 		if (sf::Joystick::isConnected(0)) {
@@ -109,13 +104,6 @@ int main() {
 				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
 			}
 		}
-		
-		#ifdef DEBUG
-			// show input bitstring if any key is pressed
-			if (input.any()) {
-//				std::cout << input << std::endl;
-			}
-		#endif
 		
 		// clear window content
 		window.clear();
