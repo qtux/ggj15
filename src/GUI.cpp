@@ -18,7 +18,8 @@ GUI::GUI()
 	timeoutClock.restart();
 	coins=0;
 	keys=0;
-
+	pauseOffset = 0;
+	lastEnable = false;
 }
 void GUI::setTimeout(int seconds)
 {
@@ -32,8 +33,20 @@ void GUI::applyTimeBufff(float seconds)
 }
 
 void GUI::update (sf::Time deltaTime) {
+	if (sceneManager.getCurrentScene().textBox->enabled()){
+		if (!lastEnable)
+		{
+			pauseOffset += timeoutClock.getElapsedTime().asSeconds();
+		}
+		timeoutClock.restart();
+		lastEnable = true;
+	}
+	else
+	{
+		lastEnable = false;
+	}
 	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
-	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff);
+	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
 	float progress = 1-(elapsedSeconds / timeoutSeconds);
 	//TODO: use min, max
 	if (progress > 1)

@@ -8,4 +8,5 @@ void CoinItem::applyEffect()
 {
 	soundManager.playSound("sound/keyCollected.ogg");
 	sceneManager.getCurrentScene().gui->addCoins(1);
+	sceneManager.getCurrentScene().textBox->triggerText("coin");
 };
