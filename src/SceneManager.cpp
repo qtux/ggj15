@@ -152,8 +152,10 @@ void SceneManager::loadScene(std::string fileName)
 	sf::Sprite *doggieSprite = new sf::Sprite();
 	playerSprite->setTexture(textureManager.playerTexture);
 	playerSprite->setPosition(90,90);
+	playerSprite->setScale(1.5f, 1.5f);
 	doggieSprite->setTexture(textureManager.playerTexture);
 	doggieSprite->setPosition(90,90);
+	doggieSprite->setScale(1.5f, 1.5f);
 	scene.player->mySprite = playerSprite;
 
 	scene.player->doggieSprite = doggieSprite;
