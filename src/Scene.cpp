@@ -76,7 +76,7 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 			tmp.currentPos = tmpPos;
 			tmp.targetPos = tmpPos2;
 			tmp.tile = getTile(startX1+x, startY1+y);
-			dir = tmp.targetPos -tmp.currentPos;
+			dir = tmp.targetPos - tmp.currentPos;
 			dir *= 0.2f;
 			orthogonal.x = -dir.y;
 			orthogonal.y = dir.x;
@@ -189,7 +189,10 @@ void Scene::update(sf::Time deltaT)
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
-			(*itIt)->applyEffect();
+			if ((*itIt)->applyEffect())
+			{
+				return;
+			}
 			if ((*itIt)->collectable)
 			{
 				itIt = items.erase(itIt);

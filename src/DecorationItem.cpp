@@ -6,8 +6,9 @@ DecorationItem::DecorationItem(sf::Sprite* sprite, bool blocksPath_, int texPosX
 	this->collectable = false;
 }
 
-void DecorationItem::applyEffect()
+bool DecorationItem::applyEffect()
 {
+	return false;
 };
 
 

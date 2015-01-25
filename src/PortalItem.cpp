@@ -11,10 +11,11 @@ PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32){
 PortalItem::~PortalItem(){
 }
 
-void PortalItem::applyEffect()
+bool PortalItem::applyEffect()
 {
 	soundManager.playSound("sound/won.ogg");
 	sceneManager.getCurrentScene().leave();
+	return true;
 };
 
 void PortalItem::update (sf::Time deltaTime) {

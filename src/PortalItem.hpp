@@ -7,7 +7,7 @@ class PortalItem : public Item
 public:
 	PortalItem(sf::Sprite* sprite);
 	virtual ~PortalItem();
-	void applyEffect();
+	bool applyEffect();
 	virtual void update(sf::Time deltaTime);
 private:
 	sf::Clock animClock;

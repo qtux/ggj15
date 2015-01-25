@@ -58,14 +58,15 @@ SceneManager::SceneManager(){
 std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x, int y, sf::Image levelImg)
 {
 	std::vector<sf::Vector2i> *tmpVector = new std::vector<sf::Vector2i>();
-	
+	int h = 24;
+	int w = 30;
 	if (color == 0x11941bff) // grass
 	{
 		for (int i = 0; i < 3; ++i)
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				if (x > 0 && y > 0 && x < screenWidth && y < screenHeight) {
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
 					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
 					sf::Uint32 colorKey = createColorKey(tmpColor);
 					// if a non-green border piece is found: choose a mix-tile
@@ -91,7 +92,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				if (x > 0 && y > 0 && x < screenWidth && y < screenHeight) {
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
 					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
 					sf::Uint32 colorKey = createColorKey(tmpColor);
 					// if a green or brown border next to piece is found: choose a border tile
@@ -113,7 +114,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				if (x > 0 && y > 0 && x < screenWidth && y < screenHeight) {
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
 					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
 					sf::Uint32 colorKey = createColorKey(tmpColor);
 					// if a non-brown border piece is found: choose a mix-tile
@@ -138,7 +139,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				if (x > 0 && y > 0 && x < screenWidth && y < screenHeight) {
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
 					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
 					sf::Uint32 colorKey = createColorKey(tmpColor);
 					// if a dark grey border near piece is found: choose a border tile
@@ -168,7 +169,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 			}
 		}
 		
-		if (x == screenWidth)
+		if (x == w - 1)
 		{
 			sf::Color tmpColor = levelImg.getPixel(x - 1, y);
 			sf::Uint32 colorKey = createColorKey(tmpColor);
@@ -193,7 +194,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 			}
 		}
 		
-		if (y == screenHeight)
+		if (y == h - 1)
 		{
 			sf::Color tmpColor = levelImg.getPixel(x, y - 1);
 			sf::Uint32 colorKey = createColorKey(tmpColor);
@@ -208,7 +209,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 		
 		
 		// gameboard mid slender walls
-		if (x > 0 && x < screenWidth)
+		if (x > 0 && x < w - 1)
 		{
 			sf::Color tmpColor1 = levelImg.getPixel(x - 1, y);
 			sf::Uint32 colorKey1 = createColorKey(tmpColor1);
@@ -225,7 +226,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 			}
 		}
 		
-		if (y > 0 && y < screenHeight)
+		if (y > 0 && y < h - 1)
 		{
 			sf::Color tmpColor1 = levelImg.getPixel(x, y - 1);
 			sf::Uint32 colorKey1 = createColorKey(tmpColor1);
@@ -242,7 +243,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 			}
 		}
 		
-		/*if (x > 0 && x < screenWidth && y > 0 && y < screenHeight)
+		/*if (x > 0 && x < w - 1 && y > 0 && y < h - 1)
 		  {
 			sf::Color tmpColor1 = levelImg.getPixel(x, y - 1);
 			sf::Uint32 colorKey1 = createColorKey(tmpColor1);
@@ -264,7 +265,7 @@ std::vector<sf::Vector2i>* SceneManager::checkNeighbours(sf::Uint32 color, int x
 		{
 			for (int j = 0; j < 3; ++j)
 			{
-				if (x > 0 && y > 0 && x < screenWidth && y < screenHeight) {
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
 					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
 					sf::Uint32 colorKey = createColorKey(tmpColor);
 					// check wall mass nearby
