@@ -30,7 +30,6 @@ public:
 	const static int sizeY = 4;
 	const static int largeTileSizeX = 6;
 	const static int largeTileSizeY = 6;
-	const static int tileScaleFactor = 3;
 	GameObject * player;
 	GUI* gui;
 	
