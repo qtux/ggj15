@@ -76,8 +76,8 @@ void Scene::update(sf::Time deltaT)
 //		sf::Vector2i globalPosition = sf::Mouse::getPosition(window);
 //
 //		sf::Vector2f localPosition;
-//		localPosition.x = 1.f*globalPosition.x/(Tile::pixelSizeX);
-//		localPosition.y = 1.f*globalPosition.y/(Tile::pixelSizeY);
+//		localPosition.x = 1.f*globalPosition.x/(pixelSizeX);
+//		localPosition.y = 1.f*globalPosition.y/(pixelSizeY);
 //		std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
 //	}
 	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
