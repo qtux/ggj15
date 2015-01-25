@@ -22,6 +22,7 @@ GUI::GUI()
 	loosed = false;
 	lastEnable = false;
 	smallTime = false;
+	buffFactor = 20;
 }
 void GUI::setTimeout(int seconds)
 {
@@ -29,9 +30,13 @@ void GUI::setTimeout(int seconds)
 	timeoutSeconds = seconds;
 	timeBuff = 0;
 }
+void GUI::setTimebuffFactor(float factor)
+{
+	buffFactor = factor;
+}
 void GUI::applyTimeBufff(float seconds)
 {
-	timeBuff += seconds;
+	timeBuff += seconds*buffFactor;
 }
 
 void GUI::update (sf::Time deltaTime) {
