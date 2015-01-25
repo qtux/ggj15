@@ -15,4 +15,5 @@ private:
 	int drawY;
 	int drawW;
 	int drawH;
+	sf::Clock waveClock;
 };

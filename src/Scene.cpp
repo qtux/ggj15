@@ -108,12 +108,16 @@ void Scene::update(sf::Time deltaT)
 	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()));
 	window.draw(level);
 	
-	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; itIt++) {
+	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
 			(*itIt)->applyEffect();
 			itIt = items.erase(itIt);
 		} 
+		else
+		{
+			itIt ++;
+		}
 	}
 	
 	/*
