@@ -27,7 +27,6 @@ bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 }
 
 void Player::update (sf::Time deltaTime) {
-	
 	float dT = float(deltaTime.asMilliseconds());
 	float currTime = globalClock.getElapsedTime().asSeconds();
 	
