@@ -14,19 +14,19 @@ public:
 	void addCoins(int amount);
 	void addKeys(int amount);
 	void setTimebuffFactor(float factor);
+	float timeLeft();
+	int coins;
+	float timeoutSeconds;
 private:
 	sf::Clock timeoutClock;
 	sf::Sprite* timeSprite;
 	sf::Sprite* coinSprite;
 	sf::Sprite* keySprite;
-
-	float timeoutSeconds;
 	float timeBuff;
 	float pauseOffset;
 	bool lastEnable;
 	bool loosed;
 	bool smallTime;
 	float buffFactor;
-	int coins;
 	int keys;
 };
