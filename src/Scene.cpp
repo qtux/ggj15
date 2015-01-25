@@ -104,7 +104,7 @@ void Scene::update(sf::Time deltaT)
 	sf::Text level;
 	level.setFont(font);
 	level.setPosition(screenWidth - 30, screenHeight - 70);
-	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()));
+	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
 	window.draw(level);
 	
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
