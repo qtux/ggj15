@@ -45,7 +45,7 @@ void GUI::update (sf::Time deltaTime) {
 	if (progress <= 0)
 	{
 		progress = 0;
-		//sceneManager.restartLevel();
+		sceneManager.restartLevel();
 	}
 	int width = (progress* (screenWidth-20));
 	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % 46, 0, width, 20));

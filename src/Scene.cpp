@@ -61,7 +61,6 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 	{
 		for (int y=0;y<largeTileSizeY;y++)
 		{
-			std::cout<<startX1+x<<", "<<startY1+y<<std::endl;
 			sf::Vector2f tmpPos = getTile(startX1+x, startY1+y)->getPosition();
 			sf::Vector2f tmpPos2 = getTile(startX2+x, startY2+y)->getPosition();
 			getTile(startX2+x, startY2+y)->setPosition(tmpPos.x, tmpPos.y);
