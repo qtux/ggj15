@@ -1,6 +1,6 @@
 Start 24 3
 Portal 4 17
-Item CoinItem 5 5
+Item CoinItem 5 10
 Item KeyItem 10 15
 Item TimeItem 5 15
 Item DecorationItem 14 14 1 0 112 16 16
@@ -10,3 +10,41 @@ Item DecorationItem 13 6 1 16 96 16 16
 Item DecorationItem 26 11 0 16 80 16 16
 TriggerItem 5 5 2 2 2 3
 TriggerItem 7 4 3 2 2 1
+Text start 0 210 210 255
+... (Press SPACE to continue, ENTER to skip)
+Text start 0 210 210 255
+The time machine is ruined, doggie.
+Text start 0 210 210 255
+...
+Text key 0 210 210 210
+A key to a new dimension!
+Text key 0 210 210 210
+Time is fragile here. You might get a chance to get back.
+Text coin 0 210 210 210
+A gold coin. There are times when gold is worthy.
+Text coin 0 210 210 210
+Probably even today. Whenever this is.
+Text smalltime 0 210 210 210
+The pizza is getting cold!
+Text smalltime 0 210 210 210
+Also this dimension looks rather fragile.
+Text smalltime 0 210 210 210
+...
+Text smalltime 0 210 210 210
+You might as well eat and watch your universe dissolve.
+Text loose 0 210 210 210
+Time IS fragile. Obviously it is now before just now.
+Text loose 0 210 210 210
+Lucky you.
+Text loose 0 210 210 210
+Also clocks seem to run backwards.
+Text end 0 210 210 210
+A dimension hole!
+Text end 0 210 210 210
+Dimension holes can be used to travel through time.
+Text end 0 210 210 210
+If it lets you.
+Text end 0 210 210 210
+You can try. Everything is possible.
+Text end 0 210 210 210
+Including the good things.

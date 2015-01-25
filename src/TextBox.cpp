@@ -69,7 +69,7 @@ void TextBox::update(sf::Time deltaT)
 		font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
 		// Text TEST
 		sf::Vector2f textPos(32.0f, 32.0f);
-		int charSize = 10;
+		int charSize = 15;
 	
 		sf::Text speech;
 		speech.setFont(font);

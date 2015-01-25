@@ -166,7 +166,9 @@ int main() {
 		}
 		else {
 			window.draw(background);
-			window.draw(outline);
+			if (showOutline){
+				window.draw(outline);
+			}
 			if (focus) {
 				sceneManager.update(deltaT);
 			}

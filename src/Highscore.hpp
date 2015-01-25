@@ -1,5 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <vector>
+class HighscoreRow
+{
+public:
+	int coins;
+	float time;
+	float maxtime;
+	int kills;
+};
 class Highscore
 {
 public:
@@ -11,4 +20,5 @@ public:
 private:
 	int level;
 	bool  actionPressed;
+	std::vector<HighscoreRow> rows;
 };

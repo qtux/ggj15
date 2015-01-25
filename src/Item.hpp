@@ -13,12 +13,11 @@ public:
 	
 	bool collectable;
 	bool blocksPath;
-private:
-	float offset;
-	sf::Clock waveClock;
-protected:
 	int drawX;
 	int drawY;
 	int drawW;
 	int drawH;
+private:
+	float offset;
+	sf::Clock waveClock;
 };

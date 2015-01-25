@@ -18,6 +18,7 @@ GUI::GUI()
 	timeoutClock.restart();
 	coins=0;
 	keys=0;
+	timeoutSeconds=0;
 	pauseOffset = 0;
 	loosed = false;
 	lastEnable = false;
@@ -83,6 +84,8 @@ void GUI::update (sf::Time deltaTime) {
 		if (!smallTime)
 		{
 			sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+			soundManager.playSound("sound/timeShort.ogg");
+			
 		}
 		smallTime = true;
 	}
