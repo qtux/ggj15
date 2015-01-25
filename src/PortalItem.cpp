@@ -1,7 +1,7 @@
 #include "globals.hpp"
 #include "PortalItem.hpp"
 #include <cmath>
-PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,16,16,16){
+PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32){
 }
 PortalItem::~PortalItem(){
 }
