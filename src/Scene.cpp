@@ -59,6 +59,7 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 	sf::Vector2f orthogonal, dir;
 	float length;
+	float momMax = 80.f;
 
 	for (int x=0;x<largeTileSizeX;x++)
 	{
@@ -80,8 +81,8 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 			orthogonal.y = dir.x;
 			length = sqrt(orthogonal.x*orthogonal.x+orthogonal.y*orthogonal.y);
 			orthogonal = orthogonal * 1.f/length;
-			tmp.momentum.x = 80.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.momentum.y = 80.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
 			tmp.scale = 1.f;
 			tileAnimationPos.push_back(tmp);
 
@@ -96,8 +97,8 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 			orthogonal.y = dir.x;
 //			length = sqrt(orthogonal.x*orthogonal.x+orthogonal.y*orthogonal.y);
 //			orthogonal = orthogonal * 1.f/length;
-			tmp.momentum.x = 80.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.momentum.y = 80.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
+			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
 			tmp.scale = 1.f;
 //			tmp.momentum = orthogonal * 40.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
 			tileAnimationPos.push_back(tmp);
@@ -123,9 +124,10 @@ void Scene::update(sf::Time deltaT)
 		std::cout << (*it) << std::endl;
 	}*/
 
+	float scaleMax = 1.4;
 	for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
 		TileFlightData &tmpObj = (*itIt);
-		tmpObj.momentum = tmpObj.momentum * 0.98f + (tmpObj.targetPos - tmpObj.currentPos)* 0.01f;
+		tmpObj.momentum = tmpObj.momentum * 0.97f + (tmpObj.targetPos - tmpObj.currentPos)* 0.02f;
 		sf::Vector2f dir = tmpObj.momentum;
 		tmpObj.currentPos += dir * 0.01f;
 		sf::Vector2f distVec1 = tmpObj.currentPos- tmpObj.startPos;
@@ -134,8 +136,8 @@ void Scene::update(sf::Time deltaT)
 		float dist1 = sqrt(distVec1.x*distVec1.x+distVec1.y*distVec1.y);
 		float dist2 = sqrt(distVec2.x*distVec2.x+distVec2.y*distVec2.y);
 		float distTotal = sqrt(distTotalVec.x*distTotalVec.x+distTotalVec.y*distTotalVec.y);
-		tmpObj.scale = std::min(dist1,dist2) / distTotal;
-		tmpObj.tile->mySprite->setScale(2.f*tmpObj.scale, 2.f*tmpObj.scale);
+		tmpObj.scale = (std::min(dist1,dist2)+distTotal) / distTotal;
+		tmpObj.tile->mySprite->setScale(scaleMax*tmpObj.scale, scaleMax*tmpObj.scale);
 		tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
 
 		// delete animation if target is reached
