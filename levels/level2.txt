@@ -1,13 +1,14 @@
-Start 23 14
-Portal 3 3
-Item CoinItem 28 21
-Item CoinItem 28 1
-Item KeyItem 1 22
-Item TimeItem 22 5
+Start 3 20
+Portal 23 17
+Timeout 25
+Item CoinItem 19 12
+Item CoinItem 21 12
+Item CoinItem 23 12
+Item KeyItem 5 12
+Item KeyItem 22 3
 #Item DecorationItem 26 3 1 0 112 16 16
-Item DecorationItem 8 5 0 16 80 16 16
-Item DecorationItem 14 20 0 16 80 16 16
-Item DecorationItem 20 12 1 16 112 16 16
-Item DecorationItem 2 2 1 16 112 16 16
-TriggerItem 21 17 3 0 0 3
-TriggerItem 28 18 3 0 2 0
+#Item DecorationItem 13 5 1 0 112 16 16
+I#tem DecorationItem 4 14 1 0 112 16 16
+#Item DecorationItem 16 3 1 16 112 16 16
+#Item DecorationItem 3 22 1 16 112 16 16
+TriggerItem 5 2 2 2 3 0
