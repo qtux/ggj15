@@ -11,4 +11,5 @@ public:
 	virtual void update(sf::Time deltaTime);
 private:
 	sf::Clock animClock;
+	bool neverAgain;
 };

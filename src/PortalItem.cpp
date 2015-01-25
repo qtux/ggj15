@@ -3,7 +3,8 @@
 #include <cmath>
 #include <iostream>
 
-PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32){
+PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32) {
+	neverAgain=false;
 	collectable = false;
 	animClock = sf::Clock();
 	animClock.restart();
@@ -13,7 +14,11 @@ PortalItem::~PortalItem(){
 
 bool PortalItem::applyEffect()
 {
-	if (sceneManager.getCurrentScene().readyToLeave()) soundManager.playSound("sound/won.ogg");
+	if (sceneManager.getCurrentScene().readyToLeave() && !neverAgain) 
+	{
+		soundManager.playSound("sound/won.ogg");
+		neverAgain = true;
+	}
 	sceneManager.getCurrentScene().leave();
 	return true;
 };
