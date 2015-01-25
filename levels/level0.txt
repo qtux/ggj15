@@ -1,4 +1,4 @@
-Start 40 9
+Start 10 5
 Portal 7 26
 Item CoinItem 5 5
 Item KeyItem 10 15
