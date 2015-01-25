@@ -1,0 +1,23 @@
+Timeout 40
+Start 2 2
+Portal 26 21
+Item CoinItem 2 19
+Item CoinItem 21 1
+Item CoinItem 26 14
+Item CoinItem 16 10
+Item KeyItem 26 1
+Item KeyItem 14 6
+Item KeyItem 2 20
+
+Item DecorationItem 0 1 1 16 112 16 16    Fels
+Item DecorationItem 15 3 1 16 112 16 16    Fels
+Item DecorationItem 13 9 1 16 112 16 16    Fels
+Item DecorationItem 11 20 1 16 112 16 16    Fels
+Item DecorationItem 9 0 1 16 112 16 16    Fels
+Item DecorationItem 17 2 0 16 80 16 16     Pilz
+Item DecorationItem 13 7 0 16 80 16 16     Pilz
+Item DecorationItem 7 19 0 16 80 16 16
+Item DecorationItem 18 18 0 16 80 16 16
+Item DecorationItem 8 5 0 16 80 16 16
+TriggerItem 8 1 2 0 0 3
+TriggerItem 17 16 3 3 0 3
