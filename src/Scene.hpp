@@ -13,6 +13,17 @@
 #include "GameObject.hpp"
 #include "GUI.hpp"
 #include "Item.hpp"
+#include "GameObject.hpp"
+
+struct TileFlightData
+{
+	GameObject *tile;
+	sf::Vector2f currentPos;
+	sf::Vector2f targetPos;
+	sf::Vector2f momentum;
+	sf::Vector2f startPos;
+	float scale;
+};
 
 class Scene {
 public:
@@ -42,6 +53,7 @@ public:
 	std::vector<Item*> items;
 //private:
 	std::vector<GameObject*> gameBoard;
+	std::vector<TileFlightData> tileAnimationPos;
 };
 
 #endif /* SCENE_HPP_ */
