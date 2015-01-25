@@ -66,14 +66,14 @@ void GUI::update (sf::Time deltaTime) {
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(10+(i*16), gridHeight-30);
+		coinSprite->setPosition(gridWidth, - i * 16);
 		window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(i*16+40,gridHeight-60);
+		keySprite->setPosition(gridWidth, gridHeight - 42 + i*16);
 		window.draw(*keySprite);
 	}
 }
