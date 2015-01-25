@@ -44,14 +44,21 @@ SceneManager::SceneManager(){
 	tmpVector = new std::vector<sf::Vector2i>();
 	tmpVector->push_back(sf::Vector2i(2,9));
 	colorToTilePositionMap[0x000100ff] = tmpVector; // wall
-	
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(5,2));
+	tmpVector->push_back(sf::Vector2i(6,2));
+	tmpVector->push_back(sf::Vector2i(7,2));
+	tmpVector->push_back(sf::Vector2i(8,2));
+	tmpVector->push_back(sf::Vector2i(9,2));
+	colorToTilePositionMap[0x0000abff] = tmpVector; // water
+
 	walkableTileState[0x000100ff] = false;
 	walkableTileState[0x5f5f5fff] = true;
 	walkableTileState[0x9b6d27ff] = true;
 	walkableTileState[0x969896ff] = true;
 	walkableTileState[0x11941bff] = true;
 	
-	currentLevelNumber = -1;
+	currentLevelNumber = 3;
 	nextLevel();
 }
 
