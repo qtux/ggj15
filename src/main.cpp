@@ -152,11 +152,12 @@ int main() {
 				"Current Level: " + std::to_string(currentLevel) +
 				"\nLEFT, RIGHT ARROW - choose level"+
 				"\nRETURN - start the game" +
-				"\nESC - return/quit" +
-				"\n\n\nIngame usage:" +
+				"\nESC - quit the game" +
+				"\n\nIngame usage:" +
 				"\nARROW keys - move the character" +
 				"\nSPACE key - proceed with dialogue" +
 				"\nS key- skip dialogue" +
+				"\nESC key- return to menu" +
 				"\n(You may use a gamepad instead)" +
 				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
 			);
