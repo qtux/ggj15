@@ -4,7 +4,7 @@ GUI::GUI()
 {
 	timeSprite = new sf::Sprite();
 	timeSprite->setTexture(textureManager.timeBarTexture);
-	timeSprite->setPosition(10,screenHeight-30);
+	timeSprite->setPosition(10,gridHeight-30);
 
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(textureManager.itemsTexture);
@@ -45,21 +45,21 @@ void GUI::update (sf::Time deltaTime) {
 		progress = 0;
 		sceneManager.restartLevel();
 	}
-	int width = (progress* (screenWidth-20));
+	int width = (progress* (gridWidth-20));
 	timeSprite->setTextureRect(sf::IntRect(width - int(elapsedSeconds) % 46, 0, width, 20));
 	window.draw(*timeSprite);
 
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(screenWidth-30,10+(i*16));
+		coinSprite->setPosition(gridWidth-30,10+(i*16));
 		window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(i*16+40,screenHeight-60);
+		keySprite->setPosition(i*16+40,gridHeight-60);
 		window.draw(*keySprite);
 	}
 }
