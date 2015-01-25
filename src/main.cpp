@@ -149,7 +149,7 @@ int main() {
 		if (inMenu) {
 			// do menu logic here
 			speech.setString(
-				"Current Level: " + std::to_string(currentLevel) +
+				"Current Level: " + std::to_string(currentLevel + 1) +
 				"\nLEFT, RIGHT ARROW - choose level"+
 				"\nRETURN - start the game" +
 				"\nESC - quit the game" +
