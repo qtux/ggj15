@@ -27,7 +27,7 @@ private:
 	
 };
 
-const static int PlayerAnimState[] = {0, 1, 0, 2};
+const static int PlayerAnimState[] = {0, 1 , 1, 0, 2, 2};
 const static int DoggieAnimState[] = {0,2,1,3,1,4};
 
 const static int slowFactor = 15;
