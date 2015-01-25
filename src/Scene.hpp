@@ -58,6 +58,7 @@ public:
 private:
 	bool leaved;
 	Highscore *highscore;
+	bool fooexit;
 };
 
 #endif /* SCENE_HPP_ */

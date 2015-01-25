@@ -20,6 +20,7 @@ Scene::Scene() {
 	textBox = new TextBox();
 	leaved = false;
 	highscore  = 0;
+	fooexit = false;
 }
 
 Scene::~Scene() {
@@ -194,26 +195,28 @@ void Scene::update(sf::Time deltaT)
 	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
 	window.draw(level);
 	textBox->update(deltaT);
-	
-	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
-		if (player->intersects(**itIt))
-		{
-			if ((*itIt)->applyEffect())
+	if (!fooexit){
+		for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
+			if (player->intersects(**itIt))
 			{
-				return;
-			}
-			if ((*itIt)->collectable)
-			{
-				itIt = items.erase(itIt);
-			}		
+				if ((*itIt)->applyEffect())
+				{
+					fooexit = true;
+					return;
+				}
+				if ((*itIt)->collectable)
+				{
+					itIt = items.erase(itIt);
+				}		
+				else
+				{
+					itIt ++;
+				}
+			} 
 			else
 			{
 				itIt ++;
 			}
-		} 
-		else
-		{
-			itIt ++;
 		}
 	}
 }
