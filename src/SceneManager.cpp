@@ -138,11 +138,11 @@ void SceneManager::loadScene(std::string fileName)
 //			tmpPos = sf::Vector2i(0, 3);
 			sprite->setTextureRect(sf::IntRect(tmpPos.x*Tile::pixelSizeX, tmpPos.y*Tile::pixelSizeY, Tile::pixelSizeX, Tile::pixelSizeY));
 			// set position of the sprite inside the map
-			sprite->setPosition(Tile::tileScaleFactor*x*Tile::pixelSizeX, Tile::tileScaleFactor*y*Tile::pixelSizeY);
+			sprite->setPosition(Scene::tileScaleFactor*x*Tile::pixelSizeX, Scene::tileScaleFactor*y*Tile::pixelSizeY);
 			// create the tile and add it to the scene
 			Tile* tmpTile = new Tile();
 			tmpTile->walkable = walkableTileState[colorKey];
-			sprite->setScale(Tile::tileScaleFactor, Tile::tileScaleFactor);
+			sprite->setScale(Scene::tileScaleFactor, Scene::tileScaleFactor);
 			tmpTile->mySprite = sprite;
 			scene.setTile(tmpTile, x, y);
 		}
@@ -174,8 +174,8 @@ void SceneManager::processEditMode()
 			sf::Vector2i globalPosition = sf::Mouse::getPosition(window);
 
 			sf::Vector2f localPosition;
-			localPosition.x = 1.f*globalPosition.x/(Tile::pixelSizeX*Tile::tileScaleFactor);
-			localPosition.y = 1.f*globalPosition.y/(Tile::pixelSizeY*Tile::tileScaleFactor);
+			localPosition.x = 1.f*globalPosition.x/(Tile::pixelSizeX*Scene::tileScaleFactor);
+			localPosition.y = 1.f*globalPosition.y/(Tile::pixelSizeY*Scene::tileScaleFactor);
 //			std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
 
 
