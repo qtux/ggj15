@@ -108,12 +108,20 @@ int main() {
 				resize(width, height);
 			}
 			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
-				--currentLevel;
-				currentLevel %= numLevels;
+				if (currentLevel == 0) {
+					currentLevel = numLevels - 1;
+				}
+				else {
+					--currentLevel;
+				}
 			}
 			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
-				++currentLevel;
-				currentLevel %= numLevels;
+				if (currentLevel == numLevels - 1) {
+					currentLevel = 0;
+				}
+				else {
+					++currentLevel;
+				}
 			}
 			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
 				inMenu = false;
