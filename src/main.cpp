@@ -16,7 +16,7 @@ void resize(int width, int height) {
 	int widthOffset = 0;
 	float ratio = 1;
 	
-	// use the smaller ratio to update the global::window size
+	// use the smaller ratio to update the window size
 	if (heightRatio > widthRatio) {
 		// black border up and down (undesirable)
 		heightOffset = (height - width * global::sizeY / global::sizeX) / widthRatio / 2;
@@ -85,7 +85,7 @@ int main() {
 	
 	// main loop
 	while (global::window.isOpen()) {
-		// poll events (do not use for global::input handling)
+		// poll events (do not use for input handling)
 		sf::Event event;
 		while (global::window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed  || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))) {
@@ -130,26 +130,26 @@ int main() {
 			}
 		}
 
-		// retrieve global::input (either gamepad or keyboard)
+		// retrieve input (either gamepad or keyboard)
 		if (sf::Joystick::isConnected(0)) {
 			// retrieve current gamepad global::input
 			global::input[0] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == -100;
 			global::input[1] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == 100;
 			global::input[2] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == -100;
 			global::input[3] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == 100;
-			// TODO global::input 4 - 7 buggy?
+			// TODO input 4 - 7 buggy?
 			for (int i = 0; i < 3; ++i) {
 				global::input[i + 4] = sf::Joystick::isButtonPressed(0, i);
 			}
 		}
 		else {
-			// retrieve current keyboard global::input
+			// retrieve current keyboard input
 			for (int i = 0; i < INPUT_SIZE; ++i) {
 				global::input[i] = sf::Keyboard::isKeyPressed(global::keyboardBinding[i]) && focus;
 			}
 		}
 		
-		// clear global::window content
+		// clear window content
 		global::window.clear();
 		// reset clock and determine elapsed time since last frame
 		deltaT = clock.restart();
