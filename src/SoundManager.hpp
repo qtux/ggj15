@@ -1,12 +1,9 @@
-//SoundManager.hpp
-#ifndef SOUNDMANAGER_HPP_
-#define SOUNDMANAGER_HPP_
+#pragma once
 
 #include <map>
 #include <string>
 #include "AbstractManager.hpp"
 #include <SFML/Audio.hpp>
-
 
 class SoundManager : public AbstractManager
 {
@@ -25,5 +22,3 @@ public:
 	~SoundManager();
 	void playSound(std::string name);
 };
-
-#endif

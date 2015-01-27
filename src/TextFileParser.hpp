@@ -5,8 +5,7 @@
  *      Author: sartz
  */
 
-#ifndef TEXTFILEPARSER_HPP_
-#define TEXTFILEPARSER_HPP_
+#pragma once
 
 #include <string>
 #include "Scene.hpp"
@@ -17,5 +16,3 @@ public:
 	virtual ~TextFileParser();
 	static void loadTextFile(Scene &scene, std::string fileName);
 };
-
-#endif /* TEXTFILEPARSER_HPP_ */

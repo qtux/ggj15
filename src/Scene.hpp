@@ -5,8 +5,7 @@
  *      Author: sartz
  */
 
-#ifndef SCENE_HPP_
-#define SCENE_HPP_
+#pragma once
 
 #include <SFML/System.hpp>
 #include <vector>
@@ -60,5 +59,3 @@ private:
 	Highscore *highscore;
 	bool fooexit;
 };
-
-#endif /* SCENE_HPP_ */
