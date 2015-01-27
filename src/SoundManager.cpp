@@ -66,7 +66,7 @@ void SoundManager::playSound(std::string name)
 	tidyUp();
 	playingSound.push_back(new sf::Sound());
 	sf::Sound &snd = *(playingSound.back());
-	snd.setBuffer(soundManager.getSound(name));
+	snd.setBuffer(getSound(name));
 	//std::cout<<"playSound start"<<std::endl;
 	snd.play();
 }

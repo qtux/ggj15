@@ -16,8 +16,8 @@ ItemFactory::ItemFactory() {
 Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int texPosY, int texW, int texH)
 {
 	sf::Sprite* sprite = new sf::Sprite();
-	sprite->setTexture(textureManager.itemsTexture);
-	sprite->setPosition(10,gridHeight-30);
+	sprite->setTexture(global::textureManager.itemsTexture);
+	sprite->setPosition(10,global::gridHeight-30);
 	
 	if (name == "TimeItem")
 	{

@@ -10,26 +10,26 @@ sf::Text speech;
 
 void resize(int width, int height) {
 	// get ratio based on the original size
-	float widthRatio = (float) window.getSize().x / gridWidth;	// TODO add bar widths
-	float heightRatio = (float) window.getSize().y / gridHeight;
+	float widthRatio = (float) global::window.getSize().x / global::gridWidth;	// TODO add bar widths
+	float heightRatio = (float) global::window.getSize().y / global::gridHeight;
 	int heightOffset = 0;
 	int widthOffset = 0;
 	float ratio = 1;
 	
-	// use the smaller ratio to update the window size
+	// use the smaller ratio to update the global::window size
 	if (heightRatio > widthRatio) {
 		// black border up and down (undesirable)
-		heightOffset = (height - width * sizeY / sizeX) / widthRatio / 2;
+		heightOffset = (height - width * global::sizeY / global::sizeX) / widthRatio / 2;
 		ratio = widthRatio;
 	}
 	else {
 		// black border left and right
-		widthOffset = (width - height * sizeX / sizeY) / heightRatio / 2;
+		widthOffset = (width - height * global::sizeX / global::sizeY) / heightRatio / 2;
 		ratio = heightRatio;
 	}
 	
 	// set view
-	window.setView(sf::View(sf::FloatRect(-widthOffset, -heightOffset, width/ratio, height/ratio)));
+	global::window.setView(sf::View(sf::FloatRect(-widthOffset, -heightOffset, width/ratio, height/ratio)));
 	// resize background
 	background.setPosition(-widthOffset, -heightOffset);
 	background.setSize(sf::Vector2f(width/ratio, height/ratio));
@@ -69,30 +69,31 @@ int main() {
 	outline.setOutlineThickness(2.0f);
 	
 	// window settings
-	//window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(30); // avoid noise ;)
-	window.setMouseCursorVisible(false);
-	resize(screenWidth, screenHeight);
+	//global::window.setVerticalSyncEnabled(true);
+	//global::window.setFramerateLimit(30); // avoid noise ;)
+	global::window.setMouseCursorVisible(false);
+	resize(global::screenWidth, global::screenHeight);
+	bool focus = true;
 	
 	// define a clock to measure time
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
-	globalClock.restart();
+	global::clock.restart();
 
-	soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
-	//soundManager.playSound("sound/test.wav");
+	global::soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
+	
 	
 	// main loop
-	while (window.isOpen()) {
-		// poll events (do not use for input handling)
+	while (global::window.isOpen()) {
+		// poll events (do not use for global::input handling)
 		sf::Event event;
-		while (window.pollEvent(event)) {
+		while (global::window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed  || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))) {
-				if (inMenu) {
-					window.close();
+				if (global::inMenu) {
+					global::window.close();
 				}
 				else {
-					inMenu = true;
+					global::inMenu = true;
 				}
 			}
 			if (event.type == sf::Event::LostFocus) {
@@ -107,54 +108,54 @@ int main() {
 				int height = event.size.height;
 				resize(width, height);
 			}
-			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+			if (global::inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
 				if (currentLevel == 0) {
-					currentLevel = numLevels - 1;
+					currentLevel = global::numLevels - 1;
 				}
 				else {
 					--currentLevel;
 				}
 			}
-			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
-				if (currentLevel == numLevels - 1) {
+			if (global::inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
+				if (currentLevel == global::numLevels - 1) {
 					currentLevel = 0;
 				}
 				else {
 					++currentLevel;
 				}
 			}
-			if (inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-				inMenu = false;
-				sceneManager.nextLevel(currentLevel);
+			if (global::inMenu && event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+				global::inMenu = false;
+				global::sceneManager.nextLevel(currentLevel);
 			}
 		}
 
-		// retrieve input (either gamepad or keyboard)
+		// retrieve global::input (either gamepad or keyboard)
 		if (sf::Joystick::isConnected(0)) {
-			// retrieve current gamepad input
-			input[0] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == -100;
-			input[1] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == 100;
-			input[2] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == -100;
-			input[3] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == 100;
-			// TODO input 4 - 7 buggy?
+			// retrieve current gamepad global::input
+			global::input[0] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == -100;
+			global::input[1] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == 100;
+			global::input[2] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == -100;
+			global::input[3] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == 100;
+			// TODO global::input 4 - 7 buggy?
 			for (int i = 0; i < 3; ++i) {
-				input[i + 4] = sf::Joystick::isButtonPressed(0, i);
+				global::input[i + 4] = sf::Joystick::isButtonPressed(0, i);
 			}
 		}
 		else {
-			// retrieve current keyboard input
+			// retrieve current keyboard global::input
 			for (int i = 0; i < INPUT_SIZE; ++i) {
-				input[i] = sf::Keyboard::isKeyPressed(keyboardBinding[i]) && focus;
+				global::input[i] = sf::Keyboard::isKeyPressed(global::keyboardBinding[i]) && focus;
 			}
 		}
 		
-		// clear window content
-		window.clear();
+		// clear global::window content
+		global::window.clear();
 		// reset clock and determine elapsed time since last frame
 		deltaT = clock.restart();
 		// update game with deltaT when focused
 		
-		if (inMenu) {
+		if (global::inMenu) {
 			// do menu logic here
 			speech.setString(
 				"Current Level: " + std::to_string(currentLevel + 1) +
@@ -170,18 +171,18 @@ int main() {
 				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
 			);
 			// draw menu and level number
-			window.draw(menu);
-			window.draw(speech);
+			global::window.draw(menu);
+			global::window.draw(speech);
 		}
 		else {
-			window.draw(background);
-			if (showOutline){
-				window.draw(outline);
+			global::window.draw(background);
+			if (global::showOutline){
+				global::window.draw(outline);
 			}
 			if (focus) {
-				sceneManager.update(deltaT);
+				global::sceneManager.update(deltaT);
 			}
 		}
-		window.display();
+		global::window.display();
 	}
 }

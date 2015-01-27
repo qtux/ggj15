@@ -14,12 +14,12 @@ PortalItem::~PortalItem(){
 
 bool PortalItem::applyEffect()
 {
-	if (sceneManager.getCurrentScene().readyToLeave() && !neverAgain) 
+	if (global::sceneManager.getCurrentScene().readyToLeave() && !neverAgain) 
 	{
-		soundManager.playSound("sound/won.ogg");
+		global::soundManager.playSound("sound/won.ogg");
 		neverAgain = true;
 	}
-	sceneManager.getCurrentScene().leave();
+	global::sceneManager.getCurrentScene().leave();
 	return true;
 };
 
@@ -28,6 +28,6 @@ void PortalItem::update (sf::Time deltaTime) {
 	{
 		int index = (1+std::sin(animClock.getElapsedTime().asMilliseconds()/300)*2);
 		mySprite->setTextureRect(sf::IntRect(16*index,0,16,32));
-		window.draw(*mySprite);
+		global::window.draw(*mySprite);
 	}
 };

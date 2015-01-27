@@ -16,7 +16,7 @@
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub
-	gameBoard.resize(sizeX * sizeY * largeTileSizeX * largeTileSizeY);
+	gameBoard.resize(global::sizeX * global::sizeY * global::largeTileSizeX * global::largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
 	highscore  = 0;
@@ -30,9 +30,9 @@ Scene::~Scene() {
 
 GameObject* Scene::getTile(int x, int y)
 {
-	if (x + y*sizeX < (int)gameBoard.size())
+	if (x + y*global::sizeX < (int)gameBoard.size())
 	{
-		return gameBoard[x + y * sizeX * largeTileSizeX];
+		return gameBoard[x + y * global::sizeX * global::largeTileSizeX];
 	}
 	return 0;
 }
@@ -40,7 +40,7 @@ GameObject* Scene::getTile(int x, int y)
 
 void Scene::setTile(GameObject* obj, int x, int y)
 {
-	gameBoard[x + y * sizeX * largeTileSizeX] = obj;
+	gameBoard[x + y * global::sizeX * global::largeTileSizeX] = obj;
 }
 
 void Scene::setGUI(GUI* obj)
@@ -55,18 +55,18 @@ const std::vector<GameObject*> &Scene::getGameBoard() const
 
 void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 {
-	int startX1 = x1*largeTileSizeX;
-	int startY1 = y1*largeTileSizeY;
-	int startX2 = x2*largeTileSizeX;
-	int startY2 = y2*largeTileSizeY;
+	int startX1 = x1*global::largeTileSizeX;
+	int startY1 = y1*global::largeTileSizeY;
+	int startX2 = x2*global::largeTileSizeX;
+	int startY2 = y2*global::largeTileSizeY;
 
 	sf::Vector2f orthogonal, dir;
 	float length;
 	float momMax = 80.f;
 
-	for (int x=0;x<largeTileSizeX;x++)
+	for (int x=0;x<global::largeTileSizeX;x++)
 	{
-		for (int y=0;y<largeTileSizeY;y++)
+		for (int y=0;y<global::largeTileSizeY;y++)
 		{
 			sf::Vector2f tmpPos = getTile(startX1+x, startY1+y)->getPosition();
 			sf::Vector2f tmpPos2 = getTile(startX2+x, startY2+y)->getPosition();
@@ -149,11 +149,11 @@ void Scene::update(sf::Time deltaT)
 {
 //	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 //	{
-//		sf::Vector2i globalPosition = sf::Mouse::getPosition(window);
+//		sf::Vector2i globalPosition = sf::Mouse::getPosition(global::window);
 //
 //		sf::Vector2f localPosition;
-//		localPosition.x = 1.f*globalPosition.x/(pixelSizeX);
-//		localPosition.y = 1.f*globalPosition.y/(pixelSizeY);
+//		localPosition.x = 1.f*globalPosition.x/(global::pixelSizeX);
+//		localPosition.y = 1.f*globalPosition.y/(global::pixelSizeY);
 //		std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
 //	}
 	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
@@ -191,9 +191,9 @@ void Scene::update(sf::Time deltaT)
 	
 	sf::Text level;
 	level.setFont(font);
-	level.setPosition(gridWidth + 2, gridHeight - 32);
-	level.setString(std::to_string(sceneManager.getCurrentLevelNumber()+1));
-	window.draw(level);
+	level.setPosition(global::gridWidth + 2, global::gridHeight - 32);
+	level.setString(std::to_string(global::sceneManager.getCurrentLevelNumber()+1));
+	global::window.draw(level);
 	textBox->update(deltaT);
 	if (!fooexit){
 		for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
@@ -222,7 +222,7 @@ void Scene::update(sf::Time deltaT)
 }
 void Scene::finishLevel()
 {
-	highscore = new Highscore(sceneManager.getCurrentLevelNumber()+1);
+	highscore = new Highscore(global::sceneManager.getCurrentLevelNumber()+1);
 	highscore->save();
 	highscore->load();
 }
