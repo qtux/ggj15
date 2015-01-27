@@ -15,7 +15,6 @@ bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 {
 	if (dynamic_cast<const Tile*>(&cmp) && dynamic_cast<const Tile*>(&cmp)->walkable) return false; // TODO: aus intersect in allgemeineren Teil verschieben
 	sf::FloatRect tmpRect(testPos.x + 3 * mySprite->getScale().x, testPos.y + (32 - 10) * mySprite->getScale().y, 10* mySprite->getScale().x, 10* mySprite->getScale().y);
-	
 	/*
 	tmpRect.top += 32 - 10;
 	tmpRect.left += 3;
@@ -65,34 +64,38 @@ void Player::update (sf::Time deltaTime) {
 	
 	bool collides = false;
 	//check for collisions:
-
+	int chkColl[] = {0, 0};
 	for (std::vector<GameObject*>::const_iterator tileIt = global::sceneManager.getCurrentScene().gameBoard.begin(); tileIt != global::sceneManager.getCurrentScene().gameBoard.end(); tileIt++)
 	{
 		sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
+		sf::Vector2f distVecOld = ((*tileIt)->getPosition() - oldPos); // check also neighbours of old position in case screen was left on one side
 		// ... 
 		//std::cout<<(*tileIt)->mySprite->getGlobalBounds().left<<" , "<<(*tileIt)->mySprite->getGlobalBounds().top<<" , "<<mySprite->getGlobalBounds().left<<" , "<<mySprite->getGlobalBounds().left<<" , "<<std::endl;
-		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
+		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 || distVecOld.x * distVecOld.x + distVecOld.y * distVecOld.y < 60 * 60) // && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
 		{
 			sf::Vector2f testPos(tmpPos);	// run additional tests for 1D movements if 2D movement is not possible
 			testPos.x = oldPos.x;
-			if (!intersects(testPos, **tileIt)) 
+			if (intersects(testPos, **tileIt)) 
 			{
-				tmpPos = testPos;
+				chkColl[1] ++;
 			}
-			else
+			
+			
+			testPos.x = tmpPos.x;
+			testPos.y = oldPos.y;
+			if(intersects(testPos, **tileIt))
 			{
-				testPos.x = tmpPos.x;
-				testPos.y = oldPos.y;
-				if(!intersects(testPos, **tileIt))
-				{
-					tmpPos = testPos;
-				}
-				else
-				{
-					collides = true;
-				}
+				chkColl[0] ++;
 			}
 		}
+	}
+	if (chkColl[0] > 0)
+	{
+		tmpPos.x = oldPos.x;
+	}
+	if (chkColl[1] > 0)
+	{
+		tmpPos.y = oldPos.y;
 	}
 	for (std::vector<Item*>::iterator itIt = global::sceneManager.getCurrentScene().items.begin() ; itIt != global::sceneManager.getCurrentScene().items.end() ; itIt++)
 	{
