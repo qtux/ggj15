@@ -9,12 +9,7 @@
 
 static const unsigned int numLevels = 9;
 
-// use absolute paths on windows (strange behaviour)
-#ifndef _WIN32
-	#define PATH "./"
-#else
-	#define PATH "C:/GalacticIrrweg/trunk/VSPROJ/Project1/Debug/"
-#endif
+#define PATH "./"
 
 // window properties
 static const int pixelSizeX = 16;
