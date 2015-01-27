@@ -7,6 +7,6 @@ Tile::Tile() : walkable(false) {};
 void Tile::update (sf::Time deltaTime) {
 	if (mySprite != 0)
 	{
-		window.draw(*mySprite);
+		global::window.draw(*mySprite);
 	}
 };

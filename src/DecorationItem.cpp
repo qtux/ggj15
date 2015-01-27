@@ -18,6 +18,6 @@ void DecorationItem::update (sf::Time deltaTime) {
 		mySprite->setTextureRect(sf::IntRect(drawX,drawY,drawW,drawH));
 		//sf::Vector2f vec = getPosition();
 		//setPosition(vec.x,vec.y+(std::sin((waveClock.getElapsedTime().asMilliseconds()+offset)/300)+0)*0.05);
-		window.draw(*mySprite);
+		global::window.draw(*mySprite);
 	}
 };

@@ -28,22 +28,22 @@ bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 
 void Player::update (sf::Time deltaTime) {
 	float dT = float(deltaTime.asMilliseconds());
-	float currTime = globalClock.getElapsedTime().asSeconds();
+	float currTime = global::clock.getElapsedTime().asSeconds();
 	
-	// get input from globals and process:
+	// get global::input from globals and process:
 	sf::Vector2f tmpPos = getPosition();
 	sf::Vector2f oldPos(tmpPos);
 	int width = getWidth();
 	int height = getHeight();
 	int dir = -1;
-	if (!sceneManager.getCurrentScene().textBox->enabled()){
-		if (input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
-		if (input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
-		if (input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
-		if (input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
+	if (!global::sceneManager.getCurrentScene().textBox->enabled()){
+		if (global::input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
+		if (global::input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
+		if (global::input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
+		if (global::input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
 	}
-	int viewWidth = sizeX * largeTileSizeX * pixelSizeX;
-	int viewHeight = sizeY * largeTileSizeY * pixelSizeY;
+	int viewWidth = global::sizeX * global::largeTileSizeX * global::pixelSizeX;
+	int viewHeight = global::sizeY * global::largeTileSizeY * global::pixelSizeY;
 	
 	if (tmpPos.x + 8 > viewWidth) tmpPos.x -= viewWidth;
 	if (tmpPos.x + width - 8 < 0)  tmpPos.x += viewWidth;
@@ -66,7 +66,7 @@ void Player::update (sf::Time deltaTime) {
 	bool collides = false;
 	//check for collisions:
 
-	for (std::vector<GameObject*>::const_iterator tileIt = sceneManager.getCurrentScene().gameBoard.begin(); tileIt != sceneManager.getCurrentScene().gameBoard.end(); tileIt++)
+	for (std::vector<GameObject*>::const_iterator tileIt = global::sceneManager.getCurrentScene().gameBoard.begin(); tileIt != global::sceneManager.getCurrentScene().gameBoard.end(); tileIt++)
 	{
 		sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
 		// ... 
@@ -94,7 +94,7 @@ void Player::update (sf::Time deltaTime) {
 			}
 		}
 	}
-	for (std::vector<Item*>::iterator itIt = sceneManager.getCurrentScene().items.begin() ; itIt != sceneManager.getCurrentScene().items.end() ; itIt++)
+	for (std::vector<Item*>::iterator itIt = global::sceneManager.getCurrentScene().items.begin() ; itIt != global::sceneManager.getCurrentScene().items.end() ; itIt++)
 	{
 		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
 		{
@@ -144,7 +144,7 @@ void Player::update (sf::Time deltaTime) {
 		{
 			doggieSprite->setTextureRect(sf::IntRect(4*16,0, 16, 16));
 		}
-		window.draw(*doggieSprite);
+		global::window.draw(*doggieSprite);
 		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 256./dT) // delay of doggie movement
 		{
 			directionQueue.pop();
@@ -152,6 +152,6 @@ void Player::update (sf::Time deltaTime) {
 		}
 		
 		mySprite->setTextureRect(sf::IntRect(direction * 16, PlayerAnimState[int(animationStep)] * 32, 16, 32));
-		window.draw(*mySprite);
+		global::window.draw(*mySprite);
 	}
 }

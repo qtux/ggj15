@@ -3,15 +3,15 @@
 GUI::GUI()
 {
 	timeSprite = new sf::Sprite();
-	timeSprite->setTexture(textureManager.timeBarTexture);
-	timeSprite->setPosition(10, gridHeight-20);
+	timeSprite->setTexture(global::textureManager.timeBarTexture);
+	timeSprite->setPosition(10, global::gridHeight-20);
 
 	coinSprite = new sf::Sprite();
-	coinSprite->setTexture(textureManager.itemsTexture);
+	coinSprite->setTexture(global::textureManager.itemsTexture);
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
 
 	keySprite = new sf::Sprite();
-	keySprite->setTexture(textureManager.itemsTexture);
+	keySprite->setTexture(global::textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
 
 	timeoutClock = sf::Clock();
@@ -47,7 +47,7 @@ float GUI::timeLeft()
 }
 
 void GUI::update (sf::Time deltaTime) {
-	if (sceneManager.getCurrentScene().textBox->enabled()){
+	if (global::sceneManager.getCurrentScene().textBox->enabled()){
 		if (!lastEnable)
 		{
 			pauseOffset += timeoutClock.getElapsedTime().asSeconds();
@@ -59,7 +59,7 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		lastEnable = false;
 	}
-	sf::Int32 currTime = globalClock.getElapsedTime().asMilliseconds();
+	sf::Int32 currTime = global::clock.getElapsedTime().asMilliseconds();
 	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
 	float progress = 1 - (elapsedSeconds / timeoutSeconds);
 	//TODO: use min, max
@@ -71,41 +71,41 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		progress = 0;
 		if (!loosed){
-			sceneManager.getCurrentScene().textBox->triggerText("loose");
+			global::sceneManager.getCurrentScene().textBox->triggerText("loose");
 		}
 		loosed = true;
-		if (!sceneManager.getCurrentScene().textBox->enabled())
+		if (!global::sceneManager.getCurrentScene().textBox->enabled())
 		{
-			sceneManager.restartLevel();
+			global::sceneManager.restartLevel();
 		}
 	}
 	if (progress < 0.3)
 	{
 		if (!smallTime)
 		{
-			sceneManager.getCurrentScene().textBox->triggerText("smalltime");
-			soundManager.playSound("sound/timeShort.ogg");
+			global::sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+			global::soundManager.playSound("sound/timeShort.ogg");
 			
 		}
 		smallTime = true;
 	}
-	int height = (1 - progress) * (gridHeight);
+	int height = (1 - progress) * (global::gridHeight);
 	timeSprite->setPosition(-15 , height);
-	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, gridHeight - height));
-	window.draw(*timeSprite);
+	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, global::gridHeight - height));
+	global::window.draw(*timeSprite);
 
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(gridWidth, i * 16);
-		window.draw(*coinSprite);
+		coinSprite->setPosition(global::gridWidth, i * 16);
+		global::window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(gridWidth, gridHeight - 42 - i*16);
-		window.draw(*keySprite);
+		keySprite->setPosition(global::gridWidth, global::gridHeight - 42 - i*16);
+		global::window.draw(*keySprite);
 	}
 }
 
