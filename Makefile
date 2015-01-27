@@ -6,7 +6,9 @@ VERSION 	= 1.0
 CC			= clang++
 #CC			= g++
 LIBS		= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+WIN_LIBS	= -static-libgcc -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 CFLAGS		= -Wall -std=c++11
+WIN_CFLAGS	= -I SFML-2.2/include -Wall -std=c++11
 BUILDDIR	= build
 BINARYDIR	= bin
 
@@ -19,6 +21,14 @@ OBJECT		= $(patsubst %.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 all: $(OBJECT)
 	mkdir -p $(BINARYDIR)
 	$(CC) $(LIBS) $^ -o $(BINARYDIR)/run
+
+# build static window release using MinGW
+win_static: CC=g++
+win_static: LIBS=$(WIN_LIBS)
+win_static: CFLAGS=$(WIN_CFLAGS)
+win_static: $(OBJECT)
+	mkdir -p $(BINARYDIR)
+	$(CC) $(WIN_STATIC_LIBS) $^ -o $(BINARYDIR)/run
 
 # create object files in BUILDIR
 $(BUILDDIR)/%.o: %.cpp
