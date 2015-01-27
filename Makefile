@@ -6,9 +6,9 @@ VERSION 	= 1.0
 CC			= clang++
 #CC			= g++
 LIBS		= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
-WIN_LIBS	= -static-libgcc -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+WIN_LIBS	= -LSFML-2.2/lib -static-libgcc -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsfml-audio-s
 CFLAGS		= -Wall -std=c++11
-WIN_CFLAGS	= -I SFML-2.2/include -Wall -std=c++11
+WIN_CFLAGS	= -DSFML_STATIC -ISFML-2.2/include -Wall -std=c++11
 BUILDDIR	= build
 BINARYDIR	= bin
 
@@ -28,7 +28,7 @@ win_static: LIBS=$(WIN_LIBS)
 win_static: CFLAGS=$(WIN_CFLAGS)
 win_static: $(OBJECT)
 	mkdir -p $(BINARYDIR)
-	$(CC) $(WIN_STATIC_LIBS) $^ -o $(BINARYDIR)/run
+	$(CC) $(LIBS) $^ -o $(BINARYDIR)/run.exe
 
 # create object files in BUILDIR
 $(BUILDDIR)/%.o: %.cpp
