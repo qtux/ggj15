@@ -10,6 +10,12 @@
 #define PATH "./"
 #define INPUT_SIZE 6
 
+#ifdef FIX_TO_STRING
+	namespace std {
+		std::string to_string(int value);
+	}
+#endif
+
 namespace global {
 
 	static const unsigned int numLevels = 10;

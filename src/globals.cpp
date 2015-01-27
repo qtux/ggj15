@@ -1,5 +1,16 @@
 #include "globals.hpp"
 
+#ifdef FIX_TO_STRING
+	#include <sstream>
+	namespace std {
+		std::string to_string(int value) {
+			std::ostringstream ss;
+			ss << value;
+			return ss.str();
+		}
+	}
+#endif
+
 sf::Keyboard::Key global::keyboardBinding[] = {
 	sf::Keyboard::Left,
 	sf::Keyboard::Right,
