@@ -1,29 +1,23 @@
-Timeout 40
-Start 2 2
-Portal 26 21
-Item CoinItem 2 19
-Item CoinItem 21 1
-Item CoinItem 26 14
-Item CoinItem 16 10
-Item KeyItem 26 1
-Item KeyItem 14 6
-Item KeyItem 2 20
-
-Item DecorationItem 0 1 1 16 112 16 16    Fels
-Item DecorationItem 15 3 1 16 112 16 16    Fels
-Item DecorationItem 13 9 1 16 112 16 16    Fels
-Item DecorationItem 11 20 1 16 112 16 16    Fels
-Item DecorationItem 9 0 1 16 112 16 16    Fels
-Item DecorationItem 17 2 0 16 80 16 16     Pilz
-Item DecorationItem 13 7 0 16 80 16 16     Pilz
-Item DecorationItem 7 19 0 16 80 16 16
-Item DecorationItem 18 18 0 16 80 16 16
-Item DecorationItem 8 5 0 16 80 16 16
-TriggerItem 8 1 2 0 0 3
-TriggerItem 17 16 3 3 0 3
-
-Text start
-It's all about islands. And rivers. And Rocks. :D
-
-Text end
-Congratulations! You have solved the puzzle of the twisting islands!
+Timebuff 5
+Timeout 5
+Start 7 14
+Portal 11 9
+Item CoinItem 7 7
+Item CoinItem 19 2
+Item CoinItem 29 14
+Item CoinItem 27 2
+#Item KeyItem 15 2
+Item TimeItem 4 9
+Item TimeItem 8 21
+Item TimeItem 23 6
+Item TimeItem 25 19
+Item DecorationItem 19 18 1 0 112 16 16     Kristall
+Item DecorationItem 11 16 1 0 112 16 16     Kristall
+Item DecorationItem 1 3 1 0 112 16 16     Kristall
+Item DecorationItem 27 18 1 0 112 16 16     Kristall
+#Item DecorationItem 25 19 1 16 96 16 16    Tiberium
+Item DecorationItem 11 13 1 16 112 16 16    Fels
+Item DecorationItem 15 20 0 16 80 16 16     Pilz
+Item DecorationItem 6 22 0 16 80 16 16
+#TriggerItem 21 17 3 0 0 3
+#TriggerItem 28 18 3 0 2 0
