@@ -6,9 +6,9 @@ VERSION 	= 1.0
 CC			= clang++
 #CC			= g++
 LIBS		= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
-WIN_LIBS	= -LSFML-2.2/lib -static-libgcc -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsfml-audio-s
+WIN_LIBS	= -static-libgcc -lsfml-audio-s -lsndfile -lopenal32 -lsfml-graphics-s -lfreetype -lglew -ljpeg -lsfml-window-s -lopengl32 -lgdi32 -lsfml-system-s -lwinmm
 CFLAGS		= -Wall -std=c++11
-WIN_CFLAGS	= -DSFML_STATIC -ISFML-2.2/include -Wall -std=c++11
+WIN_CFLAGS	= -Wall -std=c++11 -DSFML_STATIC -ISFML-2.2/include -LSFML-2.2/lib
 BUILDDIR	= build
 BINARYDIR	= bin
 
@@ -23,12 +23,9 @@ all: $(OBJECT)
 	$(CC) $(LIBS) $^ -o $(BINARYDIR)/run
 
 # build static window release using MinGW
-win_static: CC=g++
-win_static: LIBS=$(WIN_LIBS)
-win_static: CFLAGS=$(WIN_CFLAGS)
-win_static: $(OBJECT)
+win_static:
 	mkdir -p $(BINARYDIR)
-	$(CC) $(LIBS) $^ -o $(BINARYDIR)/run.exe
+	g++ $(WIN_CFLAGS) $(WIN_LIBS) $(SOURCES) -o $(BINARYDIR)/run.exe
 
 # create object files in BUILDIR
 $(BUILDDIR)/%.o: %.cpp
