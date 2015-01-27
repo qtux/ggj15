@@ -12,7 +12,7 @@
 
 namespace global {
 
-	static const unsigned int numLevels = 9;
+	static const unsigned int numLevels = 10;
 
 	// window properties
 	static const int pixelSizeX = 16;
