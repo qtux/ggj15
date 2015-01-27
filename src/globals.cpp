@@ -1,5 +1,11 @@
 #include "globals.hpp"
 
+std::string numToString(int num) {
+	std::ostringstream ss;	// std::to_string does not work with mingw
+	ss << num;
+	return ss.str();
+}
+
 sf::Keyboard::Key global::keyboardBinding[] = {
 	sf::Keyboard::Left,
 	sf::Keyboard::Right,

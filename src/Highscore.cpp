@@ -43,7 +43,7 @@ void Highscore::update(sf::Time deltaT)
 	speech.setCharacterSize(charSize+1);
 	speech.setPosition(sf::Vector2f(45,50));
 	speech.setStyle(sf::Text::Bold);
-	speech.setString(" Highscore level " + std::to_string(level));
+	speech.setString(" Highscore Level " + numToString(level));
 	speech.setCharacterSize(charSize);
 	global::window.draw(speech);
 	speech.setPosition(sf::Vector2f(45,80));
@@ -63,16 +63,16 @@ void Highscore::update(sf::Time deltaT)
 		HighscoreRow row = rows[i];
 		int points = ((1.0+row.coins)/((float)row.kills+1)) * ((row.time+1)/row.maxtime) * 1000;
 		speech.setPosition(sf::Vector2f(45,100+(i * 30)));
-		speech.setString(std::to_string(points));
+		speech.setString(numToString(points));
 		global::window.draw(speech);
 		speech.setPosition(sf::Vector2f(112,100+(i * 30)));
-		speech.setString(std::to_string(row.kills));
+		speech.setString(numToString(row.kills));
 		global::window.draw(speech);
 		speech.setPosition(sf::Vector2f(184,100+(i * 30)));
-		speech.setString(std::to_string(row.coins));
+		speech.setString(numToString(row.coins));
 		global::window.draw(speech);
 		speech.setPosition(sf::Vector2f(247,100+(i * 30)));
-		speech.setString(std::to_string((int)row.time)+"s");
+		speech.setString(numToString((int)row.time)+"s");
 		global::window.draw(speech);
 	}
 }
@@ -82,7 +82,7 @@ void Highscore::save()
 {
 
 	std::vector<std::string> hsFile;
-	std::ifstream infile(std::string(PATH) + "hs"+std::to_string(level)+".txt");
+	std::ifstream infile(std::string(PATH) + "hs"+numToString(level)+".txt");
 	std::string line;
 	while (std::getline(infile, line))
 	{
@@ -96,7 +96,8 @@ void Highscore::save()
 	hsLineStr << global::sceneManager.getCurrentScene().gui->timeoutSeconds << " ";
 	hsLineStr << global::sceneManager.restards;
 	
-	std::ofstream out(std::string(PATH) + "hs"+std::to_string(level)+".txt");
+	
+	std::ofstream out(std::string(PATH) + "hs"+numToString(level)+".txt");
 	out << hsLineStr.str() << "\n";
 	for (std::vector<std::string>::iterator lineIt = hsFile.begin() ; lineIt != hsFile.end() ; lineIt++)
 	{
@@ -108,7 +109,7 @@ void Highscore::save()
 void Highscore::load()
 {
 	
-	std::ifstream infile(std::string(PATH) + "hs"+std::to_string(level)+".txt");
+	std::ifstream infile(std::string(PATH) + "hs"+numToString(level)+".txt");
 	std::string line;
 
 	while (std::getline(infile, line))
