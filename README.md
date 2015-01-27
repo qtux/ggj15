@@ -1,5 +1,6 @@
 # GalacticIrrweg
 A puzzle game about a galactic pizza boy and his pet who accidentally landed in a wrong dimension. The path to the dimension gate back home is short... is it?
+![Ingame Screenshot](screenshot.png?raw=true "Ingame Screenshot")
 
 Developed during the Global Game Jame 2015 by
 * Annemarie Mattmann
