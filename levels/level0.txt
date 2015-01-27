@@ -39,4 +39,12 @@ Lucky you.
 Text loose 0 210 210 210
 Also clocks seem to run backwards.
 Text end 0 210 210 210
-A dimension hole! It might allow travelling through time!
+A dimension hole!
+Text end 0 210 210 210
+Dimension holes can be used to travel through time.
+Text end 0 210 210 210
+If it lets you.
+Text end 0 210 210 210
+You can try. Everything is possible.
+Text end 0 210 210 210
+Including the good things.
