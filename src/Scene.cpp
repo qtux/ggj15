@@ -192,7 +192,7 @@ void Scene::update(sf::Time deltaT)
 	sf::Text level;
 	level.setFont(font);
 	level.setPosition(global::gridWidth + 2, global::gridHeight - 32);
-	level.setString(numToString(global::sceneManager.getCurrentLevelNumber()+1));
+	level.setString(std::to_string(global::sceneManager.getCurrentLevelNumber()+1));
 	global::window.draw(level);
 	textBox->update(deltaT);
 	if (!fooexit){

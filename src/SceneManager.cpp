@@ -460,17 +460,17 @@ void SceneManager::processEditMode()
 
 void SceneManager::nextLevel(){
 	currentLevelNumber++;
-	loadScene(std::string(PATH) + "levels/level"+numToString(currentLevelNumber));
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 	restards = 0;
 }
 
 void SceneManager::nextLevel(int number){
 	currentLevelNumber = number;
-	loadScene(std::string(PATH) + "levels/level"+numToString(currentLevelNumber));
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 }
 
 void SceneManager::restartLevel(){
-	loadScene(std::string(PATH) + "levels/level"+numToString(currentLevelNumber));
+	loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 	restards++;
 }
 

@@ -6,12 +6,9 @@
 #include "SceneManager.hpp"
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
-#include <sstream>
 
 #define PATH "./"
 #define INPUT_SIZE 6
-
-std::string numToString(int num);
 
 namespace global {
 
