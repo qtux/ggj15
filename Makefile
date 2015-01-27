@@ -11,8 +11,8 @@ BUILDDIR	= build
 BINARYDIR	= bin
 
 # windows variables
-#WIN_CC		= g++
-WIN_CC		= /usr/bin/i686-w64-mingw32-g++
+WIN_CC		= g++
+#WIN_CC		= /usr/bin/i686-w64-mingw32-g++
 SFML_PATH	= SFML-2.2
 WIN_LIBS	= -s -lsfml-audio-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsndfile -lopenal32 -ljpeg -lglew -lfreetype -lgdi32 -lopengl32 -lwinmm
 WIN_CFLAGS	= -Wall -std=c++11 -DSFML_STATIC -I $(SFML_PATH)/include
@@ -37,7 +37,7 @@ win_static: $(OBJECT)
 
 # build static window release using g++ (via MinGW) fixing std::to_string
 win_static_with_fix: CFLAGS=$(FIX_CFLAGS)
-win_static: CC=$(WIN_CC)
+win_static_with_fix: CC=$(WIN_CC)
 win_static_with_fix: $(OBJECT)
 	mkdir -p $(BINARYDIR)
 	$(CC) -L $(SFML_PATH)/lib -o $(BINARYDIR)/run.exe $^ $(WIN_LIBS)
