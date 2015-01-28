@@ -26,7 +26,7 @@ bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 }
 
 void Player::update (sf::Time deltaTime) {
-	float dT = float(deltaTime.asMilliseconds());
+	float dT = deltaTime.asSeconds();
 	float currTime = global::clock.getElapsedTime().asSeconds();
 	
 	// get input from globals and process:
@@ -36,10 +36,10 @@ void Player::update (sf::Time deltaTime) {
 	int height = getHeight();
 	int dir = -1;
 	if (!global::sceneManager.getCurrentScene().textBox->enabled()){
-		if (global::input[0]) { tmpPos.x -= 0.12 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
-		if (global::input[1]) { tmpPos.x += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
-		if (global::input[2]) { tmpPos.y -= 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
-		if (global::input[3]) { tmpPos.y += 0.12 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
+		if (global::input[0]) { tmpPos.x -= 120 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
+		if (global::input[1]) { tmpPos.x += 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
+		if (global::input[2]) { tmpPos.y -= 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
+		if (global::input[3]) { tmpPos.y += 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
 	}
 	int viewWidth = global::sizeX * global::largeTileSizeX * global::pixelSizeX;
 	int viewHeight = global::sizeY * global::largeTileSizeY * global::pixelSizeY;
@@ -52,8 +52,8 @@ void Player::update (sf::Time deltaTime) {
 	
 	if (dir > -1) 
 	{
-		animationStep += 0.12*dT / slowFactor;
-		doggieStep += 0.12*dT / slowFactor;
+		animationStep += 120 * dT / slowFactor;
+		doggieStep += 120 * dT / slowFactor;
 		direction = dir;
 	} else {
 		animationStep = 0.;
@@ -148,7 +148,7 @@ void Player::update (sf::Time deltaTime) {
 			doggieSprite->setTextureRect(sf::IntRect(4*16,0, 16, 16));
 		}
 		global::window.draw(*doggieSprite);
-		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 256./dT) // delay of doggie movement
+		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 0.256/dT) // delay of doggie movement
 		{
 			directionQueue.pop();
 			positionQueue.pop();

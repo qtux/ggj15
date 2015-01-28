@@ -113,7 +113,7 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 void Scene::updateTileAnimation(sf::Time deltaT)
 {
-	float dt = deltaT.asMilliseconds();
+	float dt = deltaT.asSeconds() * 1000;
 	tileAnimationTime -= dt / 1000;
 	float scaleMax = 1.4;
 		for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {

@@ -59,7 +59,6 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		lastEnable = false;
 	}
-	sf::Int32 currTime = global::clock.getElapsedTime().asMilliseconds();
 	float elapsedSeconds = (timeoutClock.getElapsedTime().asSeconds()+timeBuff+pauseOffset);
 	float progress = 1 - (elapsedSeconds / timeoutSeconds);
 	//TODO: use min, max

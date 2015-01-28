@@ -26,7 +26,7 @@ bool PortalItem::applyEffect()
 void PortalItem::update (sf::Time deltaTime) {
 	if (mySprite != 0)
 	{
-		int index = (1+std::sin(animClock.getElapsedTime().asMilliseconds()/300)*2);
+		int index = (1+std::sin(animClock.getElapsedTime().asSeconds() * 3.14)*2);
 		mySprite->setTextureRect(sf::IntRect(16*index,0,16,32));
 		global::window.draw(*mySprite);
 	}
