@@ -5,18 +5,14 @@
 VERSION 	= 1.0
 CC			= clang++
 #CC			= g++
-LIBS		= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+LIBS		= -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 CFLAGS		= -Wall -std=c++11
 BUILDDIR	= build
 BINARYDIR	= bin
 
-# windows variables
-WIN_CC		= g++
-#WIN_CC		= /usr/bin/i686-w64-mingw32-g++
+# windows crosscompiler variables
+WIN_CC		= /usr/bin/i686-w64-mingw32-g++
 SFML_PATH	= SFML-2.2
-WIN_LIBS	= -s -lsfml-audio-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lsndfile -lopenal32 -ljpeg -lglew -lfreetype -lgdi32 -lopengl32 -lwinmm
-WIN_CFLAGS	= -Wall -std=c++11 -DSFML_STATIC -I $(SFML_PATH)/include
-FIX_CFLAGS	= -Wall -std=c++11 -DSFML_STATIC -DFIX_TO_STRING -I $(SFML_PATH)/include
 
 # define code paths
 SOURCE_PATH	= src
@@ -26,21 +22,21 @@ OBJECT		= $(patsubst %.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 # build all
 all: $(OBJECT)
 	mkdir -p $(BINARYDIR)
-	$(CC) $(LIBS) $^ -o $(BINARYDIR)/run
+	$(CC) -o $(BINARYDIR)/run $^ $(LIBS)
 
-# build static window release using g++ (via MinGW)
-win_static: CFLAGS=$(WIN_CFLAGS)
-win_static: CC=$(WIN_CC)
-win_static: $(OBJECT)
-	mkdir -p $(BINARYDIR)
-	$(CC) -L $(SFML_PATH)/lib -o $(BINARYDIR)/run.exe $^ $(WIN_LIBS)
+# build window release using g++ (via MinGW)
+win: CC		=	$(WIN_CC)
+win: CFLAGS	:=	$(CFLAGS) -I $(SFML_PATH)/include
+win: LIBS	:=	-L $(SFML_PATH)/lib $(LIBS)
+win: all
+
+# build window release using g++ (via MinGW) fixing std::to_string
+win_fix: CC		=	$(WIN_CC)
+win_fix: CFLAGS	:=	$(CFLAGS) -I $(SFML_PATH)/include -DFIX_TO_STRING
+win_fix: LIBS	:=	-L $(SFML_PATH)/lib $(LIBS)
+win_fix: all
 
 # build static window release using g++ (via MinGW) fixing std::to_string
-win_static_with_fix: CFLAGS=$(FIX_CFLAGS)
-win_static_with_fix: CC=$(WIN_CC)
-win_static_with_fix: $(OBJECT)
-	mkdir -p $(BINARYDIR)
-	$(CC) -L $(SFML_PATH)/lib -o $(BINARYDIR)/run.exe $^ $(WIN_LIBS)
 
 # create object files in BUILDIR
 $(BUILDDIR)/%.o: %.cpp
