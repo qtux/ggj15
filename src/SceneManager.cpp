@@ -51,12 +51,20 @@ SceneManager::SceneManager(){
 	tmpVector->push_back(sf::Vector2i(8,2));
 	tmpVector->push_back(sf::Vector2i(9,2));
 	colorToTilePositionMap[0x0000abff] = tmpVector; // water
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(10,0));
+	tmpVector->push_back(sf::Vector2i(11,0));
+	tmpVector->push_back(sf::Vector2i(12,0));
+	tmpVector->push_back(sf::Vector2i(13,0));
+	tmpVector->push_back(sf::Vector2i(14,0));
+	colorToTilePositionMap[0x003E04ff] = tmpVector; // trees
 
 	walkableTileState[0x000100ff] = false;
 	walkableTileState[0x5f5f5fff] = true;
 	walkableTileState[0x9b6d27ff] = true;
 	walkableTileState[0x969896ff] = true;
 	walkableTileState[0x11941bff] = true;
+	walkableTileState[0x003E04ff] = false;
 	
 	currentLevelNumber = -1;
 	restards = 0;

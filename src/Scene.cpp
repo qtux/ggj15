@@ -185,10 +185,10 @@ void Scene::update(sf::Time deltaT)
 	{
 		gui->update(deltaT);
 	}
-	
+
 	sf::Font font;
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
-	
+
 	sf::Text level;
 	level.setFont(font);
 	level.setPosition(global::gridWidth + 2, global::gridHeight - 32);
@@ -207,12 +207,12 @@ void Scene::update(sf::Time deltaT)
 				if ((*itIt)->collectable)
 				{
 					itIt = items.erase(itIt);
-				}		
+				}
 				else
 				{
 					itIt ++;
 				}
-			} 
+			}
 			else
 			{
 				itIt ++;
@@ -242,7 +242,7 @@ bool Scene::readyToLeave() const
 	return (keysInLevel == 0);
 }
 
- 
+
 void Scene::leave()
 {
 	if (!readyToLeave()) return;
