@@ -6,7 +6,7 @@ VERSION 	= 1.0
 CC			= clang++
 #CC			= g++
 LIBS		= -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-CFLAGS		= -Wall -std=c++11
+CFLAGS		= -Wall -std=c++11 -O2
 BUILDDIR	= build
 BINARYDIR	= bin
 
