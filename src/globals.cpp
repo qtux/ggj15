@@ -24,7 +24,7 @@ sf::Keyboard::Key global::keyboardBinding[] = {
 sf::RenderWindow global::window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
 SceneManager global::sceneManager;
 TextureManager global::textureManager;
-SoundManager global::soundManager;
+SoundManager global::soundManager(100, 100);
 
 bool global::inMenu = true;
 bool global::showOutline = true;
