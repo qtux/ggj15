@@ -16,7 +16,7 @@
 	}
 #endif
 
-namespace global {
+namespace gb {
 
 	static const unsigned int numLevels = 10;
 

@@ -37,7 +37,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 //	sf::Texture *itemsTexture;
 //	itemsTexture->loadFromFile(std::string(PATH) + "img/items.png");
 	sf::Sprite *itemSprite = new sf::Sprite();
-	itemSprite->setTexture(global::textureManager.itemsTexture);
+	itemSprite->setTexture(gb::textureManager.itemsTexture);
 	ItemFactory tmpFactory = ItemFactory();
 
 	while (std::getline(infile, line))
@@ -51,8 +51,8 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.startPos.x = x * global::pixelSizeX;
-			scene.startPos.y = y * global::pixelSizeY;
+			scene.startPos.x = x * gb::pixelSizeX;
+			scene.startPos.y = y * gb::pixelSizeY;
 			scene.player->setPosition(scene.startPos.x, scene.startPos.y);
 			scene.player->doggieSprite->setPosition(scene.startPos.x, scene.startPos.y);
 		}
@@ -62,10 +62,10 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.portalPos.x = x * global::pixelSizeX;
-			scene.portalPos.y = y * global::pixelSizeY;
+			scene.portalPos.x = x * gb::pixelSizeX;
+			scene.portalPos.y = y * gb::pixelSizeY;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
-			tmpItem->setPosition(x * global::pixelSizeX, y * global::pixelSizeY);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -93,7 +93,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			{
 				tmpItem = tmpFactory.getItem(second);
 			}
-			tmpItem->setPosition(x * global::pixelSizeX, y * global::pixelSizeY);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -142,7 +142,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
-			tmpItem->setPosition(x * global::pixelSizeX, y * global::pixelSizeY);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 
@@ -158,7 +158,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
-			tmpItem->setPosition(x * global::pixelSizeX, y * global::pixelSizeY);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}
 

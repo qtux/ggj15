@@ -53,11 +53,11 @@ bool TextBox::enabled()
 }
 void TextBox::update(sf::Time deltaT)
 {
-	if (!global::input[4] && actionPressed)
+	if (!gb::input[4] && actionPressed)
 	{
 		pushText();
 	}
-	if (!global::input[5] && skipPressed)
+	if (!gb::input[5] && skipPressed)
 	{
 		for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ ) {
 			if ((*itIt)->eventType == currentEvent)
@@ -67,8 +67,8 @@ void TextBox::update(sf::Time deltaT)
 		}
 		currentElement = 0;
 	}
-	actionPressed = global::input[4];
-	skipPressed = global::input[5];
+	actionPressed = gb::input[4];
+	skipPressed = gb::input[5];
 	if (currentElement != 0)
 	{
 		sf::Font font;
@@ -88,9 +88,9 @@ void TextBox::update(sf::Time deltaT)
 		textRect.setOutlineColor(sf::Color::White);
 		textRect.setOutlineThickness(2);
 		textRect.setPosition(textPos.x - 5, textPos.y - 5);
-		textRect.setSize(sf::Vector2f(global::gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
+		textRect.setSize(sf::Vector2f(gb::gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
 		textRect.setFillColor(sf::Color(0, 0, 250, 50));
-		global::window.draw(textRect);
+		gb::window.draw(textRect);
 	
 		// zu Anfang:
 		if (currentElement->bold){
@@ -101,6 +101,6 @@ void TextBox::update(sf::Time deltaT)
 			speech.setStyle(sf::Text::Regular);
 		}
 		speech.setString(currentElement->text);
-		global::window.draw(speech);
+		gb::window.draw(speech);
 	}
 }

@@ -375,7 +375,7 @@ sf::Uint32 SceneManager::createColorKey(sf::Color color) {
 void SceneManager::loadScene(std::string fileName)
 {
 	scene = Scene();
-	global::showOutline = true;
+	gb::showOutline = true;
 	std::cout << fileName<< std::endl;
 	tileTexture.loadFromFile(std::string(PATH) + "img/TileMap.png");
 	playerTexture.loadFromFile(std::string(PATH) + "img/player.png");
@@ -389,18 +389,18 @@ void SceneManager::loadScene(std::string fileName)
 	
 	// try to load the file
 	if (!levelImg.loadFromFile(fileName+".png")) {
-		global::inMenu = true;
+		gb::inMenu = true;
 		return;
 	}
 	
 	// create sprites for each tile
-	for (int x = 0; x < global::sizeX * global::largeTileSizeX; ++x)
+	for (int x = 0; x < gb::sizeX * gb::largeTileSizeX; ++x)
 	{
-		for (int y = 0; y < global::sizeY * global::largeTileSizeY; ++y)
+		for (int y = 0; y < gb::sizeY * gb::largeTileSizeY; ++y)
 		{
 			// set tile sprite texture
 			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(global::textureManager.tileTexture);
+			sprite->setTexture(gb::textureManager.tileTexture);
 			// get level code (from bitmap)
 			sf::Color tmpColor = levelImg.getPixel(x, y);
 			
@@ -410,9 +410,9 @@ void SceneManager::loadScene(std::string fileName)
 			tmpPos = getTilePosition(colorKey, x, y, levelImg);
 
 //			tmpPos = sf::Vector2i(0, 3);
-			sprite->setTextureRect(sf::IntRect(tmpPos.x * global::pixelSizeX, tmpPos.y * global::pixelSizeY, global::pixelSizeX, global::pixelSizeY));
+			sprite->setTextureRect(sf::IntRect(tmpPos.x * gb::pixelSizeX, tmpPos.y * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
 			// set position of the sprite inside the map
-			sprite->setPosition(x * global::pixelSizeX, y * global::pixelSizeY);
+			sprite->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			// create the tile and add it to the scene
 			Tile* tmpTile = new Tile();
 			tmpTile->walkable = walkableTileState[colorKey];
@@ -423,9 +423,9 @@ void SceneManager::loadScene(std::string fileName)
 	scene.player = new Player();
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
-	playerSprite->setTexture(global::textureManager.playerTexture);
+	playerSprite->setTexture(gb::textureManager.playerTexture);
 	playerSprite->setPosition(90,90);
-	doggieSprite->setTexture(global::textureManager.playerTexture);
+	doggieSprite->setTexture(gb::textureManager.playerTexture);
 	doggieSprite->setPosition(90,90);
 	scene.player->mySprite = playerSprite;
 
@@ -440,13 +440,13 @@ void SceneManager::processEditMode()
 {
 	for (int key=4;key<13;key++)
 	{
-		if (global::input[key] == true)
+		if (gb::input[key] == true)
 		{
-			sf::Vector2i globalPosition = sf::Mouse::getPosition(global::window);
+			sf::Vector2i globalPosition = sf::Mouse::getPosition(gb::window);
 
 			sf::Vector2f localPosition;
-			localPosition.x = 1.f * globalPosition.x / (global::pixelSizeX);
-			localPosition.y = 1.f * globalPosition.y / (global::pixelSizeY);
+			localPosition.x = 1.f * globalPosition.x / (gb::pixelSizeX);
+			localPosition.y = 1.f * globalPosition.y / (gb::pixelSizeY);
 //			std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
 
 
@@ -460,7 +460,7 @@ void SceneManager::processEditMode()
 			newTile->mySprite = tmpTile->mySprite;
 
 			sf::Vector2i posInTexture = sf::Vector2i(0, 0); // grass
-			newTile->mySprite->setTextureRect(sf::IntRect(posInTexture.x * global::pixelSizeX, posInTexture.y * global::pixelSizeY, global::pixelSizeX, global::pixelSizeY));
+			newTile->mySprite->setTextureRect(sf::IntRect(posInTexture.x * gb::pixelSizeX, posInTexture.y * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
 			scene.setTile(newTile,tmpPos.x, tmpPos.y);
 		}
 	}

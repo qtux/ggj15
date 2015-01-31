@@ -8,9 +8,9 @@ TriggerItem::TriggerItem(sf::Sprite* sprite):Item(sprite,0,6*16,16,16){
 
 bool TriggerItem::applyEffect()
 {
-	global::soundManager.playSound("sound/switch.ogg");
-	global::sceneManager.getCurrentScene().switchLargeTile(switchPos1.x, switchPos1.y, switchPos2.x, switchPos2.y);
-	global::sceneManager.getCurrentScene().textBox->triggerText("trigger");
+	gb::soundManager.playSound("sound/switch.ogg");
+	gb::sceneManager.getCurrentScene().switchLargeTile(switchPos1.x, switchPos1.y, switchPos2.x, switchPos2.y);
+	gb::sceneManager.getCurrentScene().textBox->triggerText("trigger");
 	return false;
 };
 

@@ -14,12 +14,12 @@ Highscore::~Highscore()
 }
 void Highscore::update(sf::Time deltaT)
 {
-	global::showOutline = false;
-	if (!global::input[4] && actionPressed)
+	gb::showOutline = false;
+	if (!gb::input[4] && actionPressed)
 	{
-		global::sceneManager.nextLevel();
+		gb::sceneManager.nextLevel();
 	}
-	actionPressed = global::input[4];
+	actionPressed = gb::input[4];
 
 	sf::Font font;
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
@@ -30,13 +30,13 @@ void Highscore::update(sf::Time deltaT)
 	textRect.setOutlineColor(sf::Color::White);
 	textRect.setOutlineThickness(2);
 	textRect.setPosition(30, 30);
-	textRect.setSize(sf::Vector2f(global::gridWidth - 60, global::gridHeight - 60));
+	textRect.setSize(sf::Vector2f(gb::gridWidth - 60, gb::gridHeight - 60));
 	textRect.setFillColor(sf::Color(0, 0, 250, 50));
-	global::window.draw(textRect);
+	gb::window.draw(textRect);
 	textRect.setOutlineThickness(1);
 	textRect.setPosition(30, 99);
-	textRect.setSize(sf::Vector2f(global::gridWidth - 60, 15));
-	global::window.draw(textRect);
+	textRect.setSize(sf::Vector2f(gb::gridWidth - 60, 15));
+	gb::window.draw(textRect);
 	sf::Text speech;
 	speech.setFont(font);
 	speech.setColor(sf::Color(255,255,255));
@@ -45,11 +45,11 @@ void Highscore::update(sf::Time deltaT)
 	speech.setStyle(sf::Text::Bold);
 	speech.setString(" Highscore level " + std::to_string(level));
 	speech.setCharacterSize(charSize);
-	global::window.draw(speech);
+	gb::window.draw(speech);
 	speech.setPosition(sf::Vector2f(45,80));
 	speech.setStyle(sf::Text::Bold);
 	speech.setString("Points         Trials            Coins         Time");
-	global::window.draw(speech);
+	gb::window.draw(speech);
 
 	
 
@@ -64,16 +64,16 @@ void Highscore::update(sf::Time deltaT)
 		int points = ((1.0+row.coins)/((float)row.kills+1)) * ((row.time+1)/row.maxtime) * 1000;
 		speech.setPosition(sf::Vector2f(45,100+(i * 30)));
 		speech.setString(std::to_string(points));
-		global::window.draw(speech);
+		gb::window.draw(speech);
 		speech.setPosition(sf::Vector2f(112,100+(i * 30)));
 		speech.setString(std::to_string(row.kills));
-		global::window.draw(speech);
+		gb::window.draw(speech);
 		speech.setPosition(sf::Vector2f(184,100+(i * 30)));
 		speech.setString(std::to_string(row.coins));
-		global::window.draw(speech);
+		gb::window.draw(speech);
 		speech.setPosition(sf::Vector2f(247,100+(i * 30)));
 		speech.setString(std::to_string((int)row.time)+"s");
-		global::window.draw(speech);
+		gb::window.draw(speech);
 	}
 }
 
@@ -91,10 +91,10 @@ void Highscore::save()
 	infile.close();
 
 	std::stringstream hsLineStr;
-	hsLineStr << global::sceneManager.getCurrentScene().gui->coins << " ";
-	hsLineStr << global::sceneManager.getCurrentScene().gui->timeLeft() << " ";
-	hsLineStr << global::sceneManager.getCurrentScene().gui->timeoutSeconds << " ";
-	hsLineStr << global::sceneManager.restards;
+	hsLineStr << gb::sceneManager.getCurrentScene().gui->coins << " ";
+	hsLineStr << gb::sceneManager.getCurrentScene().gui->timeLeft() << " ";
+	hsLineStr << gb::sceneManager.getCurrentScene().gui->timeoutSeconds << " ";
+	hsLineStr << gb::sceneManager.restards;
 	
 	std::ofstream out(std::string(PATH) + "hs"+std::to_string(level)+".txt");
 	out << hsLineStr.str() << "\n";

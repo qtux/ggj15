@@ -3,15 +3,15 @@
 GUI::GUI()
 {
 	timeSprite = new sf::Sprite();
-	timeSprite->setTexture(global::textureManager.timeBarTexture);
-	timeSprite->setPosition(10, global::gridHeight-20);
+	timeSprite->setTexture(gb::textureManager.timeBarTexture);
+	timeSprite->setPosition(10, gb::gridHeight-20);
 
 	coinSprite = new sf::Sprite();
-	coinSprite->setTexture(global::textureManager.itemsTexture);
+	coinSprite->setTexture(gb::textureManager.itemsTexture);
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
 
 	keySprite = new sf::Sprite();
-	keySprite->setTexture(global::textureManager.itemsTexture);
+	keySprite->setTexture(gb::textureManager.itemsTexture);
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
 
 	timeoutClock = sf::Clock();
@@ -47,7 +47,7 @@ float GUI::timeLeft()
 }
 
 void GUI::update (sf::Time deltaTime) {
-	if (global::sceneManager.getCurrentScene().textBox->enabled()){
+	if (gb::sceneManager.getCurrentScene().textBox->enabled()){
 		if (!lastEnable)
 		{
 			pauseOffset += timeoutClock.getElapsedTime().asSeconds();
@@ -70,41 +70,41 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		progress = 0;
 		if (!loosed){
-			global::sceneManager.getCurrentScene().textBox->triggerText("loose");
+			gb::sceneManager.getCurrentScene().textBox->triggerText("loose");
 		}
 		loosed = true;
-		if (!global::sceneManager.getCurrentScene().textBox->enabled())
+		if (!gb::sceneManager.getCurrentScene().textBox->enabled())
 		{
-			global::sceneManager.restartLevel();
+			gb::sceneManager.restartLevel();
 		}
 	}
 	if (progress < 0.3)
 	{
 		if (!smallTime)
 		{
-			global::sceneManager.getCurrentScene().textBox->triggerText("smalltime");
-			global::soundManager.playSound("sound/timeShort.ogg");
+			gb::sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+			gb::soundManager.playSound("sound/timeShort.ogg");
 			
 		}
 		smallTime = true;
 	}
-	int height = (1 - progress) * (global::gridHeight);
+	int height = (1 - progress) * (gb::gridHeight);
 	timeSprite->setPosition(-15 , height);
-	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, global::gridHeight - height));
-	global::window.draw(*timeSprite);
+	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, gb::gridHeight - height));
+	gb::window.draw(*timeSprite);
 
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(global::gridWidth, i * 16);
-		global::window.draw(*coinSprite);
+		coinSprite->setPosition(gb::gridWidth, i * 16);
+		gb::window.draw(*coinSprite);
 	}
 
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(global::gridWidth, global::gridHeight - 42 - i*16);
-		global::window.draw(*keySprite);
+		keySprite->setPosition(gb::gridWidth, gb::gridHeight - 42 - i*16);
+		gb::window.draw(*keySprite);
 	}
 }
 

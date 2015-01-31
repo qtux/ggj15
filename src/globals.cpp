@@ -11,7 +11,7 @@
 	}
 #endif
 
-sf::Keyboard::Key global::keyboardBinding[] = {
+sf::Keyboard::Key gb::keyboardBinding[] = {
 	sf::Keyboard::Left,
 	sf::Keyboard::Right,
 	sf::Keyboard::Up,
@@ -21,12 +21,12 @@ sf::Keyboard::Key global::keyboardBinding[] = {
 };
 
 
-sf::RenderWindow global::window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
-SceneManager global::sceneManager;
-TextureManager global::textureManager;
-SoundManager global::soundManager(100, 100);
+sf::RenderWindow gb::window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
+SceneManager gb::sceneManager;
+TextureManager gb::textureManager;
+SoundManager gb::soundManager(100, 100);
 
-bool global::inMenu = true;
-bool global::showOutline = true;
-global::InputType global::input;
-sf::Clock global::clock;
+bool gb::inMenu = true;
+bool gb::showOutline = true;
+gb::InputType gb::input;
+sf::Clock gb::clock;
