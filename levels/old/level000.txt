@@ -1,5 +1,0 @@
-Start 40 9
-Portal 7 26
-Item CoinItem 5 5
-Item KeyItem 15 15
-TriggerItem 2 2 2 3
