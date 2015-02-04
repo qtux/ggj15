@@ -82,6 +82,13 @@ int main() {
 
 	gb::soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
 	
+	// load only the fragment shader
+	gb::fragmentShader.loadFromFile("src/fragment_shader.frag", sf::Shader::Fragment);
+	if (!gb::fragmentShader.isAvailable())
+	{
+	    std::cerr<<"could not load shader"<<std::endl;
+	}
+
 	
 	// main loop
 	while (gb::window.isOpen()) {
@@ -155,6 +162,16 @@ int main() {
 		deltaT = clock.restart();
 		// update game with deltaT when focused
 		
+
+//		 sf::RenderTexture texture;
+//		 texture.create(500, 500);
+//		 texture.draw(background);
+//		 texture.display();
+//		 texture.setActive();
+//		 sf::Texture t = texture.getTexture();
+//		 sf::Image img = gb::window.capture();//t.copyToImage();
+//		 img.saveToFile("test.png");
+
 		if (gb::inMenu) {
 			// do menu logic here
 			speech.setString(
@@ -180,7 +197,11 @@ int main() {
 				gb::window.draw(outline);
 			}
 			if (focus) {
+				// draw scene (only tiles, items & player for now) TODO: first update, then draw
+				gb::sceneManager.draw(gb::window, NULL);
+
 				gb::sceneManager.update(deltaT);
+
 			}
 		}
 		gb::window.display();

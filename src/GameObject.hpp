@@ -6,6 +6,7 @@
  */
 #pragma once
 #include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
 #include <vector>
 
 namespace sf{
@@ -32,6 +33,7 @@ public:
 	//GameObject() {};
 
 	virtual void update(sf::Time deltaTime) = 0;
+	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader) = 0;
 	
 	virtual ~GameObject() {};
 	

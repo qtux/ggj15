@@ -24,6 +24,7 @@ public:
 	SceneManager();
 	void showScene(std::string sceneName);
 	void update(sf::Time deltaT);
+	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	void loadScene(std::string name);
 	void processEditMode();
 	void nextLevel();

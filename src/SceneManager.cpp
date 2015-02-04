@@ -360,6 +360,11 @@ void SceneManager::update(sf::Time deltaT) {
 	scene.update(deltaT);
 }
 
+void SceneManager::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader) {
+	//processEditMode();	// only for edit mode
+	scene.draw(renderTarget, renderShader);
+}
+
 sf::Uint32 SceneManager::createColorKey(sf::Color color) {
 	
 	sf::Uint32 colorKey = 0;

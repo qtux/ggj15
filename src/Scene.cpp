@@ -220,6 +220,19 @@ void Scene::update(sf::Time deltaT)
 		}
 	}
 }
+
+void Scene::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
+{
+	for(auto& obj: gameBoard) {
+		obj->draw(renderTarget, renderShader);
+	}
+
+	for(auto& obj: items) {
+		obj->draw(renderTarget, renderShader);
+	}
+	player->draw(renderTarget, renderShader);
+}
+
 void Scene::finishLevel()
 {
 	highscore = new Highscore(gb::sceneManager.getCurrentLevelNumber()+1);

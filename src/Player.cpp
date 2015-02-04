@@ -147,7 +147,7 @@ void Player::update (sf::Time deltaTime) {
 		{
 			doggieSprite->setTextureRect(sf::IntRect(4*16,0, 16, 16));
 		}
-		gb::window.draw(*doggieSprite);
+//		gb::window.draw(*doggieSprite);
 		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 0.256/dT) // delay of doggie movement
 		{
 			directionQueue.pop();
@@ -155,6 +155,15 @@ void Player::update (sf::Time deltaTime) {
 		}
 		
 		mySprite->setTextureRect(sf::IntRect(direction * 16, PlayerAnimState[int(animationStep)] * 32, 16, 32));
-		gb::window.draw(*mySprite);
+//		gb::window.draw(*mySprite);
+	}
+}
+
+void Player::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
+{
+	if (mySprite != 0 && doggieSprite != 0)
+	{
+		renderTarget.draw(*doggieSprite, renderShader);
+		renderTarget.draw(*mySprite, renderShader);
 	}
 }

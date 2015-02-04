@@ -9,6 +9,7 @@ public:
 	virtual ~Item();
 
 	virtual void update(sf::Time deltaTime);
+	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	virtual bool applyEffect();
 	
 	bool collectable;

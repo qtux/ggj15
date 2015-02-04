@@ -25,6 +25,8 @@ sf::RenderWindow gb::window(sf::VideoMode(screenWidth, screenHeight), "Galactic 
 SceneManager gb::sceneManager;
 TextureManager gb::textureManager;
 SoundManager gb::soundManager(100, 100);
+//sf::Shader gb::fragmentShader();
+sf::Shader gb::fragmentShader;
 
 bool gb::inMenu = true;
 bool gb::showOutline = true;

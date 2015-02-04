@@ -17,6 +17,7 @@ public:
 	Player(): animationStep(0.), direction(0),doggieStep(0.) {};
 
 	virtual void update(sf::Time deltaTime);
+	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	
 	// TODO put doggieSprite in here and not in GameObject
 	// TODO delete doggieSprites
