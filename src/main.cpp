@@ -194,7 +194,7 @@ int main() {
 //				texture.display();
 
 				// draw scene (only tiles, items & player for now) TODO: first update, then draw
-				gb::sceneManager.draw(texture, &(gb::fragmentShader));
+				gb::sceneManager.draw(texture, NULL);
 				texture.display();
 //				sf::Texture t = texture.getTexture();
 //				sf::Image img = t.copyToImage();
