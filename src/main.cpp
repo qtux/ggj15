@@ -189,17 +189,17 @@ int main() {
 			}
 			if (focus) {
 
-				sf::RenderTexture texture;
-				texture.create(gb::window.getSize().x, gb::window.getSize().y);
+//				sf::RenderTexture texture;
+//				texture.create(gb::window.getSize().x, gb::window.getSize().y);
 //				texture.display();
 
 				// draw scene (only tiles, items & player for now) TODO: first update, then draw
-				gb::sceneManager.draw(texture, NULL);
-				texture.display();
+				gb::sceneManager.draw(gb::window, NULL);
+//				texture.display();
 //				sf::Texture t = texture.getTexture();
 //				sf::Image img = t.copyToImage();
-				sf::Sprite tmpSprite(texture.getTexture());
-				gb::window.draw(tmpSprite);
+//				sf::Sprite tmpSprite(texture.getTexture());
+//				gb::window.draw(tmpSprite);
 //				img.saveToFile("test.png");
 
 				gb::sceneManager.update(deltaT);
