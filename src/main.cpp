@@ -10,8 +10,8 @@ sf::Text speech;
 
 void resize(int width, int height) {
 	// get ratio based on the original size
-	float widthRatio = (float) gb::window.getSize().x / gb::gridWidth;	// TODO add bar widths
-	float heightRatio = (float) gb::window.getSize().y / gb::gridHeight;
+	float widthRatio = (float) width / gb::gridWidth;	// TODO add bar widths
+	float heightRatio = (float) height / gb::gridHeight;
 	int heightOffset = 0;
 	int widthOffset = 0;
 	float ratio = 1;
