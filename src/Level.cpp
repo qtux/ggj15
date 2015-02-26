@@ -171,6 +171,22 @@ void Level::reset()
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items.push_back(tmpItem);
 		}
+		if (first == "NPC")
+		{ //TODO vorläufige Version, sollte verschönert werden
+			//std::string second;
+			//iss >> second;
+			int x,y;
+			iss >> x;
+			iss >> y;
+
+			NPC * tmpNPC = new NPC();
+			sf::Sprite *npcSprite = new sf::Sprite();
+			npcSprite->setTexture(gb::textureManager.npcTexture);
+			tmpNPC->mySprite = npcSprite;
+			tmpNPC->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+
+			scene.npcs.push_back(tmpNPC);
+		}
 		if (first == "Item")
 		{
 			std::string second;
@@ -486,3 +502,4 @@ void Level::updateTileAnimation(sf::Time deltaT)
 			}
 		}
 }
+

@@ -23,6 +23,7 @@ public:
 	const sf::Vector2f& getPosition() const;
 	
 	void setPosition(float x, float y);
+	void setPosition(const sf::Vector2f &a);
 	
 	int getWidth() const;
 	
