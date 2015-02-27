@@ -18,7 +18,7 @@ float mag2(const sf::Vector2f & a)
 }
 
 
-NPC::NPC() : animationStep(0.) {
+NPC::NPC() : animationStep(0.), phase(drand48()) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -26,6 +26,32 @@ NPC::NPC() : animationStep(0.) {
 NPC::~NPC() {
 	// TODO Auto-generated destructor stub
 }
+
+
+bool NPC::intersects(const GameObject& cmp) const
+{
+	const sf::FloatRect &tmpRect = mySprite->getGlobalBounds();
+	sf::Vector2f tmpPos(tmpRect.left, tmpRect.top);
+	return intersects(tmpPos, cmp);
+}
+
+bool NPC::intersects(const sf::Vector2f &testPos, const GameObject& cmp) const
+{ //TODO: könnte man mit der Struktur in Player besser verbinden
+	if (dynamic_cast<const Tile*>(&cmp) && dynamic_cast<const Tile*>(&cmp)->walkable) return false; // TODO: aus intersect in allgemeineren Teil verschieben
+	sf::FloatRect tmpRect(testPos.x + 3 * mySprite->getScale().x, testPos.y + 3 * mySprite->getScale().y, 10* mySprite->getScale().x, 10* mySprite->getScale().y);
+	/*
+	tmpRect.top += 32 - 10;
+	tmpRect.left += 3;
+	tmpRect.width = 10;
+	tmpRect.height = 10;*/
+
+	if (cmp.mySprite == 0) return false;
+	/*std::cout<<"size test "<<tmpRect.left<<", "<<tmpRect.top<<", "<<tmpRect.width<<", "<<tmpRect.height<<", "<<std::endl;
+	const sf::FloatRect &tmpRect2 = cmp.mySprite->getGlobalBounds();
+	std::cout<<"size tile "<<tmpRect2.left<<", "<<tmpRect2.top<<", "<<tmpRect2.width<<", "<<tmpRect2.height<<", "<<std::endl;*/
+	return cmp.mySprite->getGlobalBounds().intersects(tmpRect);
+}
+
 
 void NPC::update(sf::Time deltaTime) {
 	float dT = deltaTime.asSeconds();
@@ -60,11 +86,20 @@ void NPC::update(sf::Time deltaTime) {
 	sf::Vector2f moveVec = path[pathIdx] - myPos;
 	moveVec /= sqrtf(mag2(moveVec));
 
+
+	sf::Vector2f oldPos(myPos);
+
 	myPos += moveVec * (120 * dT);
+
 	phase += dT;
 	if (phase > 2*M_PI) phase -= 2*M_PI;
 
 	myPos.y += sin(phase);
+
+	int chkColl[] = {0, 0};
+	checkTilesCollision(myPos, oldPos, chkColl);
+
+
 
 	setPosition(myPos);
 	mySprite->setTextureRect(sf::IntRect(0, NPCAnimState[int(animationStep)] * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
@@ -78,9 +113,9 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 	{
 		if (!dynamic_cast<const Tile*>(tmp)->walkable) continue;
 
-		const sf::Vector2f &tmpPos = tmp->getPosition();
+		const sf::Vector2f &tmpPos = tmp->getPosition();// + sf::Vector2f(gb::pixelSizeX/2,  gb::pixelSizeY/2);
 		sf::Vector2f dist = current.pos - tmpPos;
-		if (mag2(dist) < gb::pixelSizeX * gb::pixelSizeX + gb::pixelSizeY * gb::pixelSizeY + 10) //10 just to be safe
+		if (mag2(dist) < .5*(gb::pixelSizeX * gb::pixelSizeX + gb::pixelSizeY * gb::pixelSizeY) + 10) //10 just to be safe
 		{
 			// is current check position already in closed list -> ignore
 			bool doContinue = false;
@@ -174,7 +209,7 @@ void NPC::draw(sf::RenderTarget& renderTarget, sf::Shader* renderShader) {
 	{
 		renderTarget.draw(*mySprite, renderShader);
 
-/*		for (auto &it : path)
+		for (auto &it : path)
 		{
 			sf::CircleShape shape(5);
 
@@ -182,6 +217,6 @@ void NPC::draw(sf::RenderTarget& renderTarget, sf::Shader* renderShader) {
 			shape.setFillColor(sf::Color(250, 50, 50));
 			shape.setPosition(it);
 			renderTarget.draw(shape);
-		}*/
+		}
 	}
 }

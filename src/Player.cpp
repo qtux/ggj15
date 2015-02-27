@@ -18,17 +18,18 @@ Player::Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, 
 	_doggieShape.setPosition(pos);
 }
 
-bool Player::intersects(const GameObject& cmp)
+bool Player::intersects(const GameObject& cmp) const
 {
 	const sf::FloatRect &tmpRect = _shape.getGlobalBounds();
 	sf::Vector2f tmpPos(tmpRect.left, tmpRect.top);
 	return intersects(tmpPos, cmp);
 }
 
-bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
+bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp) const
 {
 	if (dynamic_cast<const Tile*>(&cmp) && dynamic_cast<const Tile*>(&cmp)->walkable) return false; // TODO: aus intersect in allgemeineren Teil verschieben
 	sf::FloatRect tmpRect(testPos.x + 3, testPos.y + (32 - 10), 10, 10);
+
 	if (cmp.mySprite == 0) return false;
 	return cmp.mySprite->getGlobalBounds().intersects(tmpRect);
 }
@@ -68,38 +69,9 @@ void Player::update (sf::Time deltaTime) {
 	bool collides = false;
 	//check for collisions:
 	int chkColl[] = {0, 0};
-	for (std::vector<GameObject*>::const_iterator tileIt = _level->gameBoard.begin(); tileIt != _level->gameBoard.end(); tileIt++)
-	{
-		sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
-		sf::Vector2f distVecOld = ((*tileIt)->getPosition() - oldPos); // check also neighbours of old position in case screen was left on one side
-		// ... 
-		//std::cout<<(*tileIt)->mySprite->getGlobalBounds().left<<" , "<<(*tileIt)->mySprite->getGlobalBounds().top<<" , "<<mySprite->getGlobalBounds().left<<" , "<<mySprite->getGlobalBounds().left<<" , "<<std::endl;
-		if (distVec.x * distVec.x + distVec.y * distVec.y < 60 * 60 || distVecOld.x * distVecOld.x + distVecOld.y * distVecOld.y < 60 * 60) // && intersects(tmpPos, **tileIt)) // first condition does quick distance check, 60 is arbitrary safe distance
-		{
-			sf::Vector2f testPos(tmpPos);	// run additional tests for 1D movements if 2D movement is not possible
-			testPos.x = oldPos.x;
-			if (intersects(testPos, **tileIt)) 
-			{
-				chkColl[1] ++;
-			}
-			
-			
-			testPos.x = tmpPos.x;
-			testPos.y = oldPos.y;
-			if(intersects(testPos, **tileIt))
-			{
-				chkColl[0] ++;
-			}
-		}
-	}
-	if (chkColl[0] > 0)
-	{
-		tmpPos.x = oldPos.x;
-	}
-	if (chkColl[1] > 0)
-	{
-		tmpPos.y = oldPos.y;
-	}
+
+	checkTilesCollision(tmpPos, oldPos, chkColl);
+
 	for (std::vector<Item*>::iterator itIt = _level->items.begin() ; itIt != _level->items.end() ; itIt++)
 	{
 		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
