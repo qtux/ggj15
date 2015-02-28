@@ -3,6 +3,7 @@ Portal 4 17
 Item CoinItem 5 10
 Item KeyItem 10 15
 Item TimeItem 5 15
+Item DoorItem 13 10 1
 Item DecorationItem 14 14 1 0 112 16 16
 Item DecorationItem 7 7 1 16 96 16 16
 Item DecorationItem 18 15 1 16 112 16 16

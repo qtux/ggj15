@@ -14,6 +14,11 @@ Item::Item(sf::Sprite* sprite,int x,int y,int w,int h) : collectable(true), bloc
 	offset = rand();
 	mySprite->setTextureRect(sf::IntRect(drawX,drawY,drawW,drawH));
 };
+
+Item::Item(sf::Sprite* sprite) : collectable(true), blocksPath(false) {
+	mySprite = sprite;
+}
+
 Item::~Item()
 {
 }
@@ -40,4 +45,5 @@ void Item::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 bool Item::applyEffect()
 {
 	return false;
-};
+}
+;

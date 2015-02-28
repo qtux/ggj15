@@ -93,6 +93,13 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			{
 				tmpItem = tmpFactory.getItem(second);
 			}
+
+			if (second == "DoorItem")
+			{
+				bool vertical = false;
+				iss >> vertical;
+			}
+
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			scene.items.push_back(tmpItem);
 		}

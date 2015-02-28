@@ -4,6 +4,7 @@
 #include "TriggerItem.hpp"
 #include "PortalItem.hpp"
 #include "KeyItem.hpp"
+#include "DoorItem.hpp"
 #include "globals.hpp"
 #include <SFML/Graphics.hpp>
 #include "DecorationItem.hpp"
@@ -13,7 +14,7 @@
 ItemFactory::ItemFactory() {
 }
 
-Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int texPosY, int texW, int texH)
+Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int texPosY, int texW, int texH, bool vertical)
 {
 	sf::Sprite* sprite = new sf::Sprite();
 	sprite->setTexture(gb::textureManager.itemsTexture);
@@ -56,6 +57,11 @@ Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int t
 		return new PortalItem(sprite);
 	}
 	
+	if (name == "DoorItem")
+	{
+		return new DoorItem(sprite, vertical, true);
+	}
+
 	if (name == "DecorationItem")
 	{
 		return new DecorationItem(sprite, blocksPath, texPosX, texPosY, texW, texH);
