@@ -113,6 +113,11 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 	{
 		if (!dynamic_cast<const Tile*>(tmp)->walkable) continue;
 
+		for (auto &itemIt : gb::sceneManager.getCurrentScene().items)
+		{
+			if (itemIt->blocksPath && tmp->mySprite->getGlobalBounds().intersects(itemIt->mySprite->getGlobalBounds())) continue; // nicht über blockierende Items laufen
+		}
+
 		const sf::Vector2f &tmpPos = tmp->getPosition();// + sf::Vector2f(gb::pixelSizeX/2,  gb::pixelSizeY/2);
 		sf::Vector2f dist = current.pos - tmpPos;
 		if (mag2(dist) < .5*(gb::pixelSizeX * gb::pixelSizeX + gb::pixelSizeY * gb::pixelSizeY) + 10) //10 just to be safe
@@ -159,7 +164,7 @@ void NPC::findPath(const GameObject& from, const GameObject& to,
 	std::vector<npc::step> openList; //http://www.cplusplus.com/reference/algorithm/make_heap/
 	std::make_heap(openList.begin(), openList.end(), npc::step::comp);
 	std::vector<npc::step> closedList;
-	sf::Vector2f destPos = to.getPosition() + sf::Vector2f(10,24); //TODO: besser lösen, aktuell Player-Pixelbreite etc. hard-coded!
+	sf::Vector2f destPos = to.getPosition() + sf::Vector2f(0, gb::pixelSizeY); //TODO: besser lösen, aktuell Player-Pixelbreite etc. hard-coded!
 	sf::Vector2f origPos = from.getPosition();
 
 //	std::cout<<"from: "<<origPos.x<<", "<<origPos.y<<std::endl;
