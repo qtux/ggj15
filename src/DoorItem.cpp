@@ -8,7 +8,7 @@
 #include "DoorItem.hpp"
 #include "globals.hpp"
 
-DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed): Item(sprite), vertical(vertical_) {
+DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed): Item(sprite), vertical(vertical_), wasClosed(closed) {
 	this->blocksPath = closed;
 	this->collectable = false;
 	if (vertical)
@@ -61,10 +61,13 @@ void DoorItem::update(sf::Time deltaTime) {
 		if (blocksPath)
 		{
 			mySprite->setTextureRect(closedDoorTexture);
+			wasClosed = true;
 		}
 		else
 		{
 			mySprite->setTextureRect(openDoorTexture);
+			if (wasClosed) gb::soundManager.playSound("sound/door.ogg");
+			wasClosed = false;
 		}
 	}
 }

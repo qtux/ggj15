@@ -12,6 +12,7 @@
 
 class DoorItem: public Item {
 private:
+	bool wasClosed;
 	bool vertical;
 	sf::IntRect openDoorTexture;
 	sf::IntRect closedDoorTexture;

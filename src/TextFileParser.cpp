@@ -89,16 +89,19 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 				iss >> texH;
 				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
 			}
+			else if (second == "DoorItem")
+			{
+				bool vertical = false;
+				bool closed = true;
+				iss >> vertical >> closed;
+				tmpItem = tmpFactory.getItem(second, closed, -1, -1, -1, -1, vertical);
+			}
 			else
 			{
 				tmpItem = tmpFactory.getItem(second);
 			}
 
-			if (second == "DoorItem")
-			{
-				bool vertical = false;
-				iss >> vertical;
-			}
+
 
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			scene.items.push_back(tmpItem);
