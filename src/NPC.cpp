@@ -152,7 +152,8 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 
 			sf::Vector2f tmpDist = tmpPos - destPos;
 			openList.push_back(npc::step(tmpPos, current.pos, currCost, mag2(tmpDist) + 0. * gb::pixelSizeX * drand48() * 2));
-			std::push_heap(openList.begin(), openList.end(), npc::step::comp);
+			//std::cout<<"ende: "<<openList.back().value<<std::endl;
+			std::push_heap(openList.begin(), openList.end());
 		}
 	}
 }
@@ -162,7 +163,7 @@ void NPC::findPath(const GameObject& from, const GameObject& to,
 	const std::vector<GameObject*> &myBoard = gb::sceneManager.getCurrentScene().gameBoard; //TODO: define type (class or typedef) for board? (johannes)
 
 	std::vector<npc::step> openList; //http://www.cplusplus.com/reference/algorithm/make_heap/
-	std::make_heap(openList.begin(), openList.end(), npc::step::comp);
+
 	std::vector<npc::step> closedList;
 	sf::Vector2f destPos = to.getPosition() + sf::Vector2f(0, gb::pixelSizeY); //TODO: besser lösen, aktuell Player-Pixelbreite etc. hard-coded!
 	sf::Vector2f origPos = from.getPosition();
@@ -171,7 +172,8 @@ void NPC::findPath(const GameObject& from, const GameObject& to,
 //	std::cout<<"to: "<<destPos.x<<", "<<destPos.y<<std::endl;
 
 	openList.push_back(npc::step(origPos, origPos, 0, 0));
-	std::push_heap(openList.begin(), openList.end(), npc::step::comp);
+	std::make_heap(openList.begin(), openList.end());
+	//std::push_heap(openList.begin(), openList.end(), npc::step::comp);
 
 	bool reached = false;
 	while (!reached && openList.size() > 0)
@@ -184,7 +186,7 @@ void NPC::findPath(const GameObject& from, const GameObject& to,
 			continue;
 		}
 
-		std::pop_heap(openList.begin(), openList.end(), npc::step::comp);
+		std::pop_heap(openList.begin(), openList.end());
 		openList.pop_back();
 
 		expandNode(myBoard, current, openList, closedList, destPos);

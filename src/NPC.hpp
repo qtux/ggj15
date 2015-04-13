@@ -15,13 +15,18 @@ struct step {
 
 	step(const sf::Vector2f &pos_, const sf::Vector2f &from_, float cost_, float value_): pos(pos_), from(from_), cost(cost_), value(value_) {}
 
-	static bool comp(const step &a, const step &b)
+	inline friend bool operator<(const step& a, const step& b)
 	{
-		return a.value < b.value;
+		//std::cout<<"werde aufgerufen!"<<std::endl;
+		return (a.value > b.value);
 	}
+
 };
 
-
+/*bool comp(const step &a, const step &b)
+{
+	return (a.value < b.value);
+}*/
 // adjusted from http://www.cplusplus.com/reference/queue/priority_queue/priority_queue/
 /*class mycomparison
 {
