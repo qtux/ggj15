@@ -13,9 +13,6 @@ private:
 	std::map<sf::Uint32, std::vector<sf::Vector2i>*> colorToTilePositionMap;
 	std::map<sf::Uint32, bool> walkableTileState;
 	
-	sf::Texture tileTexture;
-	sf::Texture playerTexture;
-	sf::Texture itemTexture;
 	sf::Vector2i getRandomGrassPosition();
 	int currentLevelNumber;
 	sf::Uint32 createColorKey(sf::Color color);

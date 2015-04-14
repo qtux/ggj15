@@ -3,15 +3,15 @@
 GUI::GUI()
 {
 	timeSprite = new sf::Sprite();
-	timeSprite->setTexture(gb::textureManager.timeBarTexture);
+	timeSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/timeBar.png" , true));
 	timeSprite->setPosition(10, gb::gridHeight-20);
 
 	coinSprite = new sf::Sprite();
-	coinSprite->setTexture(gb::textureManager.itemsTexture);
+	coinSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
 
 	keySprite = new sf::Sprite();
-	keySprite->setTexture(gb::textureManager.itemsTexture);
+	keySprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
 
 	timeoutClock = sf::Clock();
