@@ -9,10 +9,10 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "CoinItem.hpp"
-#include "TimeItem.hpp"
-#include "TriggerItem.hpp"
-#include "KeyItem.hpp"
+#include "Items/CoinItem.hpp"
+#include "Items/TimeItem.hpp"
+#include "Items/TriggerItem.hpp"
+#include "Items/KeyItem.hpp"
 #include "ItemFactory.hpp"
 #include "global.hpp"
 #include "TextureManager.hpp"

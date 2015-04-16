@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Item.hpp"
+#include "../Item.hpp"
 
 class DecorationItem : public Item
 {

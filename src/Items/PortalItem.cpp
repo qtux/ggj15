@@ -1,7 +1,6 @@
-#include "global.hpp"
+#include "../global.hpp"
 #include "PortalItem.hpp"
 #include <cmath>
-#include <iostream>
 
 PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32) {
 	neverAgain=false;

@@ -1,13 +1,13 @@
 #include "ItemFactory.hpp"
-#include "TimeItem.hpp"
-#include "CoinItem.hpp"
-#include "TriggerItem.hpp"
-#include "PortalItem.hpp"
-#include "KeyItem.hpp"
-#include "DoorItem.hpp"
+#include "Items/TimeItem.hpp"
+#include "Items/CoinItem.hpp"
+#include "Items/TriggerItem.hpp"
+#include "Items/PortalItem.hpp"
+#include "Items/KeyItem.hpp"
+#include "Items/DoorItem.hpp"
 #include "global.hpp"
 #include <SFML/Graphics.hpp>
-#include "DecorationItem.hpp"
+#include "Items/DecorationItem.hpp"
 #include <iostream>
 
 

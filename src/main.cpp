@@ -1,5 +1,4 @@
 #include <iostream>
-
 // last include (requires previous includes)
 #include "global.hpp"
 
@@ -83,12 +82,11 @@ int main() {
 	gb::soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
 	
 	// load only the fragment shader
-	gb::fragmentShader.loadFromFile("src/fragment_shader.frag", sf::Shader::Fragment);
+	gb::fragmentShader.loadFromFile("src/shader/fragment_shader.frag", sf::Shader::Fragment);
 	if (!gb::fragmentShader.isAvailable())
 	{
 	    std::cerr<<"could not load shader"<<std::endl;
 	}
-
 	
 	// main loop
 	while (gb::window.isOpen()) {

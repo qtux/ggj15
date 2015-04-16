@@ -1,4 +1,4 @@
-#include "global.hpp"
+#include "../global.hpp"
 #include "CoinItem.hpp"
 
 CoinItem::CoinItem(sf::Sprite* sprite):Item(sprite,0,80,16,16){

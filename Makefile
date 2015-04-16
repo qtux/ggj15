@@ -16,7 +16,7 @@ SFML_PATH	= SFML-2.2
 
 # define code paths
 SOURCE_PATH	= src
-SOURCES		= $(wildcard $(SOURCE_PATH)/*.cpp)
+SOURCES		= $(wildcard $(SOURCE_PATH)/*.cpp) $(wildcard $(SOURCE_PATH)/Items/*.cpp)
 OBJECT		= $(patsubst %.cpp, $(BUILDDIR)/%.o, $(SOURCES))
 
 # build all

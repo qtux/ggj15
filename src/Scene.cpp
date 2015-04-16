@@ -8,11 +8,10 @@
 #include "Scene.hpp"
 #include "Tile.hpp"
 #include "global.hpp"
-#include <iostream>
 #include "GUI.hpp"
 #include <math.h>
 #include "global.hpp"
-#include "KeyItem.hpp"
+#include "Items/KeyItem.hpp"
 
 Scene::Scene() {
 	// TODO Auto-generated constructor stub

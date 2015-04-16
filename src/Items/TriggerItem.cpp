@@ -1,7 +1,5 @@
-#include "global.hpp"
+#include "../global.hpp"
 #include "TriggerItem.hpp"
-#include <iostream>
-#include "Tile.hpp"
 
 TriggerItem::TriggerItem(sf::Sprite* sprite):Item(sprite,0,6*16,16,16){
 }

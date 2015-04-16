@@ -1,6 +1,5 @@
 #include "global.hpp"
 #include "Item.hpp"
-#include <iostream>
 #include <cmath>
 
 Item::Item(sf::Sprite* sprite,int x,int y,int w,int h) : collectable(true), blocksPath(false){
@@ -46,4 +45,4 @@ bool Item::applyEffect()
 {
 	return false;
 }
-;
+

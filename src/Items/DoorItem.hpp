@@ -8,7 +8,7 @@
 #ifndef DOORITEM_H_
 #define DOORITEM_H_
 
-#include "Item.hpp"
+#include "../Item.hpp"
 
 class DoorItem: public Item {
 private:
