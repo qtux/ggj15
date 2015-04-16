@@ -28,7 +28,7 @@ TextFileParser::~TextFileParser() {
 	// TODO Auto-generated destructor stub
 }
 
-void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
+void TextFileParser::loadTextFile(Level &level, std::string fileName)
 {
 	std::ifstream infile(fileName);
 //	infile.open(fileName.c_str());
@@ -51,10 +51,10 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.startPos.x = x * gb::pixelSizeX;
-			scene.startPos.y = y * gb::pixelSizeY;
-			scene.player->setPosition(scene.startPos.x, scene.startPos.y);
-			scene.player->doggieSprite->setPosition(scene.startPos.x, scene.startPos.y);
+			level.startPos.x = x * gb::pixelSizeX;
+			level.startPos.y = y * gb::pixelSizeY;
+			level.player->setPosition(level.startPos.x, level.startPos.y);
+			level.player->doggieSprite->setPosition(level.startPos.x, level.startPos.y);
 		}
 
 		if (first == "Portal")
@@ -62,11 +62,11 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			scene.portalPos.x = x * gb::pixelSizeX;
-			scene.portalPos.y = y * gb::pixelSizeY;
+			level.portalPos.x = x * gb::pixelSizeX;
+			level.portalPos.y = y * gb::pixelSizeY;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			scene.items.push_back(tmpItem);
+			level.items.push_back(tmpItem);
 		}
 
 		if (first == "Item")
@@ -104,21 +104,21 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 
 
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			scene.items.push_back(tmpItem);
+			level.items.push_back(tmpItem);
 		}
 
 		if (first == "Timeout")
 		{
 			int time;
 			iss >> time;
-			scene.gui->setTimeout(time);
+			level.gui->setTimeout(time);
 		}
 
 		if (first == "Timebuff")
 		{
 			int time;
 			iss >> time;
-			scene.gui->setTimebuffFactor(time);
+			level.gui->setTimebuffFactor(time);
 		}
 
 		if (first == "Text")
@@ -136,7 +136,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			{
 				element->bold = true;
 			}
-			scene.textBox->appendText(element);
+			level.textBox->appendText(element);
 
 		}
 
@@ -153,7 +153,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			scene.items.push_back(tmpItem);
+			level.items.push_back(tmpItem);
 		}
 
 		if (first == "TriggerTrapItem")
@@ -169,7 +169,7 @@ void TextFileParser::loadTextFile(Scene &scene, std::string fileName)
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			scene.items.push_back(tmpItem);
+			level.items.push_back(tmpItem);
 		}
 
 	}

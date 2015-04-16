@@ -1,7 +1,6 @@
 #include "Player.hpp"
 #include <iostream>
 #include "Tile.hpp"
-#include "Scene.hpp"
 #include <math.h>
 
 bool Player::intersects(const GameObject& cmp)

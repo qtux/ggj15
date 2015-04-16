@@ -3,13 +3,13 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "Scene.hpp"
+#include "Level.hpp"
 #include <SFML/Graphics.hpp>
 
 class SceneManager {
 private:
 	// SceneLoader loader;
-	Scene scene;
+	Level scene;
 	std::map<sf::Uint32, std::vector<sf::Vector2i>*> colorToTilePositionMap;
 	std::map<sf::Uint32, bool> walkableTileState;
 	
@@ -31,7 +31,5 @@ public:
 	int restards;
 	sf::Vector2i getTilePosition(sf::Uint32 color, int x, int y, sf::Image levelImg);
 	
-	Scene& getCurrentScene();
-
-//	Scene currentScene;
+	Level& getCurrentScene();
 };

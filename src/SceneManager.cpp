@@ -379,7 +379,7 @@ sf::Uint32 SceneManager::createColorKey(sf::Color color) {
 
 void SceneManager::loadScene(std::string fileName)
 {
-	scene = Scene();
+	scene = Level();
 	gb::showOutline = true;
 	std::cout << fileName<< std::endl;
 	// load and set timebar
@@ -484,7 +484,7 @@ void SceneManager::restartLevel(){
 	restards++;
 }
 
-Scene& SceneManager::getCurrentScene()
+Level& SceneManager::getCurrentScene()
 {
 	return scene;
 }

@@ -1,11 +1,11 @@
 /*
- * Scene.cpp
+ * Level.cpp
  *
  *  Created on: 24.01.2015
  *      Author: sartz
  */
 
-#include "Scene.hpp"
+#include "Level.hpp"
 #include "Tile.hpp"
 #include "global.hpp"
 #include "GUI.hpp"
@@ -13,8 +13,7 @@
 #include "global.hpp"
 #include "Items/KeyItem.hpp"
 
-Scene::Scene() {
-	// TODO Auto-generated constructor stub
+Level::Level() {
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
@@ -22,12 +21,7 @@ Scene::Scene() {
 	fooexit = false;
 }
 
-Scene::~Scene() {
-	// TODO Auto-generated destructor stub
-}
-
-
-GameObject* Scene::getTile(int x, int y)
+GameObject* Level::getTile(int x, int y)
 {
 	if (x + y*gb::sizeX < (int)gameBoard.size())
 	{
@@ -37,22 +31,22 @@ GameObject* Scene::getTile(int x, int y)
 }
 
 
-void Scene::setTile(GameObject* obj, int x, int y)
+void Level::setTile(GameObject* obj, int x, int y)
 {
 	gameBoard[x + y * gb::sizeX * gb::largeTileSizeX] = obj;
 }
 
-void Scene::setGUI(GUI* obj)
+void Level::setGUI(GUI* obj)
 {
 	gui = obj;
 }
 
-const std::vector<GameObject*> &Scene::getGameBoard() const
+const std::vector<GameObject*> &Level::getGameBoard() const
 {
 	return gameBoard;
 }
 
-void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
+void Level::switchLargeTile(int x1, int y1, int x2, int y2)
 {
 	int startX1 = x1*gb::largeTileSizeX;
 	int startY1 = y1*gb::largeTileSizeY;
@@ -110,7 +104,7 @@ void Scene::switchLargeTile(int x1, int y1, int x2, int y2)
 
 }
 
-void Scene::updateTileAnimation(sf::Time deltaT)
+void Level::updateTileAnimation(sf::Time deltaT)
 {
 	float dt = deltaT.asSeconds() * 1000;
 	tileAnimationTime -= dt / 1000;
@@ -144,7 +138,7 @@ void Scene::updateTileAnimation(sf::Time deltaT)
 		}
 }
 
-void Scene::update(sf::Time deltaT)
+void Level::update(sf::Time deltaT)
 {
 //	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 //	{
@@ -220,7 +214,7 @@ void Scene::update(sf::Time deltaT)
 	}
 }
 
-void Scene::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
+void Level::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 {
 	for(auto& obj: gameBoard) {
 		obj->draw(renderTarget, renderShader);
@@ -232,7 +226,7 @@ void Scene::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 	player->draw(renderTarget, renderShader);
 }
 
-void Scene::finishLevel()
+void Level::finishLevel()
 {
 	highscore = new Highscore(gb::sceneManager.getCurrentLevelNumber()+1);
 	highscore->save();
@@ -240,7 +234,7 @@ void Scene::finishLevel()
 }
 
 
-bool Scene::readyToLeave() const
+bool Level::readyToLeave() const
 {
 	int size = items.size();
 	int keysInLevel = 0;
@@ -255,7 +249,7 @@ bool Scene::readyToLeave() const
 }
 
 
-void Scene::leave()
+void Level::leave()
 {
 	if (!readyToLeave()) return;
 	leaved = true;

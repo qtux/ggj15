@@ -1,5 +1,5 @@
 /*
- * Scene.hpp
+ * Level.hpp
  *
  *  Created on: 24.01.2015
  *      Author: sartz
@@ -26,10 +26,9 @@ struct TileFlightData
 	float scale;
 };
 
-class Scene {
+class Level {
 public:
-	Scene();
-	virtual ~Scene();
+	Level();
 
 	GameObject* getTile(int x, int y);
 	void setTile(GameObject* obj, int x, int y);
