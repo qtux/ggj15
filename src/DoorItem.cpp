@@ -6,7 +6,7 @@
  */
 
 #include "DoorItem.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 
 DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed): Item(sprite), vertical(vertical_), wasClosed(closed) {
 	this->blocksPath = closed;

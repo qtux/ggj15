@@ -7,11 +7,11 @@
 
 #include "Scene.hpp"
 #include "Tile.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 #include <iostream>
 #include "GUI.hpp"
 #include <math.h>
-#include "globals.hpp"
+#include "global.hpp"
 #include "KeyItem.hpp"
 
 Scene::Scene() {

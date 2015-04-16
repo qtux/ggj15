@@ -14,7 +14,7 @@
 #include "TriggerItem.hpp"
 #include "KeyItem.hpp"
 #include "ItemFactory.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 #include "TextureManager.hpp"
 #include "Tile.hpp"
 #include "TextElement.hpp"

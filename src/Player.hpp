@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameObject.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 #include <queue>
 
 class Player : public GameObject

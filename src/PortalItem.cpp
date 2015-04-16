@@ -1,4 +1,4 @@
-#include "globals.hpp"
+#include "global.hpp"
 #include "PortalItem.hpp"
 #include <cmath>
 #include <iostream>

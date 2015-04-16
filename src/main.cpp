@@ -1,7 +1,7 @@
 #include <iostream>
 
 // last include (requires previous includes)
-#include "globals.hpp"
+#include "global.hpp"
 
 sf::RectangleShape menu;
 sf::RectangleShape background;

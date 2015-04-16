@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
-#include "globals.hpp"
+#include "global.hpp"
 
 Highscore::Highscore(int level)
 {

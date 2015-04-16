@@ -5,7 +5,7 @@
 #include "PortalItem.hpp"
 #include "KeyItem.hpp"
 #include "DoorItem.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 #include <SFML/Graphics.hpp>
 #include "DecorationItem.hpp"
 #include <iostream>

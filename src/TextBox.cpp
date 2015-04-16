@@ -1,5 +1,5 @@
 #include "TextBox.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 
 TextBox::TextBox(){
 	currentElement = 0;

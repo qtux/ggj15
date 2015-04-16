@@ -1,5 +1,5 @@
 #include "GUI.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 GUI::GUI()
 {
 	timeSprite = new sf::Sprite();

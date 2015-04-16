@@ -1,4 +1,4 @@
-#include "globals.hpp"
+#include "global.hpp"
 #include "TriggerItem.hpp"
 #include <iostream>
 #include "Tile.hpp"

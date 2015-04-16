@@ -1,4 +1,4 @@
-#include "globals.hpp"
+#include "global.hpp"
 #include "Item.hpp"
 #include <iostream>
 #include <cmath>

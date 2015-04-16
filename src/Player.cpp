@@ -29,7 +29,7 @@ void Player::update (sf::Time deltaTime) {
 	float dT = deltaTime.asSeconds();
 	float currTime = gb::clock.getElapsedTime().asSeconds();
 	
-	// get input from globals and process:
+	// get input from global and process:
 	sf::Vector2f tmpPos = getPosition();
 	sf::Vector2f oldPos(tmpPos);
 	int width = getWidth();

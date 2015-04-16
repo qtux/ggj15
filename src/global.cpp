@@ -1,4 +1,4 @@
-#include "globals.hpp"
+#include "global.hpp"
 
 #ifdef FIX_TO_STRING
 	#include <sstream>

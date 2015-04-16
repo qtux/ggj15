@@ -1,6 +1,6 @@
 #include "SceneManager.hpp"
 #include "Tile.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 #include <iostream>
 #include "Player.hpp"
 #include <string>

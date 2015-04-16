@@ -1,4 +1,4 @@
-#include "globals.hpp"
+#include "global.hpp"
 #include "Tile.hpp"
 #include <iostream>
 
