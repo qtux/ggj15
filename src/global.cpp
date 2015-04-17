@@ -1,16 +1,5 @@
 #include "global.hpp"
 
-#ifdef FIX_TO_STRING
-	#include <sstream>
-	namespace std {
-		std::string to_string(int value) {
-			std::ostringstream ss;
-			ss << value;
-			return ss.str();
-		}
-	}
-#endif
-
 sf::Keyboard::Key gb::keyboardBinding[] = {
 	sf::Keyboard::Left,
 	sf::Keyboard::Right,
@@ -22,9 +11,10 @@ sf::Keyboard::Key gb::keyboardBinding[] = {
 
 
 sf::RenderWindow gb::window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
-SceneManager gb::sceneManager;
-TextureManager gb::textureManager;
 SoundManager gb::soundManager(100, 100);
+// input manager
+TextureManager gb::textureManager;
+SceneManager gb::sceneManager;
 //sf::Shader gb::fragmentShader();
 sf::Shader gb::fragmentShader;
 

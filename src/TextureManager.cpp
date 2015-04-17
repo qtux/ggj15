@@ -2,17 +2,10 @@
 
 const sf::Texture& TextureManager::getTexture(std::string fileName, bool repeat, bool smooth)
 {
-	// weird bug fix (search for static initialisation of a map --> segfault) ...
-	if (_textures.empty())
-	{
-		_textures.clear();
-	}
-	// normal code starts here
 	Key key = Key(fileName, repeat, smooth);
 	auto search = _textures.find(key);
 	if (search == _textures.end())
 	{
-		_textures[Key("a",false, false)] = sf::Texture();
 		_textures.emplace(key, sf::Texture());
 		_textures[key].loadFromFile(fileName);
 		_textures[key].setRepeated(repeat);
