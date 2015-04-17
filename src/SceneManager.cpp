@@ -4,7 +4,7 @@
 
 SceneManager::SceneManager():
 	currentLevelNumber(-1),
-	restards(0),
+	restarts(0),
 	scene(new Level())
 {
 	//nextLevel();
@@ -55,7 +55,7 @@ void SceneManager::nextLevel(){
 	delete scene;
 	scene = new Level();
 	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
-	restards = 0;
+	restarts = 0;
 }
 
 void SceneManager::nextLevel(int number){
@@ -69,7 +69,7 @@ void SceneManager::restartLevel(){
 	delete scene;
 	scene = new Level();
 	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
-	restards++;
+	restarts++;
 }
 
 Level* SceneManager::getCurrentScene()

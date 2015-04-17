@@ -94,7 +94,7 @@ void Highscore::save()
 	hsLineStr << gb::sceneManager.getCurrentScene()->gui->coins << " ";
 	hsLineStr << gb::sceneManager.getCurrentScene()->gui->timeLeft() << " ";
 	hsLineStr << gb::sceneManager.getCurrentScene()->gui->timeoutSeconds << " ";
-	hsLineStr << gb::sceneManager.restards;
+	hsLineStr << gb::sceneManager.restarts;
 	
 	std::ofstream out(std::string(PATH) + "hs"+std::to_string(level)+".txt");
 	out << hsLineStr.str() << "\n";
