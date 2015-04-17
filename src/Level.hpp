@@ -26,9 +26,9 @@ struct TileFlightData
 	float scale;
 };
 
-class Level: Scene {
+class Level: public Scene {
 public:
-	Level();
+	Level(unsigned int number);
 	
 	GameObject* getTile(int x, int y);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
@@ -43,8 +43,6 @@ public:
 	GUI* gui;
 	TextBox* textBox;
 	const std::vector<GameObject*> & getGameBoard() const;
-/*private:
-	std::vector<GameObject*> gameBoard;*/
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
 	std::vector<Item*> items;
@@ -55,7 +53,6 @@ public:
 	void updateTileAnimation(sf::Time deltaT);
 	bool readyToLeave() const;
 	void finishLevel();
-	void loadScene(std::string name);
 private:
 	sf::Uint32 createColorKey(sf::Color color);
 	bool leaved;

@@ -5,7 +5,7 @@
 SceneManager::SceneManager():
 	currentLevelNumber(-1),
 	restarts(0),
-	scene(new Level())
+	scene(new Level(0))
 {
 	//nextLevel();
 }
@@ -53,22 +53,19 @@ void SceneManager::processEditMode()
 void SceneManager::nextLevel(){
 	currentLevelNumber++;
 	delete scene;
-	scene = new Level();
-	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	scene = new Level(currentLevelNumber);
 	restarts = 0;
 }
 
 void SceneManager::nextLevel(int number){
 	currentLevelNumber = number;
 	delete scene;
-	scene = new Level();
-	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	scene = new Level(currentLevelNumber);
 }
 
 void SceneManager::restartLevel(){
 	delete scene;
-	scene = new Level();
-	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
+	scene = new Level(currentLevelNumber);
 	restarts++;
 }
 

@@ -11,10 +11,11 @@
 #include "GUI.hpp"
 #include <math.h>
 #include "Player.hpp"
+#include "Menu.hpp"
 #include "Items/KeyItem.hpp"
 #include "TextFileParser.hpp"
 
-Level::Level():
+Level::Level(unsigned int number):
 	Scene(gb::screenWidth, gb::screenHeight)
 {
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
@@ -22,6 +23,93 @@ Level::Level():
 	leaved = false;
 	highscore  = 0;
 	fooexit = false;
+	
+	gb::showOutline = true;
+	// load and set timebar
+	gui = new GUI();
+	gui->setTimeout(20);
+	// load image bitmapt file
+	sf::Image levelImg;
+	
+	// try to load the file
+	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(number);
+	if (!levelImg.loadFromFile(fileName+".png")) {
+		gb::inMenu = true;
+		return;
+	}
+	
+	// create a tileset
+	std::map<sf::Uint32, bool> walkableTileState;
+	walkableTileState[0x000100ff] = false;	// wall
+	walkableTileState[0x5f5f5fff] = true;	// wet stone
+	walkableTileState[0x9b6d27ff] = true;	// dirt
+	walkableTileState[0x969896ff] = true;	// stone
+	walkableTileState[0x11941bff] = true;	// grass
+	walkableTileState[0x003E04ff] = false;	// trees
+	walkableTileState[0x0000abff] = false;	// water
+	
+	std::map<sf::Uint32, unsigned int> colorToInt;
+	colorToInt[0x000100ff] = 6;	// wall
+	colorToInt[0x5f5f5fff] = 4;	// wet stone
+	colorToInt[0x9b6d27ff] = 3;	// dirt
+	colorToInt[0x969896ff] = 2;	// stone
+	colorToInt[0x11941bff] = 1;	// grass
+	colorToInt[0x003E04ff] = 5;	// trees
+	colorToInt[0x0000abff] = 0;	// water
+	
+	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
+	// TODO determine the following two variables in another way
+	const sf::Vector2u tileSize(32, 32);
+	const sf::Vector2f scale(0.5f, 0.5f);
+	
+	std::vector<unsigned int> mapping;
+	for (int x = 0; x < gridSize.y; ++x)
+	{
+		for (int y = 0; y < gridSize.x; ++y)
+		{
+			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
+			mapping.push_back(colorToInt[colorKey]);
+		}
+	}
+	
+	const sf::Texture& baseTileSet = gb::textureManager.getTexture(std::string(PATH) + "img/tileset.png", false);
+	sf::Vector2f offset(-6, -6);
+	const sf::Texture& tileSet = gb::textureManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
+	
+	// create sprites for each tile
+	for (int x = 0; x < gridSize.x; ++x)
+	{
+		for (int y = 0; y < gridSize.y; ++y)
+		{
+			// create tile sprite
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(tileSet);
+			sprite->setTextureRect(sf::IntRect(x * tileSize.x, y * tileSize.y, tileSize.x, tileSize.y));
+			sprite->setScale(scale);
+			sprite->setPosition(x * tileSize.x * scale.x, y * tileSize.y * scale.y);
+			
+			// create the tile and add it to the scene
+			Tile* tmpTile = new Tile();
+			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(x, y));
+			tmpTile->walkable = walkableTileState[colorKey];
+			tmpTile->mySprite = sprite;
+			gameBoard[x + y * gridSize.x] = tmpTile;
+		}
+	}
+	
+	player = new Player();
+	sf::Sprite *playerSprite = new sf::Sprite();
+	sf::Sprite *doggieSprite = new sf::Sprite();
+	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	playerSprite->setPosition(90,90);
+	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	doggieSprite->setPosition(90,90);
+	player->mySprite = playerSprite;
+	player->doggieSprite = doggieSprite;
+	
+	// read text file
+	TextFileParser::loadTextFile(this, fileName + ".txt");
+	textBox->triggerText("start");
 }
 
 GameObject* Level::getTile(int x, int y)
@@ -254,9 +342,20 @@ void Level::leave()
 
 Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 {
+	// preprocessing key input (to enhance code readability)
+	sf::Keyboard::Key keyPressed = sf::Keyboard::Unknown;
+	if (event.type == sf::Event::KeyPressed)
+	{
+		keyPressed = event.key.code;
+	}
+	
+	// process events
+	if (keyPressed == sf::Keyboard::Escape)
+	{
+		return new Menu(Menu::Command::LEVEL);
+	}
 	return this;
 }
-
 sf::Uint32 Level::createColorKey(sf::Color color) {
 	
 	sf::Uint32 colorKey = 0;
@@ -267,93 +366,4 @@ sf::Uint32 Level::createColorKey(sf::Color color) {
 	colorKey |= color.a << 0*8;
 	
 	return colorKey;
-}
-
-void Level::loadScene(std::string fileName)
-{
-	gb::showOutline = true;
-	// load and set timebar
-	gui = new GUI();
-	gui->setTimeout(20);
-	// load image bitmapt file
-	sf::Image levelImg;
-	
-	// try to load the file
-	if (!levelImg.loadFromFile(fileName+".png")) {
-		gb::inMenu = true;
-		return;
-	}
-	
-	// create a tileset
-	std::map<sf::Uint32, bool> walkableTileState;
-	walkableTileState[0x000100ff] = false;	// wall
-	walkableTileState[0x5f5f5fff] = true;	// wet stone
-	walkableTileState[0x9b6d27ff] = true;	// dirt
-	walkableTileState[0x969896ff] = true;	// stone
-	walkableTileState[0x11941bff] = true;	// grass
-	walkableTileState[0x003E04ff] = false;	// trees
-	walkableTileState[0x0000abff] = false;	// water
-	
-	std::map<sf::Uint32, unsigned int> colorToInt;
-	colorToInt[0x000100ff] = 6;	// wall
-	colorToInt[0x5f5f5fff] = 4;	// wet stone
-	colorToInt[0x9b6d27ff] = 3;	// dirt
-	colorToInt[0x969896ff] = 2;	// stone
-	colorToInt[0x11941bff] = 1;	// grass
-	colorToInt[0x003E04ff] = 5;	// trees
-	colorToInt[0x0000abff] = 0;	// water
-	
-	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
-	// TODO determine the following two variables in another way
-	const sf::Vector2u tileSize(32, 32);
-	const sf::Vector2f scale(0.5f, 0.5f);
-	
-	std::vector<unsigned int> mapping;
-	for (int x = 0; x < gridSize.y; ++x)
-	{
-		for (int y = 0; y < gridSize.x; ++y)
-		{
-			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
-			mapping.push_back(colorToInt[colorKey]);
-		}
-	}
-	
-	const sf::Texture& baseTileSet = gb::textureManager.getTexture(std::string(PATH) + "img/tileset.png", false);
-	sf::Vector2f offset(-6, -6);
-	const sf::Texture& tileSet = gb::textureManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
-	
-	// create sprites for each tile
-	for (int x = 0; x < gridSize.x; ++x)
-	{
-		for (int y = 0; y < gridSize.y; ++y)
-		{
-			// create tile sprite
-			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(tileSet);
-			sprite->setTextureRect(sf::IntRect(x * tileSize.x, y * tileSize.y, tileSize.x, tileSize.y));
-			sprite->setScale(scale);
-			sprite->setPosition(x * tileSize.x * scale.x, y * tileSize.y * scale.y);
-			
-			// create the tile and add it to the scene
-			Tile* tmpTile = new Tile();
-			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(x, y));
-			tmpTile->walkable = walkableTileState[colorKey];
-			tmpTile->mySprite = sprite;
-			gameBoard[x + y * gridSize.x] = tmpTile;
-		}
-	}
-	
-	player = new Player();
-	sf::Sprite *playerSprite = new sf::Sprite();
-	sf::Sprite *doggieSprite = new sf::Sprite();
-	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	playerSprite->setPosition(90,90);
-	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	doggieSprite->setPosition(90,90);
-	player->mySprite = playerSprite;
-	player->doggieSprite = doggieSprite;
-	
-	// read text file
-	TextFileParser::loadTextFile(this, fileName + ".txt");
-	textBox->triggerText("start");
 }
