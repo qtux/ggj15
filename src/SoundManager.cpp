@@ -1,5 +1,4 @@
 #include "SoundManager.hpp"
-#include <iostream>
 
 SoundManager::SoundManager(float soundVolume, float musicVolume):
 	bkgMusic(new sf::Music()),

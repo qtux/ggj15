@@ -7,7 +7,7 @@ SceneManager::SceneManager():
 	restards(0),
 	scene(new Level())
 {
-	nextLevel();
+	//nextLevel();
 }
 
 void SceneManager::update(sf::Time deltaT, sf::RenderWindow& window) {
@@ -22,7 +22,7 @@ void SceneManager::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader
 
 void SceneManager::processEditMode()
 {
-	for (int key=4;key<13;key++)
+	/*for (int key=4;key<13;key++)
 	{
 		if (gb::input[key] == true)
 		{
@@ -47,12 +47,12 @@ void SceneManager::processEditMode()
 			newTile->mySprite->setTextureRect(sf::IntRect(posInTexture.x * gb::pixelSizeX, posInTexture.y * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
 			scene->setTile(newTile,tmpPos.x, tmpPos.y);
 		}
-	}
+	}*/
 }
 
 void SceneManager::nextLevel(){
 	currentLevelNumber++;
-	delete scene;
+	//delete scene;
 	scene = new Level();
 	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 	restards = 0;
@@ -60,13 +60,13 @@ void SceneManager::nextLevel(){
 
 void SceneManager::nextLevel(int number){
 	currentLevelNumber = number;
-	delete scene;
+	//delete scene;
 	scene = new Level();
 	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 }
 
 void SceneManager::restartLevel(){
-	delete scene;
+	//delete scene;
 	scene = new Level();
 	scene->loadScene(std::string(PATH) + "levels/level"+std::to_string(currentLevelNumber));
 	restards++;
