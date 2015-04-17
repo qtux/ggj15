@@ -355,14 +355,14 @@ void SceneManager::showScene(std::string sceneName) {
 	// load scene if not existent and set currentScene
 }
 
-void SceneManager::update(sf::Time deltaT) {
+void SceneManager::update(sf::Time deltaT, sf::RenderWindow& window) {
 	//processEditMode();	// only for edit mode
-	scene.update(deltaT);
+	scene->update(deltaT, window);
 }
 
 void SceneManager::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader) {
 	//processEditMode();	// only for edit mode
-	scene.draw(renderTarget, renderShader);
+	scene->draw(renderTarget);
 }
 
 sf::Uint32 SceneManager::createColorKey(sf::Color color) {
@@ -379,13 +379,13 @@ sf::Uint32 SceneManager::createColorKey(sf::Color color) {
 
 void SceneManager::loadScene(std::string fileName)
 {
-	scene = Level();
+	scene = new Level();
 	gb::showOutline = true;
 	std::cout << fileName<< std::endl;
 	// load and set timebar
 	GUI* gui = new GUI();
 	gui->setTimeout(20);
-	scene.setGUI(gui);
+	scene->setGUI(gui);
 	// load image bitmapt file
 	sf::Image levelImg;
 	
@@ -419,23 +419,23 @@ void SceneManager::loadScene(std::string fileName)
 			Tile* tmpTile = new Tile();
 			tmpTile->walkable = walkableTileState[colorKey];
 			tmpTile->mySprite = sprite;
-			scene.setTile(tmpTile, x, y);
+			scene->setTile(tmpTile, x, y);
 		}
 	}
-	scene.player = new Player();
+	scene->player = new Player();
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
 	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
 	playerSprite->setPosition(90,90);
 	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
 	doggieSprite->setPosition(90,90);
-	scene.player->mySprite = playerSprite;
+	scene->player->mySprite = playerSprite;
 
-	scene.player->doggieSprite = doggieSprite;
+	scene->player->doggieSprite = doggieSprite;
 
 	// read text file
 	TextFileParser::loadTextFile(scene, fileName + ".txt");
-	scene.textBox->triggerText("start");
+	scene->textBox->triggerText("start");
 }
 
 void SceneManager::processEditMode()
@@ -456,14 +456,14 @@ void SceneManager::processEditMode()
 			tmpPos.x = (int)(localPosition.x);
 			tmpPos.y = (int)(localPosition.y);
 
-			GameObject* tmpTile = scene.getTile(tmpPos.x, tmpPos.y);
+			GameObject* tmpTile = scene->getTile(tmpPos.x, tmpPos.y);
 			Tile* newTile = new Tile();
 
 			newTile->mySprite = tmpTile->mySprite;
 
 			sf::Vector2i posInTexture = sf::Vector2i(0, 0); // grass
 			newTile->mySprite->setTextureRect(sf::IntRect(posInTexture.x * gb::pixelSizeX, posInTexture.y * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
-			scene.setTile(newTile,tmpPos.x, tmpPos.y);
+			scene->setTile(newTile,tmpPos.x, tmpPos.y);
 		}
 	}
 }
@@ -484,7 +484,7 @@ void SceneManager::restartLevel(){
 	restards++;
 }
 
-Level& SceneManager::getCurrentScene()
+Level* SceneManager::getCurrentScene()
 {
 	return scene;
 }

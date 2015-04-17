@@ -9,7 +9,7 @@
 class SceneManager {
 private:
 	// SceneLoader loader;
-	Level scene;
+	Level* scene;
 	std::map<sf::Uint32, std::vector<sf::Vector2i>*> colorToTilePositionMap;
 	std::map<sf::Uint32, bool> walkableTileState;
 	
@@ -20,7 +20,7 @@ private:
 public:
 	SceneManager();
 	void showScene(std::string sceneName);
-	void update(sf::Time deltaT);
+	void update(sf::Time deltaT, sf::RenderWindow& window);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	void loadScene(std::string name);
 	void processEditMode();
@@ -31,5 +31,5 @@ public:
 	int restards;
 	sf::Vector2i getTilePosition(sf::Uint32 color, int x, int y, sf::Image levelImg);
 	
-	Level& getCurrentScene();
+	Level* getCurrentScene();
 };

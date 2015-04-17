@@ -12,9 +12,9 @@
 #include "GameObject.hpp"
 #include "GUI.hpp"
 #include "Item.hpp"
-#include "GameObject.hpp"
 #include "TextBox.hpp"
 #include "Highscore.hpp"
+#include "Scene.hpp"
 
 struct TileFlightData
 {
@@ -26,7 +26,7 @@ struct TileFlightData
 	float scale;
 };
 
-class Level {
+class Level: Scene {
 public:
 	Level();
 
@@ -34,8 +34,11 @@ public:
 	void setTile(GameObject* obj, int x, int y);
 	void setGUI(GUI* obj);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
-	void update(sf::Time deltaT);
-	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
+	
+	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
+	void update(sf::Time deltaT, sf::RenderWindow& window) override final;
+	void draw(sf::RenderTarget& target) override final;
+	
 	void leave();
 	// hack hier, ne doch nicht xD
 	GameObject * player;

@@ -14,5 +14,5 @@ class TextFileParser {
 public:
 	TextFileParser();
 	virtual ~TextFileParser();
-	static void loadTextFile(Level &level, std::string fileName);
+	static void loadTextFile(Level* level, std::string fileName);
 };

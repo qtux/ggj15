@@ -13,12 +13,12 @@ PortalItem::~PortalItem(){
 
 bool PortalItem::applyEffect()
 {
-	if (gb::sceneManager.getCurrentScene().readyToLeave() && !neverAgain) 
+	if (gb::sceneManager.getCurrentScene()->readyToLeave() && !neverAgain) 
 	{
 		gb::soundManager.playSound("sound/won.ogg");
 		neverAgain = true;
 	}
-	gb::sceneManager.getCurrentScene().leave();
+	gb::sceneManager.getCurrentScene()->leave();
 	return true;
 };
 

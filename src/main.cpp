@@ -200,7 +200,7 @@ int main() {
 //				gb::window.draw(tmpSprite);
 //				img.saveToFile("test.png");
 
-				gb::sceneManager.update(deltaT);
+				gb::sceneManager.update(deltaT, gb::window);
 
 			}
 		}

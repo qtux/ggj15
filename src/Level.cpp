@@ -13,7 +13,9 @@
 #include "global.hpp"
 #include "Items/KeyItem.hpp"
 
-Level::Level() {
+Level::Level():
+	Scene(gb::screenWidth, gb::screenHeight)
+{
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
@@ -138,7 +140,7 @@ void Level::updateTileAnimation(sf::Time deltaT)
 		}
 }
 
-void Level::update(sf::Time deltaT)
+void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
 //	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 //	{
@@ -214,16 +216,16 @@ void Level::update(sf::Time deltaT)
 	}
 }
 
-void Level::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
+void Level::draw(sf::RenderTarget &renderTarget)
 {
 	for(auto& obj: gameBoard) {
-		obj->draw(renderTarget, renderShader);
+		obj->draw(renderTarget, &shader);
 	}
 
 	for(auto& obj: items) {
-		obj->draw(renderTarget, renderShader);
+		obj->draw(renderTarget, &shader);
 	}
-	player->draw(renderTarget, renderShader);
+	player->draw(renderTarget, &shader);
 }
 
 void Level::finishLevel()
@@ -258,4 +260,9 @@ void Level::leave()
 	{
 		finishLevel();
 	}
+}
+
+Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
+{
+	return this;
 }

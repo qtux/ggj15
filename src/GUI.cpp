@@ -47,7 +47,7 @@ float GUI::timeLeft()
 }
 
 void GUI::update (sf::Time deltaTime) {
-	if (gb::sceneManager.getCurrentScene().textBox->enabled()){
+	if (gb::sceneManager.getCurrentScene()->textBox->enabled()){
 		if (!lastEnable)
 		{
 			pauseOffset += timeoutClock.getElapsedTime().asSeconds();
@@ -70,10 +70,10 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		progress = 0;
 		if (!loosed){
-			gb::sceneManager.getCurrentScene().textBox->triggerText("loose");
+			gb::sceneManager.getCurrentScene()->textBox->triggerText("loose");
 		}
 		loosed = true;
-		if (!gb::sceneManager.getCurrentScene().textBox->enabled())
+		if (!gb::sceneManager.getCurrentScene()->textBox->enabled())
 		{
 			gb::sceneManager.restartLevel();
 		}
@@ -82,7 +82,7 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		if (!smallTime)
 		{
-			gb::sceneManager.getCurrentScene().textBox->triggerText("smalltime");
+			gb::sceneManager.getCurrentScene()->textBox->triggerText("smalltime");
 			gb::soundManager.playSound("sound/timeShort.ogg");
 			
 		}

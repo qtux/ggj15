@@ -34,7 +34,7 @@ void Player::update (sf::Time deltaTime) {
 	int width = getWidth();
 	int height = getHeight();
 	int dir = -1;
-	if (!gb::sceneManager.getCurrentScene().textBox->enabled()){
+	if (!gb::sceneManager.getCurrentScene()->textBox->enabled()){
 		if (gb::input[0]) { tmpPos.x -= 120 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
 		if (gb::input[1]) { tmpPos.x += 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
 		if (gb::input[2]) { tmpPos.y -= 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
@@ -64,7 +64,7 @@ void Player::update (sf::Time deltaTime) {
 	bool collides = false;
 	//check for collisions:
 	int chkColl[] = {0, 0};
-	for (std::vector<GameObject*>::const_iterator tileIt = gb::sceneManager.getCurrentScene().gameBoard.begin(); tileIt != gb::sceneManager.getCurrentScene().gameBoard.end(); tileIt++)
+	for (std::vector<GameObject*>::const_iterator tileIt = gb::sceneManager.getCurrentScene()->gameBoard.begin(); tileIt != gb::sceneManager.getCurrentScene()->gameBoard.end(); tileIt++)
 	{
 		sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
 		sf::Vector2f distVecOld = ((*tileIt)->getPosition() - oldPos); // check also neighbours of old position in case screen was left on one side
@@ -96,7 +96,7 @@ void Player::update (sf::Time deltaTime) {
 	{
 		tmpPos.y = oldPos.y;
 	}
-	for (std::vector<Item*>::iterator itIt = gb::sceneManager.getCurrentScene().items.begin() ; itIt != gb::sceneManager.getCurrentScene().items.end() ; itIt++)
+	for (std::vector<Item*>::iterator itIt = gb::sceneManager.getCurrentScene()->items.begin() ; itIt != gb::sceneManager.getCurrentScene()->items.end() ; itIt++)
 	{
 		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
 		{

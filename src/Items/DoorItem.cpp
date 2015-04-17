@@ -54,7 +54,7 @@ void DoorItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 }
 
 void DoorItem::update(sf::Time deltaTime) {
-	if (gb::sceneManager.getCurrentScene().readyToLeave()) blocksPath = false; //TODO: temporäre Bedingung zum Testen, ersetzen!!
+	if (gb::sceneManager.getCurrentScene()->readyToLeave()) blocksPath = false; //TODO: temporäre Bedingung zum Testen, ersetzen!!
 
 	if (mySprite != 0)
 	{
