@@ -14,8 +14,6 @@
 #include "Items/KeyItem.hpp"
 #include "TextFileParser.hpp"
 
-#include <iostream>
-
 Level::Level():
 	Scene(gb::screenWidth, gb::screenHeight)
 {
@@ -317,15 +315,12 @@ void Level::loadScene(std::string fileName)
 		{
 			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
 			mapping.push_back(colorToInt[colorKey]);
-			//std::cout << x << " " << y << ": " << colorToInt[colorKey] << std::endl;
-			//std::cout << mapping[x + y *gridSize.x] << " ";
-			std::cout << colorToInt[colorKey] << " ";
 		}
-		std::cout << std::endl;
 	}
 	
 	const sf::Texture& baseTileSet = gb::textureManager.getTexture(std::string(PATH) + "img/tileset.png", false);
-	const sf::Texture& tileSet = gb::textureManager.getTileSet(baseTileSet, mapping, tileSize, gridSize);
+	sf::Vector2f offset(-6, -6);
+	const sf::Texture& tileSet = gb::textureManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
 	
 	// create sprites for each tile
 	for (int x = 0; x < gridSize.x; ++x)
