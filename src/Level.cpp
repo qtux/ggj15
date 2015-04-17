@@ -10,8 +10,10 @@
 #include "global.hpp"
 #include "GUI.hpp"
 #include <math.h>
-#include "global.hpp"
+#include "Player.hpp"
 #include "Items/KeyItem.hpp"
+#include "TextFileParser.hpp"
+
 
 Level::Level():
 	Scene(gb::screenWidth, gb::screenHeight)
@@ -21,6 +23,65 @@ Level::Level():
 	leaved = false;
 	highscore  = 0;
 	fooexit = false;
+	
+	// moved
+	std::vector<sf::Vector2i> *tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(0,0));
+	tmpVector->push_back(sf::Vector2i(1,0));
+	tmpVector->push_back(sf::Vector2i(2,0));
+	tmpVector->push_back(sf::Vector2i(3,0));
+	tmpVector->push_back(sf::Vector2i(4,0));
+	colorToTilePositionMap[0x11941bff] = tmpVector; // grass
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(0,3));
+	tmpVector->push_back(sf::Vector2i(1,3));
+	tmpVector->push_back(sf::Vector2i(2,3));
+	tmpVector->push_back(sf::Vector2i(3,3));
+	tmpVector->push_back(sf::Vector2i(4,3));
+	tmpVector->push_back(sf::Vector2i(5,3));
+	tmpVector->push_back(sf::Vector2i(6,3));
+	tmpVector->push_back(sf::Vector2i(7,3));
+	tmpVector->push_back(sf::Vector2i(8,3));
+	tmpVector->push_back(sf::Vector2i(9,3));
+	colorToTilePositionMap[0x969896ff] = tmpVector; // stone
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(0,1));
+	tmpVector->push_back(sf::Vector2i(1,1));
+	tmpVector->push_back(sf::Vector2i(2,1));
+	tmpVector->push_back(sf::Vector2i(3,1));
+	tmpVector->push_back(sf::Vector2i(4,1));
+	colorToTilePositionMap[0x9b6d27ff] = tmpVector; // dirt
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(0,2));
+	tmpVector->push_back(sf::Vector2i(1,2));
+	tmpVector->push_back(sf::Vector2i(2,2));
+	tmpVector->push_back(sf::Vector2i(3,2));
+	tmpVector->push_back(sf::Vector2i(4,2));
+	colorToTilePositionMap[0x5f5f5fff] = tmpVector; // wet stone
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(2,9));
+	colorToTilePositionMap[0x000100ff] = tmpVector; // wall
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(5,2));
+	tmpVector->push_back(sf::Vector2i(6,2));
+	tmpVector->push_back(sf::Vector2i(7,2));
+	tmpVector->push_back(sf::Vector2i(8,2));
+	tmpVector->push_back(sf::Vector2i(9,2));
+	colorToTilePositionMap[0x0000abff] = tmpVector; // water
+	tmpVector = new std::vector<sf::Vector2i>();
+	tmpVector->push_back(sf::Vector2i(10,0));
+	tmpVector->push_back(sf::Vector2i(11,0));
+	tmpVector->push_back(sf::Vector2i(12,0));
+	tmpVector->push_back(sf::Vector2i(13,0));
+	tmpVector->push_back(sf::Vector2i(14,0));
+	colorToTilePositionMap[0x003E04ff] = tmpVector; // trees
+
+	walkableTileState[0x000100ff] = false;
+	walkableTileState[0x5f5f5fff] = true;
+	walkableTileState[0x9b6d27ff] = true;
+	walkableTileState[0x969896ff] = true;
+	walkableTileState[0x11941bff] = true;
+	walkableTileState[0x003E04ff] = false;
 }
 
 GameObject* Level::getTile(int x, int y)
@@ -265,4 +326,336 @@ void Level::leave()
 Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 {
 	return this;
+}
+
+// moved
+std::vector<sf::Vector2i>* Level::checkNeighbours(sf::Uint32 color, int x, int y, sf::Image levelImg)
+{
+	std::vector<sf::Vector2i> *tmpVector = new std::vector<sf::Vector2i>();
+	int h = 24;
+	int w = 30;
+	if (color == 0x11941bff) // grass
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 3; ++j)
+			{
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
+					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
+					sf::Uint32 colorKey = createColorKey(tmpColor);
+					// if a non-green border piece is found: choose a mix-tile
+					if (colorKey != 0x11941bff)
+					{
+						tmpVector->push_back(sf::Vector2i(5,0));
+						tmpVector->push_back(sf::Vector2i(6,0));
+						tmpVector->push_back(sf::Vector2i(7,0));
+						tmpVector->push_back(sf::Vector2i(8,0));
+						tmpVector->push_back(sf::Vector2i(9,0));
+						tmpVector->push_back(sf::Vector2i(4,5));
+						goto stopGreen;
+					}
+				}
+			}
+		}
+		stopGreen: ;
+	}
+	// this one my be omitted because it does not have much of an effect
+	if (color == 0x969896ff) // stone
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 3; ++j)
+			{
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
+					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
+					sf::Uint32 colorKey = createColorKey(tmpColor);
+					// if a green or brown border next to piece is found: choose a border tile
+					if (colorKey == 0x11941bff)
+					{
+						tmpVector->push_back(sf::Vector2i(3 + i, 4 + j));
+					}
+					if (colorKey == 0x9b6d27ff)
+					{
+						tmpVector->push_back(sf::Vector2i(6 + i, 4 + j));
+					}
+				}
+			}
+		}
+	}
+	if (color == 0x9b6d27ff) // dirt
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 3; ++j)
+			{
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
+					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
+					sf::Uint32 colorKey = createColorKey(tmpColor);
+					// if a non-brown border piece is found: choose a mix-tile
+					if (colorKey != 0x9b6d27ff)
+					{
+						tmpVector->push_back(sf::Vector2i(5,1));
+						tmpVector->push_back(sf::Vector2i(6,1));
+						tmpVector->push_back(sf::Vector2i(7,1));
+						tmpVector->push_back(sf::Vector2i(8,1));
+						tmpVector->push_back(sf::Vector2i(9,1));
+						tmpVector->push_back(sf::Vector2i(7,5));
+						goto stopBrown;
+					}
+				}
+			}
+		}
+		stopBrown: ;
+	}
+	if (color == 0x5f5f5fff) // wet stone
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 3; ++j)
+			{
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
+					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
+					sf::Uint32 colorKey = createColorKey(tmpColor);
+					// if a dark grey border near piece is found: choose a border tile
+					if (colorKey == 0x969896ff)
+					{
+						tmpVector->push_back(sf::Vector2i(i, 4 + j));
+					}
+				}
+			}
+		}
+	}
+	if (color == 0x000100ff) // wall
+	{
+		// TODO tempVector Zuweisungen auslagern
+		
+		// gameboard borders
+		if (x == 0)
+		{
+			sf::Color tmpColor = levelImg.getPixel(x + 1, y);
+			sf::Uint32 colorKey = createColorKey(tmpColor);
+			if (colorKey != 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(0,9));
+				tmpVector->push_back(sf::Vector2i(0,10));
+				tmpVector->push_back(sf::Vector2i(0,11));
+				goto doneSorting;
+			}
+		}
+		
+		if (x == w - 1)
+		{
+			sf::Color tmpColor = levelImg.getPixel(x - 1, y);
+			sf::Uint32 colorKey = createColorKey(tmpColor);
+			if (colorKey != 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(0,9));
+				tmpVector->push_back(sf::Vector2i(0,10));
+				tmpVector->push_back(sf::Vector2i(0,11));
+				goto doneSorting;
+			}
+		}
+		if (y == 0)
+		{
+			sf::Color tmpColor = levelImg.getPixel(x, y + 1);
+			sf::Uint32 colorKey = createColorKey(tmpColor);
+			if (colorKey != 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(1,7));
+				tmpVector->push_back(sf::Vector2i(2,7));
+				tmpVector->push_back(sf::Vector2i(3,7));
+				goto doneSorting;
+			}
+		}
+		
+		if (y == h - 1)
+		{
+			sf::Color tmpColor = levelImg.getPixel(x, y - 1);
+			sf::Uint32 colorKey = createColorKey(tmpColor);
+			if (colorKey != 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(1,7));
+				tmpVector->push_back(sf::Vector2i(2,7));
+				tmpVector->push_back(sf::Vector2i(3,7));
+				goto doneSorting;
+			}
+		}
+		
+		
+		// gameboard mid slender walls
+		if (x > 0 && x < w - 1)
+		{
+			sf::Color tmpColor1 = levelImg.getPixel(x - 1, y);
+			sf::Uint32 colorKey1 = createColorKey(tmpColor1);
+			sf::Color tmpColor2 = levelImg.getPixel(x + 1, y);
+			sf::Uint32 colorKey2 = createColorKey(tmpColor2);
+		
+			// if no wall left and right
+			if (colorKey1 != 0x000100ff && colorKey2 != 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(0,9));
+				tmpVector->push_back(sf::Vector2i(0,10));
+				tmpVector->push_back(sf::Vector2i(0,11));
+				goto doneSorting;
+			}
+		}
+		
+		if (y > 0 && y < h - 1)
+		{
+			sf::Color tmpColor1 = levelImg.getPixel(x, y - 1);
+			sf::Uint32 colorKey1 = createColorKey(tmpColor1);
+			sf::Color tmpColor2 = levelImg.getPixel(x, y + 1);
+			sf::Uint32 colorKey2 = createColorKey(tmpColor2);
+		
+			// if no wall top and down
+			if (colorKey1 != 0x000100ff && colorKey2 != 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(1,7));
+				tmpVector->push_back(sf::Vector2i(2,7));
+				tmpVector->push_back(sf::Vector2i(3,7));
+				goto doneSorting;
+			}
+		}
+		
+		/*if (x > 0 && x < w - 1 && y > 0 && y < h - 1)
+		  {
+			sf::Color tmpColor1 = levelImg.getPixel(x, y - 1);
+			sf::Uint32 colorKey1 = createColorKey(tmpColor1);
+			sf::Color tmpColor2 = levelImg.getPixel(x, y + 1);
+			sf::Uint32 colorKey2 = createColorKey(tmpColor2);
+			sf::Color tmpColor3 = levelImg.getPixel(x + 1, y);
+			sf::Uint32 colorKey3 = createColorKey(tmpColor3);
+			sf::Color tmpColor4 = levelImg.getPixel(x - 1, y);
+			sf::Uint32 colorKey4 = createColorKey(tmpColor4);
+			
+			// if no wall top and down
+			if (colorKey1 == 0x000100ff && colorKey2 == 0x000100ff && colorKey3 == 0x000100ff && colorKey4 == 0x000100ff)
+			{
+				tmpVector->push_back(sf::Vector2i(2,11));
+			}
+		}*/
+				
+		for (int i = 0; i < 3; ++i)
+		{
+			for (int j = 0; j < 3; ++j)
+			{
+				if (x > 0 && y > 0 && x < w - 1 && y < h - 1) {
+					sf::Color tmpColor = levelImg.getPixel((x-1) + i, (y-1) + j);
+					sf::Uint32 colorKey = createColorKey(tmpColor);
+					// check wall mass nearby
+					if (colorKey != 0x000100ff)
+					{
+						tmpVector->push_back(sf::Vector2i(1 + i, 8 + j));
+						goto doneSorting;
+					}
+				}
+			}
+		}
+		// if all is a wall
+		tmpVector->push_back(sf::Vector2i(2, 9));
+	}
+	
+	doneSorting:
+	
+	return tmpVector;
+}
+
+sf::Vector2i Level::getTilePosition(sf::Uint32 color, int x, int y, sf::Image levelImg)
+{
+	std::map<sf::Uint32, std::vector<sf::Vector2i>*>::const_iterator conIt = colorToTilePositionMap.find(color);
+	if (conIt != colorToTilePositionMap.end())
+	{
+		
+		std::vector<sf::Vector2i> *tmpVec = checkNeighbours(color, x, y, levelImg);
+		
+		if (tmpVec->empty())
+		{
+			tmpVec = colorToTilePositionMap[color];
+		}
+
+		int numTiles = tmpVec->size();
+		float rnd = 1.f * rand() / RAND_MAX;
+
+		for (int i=0;i<numTiles;i++)
+		{
+			if (rnd < 1.f*i/numTiles)
+			{
+				return (*tmpVec)[i];
+			}
+		}
+
+		return (*tmpVec)[numTiles-1];
+	}
+	return sf::Vector2i(0, 13);
+}
+
+sf::Uint32 Level::createColorKey(sf::Color color) {
+	
+	sf::Uint32 colorKey = 0;
+	
+	colorKey |= color.r << 3*8;
+	colorKey |= color.g << 2*8;
+	colorKey |= color.b << 1*8;
+	colorKey |= color.a << 0*8;
+	
+	return colorKey;
+}
+
+void Level::loadScene(std::string fileName)
+{
+	gb::showOutline = true;
+	// load and set timebar
+	GUI* gui = new GUI();
+	gui->setTimeout(20);
+	setGUI(gui);
+	// load image bitmapt file
+	sf::Image levelImg;
+	
+	// try to load the file
+	if (!levelImg.loadFromFile(fileName+".png")) {
+		gb::inMenu = true;
+		return;
+	}
+	
+	// create sprites for each tile
+	for (int x = 0; x < gb::sizeX * gb::largeTileSizeX; ++x)
+	{
+		for (int y = 0; y < gb::sizeY * gb::largeTileSizeY; ++y)
+		{
+			// set tile sprite texture
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/TileMap.png", false));
+			// get level code (from bitmap)
+			sf::Color tmpColor = levelImg.getPixel(x, y);
+			
+			// resolve the correct tile based on the color code (and set correct texture rect)
+			sf::Vector2i tmpPos;
+			sf::Uint32 colorKey = createColorKey(tmpColor);
+			tmpPos = getTilePosition(colorKey, x, y, levelImg);
+
+//			tmpPos = sf::Vector2i(0, 3);
+			sprite->setTextureRect(sf::IntRect(tmpPos.x * gb::pixelSizeX, tmpPos.y * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
+			// set position of the sprite inside the map
+			sprite->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			// create the tile and add it to the scene
+			Tile* tmpTile = new Tile();
+			tmpTile->walkable = walkableTileState[colorKey];
+			tmpTile->mySprite = sprite;
+			setTile(tmpTile, x, y);
+		}
+	}
+	player = new Player();
+	sf::Sprite *playerSprite = new sf::Sprite();
+	sf::Sprite *doggieSprite = new sf::Sprite();
+	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	playerSprite->setPosition(90,90);
+	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	doggieSprite->setPosition(90,90);
+	player->mySprite = playerSprite;
+
+	player->doggieSprite = doggieSprite;
+
+	// read text file
+	TextFileParser::loadTextFile(this, fileName + ".txt");
+	textBox->triggerText("start");
 }

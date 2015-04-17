@@ -29,7 +29,7 @@ struct TileFlightData
 class Level: Scene {
 public:
 	Level();
-
+	
 	GameObject* getTile(int x, int y);
 	void setTile(GameObject* obj, int x, int y);
 	void setGUI(GUI* obj);
@@ -57,7 +57,14 @@ public:
 	void updateTileAnimation(sf::Time deltaT);
 	bool readyToLeave() const;
 	void finishLevel();
+	void loadScene(std::string name);
 private:
+	std::map<sf::Uint32, std::vector<sf::Vector2i>*> colorToTilePositionMap;
+	std::map<sf::Uint32, bool> walkableTileState;
+	sf::Vector2i getTilePosition(sf::Uint32 color, int x, int y, sf::Image levelImg);
+	sf::Uint32 createColorKey(sf::Color color);
+	std::vector<sf::Vector2i>* checkNeighbours(sf::Uint32 color, int x, int y, sf::Image levelImg);
+	
 	bool leaved;
 	Highscore *highscore;
 	bool fooexit;
