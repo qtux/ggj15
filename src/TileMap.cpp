@@ -1,16 +1,13 @@
 #include "TileMap.hpp"
-
 #include "global.hpp"
 
-TileMap::TileMap(sf::Vector2u tileSize, sf::Vector2u gridSize, std::vector<bool> solid):
+TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Texture& texture, std::vector<bool> solid):
 	tileSize(tileSize),
 	gridSize(gridSize),
-	_texture(gb::textureManager.getTexture("./img/template.png", false)),
+	_vertices(sf::VertexArray(sf::Quads, gridSize.x * gridSize.y * 4)),
+	_texture(texture),
 	_solid(std::move(solid))
 {
-	// requires a gridSize.x * tileSize.x times gridSize.y * tileSize.y texture
-	_vertices.setPrimitiveType(sf::Quads);
-	_vertices.resize(gridSize.x * gridSize.y * 4);
 	for (auto i = 0; i < gridSize.x; ++i)
 	{
 		for (auto j = 0; j < gridSize.y; ++j)
@@ -92,7 +89,17 @@ void TileMap::switchTile(const sf::Vector2u& first, const sf::Vector2u& second, 
 	secondQuad[3].position = outside;
 }
 
-
+void TileMap::switchRange(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Vector2u& size, const sf::Time& duration)
+{
+	for (auto i = 0;  i < size.x; ++i)
+	{
+		for (auto j = 0; j < size.y; ++j)
+		{
+			sf::Vector2u offset(i, j);
+			switchTile(first + offset, second + offset, duration);
+		}
+	}
+}
 
 void TileMap::update(const sf::Time& deltaT)
 {

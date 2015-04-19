@@ -7,18 +7,17 @@
 class TileMap
 {
 public:
-	const sf::Vector2u tileSize;			// pixels x pixels
-	const sf::Vector2u gridSize;			// tiles x tiles
-	// TODO store tileSet sizes (number of random tiles, etc. here?
-	
-	TileMap(sf::Vector2u tileSize, sf::Vector2u gridSize, std::vector<bool> solid);
+	TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Texture& texture, std::vector<bool> solid);
 	void switchTile(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Time& duration);
+	void switchRange(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Vector2u& size, const sf::Time& duration);
 	void update(const sf::Time& deltaT);
 	void draw(sf::RenderTarget& target);
 	bool isSolid(sf::Vector2u pos)
 	{
 		return _solid[pos.x + pos.y * gridSize.x];
 	}
+	const sf::Vector2u tileSize;			// pixels x pixels
+	const sf::Vector2u gridSize;			// tiles x tiles
 private:
 	struct TileAnimation
 	{
@@ -84,8 +83,7 @@ private:
 	};
 	sf::VertexArray _vertices;
 	const sf::Texture& _texture;
-	std::forward_list<TileAnimation> _movingTiles;
-	std::vector<unsigned int> _mapping;
 	std::vector<bool> _solid;
+	std::forward_list<TileAnimation> _movingTiles;
 	
 };
