@@ -159,7 +159,7 @@ void Level::switchLargeTile(int x1, int y1, int x2, int y2)
 			orthogonal = orthogonal * 1.f/length;
 			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
 			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.scale = 1.f;
+			tmp.scale = 0.5f;
 			tileAnimationPos.push_back(tmp);
 
 			tmp.startPos = tmpPos2;
@@ -175,7 +175,7 @@ void Level::switchLargeTile(int x1, int y1, int x2, int y2)
 //			orthogonal = orthogonal * 1.f/length;
 			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
 			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.scale = 1.f;
+			tmp.scale = 0.5f;
 //			tmp.momentum = orthogonal * 40.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
 			tileAnimationPos.push_back(tmp);
 		}
@@ -188,7 +188,7 @@ void Level::updateTileAnimation(sf::Time deltaT)
 {
 	float dt = deltaT.asSeconds() * 1000;
 	tileAnimationTime -= dt / 1000;
-	float scaleMax = 1.4;
+	float scaleMax = 0.7f;
 		for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
 			TileFlightData &tmpObj = (*itIt);
 			tmpObj.momentum = tmpObj.momentum * 0.95f + (tmpObj.targetPos - tmpObj.currentPos)* 0.02f;
@@ -208,7 +208,7 @@ void Level::updateTileAnimation(sf::Time deltaT)
 			if (dir.x*dir.x+dir.y*dir.y < 10 || tileAnimationTime < 0)
 			{
 				tmpObj.tile->setPosition(tmpObj.targetPos.x, tmpObj.targetPos.y);
-				tmpObj.tile->mySprite->setScale(1, 1);
+				tmpObj.tile->mySprite->setScale(0.5f, 0.5f);
 				itIt = tileAnimationPos.erase(itIt);
 			}
 			else
