@@ -109,7 +109,7 @@ void Level::reset()
 		}
 	}
 	
-	player = new Player();
+	player = new Player(this);
 	sf::Sprite *playerSprite = new sf::Sprite();
 	sf::Sprite *doggieSprite = new sf::Sprite();
 	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));

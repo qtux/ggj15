@@ -2,11 +2,13 @@
 
 #include "GameObject.hpp"
 #include "global.hpp"
+#include "Level.hpp"
 #include <queue>
 
 class Player : public GameObject
 {
 public:
+	Player(Level* level): level(level) {}
 	float animationStep;
 	int direction;
 	float doggieStep;
@@ -25,7 +27,7 @@ public:
 private:
 	std::queue<sf::Vector2f> positionQueue;
 	std::queue<int> directionQueue;
-	
+	Level* level;
 };
 
 const static int PlayerAnimState[] = {0, 1 , 1, 0, 2, 2};
