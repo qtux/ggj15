@@ -194,7 +194,7 @@ Level::Level(unsigned int number):
 		}
 		if (first == "Text")
 		{
-			TextElement* element = new TextElement();
+			TextBox::TextElement* element = new TextBox::TextElement();
 			std::string boldText = "";
 			iss >> element->eventType;
 			iss >> boldText;
@@ -397,8 +397,9 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	level.setFont(font);
 	level.setPosition(gb::gridWidth + 2, gb::gridHeight - 32);
 	level.setString(std::to_string(gb::sceneManager.getCurrentLevelNumber()+1));
-	gb::window.draw(level);
-	textBox->update(deltaT);
+	window.draw(level);
+	textBox->update();
+	textBox->draw(window);
 	if (!fooexit){
 		for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 			if (player->intersects(**itIt))

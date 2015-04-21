@@ -1,11 +1,12 @@
 #include "TextBox.hpp"
 #include "global.hpp"
 
-TextBox::TextBox(){
-	currentElement = 0;
-	skipPressed = false;
-	actionPressed = false;
-}
+TextBox::TextBox():
+	//currentEvent(""),
+	currentElement(nullptr),
+	actionPressed(false),
+	skipPressed(false)
+{}
 
 void TextBox::appendText(TextElement* item)
 {
@@ -14,15 +15,15 @@ void TextBox::appendText(TextElement* item)
 
 void TextBox::triggerText(std::string eventType)
 {
-	bool exits = false;
+	bool exists = false;
 	for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ ) {
 		if ((*itIt)->eventType == eventType)
 		{
-			exits = true;
+			exists = true;
 			break;
 		}
 	}
-	if (exits){
+	if (exists){
 		currentEvent = eventType;
 		pushText();
 	}
@@ -44,14 +45,16 @@ void TextBox::pushText()
 			return;
 		} 
 	}
-	currentElement = 0;
+	currentElement = nullptr;
 }
 
 bool TextBox::enabled()
 {
-	return currentElement != 0;
+	return currentElement != nullptr;
 }
-void TextBox::update(sf::Time deltaT)
+
+// TODO rename into skip and remove input?
+void TextBox::update()
 {
 	if (!gb::input[4] && actionPressed)
 	{
@@ -59,17 +62,22 @@ void TextBox::update(sf::Time deltaT)
 	}
 	if (!gb::input[5] && skipPressed)
 	{
-		for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ ) {
+		for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ )
+		{
 			if ((*itIt)->eventType == currentEvent)
 			{
 				itIt = elements.erase(itIt);
 			} 
 		}
-		currentElement = 0;
+		currentElement = nullptr;
 	}
 	actionPressed = gb::input[4];
 	skipPressed = gb::input[5];
-	if (currentElement != 0)
+}
+
+void TextBox::draw(sf::RenderTarget &renderTarget)
+{
+	if (currentElement != nullptr)
 	{
 		sf::Font font;
 		font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
@@ -90,7 +98,7 @@ void TextBox::update(sf::Time deltaT)
 		textRect.setPosition(textPos.x - 5, textPos.y - 5);
 		textRect.setSize(sf::Vector2f(gb::gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
 		textRect.setFillColor(sf::Color(0, 0, 250, 50));
-		gb::window.draw(textRect);
+		renderTarget.draw(textRect);
 	
 		// zu Anfang:
 		if (currentElement->bold){
@@ -101,6 +109,6 @@ void TextBox::update(sf::Time deltaT)
 			speech.setStyle(sf::Text::Regular);
 		}
 		speech.setString(currentElement->text);
-		gb::window.draw(speech);
+		renderTarget.draw(speech);
 	}
 }
