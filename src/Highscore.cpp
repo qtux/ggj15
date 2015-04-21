@@ -3,15 +3,13 @@
 #include <sstream>
 #include <cmath>
 #include "global.hpp"
+#include "Level.hpp"
 
-Highscore::Highscore(int level)
-{
-	this->level = level;
-	actionPressed = false;
-}
-Highscore::~Highscore()
-{
-}
+Highscore::Highscore(Level* level):
+	level(level),
+	actionPressed(false)
+{}
+
 void Highscore::update(sf::Time deltaT)
 {
 	gb::showOutline = false;
@@ -43,7 +41,7 @@ void Highscore::update(sf::Time deltaT)
 	speech.setCharacterSize(charSize+1);
 	speech.setPosition(sf::Vector2f(45,50));
 	speech.setStyle(sf::Text::Bold);
-	speech.setString(" Highscore level " + std::to_string(level));
+	speech.setString(" Highscore level " + std::to_string(level->number + 1));
 	speech.setCharacterSize(charSize);
 	gb::window.draw(speech);
 	speech.setPosition(sf::Vector2f(45,80));
@@ -82,7 +80,7 @@ void Highscore::save()
 {
 
 	std::vector<std::string> hsFile;
-	std::ifstream infile(std::string(PATH) + "hs"+std::to_string(level)+".txt");
+	std::ifstream infile(std::string(PATH) + "hs"+std::to_string(level->number + 1)+".txt");
 	std::string line;
 	while (std::getline(infile, line))
 	{
@@ -91,12 +89,12 @@ void Highscore::save()
 	infile.close();
 
 	std::stringstream hsLineStr;
-	hsLineStr << gb::sceneManager.getCurrentScene()->gui->coins << " ";
-	hsLineStr << gb::sceneManager.getCurrentScene()->gui->timeLeft() << " ";
-	hsLineStr << gb::sceneManager.getCurrentScene()->gui->timeoutSeconds << " ";
+	hsLineStr << level->gui->coins << " ";
+	hsLineStr << level->gui->timeLeft() << " ";
+	hsLineStr << level->gui->timeoutSeconds << " ";
 	hsLineStr << gb::sceneManager.restarts;
 	
-	std::ofstream out(std::string(PATH) + "hs"+std::to_string(level)+".txt");
+	std::ofstream out(std::string(PATH) + "hs"+std::to_string(level->number + 1)+".txt");
 	out << hsLineStr.str() << "\n";
 	for (std::vector<std::string>::iterator lineIt = hsFile.begin() ; lineIt != hsFile.end() ; lineIt++)
 	{
@@ -108,7 +106,7 @@ void Highscore::save()
 void Highscore::load()
 {
 	
-	std::ifstream infile(std::string(PATH) + "hs"+std::to_string(level)+".txt");
+	std::ifstream infile(std::string(PATH) + "hs"+std::to_string(level->number + 1)+".txt");
 	std::string line;
 
 	while (std::getline(infile, line))

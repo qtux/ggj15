@@ -33,7 +33,7 @@ void Level::reset()
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
-	highscore  = 0;
+	highscore  = nullptr;
 	fooexit = false;
 	
 	gb::showOutline = true;
@@ -358,7 +358,7 @@ void Level::updateTileAnimation(sf::Time deltaT)
 
 void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
-	if (highscore != 0)
+	if (highscore != nullptr)
 	{
 		highscore->update(deltaT);
 		return;
@@ -425,7 +425,7 @@ void Level::draw(sf::RenderTarget &renderTarget)
 
 void Level::finishLevel()
 {
-	highscore = new Highscore(gb::sceneManager.getCurrentLevelNumber()+1);
+	highscore = new Highscore(this);
 	highscore->save();
 	highscore->load();
 }

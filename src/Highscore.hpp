@@ -1,6 +1,10 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <vector>
+
+class Level;
+
 class HighscoreRow
 {
 public:
@@ -12,13 +16,12 @@ public:
 class Highscore
 {
 public:
-	Highscore(int level);
-	virtual ~Highscore();
+	Highscore(Level* level);
 	void update(sf::Time deltaT);
 	void save();
 	void load();
 private:
-	int level;
+	Level* level;
 	bool  actionPressed;
 	std::vector<HighscoreRow> rows;
 };
