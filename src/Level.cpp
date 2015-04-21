@@ -13,7 +13,12 @@
 #include "Player.hpp"
 #include "Menu.hpp"
 #include "Items/KeyItem.hpp"
-#include "TextFileParser.hpp"
+
+// parser
+#include <fstream>
+#include <sstream>
+#include "ItemFactory.hpp"
+#include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
 
 Level::Level(unsigned int number):
 	Scene(gb::screenWidth, gb::screenHeight)
@@ -108,7 +113,133 @@ Level::Level(unsigned int number):
 	player->doggieSprite = doggieSprite;
 	
 	// read text file
-	TextFileParser::loadTextFile(this, fileName + ".txt");
+	std::ifstream infile(fileName + ".txt");
+	std::string line;
+	
+	sf::Sprite *itemSprite = new sf::Sprite();
+	itemSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+	ItemFactory tmpFactory = ItemFactory();
+
+	while (std::getline(infile, line))
+	{
+		std::istringstream iss(line);
+		std::string first;
+		iss >> first;
+		if (first == "Start")
+		{
+			int x,y;
+			iss >> x;
+			iss >> y;
+			startPos.x = x * gb::pixelSizeX;
+			startPos.y = y * gb::pixelSizeY;
+			player->setPosition(startPos.x, startPos.y);
+			player->doggieSprite->setPosition(startPos.x, startPos.y);
+		}
+		if (first == "Portal")
+		{
+			int x,y;
+			iss >> x;
+			iss >> y;
+			portalPos.x = x * gb::pixelSizeX;
+			portalPos.y = y * gb::pixelSizeY;
+			Item *tmpItem = tmpFactory.getItem("PortalItem");
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			items.push_back(tmpItem);
+		}
+		if (first == "Item")
+		{
+			std::string second;
+			iss >> second;
+			int x,y;
+			iss >> x;
+			iss >> y;
+			Item *tmpItem = 0;
+			if (second == "DecorationItem")
+			{
+				bool blocksPath;
+				int texPosX, texPosY, texW, texH;
+				iss >> blocksPath;
+				iss >> texPosX;
+				iss >> texPosY;
+				iss >> texW;
+				iss >> texH;
+				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
+			}
+			else if (second == "DoorItem")
+			{
+				bool vertical = false;
+				bool closed = true;
+				iss >> vertical >> closed;
+				tmpItem = tmpFactory.getItem(second, closed, -1, -1, -1, -1, vertical);
+			}
+			else
+			{
+				tmpItem = tmpFactory.getItem(second);
+			}
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			items.push_back(tmpItem);
+		}
+		
+		if (first == "Timeout")
+		{
+			int time;
+			iss >> time;
+			gui->setTimeout(time);
+		}
+		if (first == "Timebuff")
+		{
+			int time;
+			iss >> time;
+			gui->setTimebuffFactor(time);
+		}
+		if (first == "Text")
+		{
+			TextElement* element = new TextElement();
+			std::string boldText = "";
+			iss >> element->eventType;
+			iss >> boldText;
+			iss >> element->r;
+			iss >> element->g;
+			iss >> element->b;
+			std::getline(infile, line);
+			element->text = line;
+			if (boldText=="bold")
+			{
+				element->bold = true;
+			}
+			textBox->appendText(element);
+		}
+		if (first == "TriggerItem")
+		{
+			int x, y, x1, x2, y1, y2;
+			iss >> x;
+			iss >> y;
+			iss >> x1;
+			iss >> y1;
+			iss >> x2;
+			iss >> y2;
+			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
+			tmpItem->setSwitchPos(x1, y1, x2, y2);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			items.push_back(tmpItem);
+		}
+		if (first == "TriggerTrapItem")
+		{
+			int x, y, x1, x2, y1, y2;
+			iss >> x;
+			iss >> y;
+			iss >> x1;
+			iss >> y1;
+			iss >> x2;
+			iss >> y2;
+			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
+			tmpItem->setSwitchPos(x1, y1, x2, y2);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			items.push_back(tmpItem);
+		}
+	}
+	
+	// trigger text
 	textBox->triggerText("start");
 }
 
