@@ -1,6 +1,9 @@
 #include "GUI.hpp"
 #include "global.hpp"
-GUI::GUI()
+#include "Level.hpp"
+
+GUI::GUI(Level* level):
+	level(level)
 {
 	timeSprite = new sf::Sprite();
 	timeSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/timeBar.png" , true));
@@ -24,6 +27,12 @@ GUI::GUI()
 	lastEnable = false;
 	smallTime = false;
 	buffFactor = 20;
+	
+	// level number
+	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	levelNumber.setFont(font);
+	levelNumber.setPosition(gb::gridWidth + 2, gb::gridHeight - 32);
+	levelNumber.setString(std::to_string(level->number + 1));
 }
 void GUI::setTimeout(int seconds)
 {
@@ -47,7 +56,7 @@ float GUI::timeLeft()
 }
 
 void GUI::update (sf::Time deltaTime) {
-	if (gb::sceneManager.getCurrentScene()->textBox->enabled()){
+	if (level->textBox->enabled()){
 		if (!lastEnable)
 		{
 			pauseOffset += timeoutClock.getElapsedTime().asSeconds();
@@ -70,19 +79,19 @@ void GUI::update (sf::Time deltaTime) {
 	{
 		progress = 0;
 		if (!loosed){
-			gb::sceneManager.getCurrentScene()->textBox->triggerText("loose");
+			level->textBox->triggerText("loose");
 		}
 		loosed = true;
-		if (!gb::sceneManager.getCurrentScene()->textBox->enabled())
+		if (!level->textBox->enabled())
 		{
-			gb::sceneManager.restartLevel();
+			level->reset();
 		}
 	}
 	if (progress < 0.3)
 	{
 		if (!smallTime)
 		{
-			gb::sceneManager.getCurrentScene()->textBox->triggerText("smalltime");
+			level->textBox->triggerText("smalltime");
 			gb::soundManager.playSound("sound/timeShort.ogg");
 			
 		}
@@ -91,21 +100,24 @@ void GUI::update (sf::Time deltaTime) {
 	int height = (1 - progress) * (gb::gridHeight);
 	timeSprite->setPosition(-15 , height);
 	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, gb::gridHeight - height));
-	gb::window.draw(*timeSprite);
+}
 
+void GUI::draw(sf::RenderTarget &renderTarget)
+{
+	renderTarget.draw(*timeSprite);
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
 		coinSprite->setPosition(gb::gridWidth, i * 16);
-		gb::window.draw(*coinSprite);
+		renderTarget.draw(*coinSprite);
 	}
-
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
 		keySprite->setPosition(gb::gridWidth, gb::gridHeight - 42 - i*16);
-		gb::window.draw(*keySprite);
+		renderTarget.draw(*keySprite);
 	}
+	renderTarget.draw(levelNumber);
 }
 
 void GUI::resetCoins()
@@ -127,3 +139,8 @@ void GUI::addKeys(int amount)
 {
 	keys += amount;
 }
+
+// TODO insert me
+/*
+	
+*/

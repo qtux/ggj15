@@ -1,14 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <ctime>
+class Level;
 
 class GUI
 {
 public:
-	GUI();
+	GUI(Level* level);
 	void setTimeout(int seconds);
 	void applyTimeBufff(float progress);
 	void update(sf::Time deltaTime);
+	void draw(sf::RenderTarget &renderTarget);
 	void resetCoins();
 	void resetKeys();
 	void addCoins(int amount);
@@ -29,4 +31,7 @@ private:
 	bool smallTime;
 	float buffFactor;
 	int keys;
+	Level* level;
+	sf::Font font;
+	sf::Text levelNumber;
 };

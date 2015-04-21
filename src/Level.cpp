@@ -21,8 +21,15 @@
 #include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
 
 Level::Level(unsigned int number):
-	Scene(gb::screenWidth, gb::screenHeight)
+	Scene(gb::screenWidth, gb::screenHeight),
+	number(number)
 {
+	reset();
+}
+
+void Level::reset()
+{
+	// TODO implement reset of the level (new init)
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
@@ -31,7 +38,7 @@ Level::Level(unsigned int number):
 	
 	gb::showOutline = true;
 	// load and set timebar
-	gui = new GUI();
+	gui = new GUI(this);
 	gui->setTimeout(20);
 	// load image bitmapt file
 	sf::Image levelImg;
@@ -351,20 +358,6 @@ void Level::updateTileAnimation(sf::Time deltaT)
 
 void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
-//	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-//	{
-//		sf::Vector2i globalPosition = sf::Mouse::getPosition(gb::window);
-//
-//		sf::Vector2f localPosition;
-//		localPosition.x = 1.f*globalPosition.x/(gb::pixelSizeX);
-//		localPosition.y = 1.f*globalPosition.y/(gb::pixelSizeY);
-//		std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
-//	}
-	/*for (std::vector<GameObject*>::iterator it = gameBoard.begin();it != gameBoard.end(); it++)
-	{
-		(*it)->update(deltaT);
-		std::cout << (*it) << std::endl;
-	}*/
 	if (highscore != 0)
 	{
 		highscore->update(deltaT);
@@ -389,15 +382,6 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	{
 		gui->update(deltaT);
 	}
-
-	sf::Font font;
-	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
-
-	sf::Text level;
-	level.setFont(font);
-	level.setPosition(gb::gridWidth + 2, gb::gridHeight - 32);
-	level.setString(std::to_string(gb::sceneManager.getCurrentLevelNumber()+1));
-	window.draw(level);
 	textBox->update();
 	textBox->draw(window);
 	if (!fooexit){
@@ -436,6 +420,7 @@ void Level::draw(sf::RenderTarget &renderTarget)
 		obj->draw(renderTarget, &shader);
 	}
 	player->draw(renderTarget, &shader);
+	gui->draw(renderTarget);
 }
 
 void Level::finishLevel()

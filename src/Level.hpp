@@ -32,6 +32,7 @@ public:
 	
 	GameObject* getTile(int x, int y);
 	void switchLargeTile(int x1, int y1, int x2, int y2);
+	void reset();
 	
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
 	void update(sf::Time deltaT, sf::RenderWindow& window) override final;
@@ -46,6 +47,7 @@ public:
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
 	std::vector<Item*> items;
+	const unsigned int number;
 //private:
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
