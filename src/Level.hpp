@@ -60,4 +60,5 @@ private:
 	bool leaved;
 	Highscore *highscore;
 	bool fooexit;
+	sf::RectangleShape outline;
 };

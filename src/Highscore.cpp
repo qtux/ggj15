@@ -12,7 +12,6 @@ Highscore::Highscore(Level* level):
 
 void Highscore::update(sf::Time deltaT)
 {
-	gb::showOutline = false;
 	if (!gb::input[4] && actionPressed)
 	{
 		gb::sceneManager.nextLevel();

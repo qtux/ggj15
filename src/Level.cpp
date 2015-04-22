@@ -29,6 +29,14 @@ Level::Level(unsigned int number):
 
 void Level::reset()
 {
+	//background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
+	// set background and outline
+	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
+	outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
+	outline.setOutlineThickness(2.0f);
+	outline.setPosition(0, 0);
+	outline.setSize(sf::Vector2f(gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY));
+	
 	// TODO implement reset of the level (new init)
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
@@ -36,7 +44,6 @@ void Level::reset()
 	highscore  = nullptr;
 	fooexit = false;
 	
-	gb::showOutline = true;
 	// load and set timebar
 	gui = new GUI(this);
 	gui->setTimeout(20);
@@ -412,6 +419,8 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 
 void Level::draw(sf::RenderTarget &renderTarget)
 {
+	//renderTarget.draw(background);	// TODO reenable me
+	renderTarget.draw(outline);
 	for(auto& obj: gameBoard) {
 		obj->draw(renderTarget, &shader);
 	}

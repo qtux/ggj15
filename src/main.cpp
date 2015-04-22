@@ -2,10 +2,6 @@
 // last include (requires previous includes)
 #include "global.hpp"
 
-sf::RectangleShape background;
-sf::RectangleShape outline;
-sf::Text speech;
-
 void resize(int width, int height) {
 	// get ratio based on the original size
 	float widthRatio = (float) width / gb::gridWidth;	// TODO add bar widths
@@ -28,32 +24,16 @@ void resize(int width, int height) {
 	
 	// set view
 	gb::window.setView(sf::View(sf::FloatRect(-widthOffset, -heightOffset, width/ratio, height/ratio)));
-	// resize background
-	background.setPosition(-widthOffset, -heightOffset);
-	background.setSize(sf::Vector2f(width/ratio, height/ratio));
-	background.setTextureRect(sf::IntRect(0, 0, width/ratio, height/ratio));
-	// resize outline
-	outline.setPosition(0, 0);
-	outline.setSize(sf::Vector2f(width/ratio - 2 * widthOffset, height/ratio - 2 * heightOffset));
 }
 
 int main() {
-	// define background
-	sf::Texture backgroundTexture;
-	backgroundTexture.loadFromFile(std::string(PATH) + "img/background.png");
-	backgroundTexture.setRepeated(true);
-	background.setTexture(&backgroundTexture);
 	
 	// define menu variables
 	unsigned int currentLevel = 0;
 	sf::Font font;
+	sf::Text speech;
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
 	speech.setFont(font);
-	
-	// define outline
-	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
-	outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
-	outline.setOutlineThickness(2.0f);
 	
 	// window settings
 	resize(gb::screenWidth, gb::screenHeight);
@@ -149,10 +129,6 @@ int main() {
 			gb::window.draw(speech);
 		}
 		else {
-			gb::window.draw(background);
-			if (gb::showOutline){
-				gb::window.draw(outline);
-			}
 			if (focus) {
 				// draw scene (only tiles, items & player for now) TODO: first update, then draw
 				gb::sceneManager.draw(gb::window, NULL);

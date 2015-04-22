@@ -19,6 +19,5 @@ SceneManager gb::sceneManager;
 sf::Shader gb::fragmentShader;
 
 bool gb::inMenu = true;
-bool gb::showOutline = true;
 gb::InputType gb::input;
 sf::Clock gb::clock;
