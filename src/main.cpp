@@ -2,7 +2,6 @@
 // last include (requires previous includes)
 #include "global.hpp"
 
-sf::RectangleShape menu;
 sf::RectangleShape background;
 sf::RectangleShape outline;
 sf::Text speech;
@@ -36,9 +35,6 @@ void resize(int width, int height) {
 	// resize outline
 	outline.setPosition(0, 0);
 	outline.setSize(sf::Vector2f(width/ratio - 2 * widthOffset, height/ratio - 2 * heightOffset));
-	// resize menu
-	menu.setPosition(-widthOffset, -heightOffset);
-	menu.setSize(sf::Vector2f(width/ratio, height/ratio));
 }
 
 int main() {
@@ -48,19 +44,11 @@ int main() {
 	backgroundTexture.setRepeated(true);
 	background.setTexture(&backgroundTexture);
 	
-	// define menu texture (to be used with the background)
-	sf::Texture menuTexture;
-	menuTexture.loadFromFile(std::string(PATH) + "img/titleScreen.png");
-	menu.setTexture(&menuTexture);
-	
 	// define menu variables
 	unsigned int currentLevel = 0;
 	sf::Font font;
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
 	speech.setFont(font);
-	speech.setColor(sf::Color(0x00, 0x00, 0x00));
-	speech.setCharacterSize(16);
-	speech.setPosition(sf::Vector2f(16, 16));
 	
 	// define outline
 	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
@@ -68,9 +56,6 @@ int main() {
 	outline.setOutlineThickness(2.0f);
 	
 	// window settings
-	//gb::window.setVerticalSyncEnabled(true);
-	//gb::window.setFramerateLimit(30); // avoid noise ;)
-	gb::window.setMouseCursorVisible(false);
 	resize(gb::screenWidth, gb::screenHeight);
 	bool focus = true;
 	
@@ -78,8 +63,6 @@ int main() {
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
 	gb::clock.restart();
-
-	gb::soundManager.playMusic(std::string(PATH) + "sound/backgroundFast.ogg");
 	
 	// load only the fragment shader
 	gb::fragmentShader.loadFromFile("src/shader/fragment_shader.frag", sf::Shader::Fragment);
@@ -160,24 +143,9 @@ int main() {
 		deltaT = clock.restart();
 		// update game with deltaT when focused
 		
-
 		if (gb::inMenu) {
 			// do menu logic here
-			speech.setString(
-				"Current Level: " + std::to_string(currentLevel + 1) +
-				"\nLEFT, RIGHT ARROW - choose level"+
-				"\nRETURN - start the game" +
-				"\nESC - quit the game" +
-				"\n\nIngame usage:" +
-				"\nARROW keys - move the character" +
-				"\nSPACE key - proceed with dialogue" +
-				"\nS key- skip dialogue" +
-				"\nESC key- return to menu" +
-				"\n(You may use a gamepad instead)" +
-				"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
-			);
-			// draw menu and level number
-			gb::window.draw(menu);
+			speech.setString("Current Level: " + std::to_string(currentLevel + 1));
 			gb::window.draw(speech);
 		}
 		else {
@@ -186,22 +154,9 @@ int main() {
 				gb::window.draw(outline);
 			}
 			if (focus) {
-
-//				sf::RenderTexture texture;
-//				texture.create(gb::window.getSize().x, gb::window.getSize().y);
-//				texture.display();
-
 				// draw scene (only tiles, items & player for now) TODO: first update, then draw
 				gb::sceneManager.draw(gb::window, NULL);
-//				texture.display();
-//				sf::Texture t = texture.getTexture();
-//				sf::Image img = t.copyToImage();
-//				sf::Sprite tmpSprite(texture.getTexture());
-//				gb::window.draw(tmpSprite);
-//				img.saveToFile("test.png");
-
 				gb::sceneManager.update(deltaT, gb::window);
-
 			}
 		}
 		gb::window.display();

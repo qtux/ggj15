@@ -19,6 +19,7 @@ public:
 	~SoundManager();
 	void playSound(std::string name);
 	void playMusic(std::string fileName);
+	void stopMusic();
 	void pause();
 	void resume();
 	// inline definitions of volume getter and setter functions
