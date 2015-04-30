@@ -50,6 +50,4 @@ namespace gb {
 	extern bool showOutline;
 	extern InputType input;
 	extern sf::Clock clock;
-	extern sf::Shader fragmentShader;
-
 }

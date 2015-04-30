@@ -20,11 +20,20 @@
 #include "ItemFactory.hpp"
 #include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
 
+// shader
+#include <iostream>
+
 Level::Level(unsigned int number):
 	Scene(gb::screenWidth, gb::screenHeight),
 	number(number)
 {
 	reset();
+	// load only the fragment shader
+	_fragmentShader.loadFromFile("src/shader/fragment_shader.frag", sf::Shader::Fragment);
+	if (!_fragmentShader.isAvailable())
+	{
+	    std::cerr<<"could not load shader"<<std::endl;
+	}
 }
 
 void Level::reset()

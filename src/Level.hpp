@@ -61,4 +61,5 @@ private:
 	Highscore *highscore;
 	bool fooexit;
 	sf::RectangleShape outline;
+	sf::Shader _fragmentShader;
 };

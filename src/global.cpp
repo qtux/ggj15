@@ -15,8 +15,6 @@ SoundManager gb::soundManager(100, 100);
 // input manager
 TextureManager gb::textureManager;
 SceneManager gb::sceneManager;
-//sf::Shader gb::fragmentShader();
-sf::Shader gb::fragmentShader;
 
 bool gb::inMenu = true;
 gb::InputType gb::input;

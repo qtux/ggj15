@@ -1,5 +1,3 @@
-#include <iostream>
-// last include (requires previous includes)
 #include "global.hpp"
 
 void resize(int width, int height) {
@@ -43,13 +41,6 @@ int main() {
 	sf::Clock clock;
 	sf::Time deltaT = clock.restart();
 	gb::clock.restart();
-	
-	// load only the fragment shader
-	gb::fragmentShader.loadFromFile("src/shader/fragment_shader.frag", sf::Shader::Fragment);
-	if (!gb::fragmentShader.isAvailable())
-	{
-	    std::cerr<<"could not load shader"<<std::endl;
-	}
 	
 	// main loop
 	while (gb::window.isOpen()) {
@@ -131,7 +122,7 @@ int main() {
 		else {
 			if (focus) {
 				// draw scene (only tiles, items & player for now) TODO: first update, then draw
-				gb::sceneManager.draw(gb::window, NULL);
+				gb::sceneManager.draw(gb::window, nullptr);
 				gb::sceneManager.update(deltaT, gb::window);
 			}
 		}
