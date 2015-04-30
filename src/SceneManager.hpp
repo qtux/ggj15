@@ -15,6 +15,5 @@ public:
 	void nextLevel();
 	void nextLevel(int number);
 	void restartLevel();
-	int getCurrentLevelNumber();
 	Level* getCurrentScene();
 };

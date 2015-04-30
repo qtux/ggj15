@@ -35,8 +35,3 @@ Level* SceneManager::getCurrentScene()
 {
 	return scene;
 }
-
-int SceneManager::getCurrentLevelNumber()
-{
-	return currentLevelNumber;
-}
