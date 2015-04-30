@@ -55,6 +55,7 @@ public:
 	void updateTileAnimation(sf::Time deltaT);
 	bool readyToLeave() const;
 	void finishLevel();
+	unsigned int restarts;
 private:
 	sf::Uint32 createColorKey(sf::Color color);
 	bool leaved;

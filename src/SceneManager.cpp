@@ -4,57 +4,21 @@
 
 SceneManager::SceneManager():
 	currentLevelNumber(-1),
-	restarts(0),
 	scene(new Level(0))
-{
-	//nextLevel();
-}
+{}
 
 void SceneManager::update(sf::Time deltaT, sf::RenderWindow& window) {
-	//processEditMode();	// only for edit mode
 	scene->update(deltaT, window);
 }
 
 void SceneManager::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader) {
-	//processEditMode();	// only for edit mode
 	scene->draw(renderTarget, false);
-}
-
-void SceneManager::processEditMode()
-{
-	/*for (int key=4;key<13;key++)
-	{
-		if (gb::input[key] == true)
-		{
-			sf::Vector2i globalPosition = sf::Mouse::getPosition(gb::window);
-
-			sf::Vector2f localPosition;
-			localPosition.x = 1.f * globalPosition.x / (gb::pixelSizeX);
-			localPosition.y = 1.f * globalPosition.y / (gb::pixelSizeY);
-//			std::cout<<localPosition.x<<", "<<localPosition.y<<std::endl;
-
-
-			sf::Vector2i tmpPos;
-			tmpPos.x = (int)(localPosition.x);
-			tmpPos.y = (int)(localPosition.y);
-
-			GameObject* tmpTile = scene->getTile(tmpPos.x, tmpPos.y);
-			Tile* newTile = new Tile();
-
-			newTile->mySprite = tmpTile->mySprite;
-
-			sf::Vector2i posInTexture = sf::Vector2i(0, 0); // grass
-			newTile->mySprite->setTextureRect(sf::IntRect(posInTexture.x * gb::pixelSizeX, posInTexture.y * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
-			scene->setTile(newTile,tmpPos.x, tmpPos.y);
-		}
-	}*/
 }
 
 void SceneManager::nextLevel(){
 	currentLevelNumber++;
 	delete scene;
 	scene = new Level(currentLevelNumber);
-	restarts = 0;
 }
 
 void SceneManager::nextLevel(int number){
@@ -64,9 +28,7 @@ void SceneManager::nextLevel(int number){
 }
 
 void SceneManager::restartLevel(){
-	delete scene;
-	scene = new Level(currentLevelNumber);
-	restarts++;
+	scene->reset();
 }
 
 Level* SceneManager::getCurrentScene()

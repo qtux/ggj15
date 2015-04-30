@@ -25,7 +25,8 @@
 
 Level::Level(unsigned int number):
 	Scene({gb::screenWidth, gb::screenHeight}),
-	number(number)
+	number(number),
+	restarts(-1)
 {
 	reset();
 	// load only the fragment shader
@@ -38,6 +39,7 @@ Level::Level(unsigned int number):
 
 void Level::reset()
 {
+	restarts++;
 	//background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
 	// set background and outline
 	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
