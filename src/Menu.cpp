@@ -3,7 +3,7 @@
 #include "Level.hpp"
 
 Menu::Menu(Menu::Command initialCmd):
-	Scene(800, 600),
+	Scene({800, 600}),
 	cmdMap({{EDITOR, "Editor"}, {LEVEL, "Level"}, {EXIT, "Exit"}, {OPTIONS, "Options"}, {CREDITS, "Credits"}}),
 	_currentEntry(0),
 	_levels({1,2,3,4,5,10}),
@@ -11,8 +11,8 @@ Menu::Menu(Menu::Command initialCmd):
 {
 	// create entries
 	_font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
-	sf::Vector2f center(width / 2.0f, height / 2.0f);
-	float radius = width / 4.0f;
+	sf::Vector2f center(sceneSize / 2.0f);
+	float radius = sceneSize.x / 4.0f;
 	float angle = M_PI;
 	for (auto& kv: cmdMap)
 	{
@@ -118,7 +118,7 @@ void Menu::update(sf::Time deltaT, sf::RenderWindow& window)
 	}
 }
 
-void Menu::draw(sf::RenderTarget& target)
+void Menu::draw(sf::RenderTarget& target, bool focus)
 {
 	for (auto& entry: _entries)
 	{

@@ -24,7 +24,7 @@
 #include <iostream>
 
 Level::Level(unsigned int number):
-	Scene(gb::screenWidth, gb::screenHeight),
+	Scene({gb::screenWidth, gb::screenHeight}),
 	number(number)
 {
 	reset();
@@ -426,18 +426,18 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	}
 }
 
-void Level::draw(sf::RenderTarget &renderTarget)
+void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 {
 	//renderTarget.draw(background);	// TODO reenable me
 	renderTarget.draw(outline);
 	for(auto& obj: gameBoard) {
-		obj->draw(renderTarget, &shader);
+		obj->draw(renderTarget, nullptr);
 	}
 
 	for(auto& obj: items) {
-		obj->draw(renderTarget, &shader);
+		obj->draw(renderTarget, nullptr);
 	}
-	player->draw(renderTarget, &shader);
+	player->draw(renderTarget, nullptr);
 	gui->draw(renderTarget);
 }
 

@@ -17,7 +17,7 @@ void SceneManager::update(sf::Time deltaT, sf::RenderWindow& window) {
 
 void SceneManager::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader) {
 	//processEditMode();	// only for edit mode
-	scene->draw(renderTarget);
+	scene->draw(renderTarget, false);
 }
 
 void SceneManager::processEditMode()

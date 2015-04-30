@@ -3,7 +3,7 @@
 #include "global.hpp"
 
 Credits::Credits():
-	Scene(800, 600)
+	Scene({800, 600})
 {
 	background.setTexture(&gb::textureManager.getTexture("./img/credits.png", true));
 	font.loadFromFile("fonts/LiberationSerif-Regular.ttf");
@@ -43,7 +43,7 @@ void Credits::update(sf::Time deltaT, sf::RenderWindow& window)
 {
 }
 
-void Credits::draw(sf::RenderTarget& target)
+void Credits::draw(sf::RenderTarget& target, bool focus)
 {
 	target.draw(speech);
 }
