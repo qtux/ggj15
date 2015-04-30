@@ -1,12 +1,13 @@
 #include "Menu.hpp"
 #include "Editor.hpp"
 #include "Level.hpp"
+#include "Credits.hpp"
 
 Menu::Menu(Menu::Command initialCmd):
 	Scene({800, 600}),
 	cmdMap({{EDITOR, "Editor"}, {LEVEL, "Level"}, {EXIT, "Exit"}, {OPTIONS, "Options"}, {CREDITS, "Credits"}}),
 	_currentEntry(0),
-	_levels({1,2,3,4,5,10}),
+	_levels({0,1,2,3,4,5,6,7,8,9}),
 	_currentLevel(0)
 {
 	// create entries
@@ -29,6 +30,7 @@ Menu::Menu(Menu::Command initialCmd):
 		rotate(true);
 	}
 	//background.setTexture(gb::textureManager.getTexture("./img/background.png", true));
+	overlay.setFillColor(sf::Color(0, 0, 0, 200));
 }
 
 unsigned int Menu::nextPos(unsigned int pos, unsigned int size, bool clockWise)
@@ -99,7 +101,7 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 					/*TODO*/
 					break;
 				case CREDITS:
-					/*TODO*/
+					return new Credits();
 					break;
 				default:
 					break;
@@ -120,8 +122,13 @@ void Menu::update(sf::Time deltaT, sf::RenderWindow& window)
 
 void Menu::draw(sf::RenderTarget& target, bool focus)
 {
+	target.draw(background);
 	for (auto& entry: _entries)
 	{
 		target.draw(entry.text);
+	}
+	if (!focus)
+	{
+		target.draw(overlay);
 	}
 }

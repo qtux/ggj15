@@ -10,7 +10,7 @@ class Menu: public Scene
 {
 public:
 	// Command enum defines the relative order of elements
-	enum Command {LEVEL, EDITOR, OPTIONS, CREDITS, EXIT};		// TODO move this to global?
+	enum Command {LEVEL, EDITOR, OPTIONS, CREDITS, EXIT};	// TODO move this to global?
 	const std::map<Command, std::string> cmdMap;
 	struct Entry
 	{

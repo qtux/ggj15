@@ -1,13 +1,14 @@
 #include "../global.hpp"
 #include "KeyItem.hpp"
+#include "../Level.hpp"
 
 KeyItem::KeyItem(sf::Sprite* sprite):Item(sprite,0,32,16,16){
 }
 
-bool KeyItem::applyEffect()
+bool KeyItem::applyEffect(Level& level)
 {
 	gb::soundManager.playSound("sound/keyCollected.ogg");
-	gb::sceneManager.getCurrentScene()->gui->addKeys(1);
-	gb::sceneManager.getCurrentScene()->textBox->triggerText("key");
+	level.gui->addKeys(1);
+	level.textBox->triggerText("key");
 	return false;
 };

@@ -2,6 +2,8 @@
 
 #include "GameObject.hpp"
 
+class Level;
+
 class Item : public GameObject
 {
 public:
@@ -11,7 +13,7 @@ public:
 
 	virtual void update(sf::Time deltaTime);
 	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
-	virtual bool applyEffect();
+	virtual bool applyEffect(Level& level);
 	
 	bool collectable;
 	bool blocksPath;

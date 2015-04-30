@@ -24,7 +24,7 @@
 #include <iostream>
 
 Level::Level(unsigned int number):
-	Scene({gb::screenWidth, gb::screenHeight}),
+	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
 	number(number),
 	restarts(-1)
 {
@@ -401,12 +401,12 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		gui->update(deltaT);
 	}
 	textBox->update();
-	textBox->draw(window);
+	
 	if (!fooexit){
 		for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 			if (player->intersects(**itIt))
 			{
-				if ((*itIt)->applyEffect())
+				if ((*itIt)->applyEffect(*this))
 				{
 					fooexit = true;
 					return;
@@ -441,6 +441,11 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	}
 	player->draw(renderTarget, nullptr);
 	gui->draw(renderTarget);
+	textBox->draw(renderTarget);
+	if (highscore != nullptr)
+	{
+		highscore->draw(renderTarget);
+	}
 }
 
 void Level::finishLevel()
@@ -490,6 +495,11 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	if (keyPressed == sf::Keyboard::Escape)
 	{
 		return new Menu(Menu::Command::LEVEL);
+	}
+	// change level
+	if (highscore != nullptr && highscore->nextLevel)
+	{
+		return new Level(number + 1);
 	}
 	return this;
 }

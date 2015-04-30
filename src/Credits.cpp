@@ -45,5 +45,6 @@ void Credits::update(sf::Time deltaT, sf::RenderWindow& window)
 
 void Credits::draw(sf::RenderTarget& target, bool focus)
 {
+	target.draw(background);
 	target.draw(speech);
 }

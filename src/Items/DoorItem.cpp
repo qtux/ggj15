@@ -7,6 +7,7 @@
 
 #include "DoorItem.hpp"
 #include "../global.hpp"
+#include "../Level.hpp"
 
 DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed): Item(sprite), vertical(vertical_), wasClosed(closed) {
 	this->blocksPath = closed;
@@ -40,7 +41,7 @@ DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed): Item(sprite
 DoorItem::~DoorItem() {
 }
 
-bool DoorItem::applyEffect() {
+bool DoorItem::applyEffect(Level& level) {
 	return false;
 }
 
@@ -54,7 +55,7 @@ void DoorItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 }
 
 void DoorItem::update(sf::Time deltaTime) {
-	if (gb::sceneManager.getCurrentScene()->readyToLeave()) blocksPath = false; //TODO: temporäre Bedingung zum Testen, ersetzen!!
+	//if (gb::sceneManager.getCurrentScene()->readyToLeave()) blocksPath = false; //TODO: temporäre Bedingung (deprecated) zum Testen, ersetzen!!
 
 	if (mySprite != 0)
 	{

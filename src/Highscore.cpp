@@ -6,6 +6,7 @@
 #include "Level.hpp"
 
 Highscore::Highscore(Level* level):
+	nextLevel(false),
 	level(level),
 	actionPressed(false)
 {}
@@ -14,14 +15,16 @@ void Highscore::update(sf::Time deltaT)
 {
 	if (!gb::input[4] && actionPressed)
 	{
-		gb::sceneManager.nextLevel();
+		nextLevel = true;
 	}
 	actionPressed = gb::input[4];
+}
 
+void Highscore::draw(sf::RenderTarget& target)
+{
 	sf::Font font;
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
-
-	// Text TEST
+		// Text TEST
 	int charSize = 10;
 	sf::RectangleShape textRect;
 	textRect.setOutlineColor(sf::Color::White);
@@ -29,11 +32,11 @@ void Highscore::update(sf::Time deltaT)
 	textRect.setPosition(30, 30);
 	textRect.setSize(sf::Vector2f(gb::gridWidth - 60, gb::gridHeight - 60));
 	textRect.setFillColor(sf::Color(0, 0, 250, 50));
-	gb::window.draw(textRect);
+	target.draw(textRect);
 	textRect.setOutlineThickness(1);
 	textRect.setPosition(30, 99);
 	textRect.setSize(sf::Vector2f(gb::gridWidth - 60, 15));
-	gb::window.draw(textRect);
+	target.draw(textRect);
 	sf::Text speech;
 	speech.setFont(font);
 	speech.setColor(sf::Color(255,255,255));
@@ -42,15 +45,12 @@ void Highscore::update(sf::Time deltaT)
 	speech.setStyle(sf::Text::Bold);
 	speech.setString(" Highscore level " + std::to_string(level->number + 1));
 	speech.setCharacterSize(charSize);
-	gb::window.draw(speech);
+	target.draw(speech);
 	speech.setPosition(sf::Vector2f(45,80));
 	speech.setStyle(sf::Text::Bold);
 	speech.setString("Points         Trials            Coins         Time");
-	gb::window.draw(speech);
-
+	target.draw(speech);
 	
-
-
 	int size = rows.size();
 	if (size > 8)
 	{
@@ -61,19 +61,18 @@ void Highscore::update(sf::Time deltaT)
 		int points = ((1.0+row.coins)/((float)row.kills+1)) * ((row.time+1)/row.maxtime) * 1000;
 		speech.setPosition(sf::Vector2f(45,100+(i * 30)));
 		speech.setString(std::to_string(points));
-		gb::window.draw(speech);
+		target.draw(speech);
 		speech.setPosition(sf::Vector2f(112,100+(i * 30)));
 		speech.setString(std::to_string(row.kills));
-		gb::window.draw(speech);
+		target.draw(speech);
 		speech.setPosition(sf::Vector2f(184,100+(i * 30)));
 		speech.setString(std::to_string(row.coins));
-		gb::window.draw(speech);
+		target.draw(speech);
 		speech.setPosition(sf::Vector2f(247,100+(i * 30)));
 		speech.setString(std::to_string((int)row.time)+"s");
-		gb::window.draw(speech);
+		target.draw(speech);
 	}
 }
-
 
 void Highscore::save()
 {

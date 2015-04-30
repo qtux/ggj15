@@ -1,6 +1,7 @@
 #include "global.hpp"
 #include "Item.hpp"
 #include <cmath>
+#include "Level.hpp"
 
 Item::Item(sf::Sprite* sprite,int x,int y,int w,int h) : collectable(true), blocksPath(false){
 	mySprite = sprite;
@@ -41,7 +42,7 @@ void Item::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 	}
 }
 
-bool Item::applyEffect()
+bool Item::applyEffect(Level& level)
 {
 	return false;
 }

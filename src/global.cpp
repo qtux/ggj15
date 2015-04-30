@@ -14,7 +14,6 @@ sf::RenderWindow gb::window(sf::VideoMode(screenWidth, screenHeight), "Galactic 
 SoundManager gb::soundManager(100, 100);
 // input manager
 TextureManager gb::textureManager;
-SceneManager gb::sceneManager;
 
 bool gb::inMenu = true;
 gb::InputType gb::input;

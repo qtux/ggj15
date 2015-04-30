@@ -10,6 +10,8 @@
 
 #include "../Item.hpp"
 
+class Level;
+
 class DoorItem: public Item {
 private:
 	bool wasClosed;
@@ -20,7 +22,7 @@ public:
 	DoorItem(sf::Sprite* sprite, bool vertical_, bool closed = true);
 	virtual ~DoorItem();
 
-	virtual bool applyEffect();
+	virtual bool applyEffect(Level& level);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	virtual void update(sf::Time deltaTime);
 };

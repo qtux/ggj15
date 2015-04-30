@@ -1,6 +1,7 @@
 #include "../global.hpp"
 #include "PortalItem.hpp"
 #include <cmath>
+#include "../Level.hpp"
 
 PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32) {
 	neverAgain=false;
@@ -11,14 +12,14 @@ PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32) {
 PortalItem::~PortalItem(){
 }
 
-bool PortalItem::applyEffect()
+bool PortalItem::applyEffect(Level& level)
 {
-	if (gb::sceneManager.getCurrentScene()->readyToLeave() && !neverAgain) 
+	if (level.readyToLeave() && !neverAgain) 
 	{
 		gb::soundManager.playSound("sound/won.ogg");
 		neverAgain = true;
 	}
-	gb::sceneManager.getCurrentScene()->leave();
+	level.leave();
 	return true;
 };
 
