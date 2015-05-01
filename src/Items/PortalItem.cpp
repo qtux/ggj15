@@ -23,11 +23,19 @@ bool PortalItem::applyEffect(Level& level)
 	return true;
 };
 
-void PortalItem::update (sf::Time deltaTime) {
-	if (mySprite != 0)
+void PortalItem::update (sf::Time deltaTime)
+{
+	if (mySprite != nullptr)
 	{
 		int index = (1+std::sin(animClock.getElapsedTime().asSeconds() * 3.14)*2);
 		mySprite->setTextureRect(sf::IntRect(16*index,0,16,32));
-		gb::window.draw(*mySprite);
 	}
 };
+
+void PortalItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
+{
+	if (mySprite != nullptr)
+	{
+		renderTarget.draw(*mySprite);
+	}
+}

@@ -378,7 +378,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	return this;
 }
 
-void Editor::update(sf::Time deltaT, sf::RenderWindow& window)
+Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 {
 	// if mouse pressed to draw and shift is not pressed and color mode is active
 	// i.e. continuously draw color on left click + mouse move
@@ -401,6 +401,7 @@ void Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 			// to color every tile even when the mouse moves very fast
 		}
 	}
+	return this;
 }
 
 void Editor::draw(sf::RenderTarget& target, bool focus)

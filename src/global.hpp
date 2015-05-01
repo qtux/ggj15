@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <bitset>
 #include <string>
-#include "SceneManager.hpp"
 #include "SoundManager.hpp"
 #include "TextureManager.hpp"
 
@@ -22,9 +21,8 @@
 #endif
 
 namespace gb {
-
 	static const unsigned int numLevels = 10;
-
+	
 	// window properties
 	static const int pixelSizeX = 16;
 	static const int pixelSizeY = 16;
@@ -36,17 +34,13 @@ namespace gb {
 	static const int gridHeight = largeTileSizeY * sizeY * pixelSizeY;
 	static const int screenWidth = 800;
 	static const int screenHeight = 600;
-
+	
 	// define number of keyboards binding 
 	typedef std::bitset<INPUT_SIZE> InputType;
 	extern sf::Keyboard::Key keyboardBinding[INPUT_SIZE];
-
-	extern sf::RenderWindow window;
+	
 	extern SoundManager soundManager;
 	extern TextureManager textureManager;
 	
-	extern bool inMenu;
-	extern bool showOutline;
 	extern InputType input;
-	extern sf::Clock clock;
 }

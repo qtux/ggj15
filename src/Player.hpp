@@ -8,16 +8,14 @@
 class Player : public GameObject
 {
 public:
-	Player(Level* level): level(level) {}
+	Player(Level* level);
 	float animationStep;
 	int direction;
 	float doggieStep;
 	
 	virtual bool intersects(const GameObject& cmp);
 	virtual bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
-
-	Player(): animationStep(0.), direction(0),doggieStep(0.) {};
-
+	
 	virtual void update(sf::Time deltaTime);
 	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	
@@ -28,6 +26,7 @@ private:
 	std::queue<sf::Vector2f> positionQueue;
 	std::queue<int> directionQueue;
 	Level* level;
+	float _currTime;
 };
 
 const static int PlayerAnimState[] = {0, 1 , 1, 0, 2, 2};

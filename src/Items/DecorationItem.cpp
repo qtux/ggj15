@@ -14,11 +14,19 @@ bool DecorationItem::applyEffect(Level& level)
 
 
 void DecorationItem::update (sf::Time deltaTime) {
-	if (mySprite != 0)
+	if (mySprite != nullptr)
 	{
 		mySprite->setTextureRect(sf::IntRect(drawX,drawY,drawW,drawH));
 		//sf::Vector2f vec = getPosition();
 		//setPosition(vec.x,vec.y+(std::sin((waveClock.getElapsedTime().asSeconds() * 1000 +offset)/300)+0)*0.05);
-		gb::window.draw(*mySprite);
+		
 	}
 };
+
+void DecorationItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
+{
+	if (mySprite != nullptr)
+	{
+		renderTarget.draw(*mySprite);
+	}
+}

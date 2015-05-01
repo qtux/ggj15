@@ -75,7 +75,14 @@ void SceneManager::update()
 	// call update once on current scene
 	if (_focus)
 	{	
-		_currentScene->update(deltaT, _window);
+		_nextScene = _currentScene->update(deltaT, _window);
+		// immediately set currentScene to _nextScene if it is different from the _nextScene
+		if (_currentScene != _nextScene)
+		{
+			delete _currentScene;
+			_currentScene = _nextScene;
+			_currentScene->resize(_window.getSize().x, _window.getSize().y, _window);
+		}
 	}
 }
 

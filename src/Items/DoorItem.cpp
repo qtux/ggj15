@@ -9,7 +9,11 @@
 #include "../global.hpp"
 #include "../Level.hpp"
 
-DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed): Item(sprite), vertical(vertical_), wasClosed(closed) {
+DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed):
+	Item(sprite),
+	wasClosed(closed),
+	vertical(vertical_)
+{
 	this->blocksPath = closed;
 	this->collectable = false;
 	if (vertical)

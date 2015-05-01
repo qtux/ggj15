@@ -39,8 +39,9 @@ Scene* Credits::processEvent(sf::Event event, sf::RenderWindow& window)
 	}
 	return this;
 }
-void Credits::update(sf::Time deltaT, sf::RenderWindow& window)
+Scene* Credits::update(sf::Time deltaT, sf::RenderWindow& window)
 {
+	return this;
 }
 
 void Credits::draw(sf::RenderTarget& target, bool focus)

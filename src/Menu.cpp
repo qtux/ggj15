@@ -112,12 +112,13 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 	}
 	return this;
 }
-void Menu::update(sf::Time deltaT, sf::RenderWindow& window)
+Scene* Menu::update(sf::Time deltaT, sf::RenderWindow& window)
 {
 	for (auto& entry: _entries)
 	{
 		entry.update(deltaT.asSeconds() * 10.0f);
 	}
+	return this;
 }
 
 void Menu::draw(sf::RenderTarget& target, bool focus)

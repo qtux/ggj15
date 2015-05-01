@@ -64,7 +64,7 @@ void Level::reset()
 	// try to load the file
 	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(number);
 	if (!levelImg.loadFromFile(fileName+".png")) {
-		gb::inMenu = true;
+		// TODO return to menu here?
 		return;
 	}
 	
@@ -374,12 +374,18 @@ void Level::updateTileAnimation(sf::Time deltaT)
 		}
 }
 
-void Level::update(sf::Time deltaT, sf::RenderWindow& window)
+Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
 	if (highscore != nullptr)
 	{
+		// change level if required
+		if (highscore->nextLevel)
+		{
+			return new Level(number + 1);
+		}
+		// otherwise update the highscore and omit everything else
 		highscore->update(deltaT);
-		return;
+		return this;
 	}
 	if (leaved && !textBox->enabled())
 	{
@@ -409,7 +415,7 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 				if ((*itIt)->applyEffect(*this))
 				{
 					fooexit = true;
-					return;
+					return this;
 				}
 				if ((*itIt)->collectable)
 				{
@@ -426,6 +432,7 @@ void Level::update(sf::Time deltaT, sf::RenderWindow& window)
 			}
 		}
 	}
+	return this;
 }
 
 void Level::draw(sf::RenderTarget &renderTarget, bool focus)
@@ -495,11 +502,6 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	if (keyPressed == sf::Keyboard::Escape)
 	{
 		return new Menu(Menu::Command::LEVEL);
-	}
-	// change level
-	if (highscore != nullptr && highscore->nextLevel)
-	{
-		return new Level(number + 1);
 	}
 	return this;
 }

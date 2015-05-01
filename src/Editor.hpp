@@ -58,7 +58,7 @@ public:
 	Editor();
 	~Editor();
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
-	void update(sf::Time deltaT, sf::RenderWindow& window) override final;
+	Scene* update(sf::Time deltaT, sf::RenderWindow& window) override final;
 	void draw(sf::RenderTarget& target, bool focus) override final;
 	void saveLevel();
 };

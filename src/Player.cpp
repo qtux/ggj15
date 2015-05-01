@@ -3,6 +3,14 @@
 #include "Tile.hpp"
 #include <math.h>
 
+Player::Player(Level* level):
+	animationStep(0.),
+	direction(0),
+	doggieStep(0.),
+	level(level),
+	_currTime(0)
+{}
+
 bool Player::intersects(const GameObject& cmp)
 {
 	const sf::FloatRect &tmpRect = mySprite->getGlobalBounds();
@@ -26,7 +34,7 @@ bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 
 void Player::update (sf::Time deltaTime) {
 	float dT = deltaTime.asSeconds();
-	float currTime = gb::clock.getElapsedTime().asSeconds();
+	_currTime += dT;
 	
 	// get input from global and process:
 	sf::Vector2f tmpPos = getPosition();
@@ -35,10 +43,10 @@ void Player::update (sf::Time deltaTime) {
 	int height = getHeight();
 	int dir = -1;
 	if (!level->textBox->enabled()){
-		if (gb::input[0]) { tmpPos.x -= 120 * dT* (.75+.25*fabs(sin(currTime*30))); dir = 3; }
-		if (gb::input[1]) { tmpPos.x += 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 2; }
-		if (gb::input[2]) { tmpPos.y -= 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 1; }
-		if (gb::input[3]) { tmpPos.y += 120 * dT*(.75+.25*fabs(sin(currTime*30))); dir = 0; }
+		if (gb::input[0]) { tmpPos.x -= 120 * dT* (.75+.25*fabs(sin(_currTime*30))); dir = 3; }
+		if (gb::input[1]) { tmpPos.x += 120 * dT*(.75+.25*fabs(sin(_currTime*30))); dir = 2; }
+		if (gb::input[2]) { tmpPos.y -= 120 * dT*(.75+.25*fabs(sin(_currTime*30))); dir = 1; }
+		if (gb::input[3]) { tmpPos.y += 120 * dT*(.75+.25*fabs(sin(_currTime*30))); dir = 0; }
 	}
 	int viewWidth = gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX;
 	int viewHeight = gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY;

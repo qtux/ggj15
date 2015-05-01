@@ -50,7 +50,7 @@ public:
 	}
 	// pure virtual member functions (i.e. abstract member functions)
 	virtual Scene* processEvent(sf::Event event, sf::RenderWindow& window) = 0;
-	virtual void update(sf::Time deltaT, sf::RenderWindow& window) = 0;
+	virtual Scene* update(sf::Time deltaT, sf::RenderWindow& window) = 0;
 	virtual void draw(sf::RenderTarget& target, bool focus) = 0;
 protected:
 	const sf::Vector2f sceneSize;

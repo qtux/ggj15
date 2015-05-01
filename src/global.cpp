@@ -9,12 +9,6 @@ sf::Keyboard::Key gb::keyboardBinding[] = {
 	sf::Keyboard::S
 };
 
-
-sf::RenderWindow gb::window(sf::VideoMode(screenWidth, screenHeight), "Galactic Irrweg");
 SoundManager gb::soundManager(100, 100);
-// input manager
 TextureManager gb::textureManager;
-
-bool gb::inMenu = true;
 gb::InputType gb::input;
-sf::Clock gb::clock;

@@ -58,7 +58,7 @@ public:
 	
 	Menu(Command initialCmd = LEVEL);
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
-	void update(sf::Time deltaT, sf::RenderWindow& window) override final;
+	Scene* update(sf::Time deltaT, sf::RenderWindow& window) override final;
 	void draw(sf::RenderTarget& target, bool focus) override final;
 private:
 	unsigned int nextPos(unsigned int pos, unsigned int size, bool clockWise);
