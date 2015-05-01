@@ -48,7 +48,7 @@ void Level::reset()
 	outline.setPosition(0, 0);
 	outline.setSize(sf::Vector2f(gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY));
 	
-	// TODO implement reset of the level (new init)
+	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
 	leaved = false;
@@ -376,28 +376,22 @@ void Level::updateTileAnimation(sf::Time deltaT)
 
 Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
-	if (highscore != nullptr)
+	if (highscore != nullptr)		// TODO replace this with a state automaton
 	{
-		// change level if required
-		if (highscore->nextLevel)
-		{
-			return new Level(number + 1);
-		}
-		// otherwise update the highscore and omit everything else
-		highscore->update(deltaT);
 		return this;
 	}
+	
 	if (leaved && !textBox->enabled())
 	{
 		finishLevel();
 	}
-
+	
 	updateTileAnimation(deltaT);
-
+	
 	for(auto& obj: gameBoard) {
 		obj->update(deltaT);
 	}
-
+	
 	for(auto& obj: items) {
 		obj->update(deltaT);
 	}
@@ -457,8 +451,8 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 
 void Level::finishLevel()
 {
-	highscore = new Highscore(this);
-	highscore->save();
+	highscore = new Highscore(number, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+	highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
 	highscore->load();
 }
 
@@ -502,6 +496,11 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	if (keyPressed == sf::Keyboard::Escape)
 	{
 		return new Menu(Menu::Command::LEVEL);
+	}
+	// TODO use statemachine instead of comparing to a null pointer
+	if (keyPressed == sf::Keyboard::Space && highscore != nullptr)
+	{
+		return new Level(number + 1);
 	}
 	return this;
 }

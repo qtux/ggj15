@@ -5,25 +5,25 @@
 
 class Level;
 
-class HighscoreRow
-{
-public:
-	int coins;
-	float time;
-	float maxtime;
-	int kills;
-};
 class Highscore
 {
 public:
-	Highscore(Level* level);
-	void update(sf::Time deltaT);
+	struct HighscoreRow
+	{
+		unsigned int coins;
+		float time;
+		float maxtime;
+		unsigned int kills;
+	};
+	Highscore(unsigned int levelNumber, const sf::Vector2f& size);
 	void draw(sf::RenderTarget& target);
-	void save();
+	void save(unsigned int coins, unsigned int timeLeft, unsigned int timeoutSeconds, unsigned int restarts);
 	void load();
-	bool nextLevel;
+	const unsigned int levelNumber;
 private:
-	Level* level;
-	bool  actionPressed;
-	std::vector<HighscoreRow> rows;
+	sf::Font _font;
+	sf::RectangleShape _textRectOne;
+	sf::RectangleShape _textRectTwo;
+	sf::Text _speech;
+	std::vector<HighscoreRow> _rows;
 };
