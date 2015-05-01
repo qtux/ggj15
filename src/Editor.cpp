@@ -378,6 +378,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	return this;
 }
 
+// TODO possible improvement: draw a line between sample positions to color every tile even when the mouse moves very fast
 Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 {
 	// if mouse pressed to draw and shift is not pressed and color mode is active
@@ -388,17 +389,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 		// if mouse in gameboard
 		if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
 		{
-			/*
-			// recursion
-			sf::Vector2i xyPos = isIn(mousePos.x - lateralOffset, mousePos.y, 0, 0, numTilesX, numTilesY);
-			if (xyPos.x >= 0 && xyPos.y >= 0)
-			{
-				tiles[xyPos.x][xyPos.y]->setFillColor(tileColors[activeColorIndex]);
-			}
-			*/
 			tiles[(mousePos.x - lateralOffset) / tileOffset][mousePos.y / tileOffset]->setFillColor(tileColors[activeColorIndex]);
-			// TODO possible improvement: draw a line between sample positions
-			// to color every tile even when the mouse moves very fast
 		}
 	}
 	return this;
