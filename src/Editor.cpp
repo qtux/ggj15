@@ -427,9 +427,9 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 void Editor::saveLevel()
 {
 	// determine level number
-	std::string trackerFile = "levels/levelTracker.txt";
+	std::string indexFile = "levels/index.txt";
 	// read level number from file
-	std::ifstream infile(trackerFile);
+	std::ifstream infile(indexFile);
 	std::string line;
 	std::vector<int> levelNumbers;
 	if (infile.is_open())
@@ -453,7 +453,7 @@ void Editor::saveLevel()
 	maxLevel++;
 	// write new maxLevel number into file
 	std::ofstream outfile;
-	outfile.open(trackerFile, std::ios_base::app);
+	outfile.open(indexFile, std::ios_base::app);
 	if (outfile.is_open())
 	{
 		outfile << maxLevel << "\n";

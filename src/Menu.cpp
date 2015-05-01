@@ -11,35 +11,17 @@ Menu::Menu(Menu::Command initialCmd):
 	_currentEntry(0),
 	_currentLevel(0)
 {
-	// ugly I-just-want-it-to-work-code
-	// determine level number
-	std::string trackerFile = "levels/levelTracker.txt";
 	// read level number from file
-	std::ifstream infile(trackerFile);
-	std::string line;
-	std::vector<int> levelNumbers;
-	if (infile.is_open())
+	std::ifstream indexFile("levels/index.txt");
+	if (indexFile.is_open())
 	{
-		while (std::getline(infile, line))
+		unsigned int level;
+		while (indexFile >> level)
 		{
-			std::istringstream iss(line);
-			int current;
-			iss >> current;
-			levelNumbers.push_back(current);
+			_levels.push_back(level);
 		}
 	}
-	infile.close();
-	// search maximum
-	int maxLevel = 0;
-	for (int i = 0; i < levelNumbers.size(); ++i)
-	{
-		maxLevel = std::max(maxLevel, levelNumbers[i]);
-	}
-	for (unsigned int i = 0; i <= maxLevel; ++i)
-	{
-		_levels.push_back(i);
-	}
-	// end of ugly I-just-want-it-to-work-code
+	std::sort(_levels.begin(), _levels.end());
 	
 	// create entries
 	_font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
