@@ -58,12 +58,12 @@ Editor::Editor():
 	}
 	
 	// load item rects
-	tileItemRects[0] = sf::IntRect(0,4*16,32,16);	// 1. start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
-	tileItemRects[1] = sf::IntRect(0,0,16,32);		// 2. portal (goal)
-	tileItemRects[2] = sf::IntRect(0,6*16,16,16);	// 3. trigger
-	tileItemRects[3] = sf::IntRect(0,5*16,16,16);	// 4. coin
-	tileItemRects[4] = sf::IntRect(0,3*16,16,16);	// 5. clock
-	tileItemRects[5] = sf::IntRect(0,2*16,16,16);	// 6. key
+	tileItemRects[1] = sf::IntRect(0,4*16,32,16);	// 1. start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
+	tileItemRects[2] = sf::IntRect(0,0,16,32);		// 2. portal (goal)
+	tileItemRects[3] = sf::IntRect(0,6*16,16,16);	// 3. trigger
+	tileItemRects[4] = sf::IntRect(0,5*16,16,16);	// 4. coin
+	tileItemRects[5] = sf::IntRect(0,3*16,16,16);	// 5. clock
+	tileItemRects[6] = sf::IntRect(0,2*16,16,16);	// 6. key
 	// TODO more
 	// TODO deco dialog with one item shown
 	
@@ -261,7 +261,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					itemTiles[currentX][currentY]->setFillColor(sf::Color::White);
 					itemTiles[currentX][currentY]->setTexture(&actionItemTexture);
 					itemTiles[currentX][currentY]->setTextureRect(tileItemRects[activeItemIndex]);
-					if (activeItemIndex == 2) // trigger item
+					if (activeItemIndex == 3) // trigger item
 					{
 						// force marking of quadrants
 						triggerMarkingActive = true;
@@ -500,27 +500,27 @@ void Editor::saveLevel()
 		{
 			for (int y = 0; y < numTilesY; ++y)
 			{
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[0])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[1])
 				{
 					txtfile << "Start " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[1])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[2])
 				{
 					txtfile << "Portal " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[2])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[3])
 				{
 					txtfile << "TriggerItem " << x << " " << y << " " << triggerSwapPositionsX[x].first << " " << triggerSwapPositionsY[y].first << " " << triggerSwapPositionsX[x].second << " " << triggerSwapPositionsY[y].second << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[3])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[4])
 				{
 					txtfile << "Item CoinItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[4])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[5])
 				{
 					txtfile << "Item TimeItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[5])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[6])
 				{
 					txtfile << "Item KeyItem " << x << " " << y << "\n";
 				}
