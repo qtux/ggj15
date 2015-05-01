@@ -22,6 +22,8 @@ Menu::Menu(Menu::Command initialCmd):
 		}
 	}
 	std::sort(_levels.begin(), _levels.end());
+	std::unique(_levels.begin(), _levels.end());
+	// TODO use a set instead of a vector to keep track of all levels
 	
 	// create entries
 	_font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
@@ -89,13 +91,13 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 		case sf::Keyboard::Up:
 			if (levelSelected)
 			{
-				_currentLevel = nextPos(_currentLevel, _levels.size(), true);
+				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), true)];
 			}
 			break;
 		case sf::Keyboard::Down:
 			if (levelSelected)
 			{
-				_currentLevel = nextPos(_currentLevel, _levels.size(), false);
+				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), false)];
 			}
 			break;
 		case sf::Keyboard::Return:
