@@ -1,0 +1,9 @@
+Start 1 2
+TriggerItem 2 18 20 11 7 0
+Item CoinItem 6 9
+Item CoinItem 9 1
+Item TimeItem 9 4
+TriggerItem 11 2 6 9 6 18
+Item CoinItem 12 17
+Item KeyItem 22 4
+Portal 23 14
