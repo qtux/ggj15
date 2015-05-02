@@ -87,6 +87,8 @@ Editor::Editor():
 	mousePressed = false;
 	shiftActive = false;
 	triggerMarkingActive = false;
+	triggerMarked.first = -1;
+	triggerMarked.second = -1;
 }
 
 Editor::~Editor()
@@ -128,6 +130,15 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		mousePressed = true;
 		sf::Vector2f mousePos = getMouseWorldPos(window);
+		
+		// if trigger was marked (i.e. chosen), unmark it
+		if (triggerMarked.first != -1 && triggerMarked.second != -1)
+		{
+			markArea(triggerSwapPositionsX[triggerMarked.first].first, triggerSwapPositionsY[triggerMarked.second].first, sf::Color::Blue, quadrantSize);
+			markArea(triggerSwapPositionsX[triggerMarked.first].second, triggerSwapPositionsY[triggerMarked.second].second, sf::Color::Blue, quadrantSize);
+			triggerMarked.first = -1;
+			triggerMarked.second = -1;
+		}
 		
 		// if not in trigger marking mode where everything else is disabled
 		if (!triggerMarkingActive)
@@ -261,6 +272,52 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		mousePressed = false;
 	}
+	
+	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
+	{
+		sf::Vector2f mousePos = getMouseWorldPos(window);
+		int xPos = (mousePos.x - lateralOffset) / tileOffset;
+		int yPos = mousePos.y / tileOffset;
+		
+		// if trigger was marked (i.e. chosen), unmark it
+		if (triggerMarked.first != -1 && triggerMarked.second != -1)
+		{
+			markArea(triggerSwapPositionsX[triggerMarked.first].first, triggerSwapPositionsY[triggerMarked.second].first, sf::Color::Blue, quadrantSize);
+			markArea(triggerSwapPositionsX[triggerMarked.first].second, triggerSwapPositionsY[triggerMarked.second].second, sf::Color::Blue, quadrantSize);
+			triggerMarked.first = -1;
+			triggerMarked.second = -1;
+		}
+		
+		// if trigger item is on right clicked tile
+		if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[3])
+		{
+			// mark swapped tiles
+			markArea(triggerSwapPositionsX[xPos].first, triggerSwapPositionsY[yPos].first, sf::Color::Red, quadrantSize);
+			markArea(triggerSwapPositionsX[xPos].second, triggerSwapPositionsY[yPos].second, sf::Color::Red, quadrantSize);
+			triggerMarked.first = xPos;
+			triggerMarked.second = yPos;
+			// swap colors of both quadrants (simulate trigger)
+			sf::Color storeColor;
+			for (int x = 0; x < quadrantSize; ++x)
+			{
+				for (int y = 0; y < quadrantSize; ++y)
+				{
+					storeColor = tiles[triggerSwapPositionsX[xPos].first+x][triggerSwapPositionsY[yPos].first+y]->getFillColor();
+					tiles[triggerSwapPositionsX[xPos].first+x][triggerSwapPositionsY[yPos].first+y]->setFillColor(tiles[triggerSwapPositionsX[xPos].second+x][triggerSwapPositionsY[yPos].second+y]->getFillColor());
+					tiles[triggerSwapPositionsX[xPos].second+x][triggerSwapPositionsY[yPos].second+y]->setFillColor(storeColor);
+				}
+			}
+		}
+	}
+	
+	// save when clicking t
+	/*if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::T)
+	{
+		if (triggerMarked) {
+			sf::Color storeColor;
+			
+		}
+	}*/
 	
 	// box coloring on shift click (only activate here and set start tile)
 	if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift))

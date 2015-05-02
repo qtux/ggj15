@@ -44,6 +44,7 @@ private:
 	bool mousePressed;
 	bool shiftActive;
 	bool triggerMarkingActive;
+	std::pair<int, int> triggerMarked;
 	// trigger swap positions map
 	//std::map<sf::Vector2f, std::pair<sf::Vector2f, sf::Vector2f>> triggerSwapPositions;
 	std::map<int, std::pair<int, int>> triggerSwapPositionsX;
