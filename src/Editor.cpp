@@ -109,50 +109,6 @@ Editor::~Editor()
 	}
 }
 
-// check recursively whether xPos is between x1 and x2 (per divide-and-conquer)
-int Editor::isInX(const int xPos, int x1, int x2)
-{
-	if (x2 - x1 == 1)
-	{
-		return x1;
-	}
-	
-	int x2Half = x1 + (x2 - x1) / 2;
-	
-	if (xPos >= (x1 * tileOffset) && xPos < (x2Half * tileOffset)) {
-		return isInX(xPos, x1, x2Half);
-	}
-	if (xPos >= (x2Half * tileOffset) && xPos < (x2 * tileOffset)) {
-		return isInX(xPos, x2Half, x2);
-	}
-	return -1;
-}
-
-// check recursively whether yPos is between y1 and y2 (per divide-and-conquer)
-int Editor::isInY(const int yPos, int y1, int y2)
-{
-	if (y2 - y1 == 1)
-	{
-		return y1;
-	}
-	
-	int y2Half = y1 + (y2 - y1) / 2;
-	
-	if (yPos >= (y1 * tileOffset) && yPos < (y2Half * tileOffset)) {
-		return isInY(yPos, y1, y2Half);
-	}
-	if (yPos >= (y2Half * tileOffset) && yPos < (y2 * tileOffset)) {
-		return isInY(yPos, y2Half, y2);
-	}
-	return -1;
-}
-
-// check if xPos and yPos are somewhere inside the bounderies of (x1,y1) and (x2,y2)
-sf::Vector2i Editor::isIn(const int xPos, const int yPos, int x1, int y1, int x2, int y2)
-{
-	return sf::Vector2i(isInX(xPos, x1, x2), isInY(yPos, y1, y2));
-}
-
 // TODO: idea: change pen size
 // TODO make item properties changeable
 // TODO change pen size depending on item set (e.g. Portal, Door)

@@ -44,10 +44,6 @@ private:
 	bool mousePressed;
 	bool shiftActive;
 	bool triggerMarkingActive;
-	// recursion leftovers
-	sf::Vector2i isIn(const int xPos, const int yPos, int x1, int y1, int x2, int y2);
-	int isInX(const int xPos, int x1, int x2);
-	int isInY(const int yPos, int y1, int y2);
 	// trigger swap positions map
 	//std::map<sf::Vector2f, std::pair<sf::Vector2f, sf::Vector2f>> triggerSwapPositions;
 	std::map<int, std::pair<int, int>> triggerSwapPositionsX;
