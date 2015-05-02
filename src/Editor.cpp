@@ -274,6 +274,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						std::pair<int, int> swapTilesPosY;
 						triggerSwapPositionsX[currentX] = swapTilesPosX;
 						triggerSwapPositionsY[currentY] = swapTilesPosY;
+						markArea(currentX, currentY, sf::Color::Red, quadrantSize);
 					}
 				}
 				// if trigger marking is active, two correct markings must be drawn
@@ -288,15 +289,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						triggerSwapPositionsX[triggerPos.x].second = xPos;
 						triggerSwapPositionsY[triggerPos.y].second = yPos;
 						triggerMarkingActive = false;
-						if (xPos >= 0 && yPos >= 0 && xPos + quadrantSize <= numTilesX && yPos + quadrantSize <= numTilesY) {
-							for (int x = xPos; x < xPos + quadrantSize; ++x)
-							{
-								for (int y = yPos; y < yPos + quadrantSize; ++y)
-								{
-									itemTiles[x][y]->setOutlineColor(sf::Color::Blue);
-								}
-							}
-						}
+						markArea(xPos, yPos, sf::Color::Blue, quadrantSize);
 					}
 					else
 					{
@@ -311,40 +304,6 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
 		mousePressed = false;
-	}
-	
-	// check for mousemove
-	if (event.type == sf::Event::MouseMoved)
-	{
-		sf::Vector2f mousePos = getMouseWorldPos(window);
-		// show trigger marking
-		if (triggerMarkingActive)
-		{
-			static int xPos;
-			static int yPos;
-			// delete old trigger marking
-			if (xPos >= 0 && yPos >= 0 && xPos + quadrantSize <= numTilesX && yPos + quadrantSize <= numTilesY) {
-				for (int x = xPos; x < xPos + quadrantSize; ++x)
-				{
-					for (int y = yPos; y < yPos + quadrantSize; ++y)
-					{
-						itemTiles[x][y]->setOutlineColor(sf::Color::Blue);
-					}
-				}
-			}
-			// draw new trigger marking
-			xPos = (mousePos.x - lateralOffset) / tileOffset;
-			yPos = mousePos.y / tileOffset;
-			if (xPos >= 0 && yPos >= 0 && xPos + quadrantSize <= numTilesX && yPos + quadrantSize <= numTilesY) {
-				for (int x = xPos; x < xPos + quadrantSize; ++x)
-				{
-					for (int y = yPos; y < yPos + quadrantSize; ++y)
-					{
-						itemTiles[x][y]->setOutlineColor(sf::Color::Red);
-					}
-				}
-			}
-		}
 	}
 	
 	// box coloring on shift click (only activate here and set start tile)
@@ -378,9 +337,24 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	return this;
 }
 
+void Editor::markArea(int xPos, int yPos, sf::Color color, int quadrantSize)
+{
+	// if marking is in gameboard
+	if (xPos >= 0 && yPos >= 0 && xPos + quadrantSize <= numTilesX && yPos + quadrantSize <= numTilesY) {
+		// mark given size * given size tiles in given color
+		for (int x = xPos; x < xPos + quadrantSize; ++x)
+		{
+			for (int y = yPos; y < yPos + quadrantSize; ++y)
+			{
+				itemTiles[x][y]->setOutlineColor(color);
+			}
+		}
+	}
+}
+
 // TODO possible improvement: draw a line between sample positions to color every tile even when the mouse moves very fast
 Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
-{
+{	
 	// if mouse pressed to draw and shift is not pressed and color mode is active
 	// i.e. continuously draw color on left click + mouse move
 	if (mousePressed && !shiftActive && activeColorIndex != -1)
@@ -392,6 +366,21 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 			tiles[(mousePos.x - lateralOffset) / tileOffset][mousePos.y / tileOffset]->setFillColor(tileColors[activeColorIndex]);
 		}
 	}
+	
+	// show trigger marking
+	if (triggerMarkingActive)
+	{
+		sf::Vector2f mousePos = getMouseWorldPos(window);
+		static int xPos;
+		static int yPos;
+		// delete old trigger marking
+		markArea(xPos, yPos, sf::Color::Blue, quadrantSize);
+		// draw new trigger marking
+		xPos = (mousePos.x - lateralOffset) / tileOffset;
+		yPos = mousePos.y / tileOffset;
+		markArea(xPos, yPos, sf::Color::Red, quadrantSize);
+	}
+	
 	return this;
 }
 

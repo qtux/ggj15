@@ -53,6 +53,8 @@ private:
 	std::map<int, std::pair<int, int>> triggerSwapPositionsX;
 	std::map<int, std::pair<int, int>> triggerSwapPositionsY;
 	sf::Vector2f triggerPos;
+	// mark area (e.g. for trigger)
+	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 public:
 	Editor();
