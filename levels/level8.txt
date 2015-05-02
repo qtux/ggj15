@@ -19,8 +19,8 @@ Item DecorationItem 13 7 0 16 80 16 16     Pilz
 Item DecorationItem 7 19 0 16 80 16 16
 Item DecorationItem 18 18 0 16 80 16 16
 Item DecorationItem 8 5 0 16 80 16 16
-TriggerItem 8 1 2 0 0 3
-TriggerItem 17 16 3 3 0 3
+TriggerItem 8 1 12 0 0 18
+TriggerItem 17 16 18 18 0 18
 
 Text start
 It's all about islands. And rivers. And Rocks. :D

@@ -9,5 +9,5 @@ Item DecorationItem 8 5 0 16 80 16 16
 Item DecorationItem 14 20 0 16 80 16 16
 Item DecorationItem 20 12 1 16 112 16 16
 Item DecorationItem 2 2 1 16 112 16 16
-TriggerItem 21 17 3 0 0 3
-TriggerItem 28 18 3 0 2 0
+TriggerItem 21 17 18 0 0 18
+TriggerItem 28 18 18 0 12 0

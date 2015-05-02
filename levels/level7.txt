@@ -19,5 +19,5 @@ Item DecorationItem 27 18 1 0 112 16 16     Kristall
 Item DecorationItem 11 13 1 16 112 16 16    Fels
 Item DecorationItem 15 20 0 16 80 16 16     Pilz
 Item DecorationItem 6 22 0 16 80 16 16
-#TriggerItem 21 17 3 0 0 3
-#TriggerItem 28 18 3 0 2 0
+#TriggerItem 21 17 18 0 0 18
+#TriggerItem 28 18 18 0 12 0
