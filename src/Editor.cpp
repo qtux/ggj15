@@ -746,7 +746,7 @@ void Editor::loadLevel(int level)
 			{
 				itemTiles[x][y]->setFillColor(sf::Color::White);
 				itemTiles[x][y]->setTexture(&actionItemTexture);
-				itemTiles[x][y]->setTextureRect(tileItemRects[5]);
+				itemTiles[x][y]->setTextureRect(tileItemRects[6]);
 			}
 		}
 	}
