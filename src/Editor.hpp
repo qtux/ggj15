@@ -66,7 +66,6 @@ private:
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	// reset map when triggers were activated
 	void resetTriggers();
-	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 	// text
 	sf::Text textOutput;
 	sf::Font font;
@@ -74,6 +73,8 @@ private:
 	std::vector<int> levels;
 	// the current level if loaded or was saved once
 	int currentLevel;
+	// get mousePos in world
+	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 public:
 	Editor();
 	~Editor();

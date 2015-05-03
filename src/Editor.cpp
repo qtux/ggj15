@@ -68,9 +68,10 @@ Editor::Editor():
 	tileItemRects[8] = sf::IntRect(16,5*16,16,16);		// 8.  mushroom (deco)
 	tileItemRects[9] = sf::IntRect(16,6*16,16,16);		// 9.  flower (deco)
 	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 10. crystals (deco)
-	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rocks(deco)
+	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rocks (deco)
+	tileItemRects[12] = sf::IntRect(2*16,3*16,16,16);	// 12. blockItem (no function)
 	// TODO more
-	// TODO deco dialog with one item shown
+	// TODO deco dialog with one item shown?
 	
 	// create item choices bar
 	for (int y = 0; y < itemChoices.size(); ++y)
@@ -798,8 +799,8 @@ void Editor::loadLevel(int level)
 			itemTiles[x][y]->setFillColor(sf::Color::White);
 			itemTiles[x][y]->setTexture(&actionItemTexture);
 			itemTiles[x][y]->setTextureRect(tileItemRects[3]);
-			triggerSwapPositionsX[x] = std::pair<int, int>(x1,y1);
-			triggerSwapPositionsY[y] = std::pair<int, int>(x2,y2);
+			triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
+			triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
 		}
 		if (first == "Item")
 		{
