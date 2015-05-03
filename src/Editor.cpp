@@ -119,6 +119,7 @@ Editor::Editor():
 	loadLevelActive = false;
 	currentLevel = -1;
 	overwrite = false;
+	exit = false;
 }
 
 Editor::~Editor()
@@ -159,7 +160,8 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		}
 		else
 		{
-			return new Menu(Menu::Command::EDITOR);
+			textOutput.setString("Really exit?");
+			exit = true;
 		}
 	}
 	
@@ -453,6 +455,12 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			overwrite = false;
 			saveLevel(true);
 		}
+		if (exit)
+		{
+			textOutput.setString("");
+			exit = false;
+			return new Menu(Menu::Command::EDITOR);
+		}
 	}
 	
 	// do not overwrite, i.e. save normally
@@ -463,6 +471,11 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			textOutput.setString("");
 			overwrite = false;
 			saveLevel(false);
+		}
+		if (exit)
+		{
+			textOutput.setString("");
+			exit = false;
 		}
 	}
 	

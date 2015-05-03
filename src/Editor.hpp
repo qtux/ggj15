@@ -52,6 +52,7 @@ private:
 	bool triggerMarkingActive;
 	bool loadLevelActive;
 	bool overwrite;
+	bool exit;
 	std::pair<int, int> triggerMarked;
 	std::stack<std::pair<int, int>> triggerStack;
 	// trigger swap positions map
