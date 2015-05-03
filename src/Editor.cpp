@@ -58,12 +58,17 @@ Editor::Editor():
 	}
 	
 	// load item rects
-	tileItemRects[1] = sf::IntRect(0,4*16,32,16);	// 1. start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
-	tileItemRects[2] = sf::IntRect(0,0,16,32);		// 2. portal (goal)
-	tileItemRects[3] = sf::IntRect(0,6*16,16,16);	// 3. trigger
-	tileItemRects[4] = sf::IntRect(0,5*16,16,16);	// 4. coin
-	tileItemRects[5] = sf::IntRect(0,3*16,16,16);	// 5. clock
-	tileItemRects[6] = sf::IntRect(0,2*16,16,16);	// 6. key
+	tileItemRects[1] = sf::IntRect(0,4*16,32,16);		// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
+	tileItemRects[2] = sf::IntRect(0,0,16,32);			// 2.  portal (goal)
+	tileItemRects[3] = sf::IntRect(0,6*16,16,16);		// 3.  trigger
+	tileItemRects[4] = sf::IntRect(0,5*16,16,16);		// 4.  coin
+	tileItemRects[5] = sf::IntRect(0,3*16,16,16);		// 5.  clock
+	tileItemRects[6] = sf::IntRect(0,2*16,16,16);		// 6.  key
+	tileItemRects[7] = sf::IntRect(2*16,7*16,32,16);	// 7.  door
+	tileItemRects[8] = sf::IntRect(16,5*16,16,16);		// 8.  mushroom (deco)
+	tileItemRects[9] = sf::IntRect(16,6*16,16,16);		// 9.  flower (deco)
+	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 10. crystals (deco)
+	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rocks(deco)
 	// TODO more
 	// TODO deco dialog with one item shown
 	
@@ -657,6 +662,31 @@ void Editor::saveLevel(bool overwrite)
 				{
 					txtfile << "Item KeyItem " << x << " " << y << "\n";
 				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[7])
+				{
+					// TODO vertical choice
+					txtfile << "Item DoorItem " << x << " " << y << " 0\n";
+				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[8])
+				{
+					// TODO blocking choice
+					txtfile << "Item DecorationItem " << x << " " << y << " 1 16 80 16 16\n";
+				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[9])
+				{
+					// TODO blocking choice
+					txtfile << "Item DecorationItem " << x << " " << y << " 1 16 96 16 16\n";
+				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[10])
+				{
+					// TODO blocking choice
+					txtfile << "Item DecorationItem " << x << " " << y << " 1 0 112 16 16\n";
+				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[11])
+				{
+					// TODO blocking choice
+					txtfile << "Item DecorationItem " << x << " " << y << " 1 16 112 16 16\n";
+				}
 			}
 		}
 	}
@@ -747,6 +777,53 @@ void Editor::loadLevel(int level)
 				itemTiles[x][y]->setFillColor(sf::Color::White);
 				itemTiles[x][y]->setTexture(&actionItemTexture);
 				itemTiles[x][y]->setTextureRect(tileItemRects[6]);
+			}
+			if (second == "DoorItem")
+			{
+				// TODO do sth with vertical and closed
+				bool vertical = false;
+				bool closed = true;
+				iss >> vertical >> closed;
+				itemTiles[x][y]->setFillColor(sf::Color::White);
+				itemTiles[x][y]->setTexture(&actionItemTexture);
+				itemTiles[x][y]->setTextureRect(tileItemRects[7]);
+			}
+			if (second == "DecorationItem")
+			{
+				// TODO add block or non-block choice to item
+				bool blocksPath;
+				iss >> blocksPath;
+				int texPosX, texPosY;
+				iss >> texPosX;
+				iss >> texPosY;
+				// mushroom
+				if (texPosX == 16 && texPosY == 80)
+				{
+					itemTiles[x][y]->setFillColor(sf::Color::White);
+					itemTiles[x][y]->setTexture(&actionItemTexture);
+					itemTiles[x][y]->setTextureRect(tileItemRects[8]);
+				}
+				// flower
+				if (texPosX == 16 && texPosY == 96)
+				{
+					itemTiles[x][y]->setFillColor(sf::Color::White);
+					itemTiles[x][y]->setTexture(&actionItemTexture);
+					itemTiles[x][y]->setTextureRect(tileItemRects[9]);
+				}
+				// crystals
+				if (texPosX == 0 && texPosY == 112)
+				{
+					itemTiles[x][y]->setFillColor(sf::Color::White);
+					itemTiles[x][y]->setTexture(&actionItemTexture);
+					itemTiles[x][y]->setTextureRect(tileItemRects[10]);
+				}
+				// rock
+				if (texPosX == 16 && texPosY == 112)
+				{
+					itemTiles[x][y]->setFillColor(sf::Color::White);
+					itemTiles[x][y]->setTexture(&actionItemTexture);
+					itemTiles[x][y]->setTextureRect(tileItemRects[11]);
+				}
 			}
 		}
 	}

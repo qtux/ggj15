@@ -35,7 +35,7 @@ private:
 	std::array<std::array<sf::RectangleShape*, numTilesY>, numTilesX> itemTiles;
 	// bar tiles arrays (for color and item choice)
 	std::array<sf::RectangleShape*, 8> tileChoices; //TODO 7 = number enums
-	std::array<sf::RectangleShape*, 9> itemChoices;
+	std::array<sf::RectangleShape*, 12> itemChoices;
 	// active bar choice (color currently chosen or item currently chosen)
 	int activeColorIndex;
 	int activeItemIndex;
