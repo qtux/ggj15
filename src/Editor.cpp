@@ -127,7 +127,6 @@ Editor::Editor():
 	currentLevel = -1;
 	overwrite = false;
 	exit = false;
-	noDrag = true;
 }
 
 Editor::~Editor()
@@ -255,7 +254,6 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 								for (int y = y1; y <= y2; ++y)
 								{
 									tiles[x][y]->setFillColor(tileColors[activeColorIndex]);
-									noDrag = true;
 								}
 							}
 						}
@@ -290,7 +288,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// if item would not fit, don't place it
 							if (currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTexture(nullptr);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[0]);
 							}
 							else
 							{
@@ -317,7 +315,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// if door item would not fit, don't place it or place it vertically if that fits
 							if (currentX + 1 >= numTilesX && currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTexture(nullptr);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[0]);
 							}
 							else if (currentX + 1 >= numTilesX)
 							{
@@ -417,14 +415,14 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 				itemTiles[xPos][yPos]->setTextureRect(verticalDoorItemRect);
 				// swap dot
 				setTexture(xPos, yPos+1, tileItemRects[12]);
-				itemTiles[xPos+1][yPos]->setTexture(nullptr);
+				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[0]);
 			}
 			else if (itemTiles[xPos][yPos]->getTextureRect() == verticalDoorItemRect && xPos + 1 < numTilesX)
 			{
 				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[7]);
 				// swap dot
 				setTexture(xPos+1, yPos, tileItemRects[12]);
-				itemTiles[xPos][yPos+1]->setTexture(nullptr);
+				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[0]);
 			}
 			
 			// toggle blocking for deco items
@@ -456,7 +454,6 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		}
 		if (!loadLevelActive)
 		{
-			noDrag = true;
 			shiftActive = true;
 			markStart.x = -1;
 			markStart.y = -1;
@@ -633,7 +630,6 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
 			{
 				tiles[(mousePos.x - lateralOffset) / tileOffset][mousePos.y / tileOffset]->setFillColor(tileColors[activeColorIndex]);
-				noDrag = true;
 			}
 		}
 		
@@ -662,7 +658,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 				// if color active
 				if (activeColorIndex != -1)
 				{
-					mouseTile.setTexture(nullptr);
+					mouseTile.setTextureRect(tileItemRects[0]);
 					mouseTile.setFillColor(tileColors[activeColorIndex]);
 				}
 				// if item active
@@ -675,60 +671,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 				// set position to mouse position
 				mouseTile.setPosition(lateralOffset + xPos * tileOffset + 1.0f, yPos * tileOffset + 1.0f);
 				
-				/*if (!noDrag)
-				{
-					// if color active reapply old color
-					if (activeColorIndex != -1)
-					{
-						tiles[xPos][yPos]->setFillColor(color);
-					}
-					// if item active reapply item
-					if (activeItemIndex != -1)
-					{
-						setTexture(xPos, yPos, intRect);
-					}
-				}
-				noDrag = false;
-				
-				// new position
-				xPos = (mousePos.x - lateralOffset) / tileOffset;
-				yPos = mousePos.y / tileOffset;
-				// save color and item
-				color = tiles[xPos][yPos]->getFillColor();
-				if (tiles[xPos][yPos]->getTexture())
-				{
-					intRect = tiles[xPos][yPos]->getTextureRect();
-				}
-				
-				// if color active
-				if (activeColorIndex != -1)
-				{
-					// save color and draw new color
-					tiles[xPos][yPos]->setFillColor(tileColors[activeColorIndex]);
-				}
-				// if item active
-				if (activeItemIndex != -1)
-				{
-					// save item and draw new color
-					setTexture(xPos, yPos, tileItemRects[activeItemIndex]);
-				}*/
-				
 			}
-			// if mouse not inside gameboard
-			/*else
-			{
-				noDrag = true;
-				// if color active reapply old color
-				if (activeColorIndex != -1)
-				{
-					tiles[xPos][yPos]->setFillColor(color);
-				}
-				// if item active reapply item
-				if (activeItemIndex != -1)
-				{
-					setTexture(xPos, yPos, intRect);
-				}
-			}*/
 		}
 	}
 	

@@ -54,7 +54,6 @@ private:
 	bool loadLevelActive;
 	bool overwrite;
 	bool exit;
-	bool noDrag;
 	std::pair<int, int> triggerMarked;
 	std::stack<std::pair<int, int>> triggerStack;
 	// to drag
