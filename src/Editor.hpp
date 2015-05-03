@@ -6,6 +6,10 @@
 class Editor: public Scene
 {
 private:
+	enum ActionItemType
+	{
+		NOITEM, START, GOALPORTAL, TRIGGER, COIN, CLOCK, KEY, DOOR, VERTICALDOOR, MUSHROOM, FLOWER, CRYSTALS, ROCK
+	};
 	struct Key
 	{
 		Key() = delete;
@@ -72,6 +76,7 @@ private:
 	std::vector<int> levels;
 	// the current level if loaded or was saved once
 	int currentLevel;
+	std::map<ActionItemType, sf::IntRect> actionRect;
 	// mark area (e.g. for trigger)
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	// reset map when triggers were activated
