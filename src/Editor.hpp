@@ -31,6 +31,7 @@ private:
 	// maps to access color and item bar content
 	std::map<int, sf::Color> tileColors;
 	std::map<int, sf::IntRect> tileItemRects;
+	sf::IntRect verticalDoorItemRect;
 	// offset and spaces from left to right:
 	// half a tile space, tile choices, a tile space, map, same reversed ...
 	// offset for the gameboard

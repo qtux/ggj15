@@ -70,6 +70,7 @@ Editor::Editor():
 	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 10. crystals (deco)
 	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rocks (deco)
 	tileItemRects[12] = sf::IntRect(2*16,3*16,16,16);	// 12. blockItem (no function)
+	verticalDoorItemRect = sf::IntRect(2*16,4*16,16,32);
 	// TODO more
 	// TODO deco dialog with one item shown?
 	
@@ -269,17 +270,29 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					// if trigger marking is not active where everything else is disabled
 					if (!triggerMarkingActive)
 					{
-						// set item
+						// get position
 						int currentX = (mousePos.x - lateralOffset) / tileOffset;
 						int currentY = mousePos.y / tileOffset;
+						
+						// set item
 						itemTiles[currentX][currentY]->setFillColor(sf::Color::White);
 						itemTiles[currentX][currentY]->setTexture(&actionItemTexture);
 						itemTiles[currentX][currentY]->setTextureRect(tileItemRects[activeItemIndex]);
-						if (activeItemIndex > 7 && activeItemIndex < 12) // deco item
+						
+						// apply necessary additions
+						if (activeItemIndex == 1 || activeItemIndex == 2) // portal and start item
 						{
-							// set to blocking
-							decoItemBlocking[Key(currentX,currentY)] = 1;
-							textOutput.setString("Deco item is blocking.");
+							// if item would not fit, don't place it
+							if (currentY + 1 >= numTilesY)
+							{
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[0]);
+							}
+							else
+							{
+								itemTiles[currentX][currentY+1]->setFillColor(sf::Color::White);
+								itemTiles[currentX][currentY+1]->setTexture(&actionItemTexture);
+								itemTiles[currentX][currentY+1]->setTextureRect(tileItemRects[12]);
+							}
 						}
 						if (activeItemIndex == 3) // trigger item
 						{
@@ -295,6 +308,34 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							triggerSwapPositionsX[currentX] = swapTilesPosX;
 							triggerSwapPositionsY[currentY] = swapTilesPosY;
 							markArea(currentX, currentY, sf::Color::Red, quadrantSize);
+						}
+						if (activeItemIndex == 7) // door item
+						{
+							// if door item would not fit, don't place it or place it vertically if that fits
+							if (currentX + 1 >= numTilesX && currentY + 1 >= numTilesY)
+							{
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[0]);
+							}
+							else if (currentX + 1 >= numTilesX)
+							{
+								itemTiles[currentX][currentY]->setTextureRect(verticalDoorItemRect);
+								
+								itemTiles[currentX][currentY+1]->setFillColor(sf::Color::White);
+								itemTiles[currentX][currentY+1]->setTexture(&actionItemTexture);
+								itemTiles[currentX][currentY+1]->setTextureRect(tileItemRects[12]);
+							}
+							else
+							{
+								itemTiles[currentX+1][currentY]->setFillColor(sf::Color::White);
+								itemTiles[currentX+1][currentY]->setTexture(&actionItemTexture);
+								itemTiles[currentX+1][currentY]->setTextureRect(tileItemRects[12]);
+							}
+						}
+						if (activeItemIndex > 7 && activeItemIndex < 12) // deco item
+						{
+							// set to blocking
+							decoItemBlocking[Key(currentX,currentY)] = 1;
+							textOutput.setString("Deco item is blocking.");
 						}
 					}
 					// if trigger marking is active, two correct markings must be drawn
@@ -371,14 +412,24 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 				triggerStack.push(std::pair<int, int>(xPos, yPos));
 			}
 			
-			// toggle door orientation
-			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[7])
+			// toggle door orientation if enough space //TODO and no item in the way
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[7] && yPos + 1 < numTilesY)
 			{
-				itemTiles[xPos][yPos]->setTextureRect(sf::IntRect(2*16,4*16,16,32));
+				itemTiles[xPos][yPos]->setTextureRect(verticalDoorItemRect);
+				// swap dot
+				itemTiles[xPos][yPos+1]->setFillColor(sf::Color::White);
+				itemTiles[xPos][yPos+1]->setTexture(&actionItemTexture);
+				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[12]);
+				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[0]);
 			}
-			else if (itemTiles[xPos][yPos]->getTextureRect() == sf::IntRect(2*16,4*16,16,32))
+			else if (itemTiles[xPos][yPos]->getTextureRect() == verticalDoorItemRect && xPos + 1 < numTilesX)
 			{
 				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[7]);
+				// swap dot
+				itemTiles[xPos+1][yPos]->setFillColor(sf::Color::White);
+				itemTiles[xPos+1][yPos]->setTexture(&actionItemTexture);
+				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[12]);
+				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[0]);
 			}
 			
 			// toggle blocking for deco items
@@ -715,7 +766,7 @@ void Editor::saveLevel(bool overwrite)
 					// horizontal door
 					txtfile << "Item DoorItem " << x << " " << y << " 0\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == sf::IntRect(2*16,4*16,16,32))
+				if (itemTiles[x][y]->getTextureRect() == verticalDoorItemRect)
 				{
 					// vertical door
 					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
@@ -836,7 +887,7 @@ void Editor::loadLevel(int level)
 				itemTiles[x][y]->setTexture(&actionItemTexture);
 				if (vertical == 1)
 				{
-					itemTiles[x][y]->setTextureRect(sf::IntRect(2*16,4*16,16,32));
+					itemTiles[x][y]->setTextureRect(verticalDoorItemRect);
 				}
 				else
 				{
