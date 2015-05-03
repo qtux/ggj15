@@ -109,6 +109,11 @@ Editor::Editor():
 	textOutput.setPosition(mapWidth/2, mapHeight + 5); // x = Lateraloffset?
 	textOutput.setString("");
 	
+	// create drag tile
+	mouseTile.setOutlineColor(sf::Color::Blue);
+	mouseTile.setOutlineThickness(1.0f);
+	mouseTile.setSize(sf::Vector2f(tileSize, tileSize));
+	
 	// initialize color editing with color 0 (mark in red), no item editing, no mouse or key pressed, no item active
 	activeColorIndex = 0;
 	activeItemIndex = -1;
@@ -122,6 +127,7 @@ Editor::Editor():
 	currentLevel = -1;
 	overwrite = false;
 	exit = false;
+	noDrag = true;
 }
 
 Editor::~Editor()
@@ -249,6 +255,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 								for (int y = y1; y <= y2; ++y)
 								{
 									tiles[x][y]->setFillColor(tileColors[activeColorIndex]);
+									noDrag = true;
 								}
 							}
 						}
@@ -275,9 +282,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						int currentY = mousePos.y / tileOffset;
 						
 						// set item
-						itemTiles[currentX][currentY]->setFillColor(sf::Color::White);
-						itemTiles[currentX][currentY]->setTexture(&actionItemTexture);
-						itemTiles[currentX][currentY]->setTextureRect(tileItemRects[activeItemIndex]);
+						setTexture(currentX, currentY, tileItemRects[activeItemIndex]);
 						
 						// apply necessary additions
 						if (activeItemIndex == 1 || activeItemIndex == 2) // portal and start item
@@ -285,13 +290,11 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// if item would not fit, don't place it
 							if (currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[0]);
+								itemTiles[currentX][currentY]->setTexture(nullptr);
 							}
 							else
 							{
-								itemTiles[currentX][currentY+1]->setFillColor(sf::Color::White);
-								itemTiles[currentX][currentY+1]->setTexture(&actionItemTexture);
-								itemTiles[currentX][currentY+1]->setTextureRect(tileItemRects[12]);
+								setTexture(currentX, currentY+1, tileItemRects[12]);
 							}
 						}
 						if (activeItemIndex == 3) // trigger item
@@ -314,21 +317,17 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// if door item would not fit, don't place it or place it vertically if that fits
 							if (currentX + 1 >= numTilesX && currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[0]);
+								itemTiles[currentX][currentY]->setTexture(nullptr);
 							}
 							else if (currentX + 1 >= numTilesX)
 							{
 								itemTiles[currentX][currentY]->setTextureRect(verticalDoorItemRect);
 								
-								itemTiles[currentX][currentY+1]->setFillColor(sf::Color::White);
-								itemTiles[currentX][currentY+1]->setTexture(&actionItemTexture);
-								itemTiles[currentX][currentY+1]->setTextureRect(tileItemRects[12]);
+								setTexture(currentX, currentY+1, tileItemRects[12]);
 							}
 							else
 							{
-								itemTiles[currentX+1][currentY]->setFillColor(sf::Color::White);
-								itemTiles[currentX+1][currentY]->setTexture(&actionItemTexture);
-								itemTiles[currentX+1][currentY]->setTextureRect(tileItemRects[12]);
+								setTexture(currentX+1, currentY, tileItemRects[12]);
 							}
 						}
 						if (activeItemIndex > 7 && activeItemIndex < 12) // deco item
@@ -412,24 +411,20 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 				triggerStack.push(std::pair<int, int>(xPos, yPos));
 			}
 			
-			// toggle door orientation if enough space //TODO and no item in the way
+			// toggle door orientation if enough space
 			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[7] && yPos + 1 < numTilesY)
 			{
 				itemTiles[xPos][yPos]->setTextureRect(verticalDoorItemRect);
 				// swap dot
-				itemTiles[xPos][yPos+1]->setFillColor(sf::Color::White);
-				itemTiles[xPos][yPos+1]->setTexture(&actionItemTexture);
-				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[12]);
-				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[0]);
+				setTexture(xPos, yPos+1, tileItemRects[12]);
+				itemTiles[xPos+1][yPos]->setTexture(nullptr);
 			}
 			else if (itemTiles[xPos][yPos]->getTextureRect() == verticalDoorItemRect && xPos + 1 < numTilesX)
 			{
 				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[7]);
 				// swap dot
-				itemTiles[xPos+1][yPos]->setFillColor(sf::Color::White);
-				itemTiles[xPos+1][yPos]->setTexture(&actionItemTexture);
-				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[12]);
-				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[0]);
+				setTexture(xPos+1, yPos, tileItemRects[12]);
+				itemTiles[xPos][yPos+1]->setTexture(nullptr);
 			}
 			
 			// toggle blocking for deco items
@@ -461,6 +456,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		}
 		if (!loadLevelActive)
 		{
+			noDrag = true;
 			shiftActive = true;
 			markStart.x = -1;
 			markStart.y = -1;
@@ -637,6 +633,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
 			{
 				tiles[(mousePos.x - lateralOffset) / tileOffset][mousePos.y / tileOffset]->setFillColor(tileColors[activeColorIndex]);
+				noDrag = true;
 			}
 		}
 		
@@ -653,6 +650,86 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 			yPos = mousePos.y / tileOffset;
 			markArea(xPos, yPos, sf::Color::Red, quadrantSize);
 		}
+		// drag items and colors
+		else
+		{
+			sf::Vector2f mousePos = getMouseWorldPos(window);
+			// if mouse in gameboard
+			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
+			{
+				int xPos = (mousePos.x - lateralOffset) / tileOffset;
+				int yPos = mousePos.y / tileOffset;
+				// if color active
+				if (activeColorIndex != -1)
+				{
+					mouseTile.setTexture(nullptr);
+					mouseTile.setFillColor(tileColors[activeColorIndex]);
+				}
+				// if item active
+				if (activeItemIndex != -1)
+				{
+					mouseTile.setFillColor(sf::Color::White);
+					mouseTile.setTexture(&actionItemTexture);
+					mouseTile.setTextureRect(tileItemRects[activeItemIndex]);
+				}
+				// set position to mouse position
+				mouseTile.setPosition(lateralOffset + xPos * tileOffset + 1.0f, yPos * tileOffset + 1.0f);
+				
+				/*if (!noDrag)
+				{
+					// if color active reapply old color
+					if (activeColorIndex != -1)
+					{
+						tiles[xPos][yPos]->setFillColor(color);
+					}
+					// if item active reapply item
+					if (activeItemIndex != -1)
+					{
+						setTexture(xPos, yPos, intRect);
+					}
+				}
+				noDrag = false;
+				
+				// new position
+				xPos = (mousePos.x - lateralOffset) / tileOffset;
+				yPos = mousePos.y / tileOffset;
+				// save color and item
+				color = tiles[xPos][yPos]->getFillColor();
+				if (tiles[xPos][yPos]->getTexture())
+				{
+					intRect = tiles[xPos][yPos]->getTextureRect();
+				}
+				
+				// if color active
+				if (activeColorIndex != -1)
+				{
+					// save color and draw new color
+					tiles[xPos][yPos]->setFillColor(tileColors[activeColorIndex]);
+				}
+				// if item active
+				if (activeItemIndex != -1)
+				{
+					// save item and draw new color
+					setTexture(xPos, yPos, tileItemRects[activeItemIndex]);
+				}*/
+				
+			}
+			// if mouse not inside gameboard
+			/*else
+			{
+				noDrag = true;
+				// if color active reapply old color
+				if (activeColorIndex != -1)
+				{
+					tiles[xPos][yPos]->setFillColor(color);
+				}
+				// if item active reapply item
+				if (activeItemIndex != -1)
+				{
+					setTexture(xPos, yPos, intRect);
+				}
+			}*/
+		}
 	}
 	
 	return this;
@@ -661,12 +738,21 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 void Editor::draw(sf::RenderTarget& target, bool focus)
 {
 	target.draw(background);
-	// draw tiles and itemTiles
+	// draw tiles
 	for (int x = 0; x < numTilesX; ++x)
 	{
 		for (int y = 0; y < numTilesY; ++y)
 		{
 			target.draw(*tiles[x][y]);
+		}
+	}
+	// draw tile shown below the mouse
+	target.draw(mouseTile);
+	// draw itemTiles
+	for (int x = 0; x < numTilesX; ++x)
+	{
+		for (int y = 0; y < numTilesY; ++y)
+		{
 			target.draw(*itemTiles[x][y]);
 		}
 	}
@@ -680,14 +766,12 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 	{
 		target.draw(*itemChoices[y]);
 	}
+	// draw text
 	target.draw(textOutput);
 }
 
-// TODO check out which number the level shall have to not overwrite existing ones
-// needs to be better code
-// needs to register new levels so they can be played
+// TODO needs to be better code
 // should directly create the list of files and find out which level is the highest number
-// play around with overwriting level and not overwriting level currently edited
 void Editor::saveLevel(bool overwrite)
 {
 	// if saved for the first time and nothing was loaded yet or if user does not want overwrite
@@ -825,18 +909,14 @@ void Editor::loadLevel(int level)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			itemTiles[x][y]->setFillColor(sf::Color::White);
-			itemTiles[x][y]->setTexture(&actionItemTexture);
-			itemTiles[x][y]->setTextureRect(tileItemRects[1]);
+			setTexture(x, y, tileItemRects[1]);
 		}
 		if (first == "Portal")
 		{
 			int x,y;
 			iss >> x;
 			iss >> y;
-			itemTiles[x][y]->setFillColor(sf::Color::White);
-			itemTiles[x][y]->setTexture(&actionItemTexture);
-			itemTiles[x][y]->setTextureRect(tileItemRects[2]);
+			setTexture(x, y, tileItemRects[2]);
 		}
 		if (first == "TriggerItem")
 		{
@@ -847,9 +927,7 @@ void Editor::loadLevel(int level)
 			iss >> y1;
 			iss >> x2;
 			iss >> y2;
-			itemTiles[x][y]->setFillColor(sf::Color::White);
-			itemTiles[x][y]->setTexture(&actionItemTexture);
-			itemTiles[x][y]->setTextureRect(tileItemRects[3]);
+			setTexture(x, y, tileItemRects[3]);
 			triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
 			triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
 		}
@@ -862,21 +940,15 @@ void Editor::loadLevel(int level)
 			iss >> y;
 			if (second == "CoinItem")
 			{
-				itemTiles[x][y]->setFillColor(sf::Color::White);
-				itemTiles[x][y]->setTexture(&actionItemTexture);
-				itemTiles[x][y]->setTextureRect(tileItemRects[4]);
+				setTexture(x, y, tileItemRects[4]);
 			}
 			if (second == "TimeItem")
 			{
-				itemTiles[x][y]->setFillColor(sf::Color::White);
-				itemTiles[x][y]->setTexture(&actionItemTexture);
-				itemTiles[x][y]->setTextureRect(tileItemRects[5]);
+				setTexture(x, y, tileItemRects[5]);
 			}
 			if (second == "KeyItem")
 			{
-				itemTiles[x][y]->setFillColor(sf::Color::White);
-				itemTiles[x][y]->setTexture(&actionItemTexture);
-				itemTiles[x][y]->setTextureRect(tileItemRects[6]);
+				setTexture(x, y, tileItemRects[6]);
 			}
 			if (second == "DoorItem")
 			{
@@ -906,37 +978,36 @@ void Editor::loadLevel(int level)
 				if (texPosX == 16 && texPosY == 80)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					itemTiles[x][y]->setFillColor(sf::Color::White);
-					itemTiles[x][y]->setTexture(&actionItemTexture);
-					itemTiles[x][y]->setTextureRect(tileItemRects[8]);
+					setTexture(x, y, tileItemRects[8]);
 				}
 				// flower
 				if (texPosX == 16 && texPosY == 96)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					itemTiles[x][y]->setFillColor(sf::Color::White);
-					itemTiles[x][y]->setTexture(&actionItemTexture);
-					itemTiles[x][y]->setTextureRect(tileItemRects[9]);
+					setTexture(x, y, tileItemRects[9]);
 				}
 				// crystals
 				if (texPosX == 0 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					itemTiles[x][y]->setFillColor(sf::Color::White);
-					itemTiles[x][y]->setTexture(&actionItemTexture);
-					itemTiles[x][y]->setTextureRect(tileItemRects[10]);
+					setTexture(x, y, tileItemRects[10]);
 				}
 				// rock
 				if (texPosX == 16 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					itemTiles[x][y]->setFillColor(sf::Color::White);
-					itemTiles[x][y]->setTexture(&actionItemTexture);
-					itemTiles[x][y]->setTextureRect(tileItemRects[11]);
+					setTexture(x, y, tileItemRects[11]);
 				}
 			}
 		}
 	}
+}
+
+void Editor::setTexture(int x, int y, sf::IntRect textureRect)
+{
+	itemTiles[x][y]->setFillColor(sf::Color::White);
+	itemTiles[x][y]->setTexture(&actionItemTexture);
+	itemTiles[x][y]->setTextureRect(textureRect);
 }
 
 int Editor::nextPos(int pos, int size, bool clockWise)

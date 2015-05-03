@@ -54,8 +54,11 @@ private:
 	bool loadLevelActive;
 	bool overwrite;
 	bool exit;
+	bool noDrag;
 	std::pair<int, int> triggerMarked;
 	std::stack<std::pair<int, int>> triggerStack;
+	// to drag
+	sf::RectangleShape mouseTile;
 	// trigger swap positions map
 	//std::map<sf::Vector2f, std::pair<sf::Vector2f, sf::Vector2f>> triggerSwapPositions;
 	std::map<int, std::pair<int, int>> triggerSwapPositionsX;
@@ -63,10 +66,6 @@ private:
 	sf::Vector2f triggerPos;
 	// deco item blocking map
 	std::map<Key, int> decoItemBlocking;
-	// mark area (e.g. for trigger)
-	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
-	// reset map when triggers were activated
-	void resetTriggers();
 	// text
 	sf::Text textOutput;
 	sf::Font font;
@@ -74,6 +73,12 @@ private:
 	std::vector<int> levels;
 	// the current level if loaded or was saved once
 	int currentLevel;
+	// mark area (e.g. for trigger)
+	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
+	// reset map when triggers were activated
+	void resetTriggers();
+	// set texture rect
+	void setTexture(int x, int y, sf::IntRect textureRect);
 	// get mousePos in world
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 public:
