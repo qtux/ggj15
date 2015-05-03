@@ -272,6 +272,12 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						itemTiles[currentX][currentY]->setFillColor(sf::Color::White);
 						itemTiles[currentX][currentY]->setTexture(&actionItemTexture);
 						itemTiles[currentX][currentY]->setTextureRect(tileItemRects[activeItemIndex]);
+						if (activeItemIndex > 7 && activeItemIndex < 12) // deco item
+						{
+							// set to blocking
+							decoItemBlocking[Key(currentX,currentY)] = 1;
+							textOutput.setString("Deco item is blocking.");
+						}
 						if (activeItemIndex == 3) // trigger item
 						{
 							// force marking of quadrants
@@ -324,7 +330,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		{
 			textOutput.setString("");
 		}
-		if (!loadLevelActive)
+		if (!loadLevelActive && !triggerMarkingActive)
 		{
 			sf::Vector2f mousePos = getMouseWorldPos(window);
 			int xPos = (mousePos.x - lateralOffset) / tileOffset;
@@ -341,7 +347,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// TODO swapped triggers may be outlined yellow or sth (probably)
 			// if trigger item is on right clicked tile
-			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[3] && !triggerMarkingActive)
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[3])
 			{
 				// mark swapped tiles
 				markArea(triggerSwapPositionsX[xPos].first, triggerSwapPositionsY[yPos].first, sf::Color::Red, quadrantSize);
@@ -360,6 +366,34 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					}
 				}
 				triggerStack.push(std::pair<int, int>(xPos, yPos));
+			}
+			
+			// toggle door orientation
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[7])
+			{
+				itemTiles[xPos][yPos]->setTextureRect(sf::IntRect(2*16,4*16,16,32));
+			}
+			else if (itemTiles[xPos][yPos]->getTextureRect() == sf::IntRect(2*16,4*16,16,32))
+			{
+				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[7]);
+			}
+			
+			// toggle blocking for deco items
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[8]  ||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[9]  ||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[10] ||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[11]   )
+			{
+				if (decoItemBlocking[Key(xPos,yPos)] == 1)
+				{
+					textOutput.setString("Deco item is non-blocking.");
+					decoItemBlocking[Key(xPos,yPos)] = 0;
+				}
+				else
+				{
+					textOutput.setString("Deco item is blocking.");
+					decoItemBlocking[Key(xPos,yPos)] = 1;
+				}
 			}
 		}
 	}
@@ -664,28 +698,29 @@ void Editor::saveLevel(bool overwrite)
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[7])
 				{
-					// TODO vertical choice
+					// horizontal door
 					txtfile << "Item DoorItem " << x << " " << y << " 0\n";
+				}
+				if (itemTiles[x][y]->getTextureRect() == sf::IntRect(2*16,4*16,16,32))
+				{
+					// vertical door
+					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[8])
 				{
-					// TODO blocking choice
-					txtfile << "Item DecorationItem " << x << " " << y << " 1 16 80 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 80 16 16\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[9])
 				{
-					// TODO blocking choice
-					txtfile << "Item DecorationItem " << x << " " << y << " 1 16 96 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 96 16 16\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[10])
 				{
-					// TODO blocking choice
-					txtfile << "Item DecorationItem " << x << " " << y << " 1 0 112 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 0 112 16 16\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[11])
 				{
-					// TODO blocking choice
-					txtfile << "Item DecorationItem " << x << " " << y << " 1 16 112 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 112 16 16\n";
 				}
 			}
 		}
@@ -780,18 +815,24 @@ void Editor::loadLevel(int level)
 			}
 			if (second == "DoorItem")
 			{
-				// TODO do sth with vertical and closed
-				bool vertical = false;
-				bool closed = true;
-				iss >> vertical >> closed;
+				// TODO do sth with closed?
+				int vertical;
+				iss >> vertical;
 				itemTiles[x][y]->setFillColor(sf::Color::White);
 				itemTiles[x][y]->setTexture(&actionItemTexture);
-				itemTiles[x][y]->setTextureRect(tileItemRects[7]);
+				if (vertical == 1)
+				{
+					itemTiles[x][y]->setTextureRect(sf::IntRect(2*16,4*16,16,32));
+				}
+				else
+				{
+					itemTiles[x][y]->setTextureRect(tileItemRects[7]);
+				}
 			}
 			if (second == "DecorationItem")
 			{
 				// TODO add block or non-block choice to item
-				bool blocksPath;
+				int blocksPath;
 				iss >> blocksPath;
 				int texPosX, texPosY;
 				iss >> texPosX;
@@ -799,6 +840,7 @@ void Editor::loadLevel(int level)
 				// mushroom
 				if (texPosX == 16 && texPosY == 80)
 				{
+					decoItemBlocking[Key(x,y)] = blocksPath;
 					itemTiles[x][y]->setFillColor(sf::Color::White);
 					itemTiles[x][y]->setTexture(&actionItemTexture);
 					itemTiles[x][y]->setTextureRect(tileItemRects[8]);
@@ -806,6 +848,7 @@ void Editor::loadLevel(int level)
 				// flower
 				if (texPosX == 16 && texPosY == 96)
 				{
+					decoItemBlocking[Key(x,y)] = blocksPath;
 					itemTiles[x][y]->setFillColor(sf::Color::White);
 					itemTiles[x][y]->setTexture(&actionItemTexture);
 					itemTiles[x][y]->setTextureRect(tileItemRects[9]);
@@ -813,6 +856,7 @@ void Editor::loadLevel(int level)
 				// crystals
 				if (texPosX == 0 && texPosY == 112)
 				{
+					decoItemBlocking[Key(x,y)] = blocksPath;
 					itemTiles[x][y]->setFillColor(sf::Color::White);
 					itemTiles[x][y]->setTexture(&actionItemTexture);
 					itemTiles[x][y]->setTextureRect(tileItemRects[10]);
@@ -820,6 +864,7 @@ void Editor::loadLevel(int level)
 				// rock
 				if (texPosX == 16 && texPosY == 112)
 				{
+					decoItemBlocking[Key(x,y)] = blocksPath;
 					itemTiles[x][y]->setFillColor(sf::Color::White);
 					itemTiles[x][y]->setTexture(&actionItemTexture);
 					itemTiles[x][y]->setTextureRect(tileItemRects[11]);

@@ -5,16 +5,21 @@
 
 class Editor: public Scene
 {
-public:
-	enum TileType
-	{
-		BLANK, GRASS, EARTH, STONEPATH, WETSTONEPATH, STONEWALL, WATER, BUSH
-	};
-	enum ActionItemTypes
-	{
-		START, GOALPORTAL, TRIGGER, COIN, CLOCK, KEY
-	};
 private:
+	struct Key
+	{
+		Key() = delete;
+		Key(unsigned int x, unsigned int y):
+			x(x), y(y)
+		{}
+		unsigned int x;
+		unsigned int y;
+		bool operator<(const Key& rhs) const
+		{
+			// compare x then compare y
+			return std::tie(x, y) < std::tie(rhs.x, rhs.y);
+		}
+	};
 	// TODO get from outside
 	static const int numTilesX = 30;
 	static const int numTilesY = 24;
@@ -54,11 +59,14 @@ private:
 	std::map<int, std::pair<int, int>> triggerSwapPositionsX;
 	std::map<int, std::pair<int, int>> triggerSwapPositionsY;
 	sf::Vector2f triggerPos;
+	// deco item blocking map
+	std::map<Key, int> decoItemBlocking;
 	// mark area (e.g. for trigger)
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	// reset map when triggers were activated
 	void resetTriggers();
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
+	// text
 	sf::Text textOutput;
 	sf::Font font;
 	// a list of the existing levels
