@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <stack>
 #include "Scene.hpp"
 
 class Editor: public Scene
@@ -44,7 +45,9 @@ private:
 	bool mousePressed;
 	bool shiftActive;
 	bool triggerMarkingActive;
+	bool loadLevelActive;
 	std::pair<int, int> triggerMarked;
+	std::stack<std::pair<int, int>> triggerStack;
 	// trigger swap positions map
 	//std::map<sf::Vector2f, std::pair<sf::Vector2f, sf::Vector2f>> triggerSwapPositions;
 	std::map<int, std::pair<int, int>> triggerSwapPositionsX;
@@ -52,7 +55,15 @@ private:
 	sf::Vector2f triggerPos;
 	// mark area (e.g. for trigger)
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
+	// reset map when triggers were activated
+	void resetTriggers();
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
+	sf::Text levelName;
+	sf::Font font;
+	// a list of the existing levels
+	std::vector<int> levels;
+	// the current level if loaded
+	int currentLevel;
 public:
 	Editor();
 	~Editor();
@@ -60,4 +71,6 @@ public:
 	Scene* update(sf::Time deltaT, sf::RenderWindow& window) override final;
 	void draw(sf::RenderTarget& target, bool focus) override final;
 	void saveLevel();
+	void loadLevel(int level);
+	int nextPos(int pos, int size, bool clockWise);
 };
