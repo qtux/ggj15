@@ -96,11 +96,11 @@ Editor::Editor():
 	// load font
 	font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
 	// initialize text
-	levelName.setFont(font);
-	levelName.setColor(sf::Color::Black);
-	levelName.setCharacterSize(32);
-	levelName.setPosition(mapWidth/2, mapHeight + 5);
-	levelName.setString("");
+	textOutput.setFont(font);
+	textOutput.setColor(sf::Color::Black);
+	textOutput.setCharacterSize(32);
+	textOutput.setPosition(mapWidth/2, mapHeight + 5); // x = Lateraloffset?
+	textOutput.setString("");
 	
 	// initialize color editing with color 0 (mark in red), no item editing, no mouse or key pressed, no item active
 	activeColorIndex = 0;
@@ -113,6 +113,7 @@ Editor::Editor():
 	triggerMarked.second = -1;
 	loadLevelActive = false;
 	currentLevel = -1;
+	overwrite = false;
 }
 
 Editor::~Editor()
@@ -142,14 +143,14 @@ Editor::~Editor()
 Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 {
 	static sf::Vector2i markStart;
-		
+	
 	// check ESC
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 	{
 		if (loadLevelActive)
 		{
 			loadLevelActive = false;
-			levelName.setString("");
+			textOutput.setString("");
 		}
 		else
 		{
@@ -160,6 +161,10 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	// check for left mouseclick
 	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 	{
+		if (!(loadLevelActive || overwrite))
+		{
+			textOutput.setString("");
+		}
 		if (!loadLevelActive)
 		{
 			mousePressed = true;
@@ -310,6 +315,10 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	
 	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right)
 	{
+		if (!(loadLevelActive || overwrite))
+		{
+			textOutput.setString("");
+		}
 		if (!loadLevelActive)
 		{
 			sf::Vector2f mousePos = getMouseWorldPos(window);
@@ -353,6 +362,10 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	// box coloring on shift click (only activate here and set start tile)
 	if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift))
 	{
+		if (!(loadLevelActive || overwrite))
+		{
+			textOutput.setString("");
+		}
 		if (!loadLevelActive)
 		{
 			shiftActive = true;
@@ -379,7 +392,39 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S)
 	{
 		resetTriggers();
-		saveLevel();
+		// if the level is not a new one but was loaded or saved already let user choose to overwrite or not
+		if (currentLevel != -1)
+		{
+			// tell user which level will be overwritten
+			textOutput.setString("Overwrite Level " + std::to_string(currentLevel) + "?");
+			overwrite = true;
+		}
+		else
+		{
+			saveLevel(false);
+		}
+	}
+	
+	// overwrite level
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Y)
+	{
+		if (overwrite)
+		{
+			textOutput.setString("");
+			overwrite = false;
+			saveLevel(true);
+		}
+	}
+	
+	// do not overwrite, i.e. save normally
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::N)
+	{
+		if (overwrite)
+		{
+			textOutput.setString("");
+			overwrite = false;
+			saveLevel(false);
+		}
 	}
 	
 	// load when clicking l
@@ -402,7 +447,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		{
 			loadLevel(currentLevel);
 			loadLevelActive = false;
-			levelName.setString("");
+			textOutput.setString("");
 		}
 	}
 	
@@ -475,7 +520,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 {	
 	if (loadLevelActive)
 	{
-		levelName.setString("Lvl: " + std::to_string(currentLevel));
+		textOutput.setString("Level " + std::to_string(currentLevel));
 	}
 	else
 	{
@@ -531,7 +576,7 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 	{
 		target.draw(*itemChoices[y]);
 	}
-	target.draw(levelName);
+	target.draw(textOutput);
 }
 
 // TODO check out which number the level shall have to not overwrite existing ones
@@ -539,45 +584,26 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 // needs to register new levels so they can be played
 // should directly create the list of files and find out which level is the highest number
 // play around with overwriting level and not overwriting level currently edited
-void Editor::saveLevel()
+void Editor::saveLevel(bool overwrite)
 {
-	// determine level number
-	std::string indexFile = "levels/index.txt";
-	/*// read level number from file
-	std::ifstream infile(indexFile);
-	std::string line;
-	std::vector<int> levelNumbers;
-	if (infile.is_open())
+	// if saved for the first time and nothing was loaded yet or if user does not want overwrite
+	if (!overwrite)
 	{
-		while (std::getline(infile, line))
+		// create new currentLevel
+		currentLevel = levels.back() + 1;
+		// write new maxLevel number into file
+		std::string indexFile = "levels/index.txt";
+		std::ofstream outfile;
+		outfile.open(indexFile, std::ios_base::app);
+		if (outfile.is_open())
 		{
-			std::istringstream iss(line);
-			int current;
-			iss >> current;
-			levelNumbers.push_back(current);
-			std::cout << current << std::endl;
+			outfile << currentLevel << "\n";
 		}
-	}
-	infile.close();
-	// search maximum
-	int maxLevel = 0;
-	for (int i = 0; i < levelNumbers.size(); i++)
-	{
-		maxLevel = std::max(maxLevel, levelNumbers[i]);
-	}*/
-	int maxLevel = levels.back();
-	maxLevel++;
-	// write new maxLevel number into file
-	std::ofstream outfile;
-	outfile.open(indexFile, std::ios_base::app);
-	if (outfile.is_open())
-	{
-		outfile << maxLevel << "\n";
 	}
 	
 	// level name png
 	std::stringstream streamPNG;
-	streamPNG << "levels/level" << maxLevel << ".png";
+	streamPNG << "levels/level" << currentLevel << ".png";
 	
 	// save colors in png image
 	sf::Image level;
@@ -597,7 +623,7 @@ void Editor::saveLevel()
 	
 	// level name txt
 	std::stringstream streamTXT;
-	streamTXT << "levels/level" << maxLevel << ".txt";
+	streamTXT << "levels/level" << currentLevel << ".txt";
 	
 	// save items in txt file
 	std::ofstream txtfile(streamTXT.str());
@@ -639,6 +665,8 @@ void Editor::saveLevel()
 		//TODO show user
 		std::cout << "something went wrong creating txt file" << std::endl;
 	}
+	// tell user where the level was saved
+	textOutput.setString("Saved as Level " + std::to_string(currentLevel));
 }
 
 void Editor::loadLevel(int level)

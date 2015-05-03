@@ -46,6 +46,7 @@ private:
 	bool shiftActive;
 	bool triggerMarkingActive;
 	bool loadLevelActive;
+	bool overwrite;
 	std::pair<int, int> triggerMarked;
 	std::stack<std::pair<int, int>> triggerStack;
 	// trigger swap positions map
@@ -58,11 +59,11 @@ private:
 	// reset map when triggers were activated
 	void resetTriggers();
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
-	sf::Text levelName;
+	sf::Text textOutput;
 	sf::Font font;
 	// a list of the existing levels
 	std::vector<int> levels;
-	// the current level if loaded
+	// the current level if loaded or was saved once
 	int currentLevel;
 public:
 	Editor();
@@ -70,7 +71,7 @@ public:
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
 	Scene* update(sf::Time deltaT, sf::RenderWindow& window) override final;
 	void draw(sf::RenderTarget& target, bool focus) override final;
-	void saveLevel();
+	void saveLevel(bool overwrite);
 	void loadLevel(int level);
 	int nextPos(int pos, int size, bool clockWise);
 };
