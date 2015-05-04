@@ -540,18 +540,23 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			textOutput.setString("");
 			infoText.setString(standardHelpText);
 		}
-		if (!loadLevelActive)
+		if (!loadLevelActive && activeColorIndex != -1)
 		{
 			shiftActive = true;
 			markStart.x = -1;
 			markStart.y = -1;
 			infoText.setString("Left click once to define origin, keep shift pressed, move the mouse and left click again to color a box.");
 		}
+		if (activeColorIndex == -1)
+		{
+			infoText.setString("Choose a color first to color a box.");
+		}
 	}
 	
 	// stop box coloring mode on shift release
 	if (event.type == sf::Event::KeyReleased && (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift))
 	{
+		infoText.setString(standardHelpText);
 		shiftActive = false;
 		// cleanup non-colored tiles
 		if (markStart.x != -1 && markStart.y != -1)
