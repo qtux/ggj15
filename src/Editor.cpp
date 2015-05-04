@@ -361,7 +361,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							{
 								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[NOITEM]]);
 							}
-							else if (currentX + 1 >= numTilesX || mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+							else if (currentX + 1 >= numTilesX || itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 							{
 								deleteBigItem(currentX, currentY+1);
 								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[VERTICALDOOR]].first);
@@ -491,12 +491,12 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// toggle door orientation
 			// TODO do this differently or make sure nothing bad happens
-			if (mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+			if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 			{
 				itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[DOOR]]);
 				mouseTile.setTextureRect(tileItemRects[id[DOOR]]);
 			}
-			else if (mouseTile.getTextureRect() == tileItemRects[id[DOOR]])
+			else if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[DOOR]])
 			{
 				itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 				mouseTile.setTextureRect(tileItemRects[id[VERTICALDOOR]]);
@@ -741,7 +741,8 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 				// if color active
 				if (activeColorIndex != -1)
 				{
-					mouseTile.setTextureRect(tileItemRects[id[NOITEM]]);
+					mouseTile.setSize(sf::Vector2f(tileSize, tileSize));
+					mouseTile.setTexture(nullptr);
 					mouseTile.setFillColor(tileColors[activeColorIndex]);
 				}
 				// if item active
@@ -859,11 +860,11 @@ void Editor::saveLevel(bool overwrite)
 		{
 			for (int y = 0; y < numTilesY; ++y)
 			{
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[START]])
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[START]].first)
 				{
 					txtfile << "Start " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[GOALPORTAL]])
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[GOALPORTAL]].first)
 				{
 					txtfile << "Portal " << x << " " << y << "\n";
 				}
@@ -883,12 +884,12 @@ void Editor::saveLevel(bool overwrite)
 				{
 					txtfile << "Item KeyItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DOOR]])
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[DOOR]].first)
 				{
 					// horizontal door
 					txtfile << "Item DoorItem " << x << " " << y << " 0\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[VERTICALDOOR]].first)
 				{
 					// vertical door
 					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
