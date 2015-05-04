@@ -75,7 +75,6 @@ Editor::Editor():
 	// put in new deco items here
 	// ---- displayed item border
 	tileItemRects[12] = sf::IntRect(2*16,4*16,16,32);	// 12. vertical door (not shown)
-	tileItemRects[13] = sf::IntRect(2*16,3*16,16,16);	// 13. blockItem (no function)
 	// TODO more
 	// TODO deco dialog with one item shown?	
 	
@@ -137,6 +136,12 @@ Editor::Editor():
 	textOutput.setCharacterSize(32);
 	textOutput.setPosition(mapWidth/2, mapHeight + 5); // x = Lateraloffset?
 	textOutput.setString("");
+	infoText.setFont(font);
+	infoText.setColor(sf::Color::Black);
+	infoText.setCharacterSize(24);
+	infoText.setPosition(lateralOffset/2, mapHeight + 45);
+	standardHelpText = "Draw/Place Item: Left Click, Draw Color Box: Shift + Left Click, Load Level: l, Save Level: s, Exit: ESC.";
+	infoText.setString(standardHelpText);
 	
 	// create drag tile
 	mouseTile.setOutlineColor(sf::Color::Blue);
@@ -194,11 +199,19 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		{
 			loadLevelActive = false;
 			textOutput.setString("");
+			infoText.setString(standardHelpText);
+		}
+		else if (overwrite)
+		{
+			overwrite = false;
+			textOutput.setString("");
+			infoText.setString(standardHelpText);
 		}
 		else
 		{
 			textOutput.setString("Really exit?");
 			exit = true;
+			infoText.setString("Confirm with y key, deny with n key.");
 		}
 	}
 	
@@ -208,6 +221,10 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		if (!(loadLevelActive || overwrite))
 		{
 			textOutput.setString("");
+			if (!shiftActive)
+			{
+				infoText.setString(standardHelpText);
+			}
 		}
 		if (!loadLevelActive)
 		{
@@ -353,6 +370,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							triggerSwapPositionsX[currentX] = swapTilesPosX;
 							triggerSwapPositionsY[currentY] = swapTilesPosY;
 							markArea(currentX, currentY, sf::Color::Red, quadrantSize);
+							infoText.setString("Left click to mark two swap areas.");
 						}
 						if (activeItemIndex == id[DOOR]) // door item
 						{
@@ -379,6 +397,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// set to blocking
 							decoItemBlocking[Key(currentX,currentY)] = 1;
 							textOutput.setString("Deco item is blocking.");
+							infoText.setString("Toggle blocking/non-blocking for decoration items with right click.");
 						}
 					}
 					// if trigger marking is active, two correct markings must be drawn
@@ -394,11 +413,13 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							triggerSwapPositionsY[triggerPos.y].second = yPos;
 							triggerMarkingActive = false;
 							markArea(xPos, yPos, sf::Color::Blue, quadrantSize);
+							infoText.setString("Right click trigger to test swap areas, use r key to reset all triggers.");
 						}
 						else
 						{
 							triggerSwapPositionsX[triggerPos.x].first = xPos;
 							triggerSwapPositionsY[triggerPos.y].first = yPos;
+							infoText.setString("Left click to mark another swap area.");
 						}
 					}
 				}
@@ -416,6 +437,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		if (!(loadLevelActive || overwrite))
 		{
 			textOutput.setString("");
+			infoText.setString(standardHelpText);
 		}
 		if (!loadLevelActive && !triggerMarkingActive)
 		{
@@ -453,6 +475,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					}
 				}
 				triggerStack.push(std::pair<int, int>(xPos, yPos));
+				infoText.setString("Right click trigger to test swap areas, use r key to reset all triggers.");
 			}
 			
 			// toggle door orientation if enough space
@@ -481,26 +504,31 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 				{
 					textOutput.setString("Deco item is non-blocking.");
 					decoItemBlocking[Key(xPos,yPos)] = 0;
+					infoText.setString("Toggle blocking/non-blocking for decoration items with right click.");
 				}
 				else
 				{
 					textOutput.setString("Deco item is blocking.");
 					decoItemBlocking[Key(xPos,yPos)] = 1;
+					infoText.setString("Toggle blocking/non-blocking for decoration items with right click.");
 				}
 			}
 			
 			// toggle door orientation
 			// TODO do this differently or make sure nothing bad happens
-			if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+			if (mouseTile.getTextureRect() == tileItemRects[id[DOOR]] || mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 			{
-				itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[DOOR]]);
-				mouseTile.setTextureRect(tileItemRects[id[DOOR]]);
-			}
-			else if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[DOOR]])
-			{
-				itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
-				mouseTile.setTextureRect(tileItemRects[id[VERTICALDOOR]]);
-			}			
+				if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+				{
+					itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[DOOR]]);
+					mouseTile.setTextureRect(tileItemRects[id[DOOR]]);
+				}
+				else if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[DOOR]])
+				{
+					itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
+					mouseTile.setTextureRect(tileItemRects[id[VERTICALDOOR]]);
+				}		
+			}	
 		}
 	}
 	
@@ -510,12 +538,14 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		if (!(loadLevelActive || overwrite))
 		{
 			textOutput.setString("");
+			infoText.setString(standardHelpText);
 		}
 		if (!loadLevelActive)
 		{
 			shiftActive = true;
 			markStart.x = -1;
 			markStart.y = -1;
+			infoText.setString("Left click once to define origin, keep shift pressed, move the mouse and left click again to color a box.");
 		}
 	}
 	
@@ -543,6 +573,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			// tell user which level will be overwritten
 			textOutput.setString("Overwrite Level " + std::to_string(currentLevel) + "?");
 			overwrite = true;
+			infoText.setString("Confirm with y key, deny with n key (this will save it under a new name). Use ESC to cancel.");
 		}
 		else
 		{
@@ -558,11 +589,13 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			textOutput.setString("");
 			overwrite = false;
 			saveLevel(true);
+			infoText.setString(standardHelpText);
 		}
 		if (exit)
 		{
 			textOutput.setString("");
 			exit = false;
+			infoText.setString(standardHelpText);
 			return new Menu(Menu::Command::EDITOR);
 		}
 	}
@@ -575,11 +608,13 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			textOutput.setString("");
 			overwrite = false;
 			saveLevel(false);
+			infoText.setString(standardHelpText);
 		}
 		if (exit)
 		{
 			textOutput.setString("");
 			exit = false;
+			infoText.setString(standardHelpText);
 		}
 	}
 	
@@ -588,6 +623,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		loadLevelActive = true;
 		currentLevel = 0;
+		infoText.setString("Use left and right keys to choose a level, ESC to cancel loading.");
 	}
 	
 	// reset triggers when clicking r
@@ -604,6 +640,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			loadLevel(currentLevel);
 			loadLevelActive = false;
 			textOutput.setString("");
+			infoText.setString(standardHelpText);
 		}
 	}
 	
@@ -754,10 +791,15 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 					if (activeItemIndex == id[DOOR] && itemChoices[activeItemIndex]->getTextureRect() != tileItemRects[id[VERTICALDOOR]])
 					{
 						mouseTile.setSize(sf::Vector2f(2*tileSize + 2.0f, tileSize));
+						infoText.setString("Use right click to toggle door orientation before placing.");
 					}
 					else if (activeItemIndex == id[START] || activeItemIndex == id[GOALPORTAL] || activeItemIndex == id[DOOR])
 					{
 						mouseTile.setSize(sf::Vector2f(tileSize, 2*tileSize + 2.0f));
+						if (activeItemIndex == id[DOOR])
+						{
+							infoText.setString("Use right click to toggle door orientation before placing.");
+						}
 					}
 					else
 					{
@@ -807,6 +849,7 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 	}
 	// draw text
 	target.draw(textOutput);
+	target.draw(infoText);
 }
 
 // TODO needs to be better code

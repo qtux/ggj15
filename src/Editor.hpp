@@ -70,8 +70,10 @@ private:
 	// deco item blocking map
 	std::map<Key, int> decoItemBlocking;
 	// text
-	sf::Text textOutput;
 	sf::Font font;
+	sf::Text textOutput;
+	sf::Text infoText;
+	std::string standardHelpText;
 	// a list of the existing levels
 	std::vector<int> levels;
 	// the current level if loaded or was saved once
