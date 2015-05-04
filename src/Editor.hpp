@@ -8,7 +8,7 @@ class Editor: public Scene
 private:
 	enum ActionItemType
 	{
-		NOITEM, START, GOALPORTAL, TRIGGER, COIN, CLOCK, KEY, DOOR, VERTICALDOOR, MUSHROOM, FLOWER, CRYSTALS, ROCK
+		NOITEM, START, GOALPORTAL, TRIGGER, COIN, CLOCK, KEY, DOOR, VERTICALDOOR, DECO1, DECO2, DECO3, DECO4
 	};
 	struct Key
 	{
@@ -76,13 +76,18 @@ private:
 	std::vector<int> levels;
 	// the current level if loaded or was saved once
 	int currentLevel;
+	// item indices
 	std::map<ActionItemType, int> id;
+	// big item IntRects
+	std::map<int, std::pair<sf::IntRect, sf::IntRect>> bigItemRects;
 	// mark area (e.g. for trigger)
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	// reset map when triggers were activated
 	void resetTriggers();
 	// set texture rect
 	void setTexture(int x, int y, sf::IntRect textureRect);
+	// check for big item and delete if item is placed on one
+	void deleteBigItem(int x, int y);
 	// get mousePos in world
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 public:

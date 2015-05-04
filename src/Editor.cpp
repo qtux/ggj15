@@ -58,6 +58,7 @@ Editor::Editor():
 	}
 	
 	// load item rects
+	// ---- normal items
 	tileItemRects[1] = sf::IntRect(0,4*16,32,16);		// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
 	tileItemRects[2] = sf::IntRect(0,0,16,32);			// 2.  portal (goal)
 	tileItemRects[3] = sf::IntRect(0,6*16,16,16);		// 3.  trigger
@@ -65,12 +66,16 @@ Editor::Editor():
 	tileItemRects[5] = sf::IntRect(0,3*16,16,16);		// 5.  clock
 	tileItemRects[6] = sf::IntRect(0,2*16,16,16);		// 6.  key
 	tileItemRects[7] = sf::IntRect(2*16,7*16,32,16);	// 7.  door
+	// put in new items here (and adjust numbers below)
+	// ---- deco item border
 	tileItemRects[8] = sf::IntRect(16,5*16,16,16);		// 8.  mushroom (deco)
 	tileItemRects[9] = sf::IntRect(16,6*16,16,16);		// 9.  flower (deco)
 	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 10. crystals (deco)
-	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rocks (deco)
-	tileItemRects[12] = sf::IntRect(2*16,3*16,16,16);	// 12. blockItem (no function)
-	verticalDoorItemRect = sf::IntRect(2*16,4*16,16,32);
+	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rock (deco)
+	// put in new deco items here
+	// ---- displayed item border
+	tileItemRects[12] = sf::IntRect(2*16,4*16,16,32);	// 12. vertical door (not shown)
+	tileItemRects[13] = sf::IntRect(2*16,3*16,16,16);	// 13. blockItem (no function)
 	// TODO more
 	// TODO deco dialog with one item shown?	
 	
@@ -82,11 +87,21 @@ Editor::Editor():
 	id[CLOCK] = 5;
 	id[KEY] = 6;
 	id[DOOR] = 7;
-	id[VERTICALDOOR] = 13;
-	id[MUSHROOM] = 8;
-	id[FLOWER] = 9;
-	id[CRYSTALS] = 10;
-	id[ROCK] = 11;
+	// put in new items here (and adjust numbers below)
+	// ---- deco item border
+	id[DECO1] = 8;
+	id[DECO2] = 9;
+	id[DECO3] = 10;
+	id[DECO4] = 11;
+	// put in new deco items here
+	// ---- displayed item border
+	id[VERTICALDOOR] = 12;
+	
+	// large item texture parts
+	bigItemRects[id[START]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,4*16,16,16), sf::IntRect(16,4*16,16,16));
+	bigItemRects[id[GOALPORTAL]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,0,16,16), sf::IntRect(0,16,16,16));
+	bigItemRects[id[DOOR]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,7*16,16,16), sf::IntRect(3*16,7*16,16,16));
+	bigItemRects[id[VERTICALDOOR]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,4*16,16,16), sf::IntRect(2*16,5*16,16,16));
 	
 	// create item choices bar
 	for (int y = 0; y < itemChoices.size(); ++y)
@@ -129,10 +144,11 @@ Editor::Editor():
 	mouseTile.setSize(sf::Vector2f(tileSize, tileSize));
 	mouseTile.setPosition(0.5 * tileOffset, 1.0f);
 	
-	// initialize color editing with color 0 (mark in red), no item editing, no mouse or key pressed, no item active
+	// initialize color editing with color 0 (mark in red)
 	activeColorIndex = 0;
 	activeItemIndex = -1;
 	tileChoices[0]->setOutlineColor(sf::Color::Red);
+	// initialize other variables
 	mousePressed = false;
 	shiftActive = false;
 	triggerMarkingActive = false;
@@ -167,7 +183,6 @@ Editor::~Editor()
 // TODO: idea: change pen size
 // TODO make item properties changeable
 // TODO change pen size depending on item set (e.g. Portal, Door)
-// TODO make trigger test possible so one can see the result
 Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 {
 	static sf::Vector2i markStart;
@@ -294,11 +309,14 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						int currentX = (mousePos.x - lateralOffset) / tileOffset;
 						int currentY = mousePos.y / tileOffset;
 						
+						// check if there was a big item and delete it's second part
+						deleteBigItem(currentX, currentY);
+						
 						// set item
 						setTexture(currentX, currentY, tileItemRects[activeItemIndex]);
 						
 						// apply necessary additions
-						if (activeItemIndex == 1 || activeItemIndex == 2) // portal and start item
+						if (activeItemIndex == id[START] || activeItemIndex == id[GOALPORTAL]) // portal and start item
 						{
 							// if item would not fit, don't place it
 							if (currentY + 1 >= numTilesY)
@@ -307,10 +325,21 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							}
 							else
 							{
-								setTexture(currentX, currentY+1, tileItemRects[12]);
+								deleteBigItem(currentX, currentY+1);
+								// place big item
+								if (activeItemIndex == id[START])
+								{
+									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[START]].first);
+									setTexture(currentX, currentY+1, bigItemRects[id[START]].second);
+								}
+								else
+								{
+									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[GOALPORTAL]].first);
+									setTexture(currentX, currentY+1, bigItemRects[id[GOALPORTAL]].second);
+								}
 							}
 						}
-						if (activeItemIndex == 3) // trigger item
+						if (activeItemIndex == id[TRIGGER]) // trigger item
 						{
 							// force marking of quadrants
 							triggerMarkingActive = true;
@@ -325,7 +354,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							triggerSwapPositionsY[currentY] = swapTilesPosY;
 							markArea(currentX, currentY, sf::Color::Red, quadrantSize);
 						}
-						if (activeItemIndex == 7) // door item
+						if (activeItemIndex == id[DOOR]) // door item
 						{
 							// if door item would not fit, don't place it or place it vertically if that fits
 							if (currentX + 1 >= numTilesX && currentY + 1 >= numTilesY)
@@ -334,15 +363,18 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							}
 							else if (currentX + 1 >= numTilesX || mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 							{
-								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
-								setTexture(currentX, currentY+1, tileItemRects[12]);
+								deleteBigItem(currentX, currentY+1);
+								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[VERTICALDOOR]].first);
+								setTexture(currentX, currentY+1, bigItemRects[id[VERTICALDOOR]].second);
 							}
 							else
 							{
-								setTexture(currentX+1, currentY, tileItemRects[12]);
+								deleteBigItem(currentX+1, currentY);
+								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[DOOR]].first);
+								setTexture(currentX+1, currentY, bigItemRects[id[DOOR]].second);
 							}
 						}
-						if (activeItemIndex > 7 && activeItemIndex < 12) // deco item
+						if (activeItemIndex >= id[DECO1] && activeItemIndex <= id[DECO4]) // deco item
 						{
 							// set to blocking
 							decoItemBlocking[Key(currentX,currentY)] = 1;
@@ -428,22 +460,22 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			{
 				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 				// swap dot
-				setTexture(xPos, yPos+1, tileItemRects[12]);
+				setTexture(xPos, yPos+1, tileItemRects[13]);
 				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[id[NOITEM]]);
 			}
 			else if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[VERTICALDOOR]] && xPos + 1 < numTilesX)
 			{
 				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[id[DOOR]]);
 				// swap dot
-				setTexture(xPos+1, yPos, tileItemRects[12]);
+				setTexture(xPos+1, yPos, tileItemRects[13]);
 				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[id[NOITEM]]);
 			}*/
 			
 			// toggle blocking for deco items
-			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[MUSHROOM]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[FLOWER]]		||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[CRYSTALS]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[ROCK]]			)
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO1]]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO2]]		||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO3]]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO4]]			)
 			{
 				if (decoItemBlocking[Key(xPos,yPos)] == 1)
 				{
@@ -461,12 +493,12 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			// TODO do this differently or make sure nothing bad happens
 			if (mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 			{
-				itemChoices[7]->setTextureRect(tileItemRects[id[DOOR]]);
+				itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[DOOR]]);
 				mouseTile.setTextureRect(tileItemRects[id[DOOR]]);
 			}
 			else if (mouseTile.getTextureRect() == tileItemRects[id[DOOR]])
 			{
-				itemChoices[7]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
+				itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 				mouseTile.setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 			}			
 		}
@@ -639,6 +671,30 @@ void Editor::resetTriggers()
 	}
 }
 
+void Editor::deleteBigItem(int x, int y)
+{
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[START]].first 		||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id[GOALPORTAL]].first 	||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id[VERTICALDOOR]].first		)
+	{
+		setTexture(x, y+1, tileItemRects[id[NOITEM]]);
+	}
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[DOOR]].first)
+	{
+		setTexture(x+1, y, tileItemRects[id[NOITEM]]);
+	}
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[START]].second 		||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id[GOALPORTAL]].second 	||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id[VERTICALDOOR]].second	)
+	{
+		setTexture(x, y-1, tileItemRects[id[NOITEM]]);
+	}
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[DOOR]].second)
+	{
+		setTexture(x-1, y, tileItemRects[id[NOITEM]]);
+	}
+}
+
 // TODO possible improvement: draw a line between sample positions to color every tile even when the mouse moves very fast
 Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 {	
@@ -693,6 +749,19 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 				{
 					mouseTile.setFillColor(sf::Color::White);
 					mouseTile.setTexture(&actionItemTexture);
+					// show big items bigger
+					if (activeItemIndex == id[DOOR] && itemChoices[activeItemIndex]->getTextureRect() != tileItemRects[id[VERTICALDOOR]])
+					{
+						mouseTile.setSize(sf::Vector2f(2*tileSize + 2.0f, tileSize));
+					}
+					else if (activeItemIndex == id[START] || activeItemIndex == id[GOALPORTAL] || activeItemIndex == id[DOOR])
+					{
+						mouseTile.setSize(sf::Vector2f(tileSize, 2*tileSize + 2.0f));
+					}
+					else
+					{
+						mouseTile.setSize(sf::Vector2f(tileSize, tileSize));
+					}
 					mouseTile.setTextureRect(itemChoices[activeItemIndex]->getTextureRect());
 				}
 				// set position to mouse position
@@ -824,19 +893,19 @@ void Editor::saveLevel(bool overwrite)
 					// vertical door
 					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[MUSHROOM]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO1]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 80 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[FLOWER]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO2]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 96 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[CRYSTALS]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO3]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 0 112 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[ROCK]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO4]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 112 16 16\n";
 				}
@@ -878,14 +947,16 @@ void Editor::loadLevel(int level)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, tileItemRects[id[START]]);
+			setTexture(x, y, bigItemRects[id[START]].first);
+			setTexture(x, y+1, bigItemRects[id[START]].second);
 		}
 		if (first == "Portal")
 		{
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, tileItemRects[id[GOALPORTAL]]);
+			setTexture(x, y, bigItemRects[id[GOALPORTAL]].first);
+			setTexture(x, y+1, bigItemRects[id[GOALPORTAL]].second);
 		}
 		if (first == "TriggerItem")
 		{
@@ -924,15 +995,15 @@ void Editor::loadLevel(int level)
 				// TODO do sth with closed?
 				int vertical;
 				iss >> vertical;
-				itemTiles[x][y]->setFillColor(sf::Color::White);
-				itemTiles[x][y]->setTexture(&actionItemTexture);
 				if (vertical == 1)
 				{
-					itemTiles[x][y]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
+					setTexture(x, y, bigItemRects[id[VERTICALDOOR]].first);
+					setTexture(x, y+1, bigItemRects[id[VERTICALDOOR]].second);
 				}
 				else
 				{
-					itemTiles[x][y]->setTextureRect(tileItemRects[id[DOOR]]);
+					setTexture(x, y, bigItemRects[id[DOOR]].first);
+					setTexture(x+1, y, bigItemRects[id[DOOR]].second);
 				}
 			}
 			if (second == "DecorationItem")
@@ -946,25 +1017,25 @@ void Editor::loadLevel(int level)
 				if (texPosX == 16 && texPosY == 80)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[MUSHROOM]]);
+					setTexture(x, y, tileItemRects[id[DECO1]]);
 				}
 				// flower
 				if (texPosX == 16 && texPosY == 96)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[FLOWER]]);
+					setTexture(x, y, tileItemRects[id[DECO2]]);
 				}
 				// crystals
 				if (texPosX == 0 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[CRYSTALS]]);
+					setTexture(x, y, tileItemRects[id[DECO3]]);
 				}
 				// rock
 				if (texPosX == 16 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[ROCK]]);
+					setTexture(x, y, tileItemRects[id[DECO4]]);
 				}
 			}
 		}
