@@ -140,7 +140,7 @@ Editor::Editor():
 	infoText.setColor(sf::Color::Black);
 	infoText.setCharacterSize(24);
 	infoText.setPosition(lateralOffset/2, mapHeight + 45);
-	standardHelpText = "Draw/Place Item: Left Click, Draw Color Box: Shift + Left Click, Load Level: l, Save Level: s, Exit: ESC.";
+	standardHelpText = "Draw/Place Item: Left Click, Draw Color Box: Shift, Load Level: l, Save Level: s, Exit: ESC, Hide Help: h";
 	infoText.setString(standardHelpText);
 	
 	// create drag tile
@@ -662,6 +662,18 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		if (loadLevelActive)
 		{
 			currentLevel = levels[nextPos(currentLevel, levels.size(), true)];
+		}
+	}
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::H)
+	{
+		if (infoText.getCharacterSize() == 0)
+		{
+			infoText.setCharacterSize(24);
+		}
+		else
+		{
+			infoText.setCharacterSize(0);
 		}
 	}
 	
