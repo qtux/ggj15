@@ -74,19 +74,19 @@ Editor::Editor():
 	// TODO more
 	// TODO deco dialog with one item shown?	
 	
-	actionRect[NOITEM] = tileItemRects[0];
-	actionRect[START] = tileItemRects[1];
-	actionRect[GOALPORTAL] = tileItemRects[2];
-	actionRect[TRIGGER] = tileItemRects[3];
-	actionRect[COIN] = tileItemRects[4];
-	actionRect[CLOCK] = tileItemRects[5];
-	actionRect[KEY] = tileItemRects[6];
-	actionRect[DOOR] = tileItemRects[7];
-	actionRect[VERTICALDOOR] = verticalDoorItemRect;
-	actionRect[MUSHROOM] = tileItemRects[8];
-	actionRect[FLOWER] = tileItemRects[9];
-	actionRect[CRYSTALS] = tileItemRects[10];
-	actionRect[ROCK] = tileItemRects[11];
+	id[NOITEM] = 0;
+	id[START] = 1;
+	id[GOALPORTAL] = 2;
+	id[TRIGGER] = 3;
+	id[COIN] = 4;
+	id[CLOCK] = 5;
+	id[KEY] = 6;
+	id[DOOR] = 7;
+	id[VERTICALDOOR] = 13;
+	id[MUSHROOM] = 8;
+	id[FLOWER] = 9;
+	id[CRYSTALS] = 10;
+	id[ROCK] = 11;
 	
 	// create item choices bar
 	for (int y = 0; y < itemChoices.size(); ++y)
@@ -303,7 +303,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// if item would not fit, don't place it
 							if (currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTextureRect(actionRect[NOITEM]);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[NOITEM]]);
 							}
 							else
 							{
@@ -330,11 +330,11 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							// if door item would not fit, don't place it or place it vertically if that fits
 							if (currentX + 1 >= numTilesX && currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTextureRect(actionRect[NOITEM]);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[NOITEM]]);
 							}
-							else if (currentX + 1 >= numTilesX || mouseTile.getTextureRect() == actionRect[VERTICALDOOR])
+							else if (currentX + 1 >= numTilesX || mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 							{
-								itemTiles[currentX][currentY]->setTextureRect(actionRect[VERTICALDOOR]);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 								setTexture(currentX, currentY+1, tileItemRects[12]);
 							}
 							else
@@ -402,7 +402,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// TODO swapped triggers may be outlined yellow or sth (probably)
 			// if trigger item is on right clicked tile
-			if (itemTiles[xPos][yPos]->getTextureRect() == actionRect[TRIGGER])
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[TRIGGER]])
 			{
 				// mark swapped tiles
 				markArea(triggerSwapPositionsX[xPos].first, triggerSwapPositionsY[yPos].first, sf::Color::Red, quadrantSize);
@@ -424,26 +424,26 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			}
 			
 			// toggle door orientation if enough space
-			/*if (itemTiles[xPos][yPos]->getTextureRect() == actionRect[DOOR] && yPos + 1 < numTilesY)
+			/*if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DOOR]] && yPos + 1 < numTilesY)
 			{
-				itemTiles[xPos][yPos]->setTextureRect(actionRect[VERTICALDOOR]);
+				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 				// swap dot
 				setTexture(xPos, yPos+1, tileItemRects[12]);
-				itemTiles[xPos+1][yPos]->setTextureRect(actionRect[NOITEM]);
+				itemTiles[xPos+1][yPos]->setTextureRect(tileItemRects[id[NOITEM]]);
 			}
-			else if (itemTiles[xPos][yPos]->getTextureRect() == actionRect[VERTICALDOOR] && xPos + 1 < numTilesX)
+			else if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[VERTICALDOOR]] && xPos + 1 < numTilesX)
 			{
-				itemTiles[xPos][yPos]->setTextureRect(actionRect[DOOR]);
+				itemTiles[xPos][yPos]->setTextureRect(tileItemRects[id[DOOR]]);
 				// swap dot
 				setTexture(xPos+1, yPos, tileItemRects[12]);
-				itemTiles[xPos][yPos+1]->setTextureRect(actionRect[NOITEM]);
+				itemTiles[xPos][yPos+1]->setTextureRect(tileItemRects[id[NOITEM]]);
 			}*/
 			
 			// toggle blocking for deco items
-			if (itemTiles[xPos][yPos]->getTextureRect() == actionRect[MUSHROOM]		||
-				itemTiles[xPos][yPos]->getTextureRect() == actionRect[FLOWER]		||
-				itemTiles[xPos][yPos]->getTextureRect() == actionRect[CRYSTALS]		||
-				itemTiles[xPos][yPos]->getTextureRect() == actionRect[ROCK]				)
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[MUSHROOM]]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[FLOWER]]		||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[CRYSTALS]]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[ROCK]]			)
 			{
 				if (decoItemBlocking[Key(xPos,yPos)] == 1)
 				{
@@ -459,15 +459,15 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// toggle door orientation
 			// TODO do this differently or make sure nothing bad happens
-			if (mouseTile.getTextureRect() == actionRect[VERTICALDOOR])
+			if (mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 			{
-				itemChoices[7]->setTextureRect(actionRect[DOOR]);
-				mouseTile.setTextureRect(actionRect[DOOR]);
+				itemChoices[7]->setTextureRect(tileItemRects[id[DOOR]]);
+				mouseTile.setTextureRect(tileItemRects[id[DOOR]]);
 			}
-			else if (mouseTile.getTextureRect() == actionRect[DOOR])
+			else if (mouseTile.getTextureRect() == tileItemRects[id[DOOR]])
 			{
-				itemChoices[7]->setTextureRect(actionRect[VERTICALDOOR]);
-				mouseTile.setTextureRect(actionRect[VERTICALDOOR]);
+				itemChoices[7]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
+				mouseTile.setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 			}			
 		}
 	}
@@ -685,7 +685,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 				// if color active
 				if (activeColorIndex != -1)
 				{
-					mouseTile.setTextureRect(actionRect[NOITEM]);
+					mouseTile.setTextureRect(tileItemRects[id[NOITEM]]);
 					mouseTile.setFillColor(tileColors[activeColorIndex]);
 				}
 				// if item active
@@ -790,53 +790,53 @@ void Editor::saveLevel(bool overwrite)
 		{
 			for (int y = 0; y < numTilesY; ++y)
 			{
-				if (itemTiles[x][y]->getTextureRect() == actionRect[START])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[START]])
 				{
 					txtfile << "Start " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[GOALPORTAL])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[GOALPORTAL]])
 				{
 					txtfile << "Portal " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[TRIGGER])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[TRIGGER]])
 				{
 					txtfile << "TriggerItem " << x << " " << y << " " << triggerSwapPositionsX[x].first << " " << triggerSwapPositionsY[y].first << " " << triggerSwapPositionsX[x].second << " " << triggerSwapPositionsY[y].second << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[COIN])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[COIN]])
 				{
 					txtfile << "Item CoinItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[CLOCK])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[CLOCK]])
 				{
 					txtfile << "Item TimeItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[KEY])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[KEY]])
 				{
 					txtfile << "Item KeyItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[DOOR])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DOOR]])
 				{
 					// horizontal door
 					txtfile << "Item DoorItem " << x << " " << y << " 0\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[VERTICALDOOR])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
 				{
 					// vertical door
 					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[MUSHROOM])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[MUSHROOM]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 80 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[FLOWER])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[FLOWER]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 96 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[CRYSTALS])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[CRYSTALS]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 0 112 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == actionRect[ROCK])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[ROCK]])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 112 16 16\n";
 				}
@@ -878,14 +878,14 @@ void Editor::loadLevel(int level)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, actionRect[START]);
+			setTexture(x, y, tileItemRects[id[START]]);
 		}
 		if (first == "Portal")
 		{
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, actionRect[GOALPORTAL]);
+			setTexture(x, y, tileItemRects[id[GOALPORTAL]]);
 		}
 		if (first == "TriggerItem")
 		{
@@ -896,7 +896,7 @@ void Editor::loadLevel(int level)
 			iss >> y1;
 			iss >> x2;
 			iss >> y2;
-			setTexture(x, y, actionRect[TRIGGER]);
+			setTexture(x, y, tileItemRects[id[TRIGGER]]);
 			triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
 			triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
 		}
@@ -909,15 +909,15 @@ void Editor::loadLevel(int level)
 			iss >> y;
 			if (second == "CoinItem")
 			{
-				setTexture(x, y, actionRect[COIN]);
+				setTexture(x, y, tileItemRects[id[COIN]]);
 			}
 			if (second == "TimeItem")
 			{
-				setTexture(x, y, actionRect[CLOCK]);
+				setTexture(x, y, tileItemRects[id[CLOCK]]);
 			}
 			if (second == "KeyItem")
 			{
-				setTexture(x, y, actionRect[KEY]);
+				setTexture(x, y, tileItemRects[id[KEY]]);
 			}
 			if (second == "DoorItem")
 			{
@@ -928,11 +928,11 @@ void Editor::loadLevel(int level)
 				itemTiles[x][y]->setTexture(&actionItemTexture);
 				if (vertical == 1)
 				{
-					itemTiles[x][y]->setTextureRect(actionRect[VERTICALDOOR]);
+					itemTiles[x][y]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
 				}
 				else
 				{
-					itemTiles[x][y]->setTextureRect(actionRect[DOOR]);
+					itemTiles[x][y]->setTextureRect(tileItemRects[id[DOOR]]);
 				}
 			}
 			if (second == "DecorationItem")
@@ -946,25 +946,25 @@ void Editor::loadLevel(int level)
 				if (texPosX == 16 && texPosY == 80)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, actionRect[MUSHROOM]);
+					setTexture(x, y, tileItemRects[id[MUSHROOM]]);
 				}
 				// flower
 				if (texPosX == 16 && texPosY == 96)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, actionRect[FLOWER]);
+					setTexture(x, y, tileItemRects[id[FLOWER]]);
 				}
 				// crystals
 				if (texPosX == 0 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, actionRect[CRYSTALS]);
+					setTexture(x, y, tileItemRects[id[CRYSTALS]]);
 				}
 				// rock
 				if (texPosX == 16 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, actionRect[ROCK]);
+					setTexture(x, y, tileItemRects[id[ROCK]]);
 				}
 			}
 		}

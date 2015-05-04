@@ -76,7 +76,7 @@ private:
 	std::vector<int> levels;
 	// the current level if loaded or was saved once
 	int currentLevel;
-	std::map<ActionItemType, sf::IntRect> actionRect;
+	std::map<ActionItemType, int> id;
 	// mark area (e.g. for trigger)
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	// reset map when triggers were activated
