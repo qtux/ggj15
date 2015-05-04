@@ -923,6 +923,15 @@ void Editor::saveLevel(bool overwrite)
 
 void Editor::loadLevel(int level)
 {
+	// delete all set items
+	for (int x = 0; x < numTilesX; ++x)
+	{
+		for (int y = 0; y < numTilesY; ++y)
+		{
+			itemTiles[x][y]->setTextureRect(tileItemRects[id[NOITEM]]);
+		}
+	}
+	
 	// load colors
 	sf::Image levelPNG;
 	levelPNG.loadFromFile("./levels/level" + std::to_string(level) + ".png");
