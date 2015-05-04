@@ -1,0 +1,45 @@
+Item DecorationItem 0 4 1 16 112 16 16
+Item DecorationItem 0 17 1 16 96 16 16
+Item CoinItem 1 14
+Item DecorationItem 1 21 1 16 96 16 16
+TriggerItem 2 5 7 11 18 5
+Item CoinItem 2 14
+Item DecorationItem 3 2 1 16 112 16 16
+Item DecorationItem 3 8 1 16 96 16 16
+Item CoinItem 3 14
+TriggerItem 3 17 2 11 0 18
+Item CoinItem 4 14
+Item CoinItem 5 14
+Item DecorationItem 6 2 1 16 96 16 16
+Item DecorationItem 6 8 1 16 112 16 16
+Item CoinItem 6 14
+Item KeyItem 7 11
+Item TimeItem 7 20
+Item DecorationItem 7 22 1 16 112 16 16
+Item DecorationItem 8 9 1 16 96 16 16
+Item TimeItem 9 14
+Item DecorationItem 10 10 1 16 112 16 16
+Item DecorationItem 10 20 1 16 112 16 16
+Start 11 3
+Item DecorationItem 13 19 1 16 112 16 16
+Item DecorationItem 14 2 1 16 96 16 16
+TriggerItem 15 7 1 11 18 12
+TriggerItem 15 21 1 4 18 14
+Item DecorationItem 16 9 1 16 80 16 16
+Item DecorationItem 16 10 1 16 80 16 16
+Item DecorationItem 18 3 1 16 80 16 16
+Item DecorationItem 18 10 1 16 96 16 16
+Item DecorationItem 19 1 1 16 80 16 16
+Item DecorationItem 19 8 1 16 112 16 16
+Item DecorationItem 19 20 1 16 112 16 16
+Item DecorationItem 21 4 1 16 112 16 16
+Item KeyItem 21 7
+Portal 21 20
+Item DecorationItem 24 5 1 16 96 16 16
+TriggerItem 24 13 7 11 6 18
+TriggerItem 25 2 1 3 12 1
+Item DecorationItem 25 12 1 16 96 16 16
+TriggerItem 25 20 1 4 12 18
+Item DecorationItem 26 7 1 16 96 16 16
+Item DecorationItem 26 17 1 16 112 16 16
+Item TimeItem 27 3
