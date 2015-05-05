@@ -21,7 +21,7 @@ public:
 	virtual bool intersects(const GameObject& cmp);
 	
 	const sf::Vector2f& getPosition() const;
-	void setPosition(int x, int y);
+	
 	void setPosition(float x, float y);
 	
 	int getWidth() const;

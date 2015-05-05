@@ -6,11 +6,6 @@ const sf::Vector2f& GameObject::getPosition() const
 {
 	return mySprite->getPosition();
 }
-	
-void GameObject::setPosition(int x, int y)
-{
-	mySprite->setPosition(x, y);
-}
 
 void GameObject::setPosition(float x, float y)
 {
@@ -21,7 +16,6 @@ bool GameObject::intersects(const GameObject& cmp)
 {
 	return cmp.mySprite->getGlobalBounds().intersects(mySprite->getGlobalBounds());
 }
-
 
 int GameObject::getHeight() const
 {
