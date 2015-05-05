@@ -1,26 +1,25 @@
 #include "Player.hpp"
-#include <iostream>
+#include "global.hpp"
+#include "Level.hpp"
 #include "Tile.hpp"
-#include <math.h>
+#include "GameObject.hpp"
 
 Player::Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize):
-	animationStep(0.),
-	direction(0),
-	doggieStep(0.),
-	level(level)
+	_level(level),
+	_animationStep(0.0f),
+	_direction(0),
+	_shape(size),
+	_doggieShape(doggieSize)
 {
-	mySprite = new sf::Sprite();
-	mySprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	mySprite->setPosition(pos);
-	
-	doggieSprite = new sf::Sprite();
-	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	doggieSprite->setPosition(pos);
+	_shape.setTexture(&gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	_shape.setPosition(pos);
+	_doggieShape.setTexture(&gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	_doggieShape.setPosition(pos);
 }
 
 bool Player::intersects(const GameObject& cmp)
 {
-	const sf::FloatRect &tmpRect = mySprite->getGlobalBounds();
+	const sf::FloatRect &tmpRect = _shape.getGlobalBounds();
 	sf::Vector2f tmpPos(tmpRect.left, tmpRect.top);
 	return intersects(tmpPos, cmp);
 }
@@ -28,13 +27,7 @@ bool Player::intersects(const GameObject& cmp)
 bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
 {
 	if (dynamic_cast<const Tile*>(&cmp) && dynamic_cast<const Tile*>(&cmp)->walkable) return false; // TODO: aus intersect in allgemeineren Teil verschieben
-	sf::FloatRect tmpRect(testPos.x + 3 * mySprite->getScale().x, testPos.y + (32 - 10) * mySprite->getScale().y, 10* mySprite->getScale().x, 10* mySprite->getScale().y);
-	/*
-	tmpRect.top += 32 - 10;
-	tmpRect.left += 3;
-	tmpRect.width = 10;
-	tmpRect.height = 10;*/
-	
+	sf::FloatRect tmpRect(testPos.x + 3, testPos.y + (32 - 10), 10, 10);
 	if (cmp.mySprite == 0) return false;
 	return cmp.mySprite->getGlobalBounds().intersects(tmpRect);
 }
@@ -43,12 +36,12 @@ void Player::update (sf::Time deltaTime) {
 	float dT = deltaTime.asSeconds();
 	
 	// get input from global and process:
-	sf::Vector2f tmpPos = mySprite->getPosition();
+	sf::Vector2f tmpPos = _shape.getPosition();
 	sf::Vector2f oldPos(tmpPos);
-	int width = mySprite->getTextureRect().width * mySprite->getScale().x;
-	int height = mySprite->getTextureRect().height * mySprite->getScale().y;
+	int width = _shape.getTextureRect().width;
+	int height = _shape.getTextureRect().height;
 	int dir = -1;
-	if (!level->textBox->enabled()){
+	if (!_level->textBox->enabled()){
 		if (gb::input[0]) { tmpPos.x -= 120 * dT; dir = 3; }
 		if (gb::input[1]) { tmpPos.x += 120 * dT; dir = 2; }
 		if (gb::input[2]) { tmpPos.y -= 120 * dT; dir = 1; }
@@ -59,27 +52,22 @@ void Player::update (sf::Time deltaTime) {
 	
 	if (tmpPos.x + 8 > viewWidth) tmpPos.x -= viewWidth;
 	if (tmpPos.x + width - 8 < 0)  tmpPos.x += viewWidth;
-	if (tmpPos.y + 28*mySprite->getScale().y > viewHeight) tmpPos.y -= viewHeight;
-	if (tmpPos.y + height - 8  *mySprite->getScale().y < 0)  tmpPos.y += viewHeight;
-	
+	if (tmpPos.y + 28 > viewHeight) tmpPos.y -= viewHeight;
+	if (tmpPos.y + height - 8 < 0)  tmpPos.y += viewHeight;
 	
 	if (dir > -1) 
 	{
-		int slowFactor = 15;
-		animationStep += 120 * dT / slowFactor;
-		doggieStep += 120 * dT / slowFactor;
-		direction = dir;
+		_animationStep += 8 * dT;
+		_direction = dir;
 	} else {
-		animationStep = 0.;
-		doggieStep = 0.;
+		_animationStep = 0.0f;
 	}
-	if (animationStep >= 6.) animationStep -= 6;
-	if (doggieStep >= 6.) doggieStep -= 6;
+	if (_animationStep >= 6.) _animationStep -= 6;
 	
 	bool collides = false;
 	//check for collisions:
 	int chkColl[] = {0, 0};
-	for (std::vector<GameObject*>::const_iterator tileIt = level->gameBoard.begin(); tileIt != level->gameBoard.end(); tileIt++)
+	for (std::vector<GameObject*>::const_iterator tileIt = _level->gameBoard.begin(); tileIt != _level->gameBoard.end(); tileIt++)
 	{
 		sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
 		sf::Vector2f distVecOld = ((*tileIt)->getPosition() - oldPos); // check also neighbours of old position in case screen was left on one side
@@ -111,7 +99,7 @@ void Player::update (sf::Time deltaTime) {
 	{
 		tmpPos.y = oldPos.y;
 	}
-	for (std::vector<Item*>::iterator itIt = level->items.begin() ; itIt != level->items.end() ; itIt++)
+	for (std::vector<Item*>::iterator itIt = _level->items.begin() ; itIt != _level->items.end() ; itIt++)
 	{
 		if ((*itIt)->blocksPath && intersects(tmpPos, **itIt))
 		{
@@ -141,43 +129,34 @@ void Player::update (sf::Time deltaTime) {
 		// doggie follows the hero
 		if (dir > -1)
 		{
-			positionQueue.push(tmpPos);
-			directionQueue.push(direction);
+			_positionQueue.push(tmpPos);
+			_directionQueue.push(_direction);
 		}
 		
-		mySprite->setPosition(tmpPos.x, tmpPos.y);
-		if (!positionQueue.empty()){
-			doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18*mySprite->getScale().y);
+		_shape.setPosition(tmpPos.x, tmpPos.y);
+		if (!_positionQueue.empty()){
+			_doggieShape.setPosition(_positionQueue.front().x, _positionQueue.front().y + 18);
 		}
 	}
 	
-	//std::cout<<"1/dT "<<.256/dT<<std::endl;
-	if (mySprite != 0 && doggieSprite != 0)
-	{		
-		if (!directionQueue.empty()){
-			doggieSprite->setTextureRect(sf::IntRect((directionQueue.front() + 4) * 16, DoggieAnimState[int(doggieStep)] * 16, 16, 16));
-		}
-		else
-		{
-			doggieSprite->setTextureRect(sf::IntRect(4*16,0, 16, 16));
-		}
-//		gb::window.draw(*doggieSprite);
-		if (!positionQueue.empty() && !directionQueue.empty() && positionQueue.size() > 0.256/dT) // delay of doggie movement
-		{
-			directionQueue.pop();
-			positionQueue.pop();
-		}
-		
-		mySprite->setTextureRect(sf::IntRect(direction * 16, PlayerAnimState[int(animationStep)] * 32, 16, 32));
-//		gb::window.draw(*mySprite);
+	if (!_directionQueue.empty()){
+		_doggieShape.setTextureRect(sf::IntRect((_directionQueue.front() + 4) * 16, DoggieAnimState[int(_animationStep)] * 16, 16, 16));
 	}
+	else
+	{
+		_doggieShape.setTextureRect(sf::IntRect(4*16,0, 16, 16));
+	}
+	if (!_positionQueue.empty() && !_directionQueue.empty() && _positionQueue.size() > 0.256/dT) // delay of doggie movement
+	{
+		_directionQueue.pop();
+		_positionQueue.pop();
+	}
+	
+	_shape.setTextureRect(sf::IntRect(_direction * 16, PlayerAnimState[int(_animationStep)] * 32, 16, 32));
 }
 
 void Player::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 {
-	if (mySprite != 0 && doggieSprite != 0)
-	{
-		renderTarget.draw(*doggieSprite, renderShader);
-		renderTarget.draw(*mySprite, renderShader);
-	}
+	renderTarget.draw(_doggieShape, renderShader);
+	renderTarget.draw(_shape, renderShader);
 }

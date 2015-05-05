@@ -1,30 +1,26 @@
 #pragma once
 
-#include "GameObject.hpp"
-#include "global.hpp"
-#include "Level.hpp"
+class Level;
+class GameObject;
 #include <queue>
+#include <SFML/Graphics.hpp>
 
 class Player
 {
 public:
 	Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize);
-	float animationStep;
-	int direction;
-	float doggieStep;
-	
-	virtual bool intersects(const GameObject& cmp);
-	virtual bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
-	
-	virtual void update(sf::Time deltaTime);
-	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
-	
-	sf::Sprite * doggieSprite;
-	sf::Sprite * mySprite;
+	bool intersects(const GameObject& cmp);
+	bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
+	void update(sf::Time deltaTime);
+	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 private:
-	std::queue<sf::Vector2f> positionQueue;
-	std::queue<int> directionQueue;
-	Level* level;
+	Level* _level;
+	float _animationStep;
+	int _direction;
+	sf::RectangleShape _shape;
+	sf::RectangleShape _doggieShape;
+	std::queue<sf::Vector2f> _positionQueue;
+	std::queue<int> _directionQueue;
 };
 
 const static int PlayerAnimState[] = {0, 1, 1, 0, 2, 2};
