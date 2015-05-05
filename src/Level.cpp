@@ -67,7 +67,7 @@ void Level::reset()
 	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
-	highscore  = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 	
 	// load and set timebar
 	gui = new GUI(this);
@@ -78,7 +78,7 @@ void Level::reset()
 	// try to load the file
 	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(levelNumber);
 	if (!levelImg.loadFromFile(fileName+".png")) {
-		// TODO return to menu here?
+		// TODO return to menu here
 		return;
 	}
 	
@@ -359,11 +359,9 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		return new Menu(Menu::Command::LEVEL);
 	}
-	
 	if (keyPressed == sf::Keyboard::Space)
 	{
-		// TODO use statemachine instead of comparing to a null pointer
-		if (highscore != nullptr)
+		if (_state == HIGHSCORE)
 		{
 			return new Level(levelNumber + 1);
 		}
@@ -376,6 +374,7 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		textBox->skip();
 	}
+	
 	return this;
 }
 
