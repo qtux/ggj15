@@ -131,3 +131,52 @@ void TileMap::draw(sf::RenderTarget& target)
 		target.draw(*ani.sprite);
 	}
 }
+
+bool TileMap::collides(const sf::FloatRect& collider)
+{
+	sf::Vector2u tilePosition(
+		std::trunc(collider.left / tileSize.x),
+		std::trunc(collider.top / tileSize.y)
+	);
+	sf::Vector2u multiple(
+		static_cast <unsigned int> (std::ceil(collider.width / tileSize.x)),
+		static_cast <unsigned int> (std::ceil(collider.height / tileSize.y))
+	);
+	for (auto i = 0; i < multiple.x; ++i)
+	{
+		for (auto j = 0; j < multiple.y; ++j)
+		{
+			if (_solid[(tilePosition.x + i) + (tilePosition.y + j) * gridSize.x])
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// assumes a tileSize rectangular collider
+/*bool TileMap::collides(const sf::Vector2f& position)
+{
+	sf::Vector2u tile(
+		std::trunc(position.x / tileSize.x),
+		std::trunc(position.y / tileSize.y)
+	);
+	if (_solid[(tile.x + 0) + (tile.y + 0) * gridSize.x]) {return true;}
+	if (_solid[(tile.x + 1) + (tile.y + 0) * gridSize.x]) {return true;}
+	if (_solid[(tile.x + 0) + (tile.y + 1) * gridSize.x]) {return true;}
+	if (_solid[(tile.x + 1) + (tile.y + 1) * gridSize.x]) {return true;}
+	return false;
+}*/
+
+// assumes a tileSize rectangular collider
+/*sf:Vector2f TileMap::move(const Vector2f& startPos, const Vector2f& offset)
+{
+	if (startPos + offset not in level)
+	{
+		// divide path (A --> border, other border --> B) and calculate separately
+		// if no collision on first path to the level border and no collision on other border
+		// targetPos = move(second path) (recursion)
+	}
+	// calculate the target position taking collision into account
+}*/

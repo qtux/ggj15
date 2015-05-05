@@ -12,6 +12,8 @@ public:
 	void switchRange(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Vector2u& size, const sf::Time& duration);
 	void update(const sf::Time& deltaT);
 	void draw(sf::RenderTarget& target);
+	//bool collisionTest(const sf::Vector2f& startPos, const sf::Vector2f& targetPos, const sf::Vector2f& size);
+	bool collides(const sf::FloatRect& collider);
 	bool isSolid(sf::Vector2u pos)
 	{
 		return _solid[pos.x + pos.y * gridSize.x];
