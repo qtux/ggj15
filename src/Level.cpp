@@ -10,6 +10,8 @@
 #include "global.hpp"
 #include "GUI.hpp"
 #include <math.h>
+#include "Highscore.hpp"
+#include "Item.hpp"
 #include "Player.hpp"
 #include "Menu.hpp"
 #include "Items/KeyItem.hpp"
@@ -29,6 +31,13 @@ Level::Level(unsigned int levelNumber):
 	restarts(-1),
 	_state(GAME)
 {
+	_outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
+	_outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
+	_outline.setOutlineThickness(2.0f);
+	_outline.setPosition(0, 0);
+	_outline.setSize(sceneSize);
+	background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
+	
 	reset();
 	// load only the fragment shader
 	_fragmentShader.loadFromFile("src/shader/fragment_shader.frag", sf::Shader::Fragment);
@@ -55,18 +64,10 @@ void Level::reset()
 	restarts++;
 	_state = GAME;
 	
-	//background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
-	// set background and outline
-	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
-	outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
-	outline.setOutlineThickness(2.0f);
-	outline.setPosition(0, 0);
-	outline.setSize(sf::Vector2f(gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY));
-	
 	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
-	highscore  = nullptr;
+	highscore  = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 	
 	// load and set timebar
 	gui = new GUI(this);
@@ -256,7 +257,6 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	
 	if (_state == LEAVING  && !textBox->enabled())
 	{
-		highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
 		highscore->load();
 		_state = HIGHSCORE;
@@ -303,8 +303,8 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 
 void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 {
-	//renderTarget.draw(background);	// TODO reenable me
-	renderTarget.draw(outline);
+	renderTarget.draw(background);
+	renderTarget.draw(_outline);
 	for(auto& obj: gameBoard) {
 		obj->draw(renderTarget, nullptr);
 	}

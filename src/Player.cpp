@@ -2,6 +2,7 @@
 #include "global.hpp"
 #include "Level.hpp"
 #include "Tile.hpp"
+#include "Item.hpp"
 #include "GameObject.hpp"
 
 Player::Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize):

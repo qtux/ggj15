@@ -3,18 +3,20 @@
  *
  *  Created on: 24.01.2015
  *      Author: sartz
+ * hack hier, ne doch nicht xD
  */
 
 #pragma once
 
 #include <SFML/System.hpp>
 #include <vector>
-class Player;
-#include "GUI.hpp"
-#include "Item.hpp"
-#include "TextBox.hpp"
-#include "Highscore.hpp"
 #include "Scene.hpp"
+class Highscore;
+#include "TextBox.hpp"
+class Item;
+#include "GUI.hpp"
+class Player;
+#include "GameObject.hpp"
 
 struct TileFlightData
 {
@@ -39,8 +41,6 @@ public:
 	void draw(sf::RenderTarget& target, bool focus) override final;
 	
 	void leave();
-	// hack hier, ne doch nicht xD
-	Player* player;
 	GUI* gui;
 	TextBox* textBox;
 	const std::vector<GameObject*> & getGameBoard() const;
@@ -60,7 +60,8 @@ private:
 	sf::Uint32 createColorKey(sf::Color color);
 	enum State {GAME, LEAVING, HIGHSCORE};
 	State _state;
+	Player* player;
 	Highscore *highscore;
-	sf::RectangleShape outline;
 	sf::Shader _fragmentShader;
+	sf::RectangleShape _outline;
 };
