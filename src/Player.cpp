@@ -18,19 +18,15 @@ Player::Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, 
 	_doggieShape.setPosition(pos);
 }
 
-bool Player::intersects(const GameObject& cmp)
+bool Player::intersects(const sf::Vector2u& tilePosition, const sf::Vector2f& tileSize)
 {
-	const sf::FloatRect &tmpRect = _shape.getGlobalBounds();
-	sf::Vector2f tmpPos(tmpRect.left, tmpRect.top);
-	return intersects(tmpPos, cmp);
-}
-
-bool Player::intersects(const sf::Vector2f &testPos, const GameObject& cmp)
-{
-	if (dynamic_cast<const Tile*>(&cmp) && dynamic_cast<const Tile*>(&cmp)->walkable) return false; // TODO: aus intersect in allgemeineren Teil verschieben
-	sf::FloatRect tmpRect(testPos.x + 3, testPos.y + (32 - 10), 10, 10);
-	if (cmp.mySprite == 0) return false;
-	return cmp.mySprite->getGlobalBounds().intersects(tmpRect);
+	// TODO improve code
+	sf::FloatRect playerRect = _shape.getGlobalBounds();
+	playerRect.height /= 2;
+	playerRect.top += playerRect.height;
+	sf::Vector2f tileCoord(tilePosition.x * tileSize.x, tilePosition.y * tileSize.y);
+	sf::FloatRect tileRect(tileCoord, tileSize);
+	return playerRect.intersects(tileRect);
 }
 
 void Player::update (sf::Time deltaTime) {

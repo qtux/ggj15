@@ -9,8 +9,7 @@ class Player
 {
 public:
 	Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize);
-	bool intersects(const GameObject& cmp);
-	bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
+	bool intersects(const sf::Vector2u& tilePosition, const sf::Vector2f& tileSize);
 	void update(sf::Time deltaTime);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 private:

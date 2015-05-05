@@ -9,7 +9,7 @@
 #pragma once
 
 #include <SFML/System.hpp>
-#include <vector>
+#include <map>
 #include "Scene.hpp"
 class Highscore;
 #include "TextBox.hpp"
@@ -55,13 +55,27 @@ public:
 	// move to private
 	GUI* gui;
 	TextBox* textBox;
-	std::vector<Item*> items;
 private:
 	sf::Uint32 createColorKey(sf::Color color);
 	enum State {GAME, LEAVING, HIGHSCORE};
+	struct Key
+	{
+		Key() = delete;
+		Key(unsigned int x, unsigned int y):
+			x(x), y(y)
+		{}
+		unsigned int x;
+		unsigned int y;
+		bool operator<(const Key& rhs) const
+		{
+			// compare x then compare y
+			return std::tie(x, y) < std::tie(rhs.x, rhs.y);
+		}
+	};
 	State _state;
 	Player* player;
 	Highscore *highscore;
 	sf::Shader _fragmentShader;
 	sf::RectangleShape _outline;
+	std::map<Key, Item*> items;
 };

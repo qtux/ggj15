@@ -169,7 +169,7 @@ void Level::reset()
 			iss >> x >> y;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items.push_back(tmpItem);
+			items[Key(x, y)] = tmpItem;
 		}
 		if (first == "Item")
 		{
@@ -196,7 +196,7 @@ void Level::reset()
 				tmpItem = tmpFactory.getItem(second);
 			}
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items.push_back(tmpItem);
+			items[Key(x, y)] = tmpItem;
 		}
 		
 		if (first == "Timeout")
@@ -231,7 +231,7 @@ void Level::reset()
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items.push_back(tmpItem);
+			items[Key(x, y)] = tmpItem;
 		}
 		if (first == "TriggerTrapItem")
 		{
@@ -240,7 +240,7 @@ void Level::reset()
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items.push_back(tmpItem);
+			items[Key(x, y)] = tmpItem;
 		}
 	}
 	
@@ -268,8 +268,9 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		obj->update(deltaT);
 	}
 	
-	for(auto& obj: items) {
-		obj->update(deltaT);
+	for(auto& kv: items)
+	{
+		kv.second->update(deltaT);
 	}
 	player->update(deltaT);
 	if (gui != 0)
@@ -277,27 +278,25 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		gui->update(deltaT);
 	}
 	
-	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
-		if (player->intersects(**itIt))
+	// check if the player activated an item while moving on it
+	for (auto& kv: items)
+	{
+		const sf::Vector2u tilePos(kv.first.x, kv.first.y);
+		const sf::Vector2f tileSize(gb::pixelSizeX, gb::pixelSizeY);
+		if (player->intersects(tilePos, tileSize))
 		{
-			if ((*itIt)->applyEffect(*this))
+			if (kv.second->applyEffect(*this))
 			{
+				// portal reached
 				return this;
 			}
-			if ((*itIt)->collectable)
+			if (kv.second->collectable)
 			{
-				itIt = items.erase(itIt);
+				items.erase(kv.first);
 			}
-			else
-			{
-				itIt ++;
-			}
-		}
-		else
-		{
-			itIt ++;
 		}
 	}
+	
 	return this;
 }
 
@@ -308,9 +307,9 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	for(auto& obj: gameBoard) {
 		obj->draw(renderTarget, nullptr);
 	}
-
-	for(auto& obj: items) {
-		obj->draw(renderTarget, nullptr);
+	for(auto& kv: items)
+	{
+		kv.second->draw(renderTarget, nullptr);
 	}
 	player->draw(renderTarget, nullptr);
 	gui->draw(renderTarget);
@@ -323,11 +322,10 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 
 bool Level::readyToLeave() const
 {
-	int size = items.size();
 	int keysInLevel = 0;
-	for(int i = 0;i < size;i++)
+	for(auto& kv: items)
 	{
-		if (dynamic_cast<KeyItem*>(items[i]))
+		if (dynamic_cast<KeyItem*>(kv.second))
 		{
 			keysInLevel++;
 		}
