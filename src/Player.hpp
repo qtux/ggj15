@@ -25,7 +25,6 @@ private:
 	std::queue<sf::Vector2f> positionQueue;
 	std::queue<int> directionQueue;
 	Level* level;
-	float _currTime;
 };
 
 const static int PlayerAnimState[] = {0, 1, 1, 0, 2, 2};
