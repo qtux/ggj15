@@ -6,15 +6,14 @@
  */
 
 #include "Level.hpp"
-#include "Tile.hpp"
 #include "global.hpp"
-#include "GUI.hpp"
 #include <math.h>
+#include "Menu.hpp"
+#include "Items/KeyItem.hpp"
 #include "Highscore.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
-#include "Menu.hpp"
-#include "Items/KeyItem.hpp"
+#include "TileMap.hpp"
 
 // parser
 #include <fstream>
@@ -65,7 +64,6 @@ void Level::reset()
 	_state = GAME;
 	
 	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
-	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
 	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 	
@@ -103,7 +101,7 @@ void Level::reset()
 	
 	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
 	// TODO determine the following two variables in another way
-	const sf::Vector2u tileSize(32, 32);
+	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
 	const sf::Vector2f scale(0.5f, 0.5f);
 	
 	std::vector<unsigned int> mapping;
@@ -116,30 +114,20 @@ void Level::reset()
 		}
 	}
 	
+	std::vector<bool> collision;
+	for (int x = 0; x < gridSize.y; ++x)
+	{
+		for (int y = 0; y < gridSize.x; ++y)
+		{
+			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
+			collision.push_back(walkableTileState[colorKey]);
+		}
+	}
+	
 	const sf::Texture& baseTileSet = gb::textureManager.getTexture(std::string(PATH) + "img/tileset.png", false);
 	sf::Vector2f offset(-6, -6);
 	const sf::Texture& tileSet = gb::textureManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
-	
-	// create sprites for each tile
-	for (int x = 0; x < gridSize.x; ++x)
-	{
-		for (int y = 0; y < gridSize.y; ++y)
-		{
-			// create tile sprite
-			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(tileSet);
-			sprite->setTextureRect(sf::IntRect(x * tileSize.x, y * tileSize.y, tileSize.x, tileSize.y));
-			sprite->setScale(scale);
-			sprite->setPosition(x * tileSize.x * scale.x, y * tileSize.y * scale.y);
-			
-			// create the tile and add it to the scene
-			Tile* tmpTile = new Tile();
-			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(x, y));
-			tmpTile->walkable = walkableTileState[colorKey];
-			tmpTile->mySprite = sprite;
-			gameBoard[x + y * gridSize.x] = tmpTile;
-		}
-	}
+	map = new TileMap(tileSize, {gb::largeTileSizeX * gb::sizeX, gb::largeTileSizeY * gb::sizeY}, tileSet, collision);
 	
 	// read text file
 	std::ifstream infile(fileName + ".txt");
@@ -157,7 +145,6 @@ void Level::reset()
 			iss >> x >> y;
 			// TODO remove static_casts
 			player = new Player(
-				this,
 				{static_cast<float>(x * gb::pixelSizeX), static_cast<float>(y * gb::pixelSizeY)},
 				{static_cast<float>(gb::pixelSizeX), static_cast<float>(2 * gb::pixelSizeY)},
 				{static_cast<float>(gb::pixelSizeX), static_cast<float>(gb::pixelSizeY)}
@@ -248,101 +235,6 @@ void Level::reset()
 	textBox->triggerText("start");
 }
 
-Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
-{
-	if (_state == HIGHSCORE)
-	{
-		return this;
-	}
-	
-	if (_state == LEAVING  && !textBox->enabled())
-	{
-		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
-		highscore->load();
-		_state = HIGHSCORE;
-	}
-	
-	updateTileAnimation(deltaT);
-	
-	for(auto& obj: gameBoard) {
-		obj->update(deltaT);
-	}
-	
-	for(auto& kv: items)
-	{
-		kv.second->update(deltaT);
-	}
-	player->update(deltaT);
-	if (gui != 0)
-	{
-		gui->update(deltaT);
-	}
-	
-	// check if the player activated an item while moving on it
-	for (auto& kv: items)
-	{
-		const sf::Vector2u tilePos(kv.first.x, kv.first.y);
-		const sf::Vector2f tileSize(gb::pixelSizeX, gb::pixelSizeY);
-		if (player->intersects(tilePos, tileSize))
-		{
-			if (kv.second->applyEffect(*this))
-			{
-				// portal reached
-				return this;
-			}
-			if (kv.second->collectable)
-			{
-				items.erase(kv.first);
-			}
-		}
-	}
-	
-	return this;
-}
-
-void Level::draw(sf::RenderTarget &renderTarget, bool focus)
-{
-	renderTarget.draw(background);
-	renderTarget.draw(_outline);
-	for(auto& obj: gameBoard) {
-		obj->draw(renderTarget, nullptr);
-	}
-	for(auto& kv: items)
-	{
-		kv.second->draw(renderTarget, nullptr);
-	}
-	player->draw(renderTarget, nullptr);
-	gui->draw(renderTarget);
-	textBox->draw(renderTarget);
-	if (_state == HIGHSCORE)
-	{
-		highscore->draw(renderTarget);
-	}
-}
-
-bool Level::readyToLeave() const
-{
-	int keysInLevel = 0;
-	for(auto& kv: items)
-	{
-		if (dynamic_cast<KeyItem*>(kv.second))
-		{
-			keysInLevel++;
-		}
-	}
-	return (keysInLevel == 0);
-}
-
-void Level::leave()
-{
-	if (!readyToLeave())
-	{
-		return;
-	}
-	_state = LEAVING;
-	textBox->triggerText("end");
-}
-
 Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 {
 	// preprocessing key input (to enhance code readability)
@@ -379,108 +271,124 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	return this;
 }
 
-GameObject* Level::getTile(int x, int y)
+Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
-	if (x + y*gb::sizeX < (int)gameBoard.size())
+	// load highscore once
+	if (_state == LEAVING && !textBox->enabled())
 	{
-		return gameBoard[x + y * gb::sizeX * gb::largeTileSizeX];
+		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
+		highscore->load();
+		_state = HIGHSCORE;
 	}
-	return 0;
+	
+	// update game logic while in GAME state
+	if (_state == GAME && !textBox->enabled())
+	{
+		// determine the movement vector based on input
+		sf::Vector2f moveDir(0, 0);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			moveDir.x -= 1;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			moveDir.x += 1;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			moveDir.y -= 1;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			moveDir.y += 1;
+		}
+		player->move(deltaT, moveDir, sceneSize);
+		// get neighbouring collision data
+		// move collider (apply moving beyond level border) and check for collision with tilemap
+		// TODO implement collision with items --> Box2D?
+		// set collider to be at the right position
+		// (normalize the movement) moveVector /= hypot(moveVector.x, moveVector.y);
+		// apply movement to the player
+		
+		
+		// check if the player activated an item while moving on it
+		for (auto& kv: items)
+		{
+			const sf::Vector2u tilePos(kv.first.x, kv.first.y);
+			const sf::Vector2f tileSize(gb::pixelSizeX, gb::pixelSizeY);
+			if (player->intersects(tilePos, tileSize))
+			{
+				if (kv.second->applyEffect(*this))
+				{
+					// portal reached
+					return this;
+				}
+				if (kv.second->collectable)
+				{
+					items.erase(kv.first);
+				}
+			}
+		}
+	}
+	
+	// update map, gui and items (mostly animation state) while not in HIGHSCORE state
+	if (_state != HIGHSCORE)
+	{
+		map->update(deltaT);
+		gui->update(deltaT);
+		for(auto& kv: items)
+		{
+			kv.second->update(deltaT);
+		}
+		// update doggie and playeranimation
+		player->update(deltaT);
+	}
+	
+	return this;
 }
 
-const std::vector<GameObject*> &Level::getGameBoard() const
+void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 {
-	return gameBoard;
+	renderTarget.draw(background);
+	renderTarget.draw(_outline);
+	map->draw(renderTarget);
+	for(auto& kv: items)
+	{
+		kv.second->draw(renderTarget, nullptr);
+	}
+	player->draw(renderTarget, nullptr);
+	gui->draw(renderTarget);
+	textBox->draw(renderTarget);
+	if (_state == HIGHSCORE)
+	{
+		highscore->draw(renderTarget);
+	}
 }
 
+bool Level::readyToLeave() const
+{
+	int keysInLevel = 0;
+	for(auto& kv: items)
+	{
+		if (dynamic_cast<KeyItem*>(kv.second))
+		{
+			keysInLevel++;
+		}
+	}
+	return (keysInLevel == 0);
+}
+
+void Level::leave()
+{
+	if (!readyToLeave())
+	{
+		return;
+	}
+	_state = LEAVING;
+	textBox->triggerText("end");
+}
+
+// TODO remove this and register switchRange in a scripting language
 void Level::switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second)
 {
-	int startX1 = first.x;
-	int startY1 = first.y;
-	int startX2 = second.x;
-	int startY2 = second.y;
-
-	sf::Vector2f orthogonal, dir;
-	float length;
-	float momMax = 80.f;
-
-	for (int x=0;x<gb::largeTileSizeX;x++)
-	{
-		for (int y=0;y<gb::largeTileSizeY;y++)
-		{
-			sf::Vector2f tmpPos = getTile(startX1+x, startY1+y)->getPosition();
-			sf::Vector2f tmpPos2 = getTile(startX2+x, startY2+y)->getPosition();
-//			getTile(startX2+x, startY2+y)->setPosition(tmpPos.x, tmpPos.y);
-//			getTile(startX1+x, startY1+y)->setPosition(tmpPos2.x, tmpPos2.y);
-
-			TileFlightData tmp;
-			tmp.startPos = tmpPos;
-			tmp.currentPos = tmpPos;
-			tmp.targetPos = tmpPos2;
-			tmp.tile = getTile(startX1+x, startY1+y);
-			dir = tmp.targetPos - tmp.currentPos;
-			dir *= 0.2f;
-			orthogonal.x = -dir.y;
-			orthogonal.y = dir.x;
-			length = sqrt(orthogonal.x*orthogonal.x+orthogonal.y*orthogonal.y);
-			orthogonal = orthogonal * 1.f/length;
-			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.scale = 0.5f;
-			tileAnimationPos.push_back(tmp);
-
-			tmp.startPos = tmpPos2;
-			tmp.currentPos = tmpPos2;
-			tmp.targetPos = tmpPos;
-			tmp.tile = getTile(startX2+x, startY2+y);
-			dir = tmp.targetPos -tmp.currentPos;
-			length = sqrt(dir.x*dir.x+dir.y*dir.y);
-			dir = dir * 1.f/length;
-			orthogonal.x = -dir.y;
-			orthogonal.y = dir.x;
-//			length = sqrt(orthogonal.x*orthogonal.x+orthogonal.y*orthogonal.y);
-//			orthogonal = orthogonal * 1.f/length;
-			tmp.momentum.x = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.momentum.y = momMax * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tmp.scale = 0.5f;
-//			tmp.momentum = orthogonal * 40.f * (2.f * (1.f*rand() / RAND_MAX) - 1.f);
-			tileAnimationPos.push_back(tmp);
-		}
-	}
-	tileAnimationTime = 1.5f;
-
-}
-
-void Level::updateTileAnimation(sf::Time deltaT)
-{
-	float dt = deltaT.asSeconds() * 1000;
-	tileAnimationTime -= dt / 1000;
-	float scaleMax = 0.7f;
-		for(std::vector<TileFlightData>::iterator itIt = tileAnimationPos.begin() ; itIt != tileAnimationPos.end() ; ) {
-			TileFlightData &tmpObj = (*itIt);
-			tmpObj.momentum = tmpObj.momentum * 0.95f + (tmpObj.targetPos - tmpObj.currentPos)* 0.02f;
-			sf::Vector2f dir = tmpObj.momentum;
-			tmpObj.currentPos += dt*dir * 0.01f;
-			sf::Vector2f distVec1 = tmpObj.currentPos- tmpObj.startPos;
-			sf::Vector2f distVec2 = tmpObj.currentPos- tmpObj.targetPos;
-			sf::Vector2f distTotalVec = tmpObj.startPos- tmpObj.targetPos;
-			float dist1 = sqrt(distVec1.x*distVec1.x+distVec1.y*distVec1.y);
-			float dist2 = sqrt(distVec2.x*distVec2.x+distVec2.y*distVec2.y);
-			float distTotal = sqrt(distTotalVec.x*distTotalVec.x+distTotalVec.y*distTotalVec.y);
-			tmpObj.scale = (std::min(dist1,dist2)+distTotal) / distTotal;
-			tmpObj.tile->mySprite->setScale(scaleMax*tmpObj.scale, scaleMax*tmpObj.scale);
-			tmpObj.tile->setPosition(tmpObj.currentPos.x, tmpObj.currentPos.y);
-
-			// delete animation if target is reached
-			if (dir.x*dir.x+dir.y*dir.y < 10 || tileAnimationTime < 0)
-			{
-				tmpObj.tile->setPosition(tmpObj.targetPos.x, tmpObj.targetPos.y);
-				tmpObj.tile->mySprite->setScale(0.5f, 0.5f);
-				itIt = tileAnimationPos.erase(itIt);
-			}
-			else
-			{
-				itIt ++;
-			}
-		}
+	map->switchRange(first, second, {gb::largeTileSizeX, gb::largeTileSizeY}, sf::seconds(0.5f));
 }

@@ -23,8 +23,8 @@
 namespace gb {
 	
 	// window properties
-	static const int pixelSizeX = 16;
-	static const int pixelSizeY = 16;
+	static const int pixelSizeX = 32;
+	static const int pixelSizeY = 32;
 	static const int sizeX = 5;
 	static const int sizeY = 4;
 	static const int largeTileSizeX = 6;

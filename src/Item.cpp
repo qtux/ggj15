@@ -5,6 +5,7 @@
 
 Item::Item(sf::Sprite* sprite,int x,int y,int w,int h) : collectable(true), blocksPath(false){
 	mySprite = sprite;
+	sprite->setScale(2,2);	// hack to allow 32x32 pixel per tile TODO replace sprites with rectangle and set size to pixelSize
 	drawX = x;
 	drawY = y;
 	drawW = w;
