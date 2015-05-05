@@ -365,7 +365,6 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	{
 		gui->update(deltaT);
 	}
-	textBox->update();
 	
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
@@ -459,10 +458,22 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		return new Menu(Menu::Command::LEVEL);
 	}
-	// TODO use statemachine instead of comparing to a null pointer
-	if (keyPressed == sf::Keyboard::Space && highscore != nullptr)
+	
+	if (keyPressed == sf::Keyboard::Space)
 	{
-		return new Level(levelNumber + 1);
+		// TODO use statemachine instead of comparing to a null pointer
+		if (highscore != nullptr)
+		{
+			return new Level(levelNumber + 1);
+		}
+		else
+		{
+			textBox->pushText();
+		}
+	}
+	if (keyPressed == sf::Keyboard::S)
+	{
+		textBox->skip();
 	}
 	return this;
 }

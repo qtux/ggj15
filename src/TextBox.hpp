@@ -21,12 +21,13 @@ public:
 	void triggerText(std::string eventType);
 	bool enabled();
 	void pushText();
-	void update();
+	void skip();
 	void draw(sf::RenderTarget &renderTarget);
 private:
 	std::vector<TextElement*> elements;
 	std::string currentEvent;
 	TextElement* currentElement;
-	bool actionPressed;
-	bool skipPressed;
+	sf::Font _font;
+	sf::Text _speech;
+	sf::RectangleShape _textRect;
 };
