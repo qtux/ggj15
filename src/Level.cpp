@@ -37,6 +37,18 @@ Level::Level(unsigned int levelNumber):
 	}
 }
 
+sf::Uint32 Level::createColorKey(sf::Color color) {
+	
+	sf::Uint32 colorKey = 0;
+	
+	colorKey |= color.r << 3*8;
+	colorKey |= color.g << 2*8;
+	colorKey |= color.b << 1*8;
+	colorKey |= color.a << 0*8;
+	
+	return colorKey;
+}
+
 void Level::reset()
 {
 	restarts++;
@@ -233,6 +245,137 @@ void Level::reset()
 	textBox->triggerText("start");
 }
 
+Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
+{
+	if (highscore != nullptr)		// TODO replace this with a state automaton
+	{
+		return this;
+	}
+	
+	if (leaved && !textBox->enabled())
+	{
+		highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
+		highscore->load();
+	}
+	
+	updateTileAnimation(deltaT);
+	
+	for(auto& obj: gameBoard) {
+		obj->update(deltaT);
+	}
+	
+	for(auto& obj: items) {
+		obj->update(deltaT);
+	}
+	player->update(deltaT);
+	if (gui != 0)
+	{
+		gui->update(deltaT);
+	}
+	
+	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
+		if (player->intersects(**itIt))
+		{
+			if ((*itIt)->applyEffect(*this))
+			{
+				return this;
+			}
+			if ((*itIt)->collectable)
+			{
+				itIt = items.erase(itIt);
+			}
+			else
+			{
+				itIt ++;
+			}
+		}
+		else
+		{
+			itIt ++;
+		}
+	}
+	return this;
+}
+
+void Level::draw(sf::RenderTarget &renderTarget, bool focus)
+{
+	//renderTarget.draw(background);	// TODO reenable me
+	renderTarget.draw(outline);
+	for(auto& obj: gameBoard) {
+		obj->draw(renderTarget, nullptr);
+	}
+
+	for(auto& obj: items) {
+		obj->draw(renderTarget, nullptr);
+	}
+	player->draw(renderTarget, nullptr);
+	gui->draw(renderTarget);
+	textBox->draw(renderTarget);
+	if (highscore != nullptr)
+	{
+		highscore->draw(renderTarget);
+	}
+}
+
+bool Level::readyToLeave() const
+{
+	int size = items.size();
+	int keysInLevel = 0;
+	for(int i = 0;i < size;i++)
+	{
+		if (dynamic_cast<KeyItem*>(items[i]))
+		{
+			keysInLevel++;
+		}
+	}
+	return (keysInLevel == 0);
+}
+
+void Level::leave()
+{
+	if (!readyToLeave())
+	{
+		return;
+	}
+	leaved = true;
+	textBox->triggerText("end");
+}
+
+Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
+{
+	// preprocessing key input (to enhance code readability)
+	sf::Keyboard::Key keyPressed = sf::Keyboard::Unknown;
+	if (event.type == sf::Event::KeyPressed)
+	{
+		keyPressed = event.key.code;
+	}
+	
+	// process events
+	if (keyPressed == sf::Keyboard::Escape)
+	{
+		return new Menu(Menu::Command::LEVEL);
+	}
+	
+	if (keyPressed == sf::Keyboard::Space)
+	{
+		// TODO use statemachine instead of comparing to a null pointer
+		if (highscore != nullptr)
+		{
+			return new Level(levelNumber + 1);
+		}
+		else
+		{
+			textBox->pushText();
+		}
+	}
+	if (keyPressed == sf::Keyboard::S)
+	{
+		textBox->skip();
+	}
+	return this;
+}
+
 GameObject* Level::getTile(int x, int y)
 {
 	if (x + y*gb::sizeX < (int)gameBoard.size())
@@ -337,144 +480,4 @@ void Level::updateTileAnimation(sf::Time deltaT)
 				itIt ++;
 			}
 		}
-}
-
-Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
-{
-	if (highscore != nullptr)		// TODO replace this with a state automaton
-	{
-		return this;
-	}
-	
-	if (leaved && !textBox->enabled())
-	{
-		highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
-		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
-		highscore->load();
-	}
-	
-	updateTileAnimation(deltaT);
-	
-	for(auto& obj: gameBoard) {
-		obj->update(deltaT);
-	}
-	
-	for(auto& obj: items) {
-		obj->update(deltaT);
-	}
-	player->update(deltaT);
-	if (gui != 0)
-	{
-		gui->update(deltaT);
-	}
-	
-	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
-		if (player->intersects(**itIt))
-		{
-			if ((*itIt)->applyEffect(*this))
-			{
-				return this;
-			}
-			if ((*itIt)->collectable)
-			{
-				itIt = items.erase(itIt);
-			}
-			else
-			{
-				itIt ++;
-			}
-		}
-		else
-		{
-			itIt ++;
-		}
-	}
-	return this;
-}
-
-void Level::draw(sf::RenderTarget &renderTarget, bool focus)
-{
-	//renderTarget.draw(background);	// TODO reenable me
-	renderTarget.draw(outline);
-	for(auto& obj: gameBoard) {
-		obj->draw(renderTarget, nullptr);
-	}
-
-	for(auto& obj: items) {
-		obj->draw(renderTarget, nullptr);
-	}
-	player->draw(renderTarget, nullptr);
-	gui->draw(renderTarget);
-	textBox->draw(renderTarget);
-	if (highscore != nullptr)
-	{
-		highscore->draw(renderTarget);
-	}
-}
-
-bool Level::readyToLeave() const
-{
-	int size = items.size();
-	int keysInLevel = 0;
-	for(int i = 0;i < size;i++)
-	{
-		if (dynamic_cast<KeyItem*>(items[i]))
-		{
-			keysInLevel++;
-		}
-	}
-	return (keysInLevel == 0);
-}
-
-
-void Level::leave()
-{
-	if (!readyToLeave()) return;
-	leaved = true;
-	textBox->triggerText("end");
-}
-
-Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
-{
-	// preprocessing key input (to enhance code readability)
-	sf::Keyboard::Key keyPressed = sf::Keyboard::Unknown;
-	if (event.type == sf::Event::KeyPressed)
-	{
-		keyPressed = event.key.code;
-	}
-	
-	// process events
-	if (keyPressed == sf::Keyboard::Escape)
-	{
-		return new Menu(Menu::Command::LEVEL);
-	}
-	
-	if (keyPressed == sf::Keyboard::Space)
-	{
-		// TODO use statemachine instead of comparing to a null pointer
-		if (highscore != nullptr)
-		{
-			return new Level(levelNumber + 1);
-		}
-		else
-		{
-			textBox->pushText();
-		}
-	}
-	if (keyPressed == sf::Keyboard::S)
-	{
-		textBox->skip();
-	}
-	return this;
-}
-sf::Uint32 Level::createColorKey(sf::Color color) {
-	
-	sf::Uint32 colorKey = 0;
-	
-	colorKey |= color.r << 3*8;
-	colorKey |= color.g << 2*8;
-	colorKey |= color.b << 1*8;
-	colorKey |= color.a << 0*8;
-	
-	return colorKey;
 }
