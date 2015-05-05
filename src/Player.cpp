@@ -37,10 +37,10 @@ void Player::update (sf::Time deltaTime) {
 	_currTime += dT;
 	
 	// get input from global and process:
-	sf::Vector2f tmpPos = getPosition();
+	sf::Vector2f tmpPos = mySprite->getPosition();
 	sf::Vector2f oldPos(tmpPos);
-	int width = getWidth();
-	int height = getHeight();
+	int width = mySprite->getTextureRect().width * mySprite->getScale().x;
+	int height = mySprite->getTextureRect().height * mySprite->getScale().y;
 	int dir = -1;
 	if (!level->textBox->enabled()){
 		if (gb::input[0]) { tmpPos.x -= 120 * dT* (.75+.25*fabs(sin(_currTime*30))); dir = 3; }
@@ -138,7 +138,7 @@ void Player::update (sf::Time deltaTime) {
 			directionQueue.push(direction);
 		}
 		
-		setPosition(tmpPos.x, tmpPos.y);
+		mySprite->setPosition(tmpPos.x, tmpPos.y);
 		if (!positionQueue.empty()){
 			doggieSprite->setPosition(positionQueue.front().x, positionQueue.front().y + 18*mySprite->getScale().y);
 		}

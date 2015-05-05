@@ -9,7 +9,7 @@
 
 #include <SFML/System.hpp>
 #include <vector>
-#include "GameObject.hpp"
+class Player;
 #include "GUI.hpp"
 #include "Item.hpp"
 #include "TextBox.hpp"
@@ -40,7 +40,7 @@ public:
 	
 	void leave();
 	// hack hier, ne doch nicht xD
-	GameObject * player;
+	Player* player;
 	GUI* gui;
 	TextBox* textBox;
 	const std::vector<GameObject*> & getGameBoard() const;

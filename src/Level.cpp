@@ -157,7 +157,7 @@ void Level::reset()
 			iss >> y;
 			startPos.x = x * gb::pixelSizeX;
 			startPos.y = y * gb::pixelSizeY;
-			player->setPosition(startPos.x, startPos.y);
+			player->mySprite->setPosition(startPos.x, startPos.y);
 			player->doggieSprite->setPosition(startPos.x, startPos.y);
 		}
 		if (first == "Portal")

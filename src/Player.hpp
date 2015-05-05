@@ -5,7 +5,7 @@
 #include "Level.hpp"
 #include <queue>
 
-class Player : public GameObject
+class Player
 {
 public:
 	Player(Level* level);
@@ -19,9 +19,8 @@ public:
 	virtual void update(sf::Time deltaTime);
 	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	
-	// TODO put doggieSprite in here and not in GameObject
-	// TODO delete doggieSprites
-	
+	sf::Sprite * doggieSprite;
+	sf::Sprite * mySprite;
 private:
 	std::queue<sf::Vector2f> positionQueue;
 	std::queue<int> directionQueue;
