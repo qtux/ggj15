@@ -58,7 +58,8 @@ public:
 	unsigned int restarts;
 private:
 	sf::Uint32 createColorKey(sf::Color color);
-	bool leaved;
+	enum State {GAME, LEAVING, HIGHSCORE};
+	State _state;
 	Highscore *highscore;
 	sf::RectangleShape outline;
 	sf::Shader _fragmentShader;

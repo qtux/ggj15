@@ -26,7 +26,8 @@
 Level::Level(unsigned int levelNumber):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
 	levelNumber(levelNumber),
-	restarts(-1)
+	restarts(-1),
+	_state(GAME)
 {
 	reset();
 	// load only the fragment shader
@@ -52,6 +53,8 @@ sf::Uint32 Level::createColorKey(sf::Color color) {
 void Level::reset()
 {
 	restarts++;
+	_state = GAME;
+	
 	//background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
 	// set background and outline
 	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
@@ -63,7 +66,6 @@ void Level::reset()
 	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
-	leaved = false;
 	highscore  = nullptr;
 	
 	// load and set timebar
@@ -247,16 +249,17 @@ void Level::reset()
 
 Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
-	if (highscore != nullptr)		// TODO replace this with a state automaton
+	if (_state == HIGHSCORE)
 	{
 		return this;
 	}
 	
-	if (leaved && !textBox->enabled())
+	if (_state == LEAVING  && !textBox->enabled())
 	{
 		highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
 		highscore->load();
+		_state = HIGHSCORE;
 	}
 	
 	updateTileAnimation(deltaT);
@@ -312,7 +315,7 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	player->draw(renderTarget, nullptr);
 	gui->draw(renderTarget);
 	textBox->draw(renderTarget);
-	if (highscore != nullptr)
+	if (_state == HIGHSCORE)
 	{
 		highscore->draw(renderTarget);
 	}
@@ -338,7 +341,7 @@ void Level::leave()
 	{
 		return;
 	}
-	leaved = true;
+	_state = LEAVING;
 	textBox->triggerText("end");
 }
 
