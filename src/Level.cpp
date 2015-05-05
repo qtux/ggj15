@@ -281,12 +281,12 @@ const std::vector<GameObject*> &Level::getGameBoard() const
 	return gameBoard;
 }
 
-void Level::switchTile(int x1, int y1, int x2, int y2)
+void Level::switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second)
 {
-	int startX1 = x1;
-	int startY1 = y1;
-	int startX2 = x2;
-	int startY2 = y2;
+	int startX1 = first.x;
+	int startY1 = first.y;
+	int startX2 = second.x;
+	int startY2 = second.y;
 
 	sf::Vector2f orthogonal, dir;
 	float length;

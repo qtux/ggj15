@@ -31,7 +31,7 @@ public:
 	Level(unsigned int number);
 	
 	GameObject* getTile(int x, int y);
-	void switchTile(int x1, int y1, int x2, int y2);
+	void switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second);
 	void reset();
 	
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
