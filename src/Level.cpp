@@ -53,7 +53,6 @@ void Level::reset()
 	textBox = new TextBox();
 	leaved = false;
 	highscore  = nullptr;
-	fooexit = false;
 	
 	// load and set timebar
 	gui = new GUI(this);
@@ -402,28 +401,25 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	}
 	textBox->update();
 	
-	if (!fooexit){
-		for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
-			if (player->intersects(**itIt))
+	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
+		if (player->intersects(**itIt))
+		{
+			if ((*itIt)->applyEffect(*this))
 			{
-				if ((*itIt)->applyEffect(*this))
-				{
-					fooexit = true;
-					return this;
-				}
-				if ((*itIt)->collectable)
-				{
-					itIt = items.erase(itIt);
-				}
-				else
-				{
-					itIt ++;
-				}
+				return this;
+			}
+			if ((*itIt)->collectable)
+			{
+				itIt = items.erase(itIt);
 			}
 			else
 			{
 				itIt ++;
 			}
+		}
+		else
+		{
+			itIt ++;
 		}
 	}
 	return this;

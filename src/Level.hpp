@@ -60,7 +60,6 @@ private:
 	sf::Uint32 createColorKey(sf::Color color);
 	bool leaved;
 	Highscore *highscore;
-	bool fooexit;
 	sf::RectangleShape outline;
 	sf::Shader _fragmentShader;
 };
