@@ -1,7 +1,6 @@
 #include "SceneManager.hpp"
 #include "Scene.hpp"
 #include "Menu.hpp"
-#include "global.hpp"
 
 SceneManager::SceneManager(Scene* initialScene, sf::RenderWindow& window):
 	_nextScene(initialScene),
@@ -14,25 +13,6 @@ SceneManager::SceneManager(Scene* initialScene, sf::RenderWindow& window):
 
 void SceneManager::update()
 {
-	// retrieve input (either gamepad or keyboard)
-	if (sf::Joystick::isConnected(0)) {
-		// retrieve current gamepad gb::input
-		gb::input[0] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == -100;
-		gb::input[1] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovX) == 100;
-		gb::input[2] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == -100;
-		gb::input[3] = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::PovY) == 100;
-		// TODO input 4 - 7 buggy?
-		for (int i = 0; i < 3; ++i) {
-			gb::input[i + 4] = sf::Joystick::isButtonPressed(0, i);
-		}
-	}
-	else {
-		// retrieve current keyboard input
-		for (int i = 0; i < INPUT_SIZE; ++i) {
-			gb::input[i] = sf::Keyboard::isKeyPressed(gb::keyboardBinding[i]) && _focus;
-		}
-	}
-	
 	// process events
 	sf::Event event;
 	while (_window.pollEvent(event))
