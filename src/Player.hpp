@@ -8,7 +8,7 @@
 class Player
 {
 public:
-	Player(Level* level);
+	Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize);
 	float animationStep;
 	int direction;
 	float doggieStep;
@@ -28,7 +28,5 @@ private:
 	float _currTime;
 };
 
-const static int PlayerAnimState[] = {0, 1 , 1, 0, 2, 2};
-const static int DoggieAnimState[] = {0,2,1,3,1,4};
-
-const static int slowFactor = 15;
+const static int PlayerAnimState[] = {0, 1, 1, 0, 2, 2};
+const static int DoggieAnimState[] = {0, 2, 1, 3, 1, 4};

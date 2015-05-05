@@ -3,13 +3,21 @@
 #include "Tile.hpp"
 #include <math.h>
 
-Player::Player(Level* level):
+Player::Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize):
 	animationStep(0.),
 	direction(0),
 	doggieStep(0.),
 	level(level),
 	_currTime(0)
-{}
+{
+	mySprite = new sf::Sprite();
+	mySprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	mySprite->setPosition(pos);
+	
+	doggieSprite = new sf::Sprite();
+	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	doggieSprite->setPosition(pos);
+}
 
 bool Player::intersects(const GameObject& cmp)
 {
@@ -59,6 +67,7 @@ void Player::update (sf::Time deltaTime) {
 	
 	if (dir > -1) 
 	{
+		int slowFactor = 15;
 		animationStep += 120 * dT / slowFactor;
 		doggieStep += 120 * dT / slowFactor;
 		direction = dir;

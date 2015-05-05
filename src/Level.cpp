@@ -126,46 +126,32 @@ void Level::reset()
 		}
 	}
 	
-	player = new Player(this);
-	sf::Sprite *playerSprite = new sf::Sprite();
-	sf::Sprite *doggieSprite = new sf::Sprite();
-	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	playerSprite->setPosition(90,90);
-	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	doggieSprite->setPosition(90,90);
-	player->mySprite = playerSprite;
-	player->doggieSprite = doggieSprite;
-	
 	// read text file
 	std::ifstream infile(fileName + ".txt");
 	std::string line;
-	
-	sf::Sprite *itemSprite = new sf::Sprite();
-	itemSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
 	ItemFactory tmpFactory = ItemFactory();
-
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
 		std::string first;
 		iss >> first;
+		// TODO do a sanity check on items placed at the same coordinate
 		if (first == "Start")
 		{
-			int x,y;
-			iss >> x;
-			iss >> y;
-			startPos.x = x * gb::pixelSizeX;
-			startPos.y = y * gb::pixelSizeY;
-			player->mySprite->setPosition(startPos.x, startPos.y);
-			player->doggieSprite->setPosition(startPos.x, startPos.y);
+			unsigned int x,y;
+			iss >> x >> y;
+			// TODO remove static_casts
+			player = new Player(
+				this,
+				{static_cast<float>(x * gb::pixelSizeX), static_cast<float>(y * gb::pixelSizeY)},
+				{static_cast<float>(gb::pixelSizeX), static_cast<float>(2 * gb::pixelSizeY)},
+				{static_cast<float>(gb::pixelSizeX), static_cast<float>(gb::pixelSizeY)}
+			);
 		}
 		if (first == "Portal")
 		{
-			int x,y;
-			iss >> x;
-			iss >> y;
-			portalPos.x = x * gb::pixelSizeX;
-			portalPos.y = y * gb::pixelSizeY;
+			unsigned int x,y;
+			iss >> x >> y;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items.push_back(tmpItem);
@@ -173,20 +159,14 @@ void Level::reset()
 		if (first == "Item")
 		{
 			std::string second;
-			iss >> second;
-			int x,y;
-			iss >> x;
-			iss >> y;
+			unsigned int x,y;
+			iss >> second >> x >> y;
 			Item *tmpItem = 0;
 			if (second == "DecorationItem")
 			{
 				bool blocksPath;
 				int texPosX, texPosY, texW, texH;
-				iss >> blocksPath;
-				iss >> texPosX;
-				iss >> texPosY;
-				iss >> texW;
-				iss >> texH;
+				iss >> blocksPath >> texPosX >> texPosY >> texW >> texH;
 				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
 			}
 			else if (second == "DoorItem")
@@ -220,11 +200,7 @@ void Level::reset()
 		{
 			TextBox::TextElement* element = new TextBox::TextElement();
 			std::string boldText = "";
-			iss >> element->eventType;
-			iss >> boldText;
-			iss >> element->r;
-			iss >> element->g;
-			iss >> element->b;
+			iss >> element->eventType >> boldText >> element->r >> element->g >> element->b;
 			std::getline(infile, line);
 			element->text = line;
 			if (boldText=="bold")
@@ -235,13 +211,8 @@ void Level::reset()
 		}
 		if (first == "TriggerItem")
 		{
-			int x, y, x1, x2, y1, y2;
-			iss >> x;
-			iss >> y;
-			iss >> x1;
-			iss >> y1;
-			iss >> x2;
-			iss >> y2;
+			unsigned int x, y, x1, x2, y1, y2;
+			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
@@ -249,13 +220,8 @@ void Level::reset()
 		}
 		if (first == "TriggerTrapItem")
 		{
-			int x, y, x1, x2, y1, y2;
-			iss >> x;
-			iss >> y;
-			iss >> x1;
-			iss >> y1;
-			iss >> x2;
-			iss >> y2;
+			unsigned int x, y, x1, x2, y1, y2;
+			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
