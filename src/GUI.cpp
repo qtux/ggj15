@@ -32,7 +32,7 @@ GUI::GUI(Level* level):
 	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
 	levelNumber.setFont(font);
 	levelNumber.setPosition(gb::gridWidth + 2, gb::gridHeight - 32);
-	levelNumber.setString(std::to_string(level->number + 1));
+	levelNumber.setString(std::to_string(level->levelNumber));
 }
 void GUI::setTimeout(int seconds)
 {

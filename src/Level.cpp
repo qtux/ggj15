@@ -23,9 +23,9 @@
 // shader
 #include <iostream>
 
-Level::Level(unsigned int number):
+Level::Level(unsigned int levelNumber):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
-	number(number),
+	levelNumber(levelNumber),
 	restarts(-1)
 {
 	reset();
@@ -61,7 +61,7 @@ void Level::reset()
 	sf::Image levelImg;
 	
 	// try to load the file
-	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(number);
+	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(levelNumber);
 	if (!levelImg.loadFromFile(fileName+".png")) {
 		// TODO return to menu here?
 		return;
@@ -413,7 +413,7 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 
 void Level::finishLevel()
 {
-	highscore = new Highscore(number, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 	highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
 	highscore->load();
 }
@@ -462,7 +462,7 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	// TODO use statemachine instead of comparing to a null pointer
 	if (keyPressed == sf::Keyboard::Space && highscore != nullptr)
 	{
-		return new Level(number + 1);
+		return new Level(levelNumber + 1);
 	}
 	return this;
 }

@@ -28,7 +28,7 @@ struct TileFlightData
 
 class Level: public Scene {
 public:
-	Level(unsigned int number);
+	Level(unsigned int levelNumber);
 	
 	GameObject* getTile(int x, int y);
 	void switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second);
@@ -47,7 +47,7 @@ public:
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
 	std::vector<Item*> items;
-	const unsigned int number;
+	const unsigned int levelNumber;
 //private:
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
