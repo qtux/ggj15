@@ -372,7 +372,10 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	}
 	if (keyPressed == sf::Keyboard::S)
 	{
-		textBox->skip();
+		if (_state != HIGHSCORE)
+		{
+			textBox->skip();
+		}
 	}
 	
 	return this;
