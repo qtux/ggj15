@@ -348,7 +348,9 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	
 	if (leaved && !textBox->enabled())
 	{
-		finishLevel();
+		highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
+		highscore->load();
 	}
 	
 	updateTileAnimation(deltaT);
@@ -410,14 +412,6 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	}
 }
 
-void Level::finishLevel()
-{
-	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
-	highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
-	highscore->load();
-}
-
-
 bool Level::readyToLeave() const
 {
 	int size = items.size();
@@ -438,10 +432,6 @@ void Level::leave()
 	if (!readyToLeave()) return;
 	leaved = true;
 	textBox->triggerText("end");
-	if (!textBox->enabled())
-	{
-		finishLevel();
-	}
 }
 
 Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
