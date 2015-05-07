@@ -7,11 +7,15 @@
 float mag2(const sf::Vector2f & a);
 
 namespace npc{
+
+enum class state {search, attack, withdraw, idle};
+
 struct step {
 	sf::Vector2f pos;
 	sf::Vector2f from;
 	float cost;
 	float value;
+
 
 	step(const sf::Vector2f &pos_, const sf::Vector2f &from_, float cost_, float value_): pos(pos_), from(from_), cost(cost_), value(value_) {}
 
@@ -56,12 +60,18 @@ private:
 	int pathIdx;
 	std::vector<sf::Vector2f> path;
 	float phase;
+	npc::state state;
+	npc::state oldState;
+	sf::Clock idleClock;
+	bool clockNeedsReset;
+	float jumpSpeed;
 
 	void expandNode(const std::vector<GameObject*> &myBoard, npc::step &current, std::vector<npc::step> &openList, std::vector<npc::step> &closedList, const sf::Vector2f &destPos);
 	void findPath(const GameObject &from, const GameObject &to, std::vector<sf::Vector2f> &path);
+	void findAvoidPath(const GameObject& from, const GameObject& avoid, std::vector<sf::Vector2f>& path);
 
 public:
-	NPC();
+	NPC(Level* level);
 	virtual ~NPC();
 
 	virtual bool intersects(const GameObject& cmp) const;

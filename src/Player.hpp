@@ -13,6 +13,7 @@ public:
 	bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
 	void update(sf::Time deltaTime);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
+
 private:
 	Level* _level;
 	float _animationStep;

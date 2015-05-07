@@ -17,6 +17,7 @@ class Item;
 #include "GUI.hpp"
 class Player;
 #include "GameObject.hpp"
+#include "NPC.hpp"
 
 struct TileFlightData
 {
@@ -47,6 +48,9 @@ public:
 	const std::vector<GameObject*> & getGameBoard() const;
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
+	std::vector<NPC*> npcs;
+	const unsigned int number;
+
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
 	float tileAnimationTime;

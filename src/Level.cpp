@@ -22,8 +22,11 @@
 #include "ItemFactory.hpp"
 #include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
 
+
 // shader
 #include <iostream>
+#include "NPC.hpp"
+
 
 Level::Level(unsigned int levelNumber):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
@@ -179,13 +182,13 @@ void Level::reset()
 			iss >> x;
 			iss >> y;
 
-			NPC * tmpNPC = new NPC();
+			NPC * tmpNPC = new NPC(this);
 			sf::Sprite *npcSprite = new sf::Sprite();
-			npcSprite->setTexture(gb::textureManager.npcTexture);
+			npcSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/npc.png", false));
 			tmpNPC->mySprite = npcSprite;
 			tmpNPC->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-
-			scene.npcs.push_back(tmpNPC);
+			//std::cout<<"NPC loaded"<<std::endl;
+			npcs.push_back(tmpNPC);
 		}
 		if (first == "Item")
 		{
@@ -502,4 +505,5 @@ void Level::updateTileAnimation(sf::Time deltaT)
 			}
 		}
 }
+
 

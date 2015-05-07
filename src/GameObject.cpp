@@ -1,7 +1,8 @@
 #include "GameObject.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "globals.hpp"
+#include "Level.hpp"
+//#include "globals.hpp"
 
 const sf::Vector2f& GameObject::getPosition() const
 {

@@ -40,6 +40,10 @@ void GUI::setTimeout(int seconds)
 	timeoutSeconds = seconds;
 	timeBuff = 0;
 }
+float GUI::getTimebuffFactor() const
+{
+	return buffFactor;
+}
 void GUI::setTimebuffFactor(float factor)
 {
 	buffFactor = factor;

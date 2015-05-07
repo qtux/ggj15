@@ -6,7 +6,7 @@
  */
 
 #include "NPC.hpp"
-#include "globals.hpp"
+#include "global.hpp"
 #include <algorithm>
 #include "Tile.hpp"
 #include <math.h>
@@ -18,9 +18,9 @@ float mag2(const sf::Vector2f & a)
 }
 
 
-NPC::NPC() : animationStep(0.), phase(drand48()) {
+NPC::NPC(Level* level) : animationStep(0.), phase(drand48()), state(npc::state::search), clockNeedsReset(true), jumpSpeed(-9999.) {
 	// TODO Auto-generated constructor stub
-
+	this->level = level;
 }
 
 NPC::~NPC() {
@@ -60,51 +60,160 @@ void NPC::update(sf::Time deltaTime) {
 	animationStep += 120 * dT / NPCslowFactor;
 	if (animationStep >= 4.) animationStep -= 4;
 
-	GameObject * myPlayer = gb::sceneManager.getCurrentScene().player;
+	GameObject * myPlayer = gb::sceneManager.getCurrentScene()->player;
 	if (myPlayer == 0) return;
 
-	if (path.size() == 0 || mag2(myPlayer->getPosition() - oldPlayerPos) > 9 * gb::pixelSizeX * gb::pixelSizeX)
-	{
-		path.clear();
-		findPath(*this, *myPlayer, path);
-		//std::cout<<"len path "<<path.size()<<std::endl;
-		pathIdx = path.size() - 1;
-		oldPlayerPos = myPlayer->getPosition();
-	}
-
-	if (pathIdx < 0) return;
-
+	sf::Vector2f moveVec;
 	sf::Vector2f myPos = getPosition();
 
-	if (mag2(path[pathIdx] - myPos) < 3) // 3 ist beliebiger aber fester Abstandsparameter vom KI-Wegpunkt
+	/*if (oldState != state)
 	{
-		--pathIdx;
+		std::cout << "state switched to ";
+		switch(state){
+		case npc::state::attack : std::cout << "attack"; break;
+		case npc::state::search : std::cout << "search"; break;
+		case npc::state::withdraw : std::cout << "withdraw"; break;
+		case npc::state::idle : std::cout << "idle"; break;
+		}
+		std::cout<<std::endl;
+		oldState = state;
+	}*/
+
+	switch (state){
+	case npc::state::search:
+		{
+			if (path.size() == 0 || mag2(myPlayer->getPosition() - oldPlayerPos) > 9 * gb::pixelSizeX * gb::pixelSizeX)
+			{
+				path.clear();
+				findPath(*this, *myPlayer, path);
+				//std::cout<<"len path "<<path.size()<<std::endl;
+				pathIdx = path.size() - 1;
+				oldPlayerPos = myPlayer->getPosition();
+			}
+
+			if (mag2(myPlayer->getPosition() - myPos) < 4 * gb::pixelSizeX * gb::pixelSizeX && pathIdx < 5) // switch to attack mode once close to player
+			{
+				path.clear();
+				state = npc::state::attack;
+			}
+
+			if (pathIdx < 0)
+				{
+				// no way to player found
+				path.clear();
+				state = npc::state::idle;
+				}
+
+
+			if (mag2(path[pathIdx] - myPos) < 3) // 3 ist beliebiger aber fester Abstandsparameter vom KI-Wegpunkt
+			{
+				--pathIdx;
+			}
+
+			if (pathIdx < 0)
+				{
+				path.clear();
+				state = npc::state::attack; // Attacke beginnen wenn am Ende des Pfades
+				}
+
+			moveVec = path[pathIdx] - myPos;
+			moveVec /= sqrtf(mag2(moveVec));
+			break;
+		}
+	case npc::state::withdraw:
+		{
+			if (path.size() == 0)
+			{
+				findAvoidPath(*this, *myPlayer, path);
+				pathIdx = path.size() - 1;
+			}
+			if (mag2(path[pathIdx] - myPos) < 3) // 3 ist beliebiger aber fester Abstandsparameter vom KI-Wegpunkt
+			{
+				--pathIdx;
+			}
+			if (pathIdx < 0)
+			{
+				// end of escape path reached
+				path.clear();
+				state = npc::state::idle;
+			}
+			moveVec = path[pathIdx] - myPos;
+			moveVec /= sqrtf(mag2(moveVec));
+
+			break;
+		}
+	case npc::state::idle:
+		{
+			if (clockNeedsReset)
+			{
+				idleClock.restart();
+				clockNeedsReset = false;
+			}
+			if (idleClock.getElapsedTime().asMilliseconds() > 5000)
+			{
+				state = npc::state::search;
+				clockNeedsReset = true;
+			}
+			break;
+		}
+	case npc::state::attack:
+		{
+			if (jumpSpeed < -999. && mag2(myPos - myPlayer->getPosition()) < 4. * gb::pixelSizeX * gb::pixelSizeX)
+			{
+				jumpSpeed = 1.;
+			}
+			moveVec = myPlayer->getPosition() - myPos;
+			moveVec /= sqrtf(mag2(moveVec));
+			break;
+		}
 	}
-
-	if (pathIdx < 0) return; // nicht bewegen wenn am Ende des Pfades
-
-	sf::Vector2f moveVec = path[pathIdx] - myPos;
-	moveVec /= sqrtf(mag2(moveVec));
-
 
 	sf::Vector2f oldPos(myPos);
 
 	myPos += moveVec * (120 * dT);
 
-	phase += dT;
-	if (phase > 2*M_PI) phase -= 2*M_PI;
+	if (jumpSpeed < -999.)
+	{
+		phase += dT;
+		if (phase > 2*M_PI) phase -= 2*M_PI;
 
-	myPos.y += sin(phase);
+		myPos.y += .1*sin(phase*10);
+	}
+	else
+	{
+		myPos.y -= jumpSpeed;
+		jumpSpeed -= deltaTime.asMilliseconds() * .002;
+		if (jumpSpeed < -1.) jumpSpeed = 1.;
+	}
 
 	int chkColl[] = {0, 0};
 	checkTilesCollision(myPos, oldPos, chkColl);
 
+	if (state == npc::state::attack && this->intersects(*myPlayer))
+	{
+		state = npc::state::withdraw;
+		jumpSpeed = -9999.;
 
+		//TODO hässlicher Teil, ändern:
+		float tmpStor = level->gui->getTimebuffFactor();
+		level->gui->setTimebuffFactor(-1);
+
+		level->gui->applyTimeBufff(-4);
+
+		level->gui->setTimebuffFactor(tmpStor);
+	}
 
 	setPosition(myPos);
-	mySprite->setTextureRect(sf::IntRect(0, NPCAnimState[int(animationStep)] * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
+
+	bool angry = (state == npc::state::attack || state == npc::state::search) ? true : false;
+
+	mySprite->setTextureRect(sf::IntRect((angry) ? gb::pixelSizeX : 0, NPCAnimState[int(animationStep)] * gb::pixelSizeY, gb::pixelSizeX, gb::pixelSizeY));
 }
 
+
+/**
+ * internal method of A* algorithm, gets called by findPath()
+ */
 void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current, std::vector<npc::step> &openList, std::vector<npc::step> &closedList, const sf::Vector2f &destPos)
 {
 	float currCost = current.cost + 1.f;
@@ -113,7 +222,7 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 	{
 		if (!dynamic_cast<const Tile*>(tmp)->walkable) continue;
 
-		for (auto &itemIt : gb::sceneManager.getCurrentScene().items)
+		for (auto &itemIt : gb::sceneManager.getCurrentScene()->items)
 		{
 			if (itemIt->blocksPath && tmp->mySprite->getGlobalBounds().intersects(itemIt->mySprite->getGlobalBounds())) continue; // nicht über blockierende Items laufen
 		}
@@ -158,9 +267,52 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 	}
 }
 
+
+void NPC::findAvoidPath(const GameObject& from, const GameObject& avoid, std::vector<sf::Vector2f>& path)
+{
+	auto myEval = [] (const sf::Vector2f &from, const sf::Vector2f &tmpPos) -> double {return mag2(tmpPos - from);} ;
+
+	const std::vector<GameObject*> &myBoard = gb::sceneManager.getCurrentScene()->gameBoard; //TODO: define type (class or typedef) for board? (johannes)
+
+	std::pair<sf::Vector2f, double> bestOption (sf::Vector2f(), -1.);
+	sf::Vector2f current(from.getPosition());
+
+	for (int i = 0; i < 5; i++)
+	{
+		bestOption.second = -1.;
+		for (auto &tmp : myBoard)
+		{
+			if (!dynamic_cast<const Tile*>(tmp)->walkable) continue;
+
+			for (auto &itemIt : gb::sceneManager.getCurrentScene()->items)
+			{
+				if (itemIt->blocksPath && tmp->mySprite->getGlobalBounds().intersects(itemIt->mySprite->getGlobalBounds())) continue; // nicht über blockierende Items laufen
+			}
+
+			const sf::Vector2f &tmpPos = tmp->getPosition();// + sf::Vector2f(gb::pixelSizeX/2,  gb::pixelSizeY/2);
+			sf::Vector2f dist = current - tmpPos;
+			if (mag2(dist) < .5*(gb::pixelSizeX * gb::pixelSizeX + gb::pixelSizeY * gb::pixelSizeY) + 10) //10 just to be safe
+			{
+				double chkVal = myEval(avoid.getPosition(), tmpPos);
+				if (chkVal > bestOption.second)
+				{
+					bestOption.first.x = tmpPos.x;
+					bestOption.first.y = tmpPos.y;
+					bestOption.second = chkVal;
+				}
+			}
+		}
+
+		path.push_back(bestOption.first);
+		current = bestOption.first;
+	}
+	std::reverse(path.begin(), path.end());
+}
+
+
 void NPC::findPath(const GameObject& from, const GameObject& to,
 		std::vector<sf::Vector2f>& path) {
-	const std::vector<GameObject*> &myBoard = gb::sceneManager.getCurrentScene().gameBoard; //TODO: define type (class or typedef) for board? (johannes)
+	const std::vector<GameObject*> &myBoard = gb::sceneManager.getCurrentScene()->gameBoard; //TODO: define type (class or typedef) for board? (johannes)
 
 	std::vector<npc::step> openList; //http://www.cplusplus.com/reference/algorithm/make_heap/
 
@@ -216,7 +368,7 @@ void NPC::draw(sf::RenderTarget& renderTarget, sf::Shader* renderShader) {
 	{
 		renderTarget.draw(*mySprite, renderShader);
 
-		for (auto &it : path)
+		/*for (auto &it : path)
 		{
 			sf::CircleShape shape(5);
 
@@ -224,6 +376,6 @@ void NPC::draw(sf::RenderTarget& renderTarget, sf::Shader* renderShader) {
 			shape.setFillColor(sf::Color(250, 50, 50));
 			shape.setPosition(it);
 			renderTarget.draw(shape);
-		}
+		}*/
 	}
 }

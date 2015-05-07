@@ -16,6 +16,7 @@ public:
 	void addCoins(int amount);
 	void addKeys(int amount);
 	void setTimebuffFactor(float factor);
+	float getTimebuffFactor() const;
 	float timeLeft();
 	int coins;
 	float timeoutSeconds;
