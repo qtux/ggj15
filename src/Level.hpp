@@ -37,6 +37,7 @@ public:
 	TextBox* textBox;
 private:
 	sf::Uint32 createColorKey(sf::Color color);
+	sf::Vector2f getTarget(const sf::Vector2f& start, const sf::Vector2f& offset);
 	enum State {GAME, LEAVING, HIGHSCORE};
 	State _state;
 	struct Key

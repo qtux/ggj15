@@ -364,6 +364,30 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	}
 }
 
+sf::Vector2f Level::getTarget(const sf::Vector2f& start, const sf::Vector2f& offset)
+{
+	if (std::hypot(offset.x, offset.y) < 0.001)
+	{
+		return start;
+	}
+	sf::FloatRect area(/*TODO position of tilemap*/ {0,0}, /* TODO size of tilemap*/ sceneSize);
+	sf::Vector2f target = start + offset;
+	// get a point inside the area (includes borders, e.g. intersection points)
+	sf::Vector2f nextTarget;
+	nextTarget.x = std::max(area.left, std::min(area.left + area.width, target.x));
+	nextTarget.y = std::max(area.top, std::min(area.top + area.height, target.y));
+	
+	// do collision check between start and nextTarget and determine where to move (i.e. the real nextTarget)
+	
+	
+	// get the wrapped starting point
+	sf::Vector2f nextStart;
+	nextStart.x = (target.x - area.left) - area.width * std::floor((target.x - area.left) / area.width);
+	nextStart.y = (target.y - area.top) - area.height * std::floor((target.y - area.top) / area.height);
+	// do recursion
+	return getTarget(nextStart, offset - (nextTarget - start));
+}
+
 bool Level::readyToLeave() const
 {
 	int keysInLevel = 0;
