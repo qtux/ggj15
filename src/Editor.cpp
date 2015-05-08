@@ -12,7 +12,30 @@
 // TODO make time changeable
 Editor::Editor():
 	Scene({mapWidth + 2 * lateralOffset, mapHeight + lateralOffset}),
-	actionItemTexture(gb::textureManager.getTexture("./img/items.png", false))
+	actionItemTexture(gb::textureManager.getTexture("./img/items.png", false)),
+	id ({
+	// ---- normal items
+	{NOITEM, 0},
+	{START, 1},
+	{GOALPORTAL, 2},
+	{TRIGGER, 3},
+	{COIN, 4},
+	{CLOCK, 5},
+	{KEY, 6},
+	{DOOR, 7},
+	// put in new items here (and adjust numbers below)
+	// ---- deco item border
+	{DECO1, 8},
+	{DECO2, 9},
+	{DECO3, 10},
+	{DECO4, 11},
+	// put in new deco items here
+	// ---- npc border
+	{SLIME, 12},
+	// put in new npcs here (and adjust numbers below)
+	// ---- non-displayed item border
+	{VERTICALDOOR, 13}
+	})
 {
 	// fill color choices array
 	tileColors[0] = sf::Color::White;//0xffffffff;
@@ -22,7 +45,7 @@ Editor::Editor():
 	tileColors[4] = sf::Color(95, 95, 95);//0x5f5f5fff;
 	tileColors[5] = sf::Color(0, 1, 0);//0x000100ff;
 	tileColors[6] = sf::Color(0, 0, 171);//0x0000abff;
-	tileColors[7] = sf::Color(00, 62, 4);//0x003E04ff;
+	tileColors[7] = sf::Color(0, 62, 4);//0x003E04ff;
 	
 	
 	// create tiles and itemTiles (gameboard)
@@ -63,30 +86,30 @@ Editor::Editor():
 	
 	// load item rects
 	// ---- normal items
-	tileItemRects[1] = sf::IntRect(0,4*16,32,16);		// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
-	tileItemRects[2] = sf::IntRect(0,0,16,32);			// 2.  portal (goal)
-	tileItemRects[3] = sf::IntRect(0,6*16,16,16);		// 3.  trigger
-	tileItemRects[4] = sf::IntRect(0,5*16,16,16);		// 4.  coin
-	tileItemRects[5] = sf::IntRect(0,3*16,16,16);		// 5.  clock
-	tileItemRects[6] = sf::IntRect(0,2*16,16,16);		// 6.  key
-	tileItemRects[7] = sf::IntRect(2*16,7*16,32,16);	// 7.  door
-	// put in new items here (and adjust numbers below)
+	tileItemRects[id.at(START)] = sf::IntRect(0,4*16,32,16);			// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
+	tileItemRects[id.at(GOAL)] = sf::IntRect(0,0,16,32);				// 2.  portal (goal)
+	tileItemRects[id.at(TRIGGER)] = sf::IntRect(0,6*16,16,16);			// 3.  trigger
+	tileItemRects[id.at(COIN)] = sf::IntRect(0,5*16,16,16);				// 4.  coin
+	tileItemRects[id.at(CLOCK)] = sf::IntRect(0,3*16,16,16);			// 5.  clock
+	tileItemRects[id.at(KEY)] = sf::IntRect(0,2*16,16,16);				// 6.  key
+	tileItemRects[id.at(DOOR)] = sf::IntRect(2*16,7*16,32,16);			// 7.  door
+	// put in new items here (and adjust numbers above)
 	// ---- deco item border
-	tileItemRects[8] = sf::IntRect(16,5*16,16,16);		// 1.(deco)	mushroom
-	tileItemRects[9] = sf::IntRect(16,6*16,16,16);		// 2.(deco)	flower
-	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 3.(deco)	crystals
-	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 4.(deco)	rock
+	tileItemRects[id.at(DECO1)] = sf::IntRect(16,5*16,16,16);			// 1.(deco)	mushroom
+	tileItemRects[id.at(DECO2)] = sf::IntRect(16,6*16,16,16);			// 2.(deco)	flower
+	tileItemRects[id.at(DECO3)] = sf::IntRect(0,7*16,16,16);			// 3.(deco)	crystals
+	tileItemRects[id.at(DECO4)] = sf::IntRect(16,7*16,16,16);			// 4.(deco)	rock
 	// put in new deco items here
 	// ---- npc border
-	tileItemRects[12] = sf::IntRect(3*16,0,16,16);		// 1.(npc)	slime
-	// put in new npcs here (and adjust numbers below)
+	tileItemRects[id.at(SLIME)] = sf::IntRect(3*16,0,16,16);			// 1.(npc)	slime
+	// put in new npcs here (and adjust numbers above)
 	// ---- non-displayed item border
-	tileItemRects[13] = sf::IntRect(2*16,4*16,16,32);	// vertical door (not shown)
+	tileItemRects[id.at(VERTICALDOOR)] = sf::IntRect(2*16,4*16,16,32);	// vertical door (not shown)
 	// TODO more
 	// TODO deco dialog with one item shown?	
 	
 	// ---- normal items
-	id[NOITEM] = 0;
+	/*id[NOITEM] = 0;
 	id[START] = 1;
 	id[GOALPORTAL] = 2;
 	id[TRIGGER] = 3;
@@ -105,13 +128,13 @@ Editor::Editor():
 	id[SLIME] = 12;
 	// put in new npcs here (and adjust numbers below)
 	// ---- non-displayed item border
-	id[VERTICALDOOR] = 13;
+	id[VERTICALDOOR] = 13;*/
 	
 	// large item texture parts
-	bigItemRects[id[START]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,4*16,16,16), sf::IntRect(16,4*16,16,16));
-	bigItemRects[id[GOALPORTAL]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,0,16,16), sf::IntRect(0,16,16,16));
-	bigItemRects[id[DOOR]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,7*16,16,16), sf::IntRect(3*16,7*16,16,16));
-	bigItemRects[id[VERTICALDOOR]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,4*16,16,16), sf::IntRect(2*16,5*16,16,16));
+	bigItemRects[id.at(START)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,4*16,16,16), sf::IntRect(16,4*16,16,16));
+	bigItemRects[id.at(GOALPORTAL)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,0,16,16), sf::IntRect(0,16,16,16));
+	bigItemRects[id.at(DOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,7*16,16,16), sf::IntRect(3*16,7*16,16,16));
+	bigItemRects[id.at(VERTICALDOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,4*16,16,16), sf::IntRect(2*16,5*16,16,16));
 	
 	// create item choices bar
 	for (int y = 0; y < itemChoices.size(); ++y)
@@ -347,30 +370,30 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						setTexture(currentX, currentY, tileItemRects[activeItemIndex]);
 						
 						// apply necessary additions
-						if (activeItemIndex == id[START] || activeItemIndex == id[GOALPORTAL]) // portal and start item
+						if (activeItemIndex == id.at(START) || activeItemIndex == id.at(GOALPORTAL)) // portal and start item
 						{
 							// if item would not fit, don't place it
 							if (currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[NOITEM]]);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id.at(NOITEM)]);
 							}
 							else
 							{
 								deleteBigItem(currentX, currentY+1);
 								// place big item
-								if (activeItemIndex == id[START])
+								if (activeItemIndex == id.at(START))
 								{
-									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[START]].first);
-									setTexture(currentX, currentY+1, bigItemRects[id[START]].second);
+									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id.at(START)].first);
+									setTexture(currentX, currentY+1, bigItemRects[id.at(START)].second);
 								}
 								else
 								{
-									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[GOALPORTAL]].first);
-									setTexture(currentX, currentY+1, bigItemRects[id[GOALPORTAL]].second);
+									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id.at(GOALPORTAL)].first);
+									setTexture(currentX, currentY+1, bigItemRects[id.at(GOALPORTAL)].second);
 								}
 							}
 						}
-						if (activeItemIndex == id[TRIGGER]) // trigger item
+						if (activeItemIndex == id.at(TRIGGER)) // trigger item
 						{
 							// force marking of quadrants
 							triggerMarkingActive = true;
@@ -386,27 +409,27 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 							markArea(currentX, currentY, sf::Color::Red, quadrantSize);
 							infoText.setString("Left click to mark two swap areas.");
 						}
-						if (activeItemIndex == id[DOOR]) // door item
+						if (activeItemIndex == id.at(DOOR)) // door item
 						{
 							// if door item would not fit, don't place it or place it vertically if that fits
 							if (currentX + 1 >= numTilesX && currentY + 1 >= numTilesY)
 							{
-								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id[NOITEM]]);
+								itemTiles[currentX][currentY]->setTextureRect(tileItemRects[id.at(NOITEM)]);
 							}
-							else if (currentX + 1 >= numTilesX || itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+							else if (currentX + 1 >= numTilesX || itemChoices[id.at(DOOR)]->getTextureRect() == tileItemRects[id.at(VERTICALDOOR)])
 							{
 								deleteBigItem(currentX, currentY+1);
-								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[VERTICALDOOR]].first);
-								setTexture(currentX, currentY+1, bigItemRects[id[VERTICALDOOR]].second);
+								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id.at(VERTICALDOOR)].first);
+								setTexture(currentX, currentY+1, bigItemRects[id.at(VERTICALDOOR)].second);
 							}
 							else
 							{
 								deleteBigItem(currentX+1, currentY);
-								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id[DOOR]].first);
-								setTexture(currentX+1, currentY, bigItemRects[id[DOOR]].second);
+								itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id.at(DOOR)].first);
+								setTexture(currentX+1, currentY, bigItemRects[id.at(DOOR)].second);
 							}
 						}
-						if (activeItemIndex >= id[DECO1] && activeItemIndex <= id[DECO4]) // deco item
+						if (activeItemIndex >= id.at(DECO1) && activeItemIndex <= id.at(DECO4)) // deco item
 						{
 							// set to blocking
 							decoItemBlocking[Key(currentX,currentY)] = 1;
@@ -469,7 +492,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// TODO swapped triggers may be outlined yellow or sth (probably)
 			// if trigger item is on right clicked tile
-			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[TRIGGER]])
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id.at(TRIGGER)])
 			{
 				// mark swapped tiles
 				markArea(triggerSwapPositionsX[xPos].first, triggerSwapPositionsY[yPos].first, sf::Color::Red, quadrantSize);
@@ -508,10 +531,10 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			}*/
 			
 			// toggle blocking for deco items
-			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO1]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO2]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO3]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO4]]		)
+			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id.at(DECO1)]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id.at(DECO2)]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id.at(DECO3)]	||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id.at(DECO4)]		)
 			{
 				if (decoItemBlocking[Key(xPos,yPos)] == 1)
 				{
@@ -529,17 +552,17 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// toggle door orientation
 			// TODO do this differently or make sure nothing bad happens
-			if (mouseTile.getTextureRect() == tileItemRects[id[DOOR]] || mouseTile.getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+			if (mouseTile.getTextureRect() == tileItemRects[id.at(DOOR)] || mouseTile.getTextureRect() == tileItemRects[id.at(VERTICALDOOR)])
 			{
-				if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[VERTICALDOOR]])
+				if (itemChoices[id.at(DOOR)]->getTextureRect() == tileItemRects[id.at(VERTICALDOOR)])
 				{
-					itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[DOOR]]);
-					mouseTile.setTextureRect(tileItemRects[id[DOOR]]);
+					itemChoices[id.at(DOOR)]->setTextureRect(tileItemRects[id.at(DOOR)]);
+					mouseTile.setTextureRect(tileItemRects[id.at(DOOR)]);
 				}
-				else if (itemChoices[id[DOOR]]->getTextureRect() == tileItemRects[id[DOOR]])
+				else if (itemChoices[id.at(DOOR)]->getTextureRect() == tileItemRects[id.at(DOOR)])
 				{
-					itemChoices[id[DOOR]]->setTextureRect(tileItemRects[id[VERTICALDOOR]]);
-					mouseTile.setTextureRect(tileItemRects[id[VERTICALDOOR]]);
+					itemChoices[id.at(DOOR)]->setTextureRect(tileItemRects[id.at(VERTICALDOOR)]);
+					mouseTile.setTextureRect(tileItemRects[id.at(VERTICALDOOR)]);
 				}		
 			}	
 		}
@@ -726,75 +749,6 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	return this;
 }
 
-void Editor::markArea(int xPos, int yPos, sf::Color color, int quadrantSize)
-{
-	// if marking is in gameboard
-	if (xPos >= 0 && yPos >= 0 && xPos + quadrantSize <= numTilesX && yPos + quadrantSize <= numTilesY) {
-		// mark given size * given size tiles in given color
-		for (int x = xPos; x < xPos + quadrantSize; ++x)
-		{
-			for (int y = yPos; y < yPos + quadrantSize; ++y)
-			{
-				itemTiles[x][y]->setOutlineColor(color);
-			}
-		}
-	}
-}
-
-void Editor::resetTriggers()
-{
-	// if trigger was marked (i.e. chosen), unmark it
-	if (triggerMarked.first != -1 && triggerMarked.second != -1)
-	{
-		markArea(triggerSwapPositionsX[triggerMarked.first].first, triggerSwapPositionsY[triggerMarked.second].first, sf::Color::Blue, quadrantSize);
-		markArea(triggerSwapPositionsX[triggerMarked.first].second, triggerSwapPositionsY[triggerMarked.second].second, sf::Color::Blue, quadrantSize);
-		triggerMarked.first = -1;
-		triggerMarked.second = -1;
-	}
-		
-	// swap triggers back in correct order
-	while (!triggerStack.empty())
-	{
-		int xPos = triggerStack.top().first;
-		int yPos = triggerStack.top().second;
-		triggerStack.pop();
-		sf::Color storeColor;
-		for (int x = 0; x < quadrantSize; ++x)
-		{
-			for (int y = 0; y < quadrantSize; ++y)
-			{
-				storeColor = tiles[triggerSwapPositionsX[xPos].first+x][triggerSwapPositionsY[yPos].first+y]->getFillColor();
-				tiles[triggerSwapPositionsX[xPos].first+x][triggerSwapPositionsY[yPos].first+y]->setFillColor(tiles[triggerSwapPositionsX[xPos].second+x][triggerSwapPositionsY[yPos].second+y]->getFillColor());
-				tiles[triggerSwapPositionsX[xPos].second+x][triggerSwapPositionsY[yPos].second+y]->setFillColor(storeColor);
-			}
-		}
-	}
-}
-
-void Editor::deleteBigItem(int x, int y)
-{
-	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[START]].first 		||
-		itemTiles[x][y]->getTextureRect() == bigItemRects[id[GOALPORTAL]].first 	||
-		itemTiles[x][y]->getTextureRect() == bigItemRects[id[VERTICALDOOR]].first		)
-	{
-		setTexture(x, y+1, tileItemRects[id[NOITEM]]);
-	}
-	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[DOOR]].first)
-	{
-		setTexture(x+1, y, tileItemRects[id[NOITEM]]);
-	}
-	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[START]].second 		||
-		itemTiles[x][y]->getTextureRect() == bigItemRects[id[GOALPORTAL]].second 	||
-		itemTiles[x][y]->getTextureRect() == bigItemRects[id[VERTICALDOOR]].second	)
-	{
-		setTexture(x, y-1, tileItemRects[id[NOITEM]]);
-	}
-	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[DOOR]].second)
-	{
-		setTexture(x-1, y, tileItemRects[id[NOITEM]]);
-	}
-}
-
 // TODO possible improvement: draw a line between sample positions to color every tile even when the mouse moves very fast
 Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 {	
@@ -860,15 +814,15 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 					mouseTile.setFillColor(sf::Color::White);
 					mouseTile.setTexture(&actionItemTexture);
 					// show big items bigger
-					if (activeItemIndex == id[DOOR] && itemChoices[activeItemIndex]->getTextureRect() != tileItemRects[id[VERTICALDOOR]])
+					if (activeItemIndex == id.at(DOOR) && itemChoices[activeItemIndex]->getTextureRect() != tileItemRects[id.at(VERTICALDOOR)])
 					{
 						mouseTile.setSize(sf::Vector2f(2*tileSize + 2.0f, tileSize));
 						infoText.setString("Use right click to toggle door orientation before placing.");
 					}
-					else if (activeItemIndex == id[START] || activeItemIndex == id[GOALPORTAL] || activeItemIndex == id[DOOR])
+					else if (activeItemIndex == id.at(START) || activeItemIndex == id.at(GOALPORTAL) || activeItemIndex == id.at(DOOR))
 					{
 						mouseTile.setSize(sf::Vector2f(tileSize, 2*tileSize + 2.0f));
-						if (activeItemIndex == id[DOOR])
+						if (activeItemIndex == id.at(DOOR))
 						{
 							infoText.setString("Use right click to toggle door orientation before placing.");
 						}
@@ -932,6 +886,78 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 	target.draw(infoText);
 }
 
+
+
+
+void Editor::markArea(int xPos, int yPos, sf::Color color, int quadrantSize)
+{
+	// if marking is in gameboard
+	if (xPos >= 0 && yPos >= 0 && xPos + quadrantSize <= numTilesX && yPos + quadrantSize <= numTilesY) {
+		// mark given size * given size tiles in given color
+		for (int x = xPos; x < xPos + quadrantSize; ++x)
+		{
+			for (int y = yPos; y < yPos + quadrantSize; ++y)
+			{
+				itemTiles[x][y]->setOutlineColor(color);
+			}
+		}
+	}
+}
+
+void Editor::resetTriggers()
+{
+	// if trigger was marked (i.e. chosen), unmark it
+	if (triggerMarked.first != -1 && triggerMarked.second != -1)
+	{
+		markArea(triggerSwapPositionsX[triggerMarked.first].first, triggerSwapPositionsY[triggerMarked.second].first, sf::Color::Blue, quadrantSize);
+		markArea(triggerSwapPositionsX[triggerMarked.first].second, triggerSwapPositionsY[triggerMarked.second].second, sf::Color::Blue, quadrantSize);
+		triggerMarked.first = -1;
+		triggerMarked.second = -1;
+	}
+		
+	// swap triggers back in correct order
+	while (!triggerStack.empty())
+	{
+		int xPos = triggerStack.top().first;
+		int yPos = triggerStack.top().second;
+		triggerStack.pop();
+		sf::Color storeColor;
+		for (int x = 0; x < quadrantSize; ++x)
+		{
+			for (int y = 0; y < quadrantSize; ++y)
+			{
+				storeColor = tiles[triggerSwapPositionsX[xPos].first+x][triggerSwapPositionsY[yPos].first+y]->getFillColor();
+				tiles[triggerSwapPositionsX[xPos].first+x][triggerSwapPositionsY[yPos].first+y]->setFillColor(tiles[triggerSwapPositionsX[xPos].second+x][triggerSwapPositionsY[yPos].second+y]->getFillColor());
+				tiles[triggerSwapPositionsX[xPos].second+x][triggerSwapPositionsY[yPos].second+y]->setFillColor(storeColor);
+			}
+		}
+	}
+}
+
+void Editor::deleteBigItem(int x, int y)
+{
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(START)].first 		||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOALPORTAL)].first 	||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(VERTICALDOOR)].first		)
+	{
+		setTexture(x, y+1, tileItemRects[id.at(NOITEM)]);
+	}
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(DOOR)].first)
+	{
+		setTexture(x+1, y, tileItemRects[id.at(NOITEM)]);
+	}
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(START)].second 		||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOALPORTAL)].second 	||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(VERTICALDOOR)].second	)
+	{
+		setTexture(x, y-1, tileItemRects[id.at(NOITEM)]);
+	}
+	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(DOOR)].second)
+	{
+		setTexture(x-1, y, tileItemRects[id.at(NOITEM)]);
+	}
+}
+
 // TODO needs to be better code
 // should directly create the list of files and find out which level is the highest number
 void Editor::saveLevel(bool overwrite)
@@ -989,57 +1015,57 @@ void Editor::saveLevel(bool overwrite)
 		{
 			for (int y = 0; y < numTilesY; ++y)
 			{
-				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[START]].first)
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(START)].first)
 				{
 					txtfile << "Start " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[GOALPORTAL]].first)
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOALPORTAL)].first)
 				{
 					txtfile << "Portal " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[TRIGGER]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(TRIGGER)])
 				{
 					txtfile << "TriggerItem " << x << " " << y << " " << triggerSwapPositionsX[x].first << " " << triggerSwapPositionsY[y].first << " " << triggerSwapPositionsX[x].second << " " << triggerSwapPositionsY[y].second << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[COIN]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(COIN)])
 				{
 					txtfile << "Item CoinItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[CLOCK]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(CLOCK)])
 				{
 					txtfile << "Item TimeItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[KEY]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(KEY)])
 				{
 					txtfile << "Item KeyItem " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[DOOR]].first)
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(DOOR)].first)
 				{
 					// horizontal door
 					txtfile << "Item DoorItem " << x << " " << y << " 0\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id[VERTICALDOOR]].first)
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(VERTICALDOOR)].first)
 				{
 					// vertical door
 					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO1]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO1)])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 80 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO2]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO2)])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 96 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO3]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO3)])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 0 112 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[DECO4]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO4)])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 112 16 16\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[SLIME]])
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(SLIME)])
 				{
 					txtfile << "NPC " << x << " " << y << "\n";
 				}
@@ -1063,7 +1089,7 @@ void Editor::loadLevel(int level)
 	{
 		for (int y = 0; y < numTilesY; ++y)
 		{
-			itemTiles[x][y]->setTextureRect(tileItemRects[id[NOITEM]]);
+			itemTiles[x][y]->setTextureRect(tileItemRects[id.at(NOITEM)]);
 		}
 	}
 	
@@ -1091,16 +1117,16 @@ void Editor::loadLevel(int level)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, bigItemRects[id[START]].first);
-			setTexture(x, y+1, bigItemRects[id[START]].second);
+			setTexture(x, y, bigItemRects[id.at(START)].first);
+			setTexture(x, y+1, bigItemRects[id.at(START)].second);
 		}
 		if (first == "Portal")
 		{
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, bigItemRects[id[GOALPORTAL]].first);
-			setTexture(x, y+1, bigItemRects[id[GOALPORTAL]].second);
+			setTexture(x, y, bigItemRects[id.at(GOALPORTAL)].first);
+			setTexture(x, y+1, bigItemRects[id.at(GOALPORTAL)].second);
 		}
 		if (first == "TriggerItem")
 		{
@@ -1111,7 +1137,7 @@ void Editor::loadLevel(int level)
 			iss >> y1;
 			iss >> x2;
 			iss >> y2;
-			setTexture(x, y, tileItemRects[id[TRIGGER]]);
+			setTexture(x, y, tileItemRects[id.at(TRIGGER)]);
 			triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
 			triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
 		}
@@ -1120,7 +1146,7 @@ void Editor::loadLevel(int level)
 			int x, y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, tileItemRects[id[SLIME]]);
+			setTexture(x, y, tileItemRects[id.at(SLIME)]);
 		}
 		if (first == "Item")
 		{
@@ -1131,15 +1157,15 @@ void Editor::loadLevel(int level)
 			iss >> y;
 			if (second == "CoinItem")
 			{
-				setTexture(x, y, tileItemRects[id[COIN]]);
+				setTexture(x, y, tileItemRects[id.at(COIN)]);
 			}
 			if (second == "TimeItem")
 			{
-				setTexture(x, y, tileItemRects[id[CLOCK]]);
+				setTexture(x, y, tileItemRects[id.at(CLOCK)]);
 			}
 			if (second == "KeyItem")
 			{
-				setTexture(x, y, tileItemRects[id[KEY]]);
+				setTexture(x, y, tileItemRects[id.at(KEY)]);
 			}
 			if (second == "DoorItem")
 			{
@@ -1148,13 +1174,13 @@ void Editor::loadLevel(int level)
 				iss >> vertical;
 				if (vertical == 1)
 				{
-					setTexture(x, y, bigItemRects[id[VERTICALDOOR]].first);
-					setTexture(x, y+1, bigItemRects[id[VERTICALDOOR]].second);
+					setTexture(x, y, bigItemRects[id.at(VERTICALDOOR)].first);
+					setTexture(x, y+1, bigItemRects[id.at(VERTICALDOOR)].second);
 				}
 				else
 				{
-					setTexture(x, y, bigItemRects[id[DOOR]].first);
-					setTexture(x+1, y, bigItemRects[id[DOOR]].second);
+					setTexture(x, y, bigItemRects[id.at(DOOR)].first);
+					setTexture(x+1, y, bigItemRects[id.at(DOOR)].second);
 				}
 			}
 			if (second == "DecorationItem")
@@ -1168,25 +1194,25 @@ void Editor::loadLevel(int level)
 				if (texPosX == 16 && texPosY == 80)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[DECO1]]);
+					setTexture(x, y, tileItemRects[id.at(DECO1)]);
 				}
 				// flower
 				if (texPosX == 16 && texPosY == 96)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[DECO2]]);
+					setTexture(x, y, tileItemRects[id.at(DECO2)]);
 				}
 				// crystals
 				if (texPosX == 0 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[DECO3]]);
+					setTexture(x, y, tileItemRects[id.at(DECO3)]);
 				}
 				// rock
 				if (texPosX == 16 && texPosY == 112)
 				{
 					decoItemBlocking[Key(x,y)] = blocksPath;
-					setTexture(x, y, tileItemRects[id[DECO4]]);
+					setTexture(x, y, tileItemRects[id.at(DECO4)]);
 				}
 			}
 		}

@@ -81,7 +81,7 @@ private:
 	// the current level if loaded or was saved once
 	int currentLevel;
 	// item indices
-	std::map<ActionItemType, int> id;
+	const std::map<ActionItemType, int> id;
 	// big item IntRects
 	std::map<int, std::pair<sf::IntRect, sf::IntRect>> bigItemRects;
 	// mark area (e.g. for trigger)
