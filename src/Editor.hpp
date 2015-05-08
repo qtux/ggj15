@@ -92,6 +92,11 @@ private:
 	void setTexture(int x, int y, sf::IntRect textureRect);
 	// check for big item and delete if item is placed on one
 	void deleteBigItem(int x, int y);
+	// get x and y position of mouse in gameboard
+	int getX(sf::RenderWindow& window);
+	int getY(sf::RenderWindow& window);
+	// check whether mouse is in gameboard
+	bool mouseInGameboard(sf::RenderWindow& window);
 	// get mousePos in world
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 public:

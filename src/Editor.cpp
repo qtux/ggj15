@@ -255,7 +255,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						itemChoices[activeItemIndex]->setOutlineColor(sf::Color::Black);
 					}
 					activeColorIndex = -1;
-					activeItemIndex = mousePos.y / tileOffset;
+					activeItemIndex = getY(window);
 					itemChoices[activeItemIndex]->setOutlineColor(sf::Color::Red);
 				}
 				
@@ -272,13 +272,13 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						itemChoices[activeItemIndex]->setOutlineColor(sf::Color::Black);
 					}
 					activeItemIndex = -1;
-					activeColorIndex = mousePos.y / tileOffset;
+					activeColorIndex = getY(window);
 					tileChoices[activeColorIndex]->setOutlineColor(sf::Color::Red);
 				}
 			}
 			
 			// if mouse in gameboard
-			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
+			if (mouseInGameboard(window))
 			{
 				// if color is active which is also when not in trigger marking mode (because switching to color is disabled)
 				if (activeColorIndex != -1)
@@ -290,10 +290,10 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						if (markStart.x != -1 && markStart.y != -1)
 						{
 							// find left upper corner and right lower corner of the box
-							int x1 = std::min(markStart.x, (int) (mousePos.x - lateralOffset) / tileOffset);
-							int x2 = std::max(markStart.x, (int) (mousePos.x - lateralOffset) / tileOffset);
-							int y1 = std::min(markStart.y, (int) mousePos.y / tileOffset);
-							int y2 = std::max(markStart.y, (int) mousePos.y / tileOffset);
+							int x1 = std::min(markStart.x, (int) getX(window));
+							int x2 = std::max(markStart.x, (int) getX(window));
+							int y1 = std::min(markStart.y, (int) getY(window));
+							int y2 = std::max(markStart.y, (int) getY(window));
 							// color the box
 							for (int x = x1; x <= x2; ++x)
 							{
@@ -306,8 +306,8 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						// color origin tile of box coloring
 						if (markStart.x == -1 && markStart.y == -1)
 						{
-							markStart.x = (mousePos.x - lateralOffset) / tileOffset;
-							markStart.y = mousePos.y / tileOffset;
+							markStart.x = getX(window);
+							markStart.y = getY(window);
 							tiles[markStart.x][markStart.y]->setOutlineThickness(2.0f);
 							tiles[markStart.x][markStart.y]->setOutlineColor(sf::Color::Red);
 						}
@@ -322,8 +322,8 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					if (!triggerMarkingActive)
 					{
 						// get position
-						int currentX = (mousePos.x - lateralOffset) / tileOffset;
-						int currentY = mousePos.y / tileOffset;
+						int currentX = getX(window);
+						int currentY = getY(window);
 						
 						// check if there was a big item and delete it's second part
 						deleteBigItem(currentX, currentY);
@@ -403,8 +403,8 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					else
 					{
 						// TODO add safety so trigger item cannot be swapped (hero cannot be trapped immediately)?
-						int xPos = (mousePos.x - lateralOffset) / tileOffset;
-						int yPos = mousePos.y / tileOffset;
+						int xPos = getX(window);
+						int yPos = getY(window);
 						++marks;
 						if (marks == 2)
 						{
@@ -440,9 +440,8 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		}
 		if (!loadLevelActive && !triggerMarkingActive)
 		{
-			sf::Vector2f mousePos = getMouseWorldPos(window);
-			int xPos = (mousePos.x - lateralOffset) / tileOffset;
-			int yPos = mousePos.y / tileOffset;
+			int xPos = getX(window);
+			int yPos = getY(window);
 			
 			// if trigger was marked (i.e. chosen), unmark it
 			if (triggerMarked.first != -1 && triggerMarked.second != -1)
@@ -780,12 +779,11 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 		// i.e. continuously draw color on left click + mouse move
 		if (mousePressed && !shiftActive && activeColorIndex != -1)
 		{
-			sf::Vector2f mousePos = getMouseWorldPos(window);
 			// if mouse in gameboard
-			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
+			if (mouseInGameboard(window))
 			{
-				int xPos = (mousePos.x - lateralOffset) / tileOffset;
-				int yPos = mousePos.y / tileOffset;
+				int xPos = getX(window);
+				int yPos = getY(window);
 				for (int x = xPos; x < xPos + pensize; ++x)
 				{
 					for (int y = yPos; y < yPos + pensize; ++y)
@@ -802,25 +800,23 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 		// show trigger marking
 		if (triggerMarkingActive)
 		{
-			sf::Vector2f mousePos = getMouseWorldPos(window);
 			static int xPos;
 			static int yPos;
 			// delete old trigger marking
 			markArea(xPos, yPos, sf::Color::Blue, quadrantSize);
 			// draw new trigger marking
-			xPos = (mousePos.x - lateralOffset) / tileOffset;
-			yPos = mousePos.y / tileOffset;
+			xPos = getX(window);
+			yPos = getY(window);
 			markArea(xPos, yPos, sf::Color::Red, quadrantSize);
 		}
 		// drag items and colors
 		else
 		{
-			sf::Vector2f mousePos = getMouseWorldPos(window);
 			// if mouse in gameboard
-			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
+			if (mouseInGameboard(window))
 			{
-				int xPos = (mousePos.x - lateralOffset) / tileOffset;
-				int yPos = mousePos.y / tileOffset;
+				int xPos = getX(window);
+				int yPos = getY(window);
 				// if color active
 				if (activeColorIndex != -1)
 				{
@@ -1160,4 +1156,22 @@ sf::Vector2f Editor::getMouseWorldPos(sf::RenderWindow& window)
 {
 	sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
 	return window.mapPixelToCoords(pixelPos);
+}
+
+int Editor::getX(sf::RenderWindow& window)
+{
+	sf::Vector2f mousePos = getMouseWorldPos(window);
+	return (mousePos.x - lateralOffset) / tileOffset;
+}
+
+int Editor::getY(sf::RenderWindow& window)
+{
+	sf::Vector2f mousePos = getMouseWorldPos(window);
+	return mousePos.y / tileOffset;
+}
+
+bool Editor::mouseInGameboard(sf::RenderWindow& window)
+{
+	sf::Vector2f mousePos = getMouseWorldPos(window);
+	return (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight);
 }
