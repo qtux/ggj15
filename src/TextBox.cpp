@@ -2,11 +2,20 @@
 #include "global.hpp"
 
 TextBox::TextBox():
-	//currentEvent(""),
-	currentElement(nullptr),
-	actionPressed(false),
-	skipPressed(false)
-{}
+	currentElement(nullptr)
+{
+	int charSize = gb::pixelSizeY;
+	sf::Vector2f textPos(32.0f, 32.0f);
+	_font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
+	_speech.setFont(_font);
+	_speech.setCharacterSize(charSize);
+	_speech.setPosition(textPos);
+	_textRect.setOutlineColor(sf::Color::White);
+	_textRect.setOutlineThickness(2);
+	_textRect.setPosition(textPos.x - 5, textPos.y - 5);
+	_textRect.setSize(sf::Vector2f(gb::gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
+	_textRect.setFillColor(sf::Color(0, 0, 250, 50));
+}
 
 void TextBox::appendText(TextElement* item)
 {
@@ -16,14 +25,16 @@ void TextBox::appendText(TextElement* item)
 void TextBox::triggerText(std::string eventType)
 {
 	bool exists = false;
-	for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ ) {
-		if ((*itIt)->eventType == eventType)
+	for (auto& text: elements)
+	{
+		if (text->eventType == eventType)
 		{
 			exists = true;
 			break;
 		}
 	}
-	if (exists){
+	if (exists)
+	{
 		currentEvent = eventType;
 		pushText();
 	}
@@ -53,62 +64,35 @@ bool TextBox::enabled()
 	return currentElement != nullptr;
 }
 
-// TODO rename into skip and remove input?
-void TextBox::update()
+void TextBox::skip()
 {
-	if (!gb::input[4] && actionPressed)
+	for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ )
 	{
-		pushText();
-	}
-	if (!gb::input[5] && skipPressed)
-	{
-		for(std::vector<TextElement*>::iterator itIt = elements.begin() ; itIt != elements.end() ;itIt++ )
+		if ((*itIt)->eventType == currentEvent)
 		{
-			if ((*itIt)->eventType == currentEvent)
-			{
-				itIt = elements.erase(itIt);
-			} 
-		}
-		currentElement = nullptr;
+			itIt = elements.erase(itIt);
+		} 
 	}
-	actionPressed = gb::input[4];
-	skipPressed = gb::input[5];
+	currentElement = nullptr;
 }
 
 void TextBox::draw(sf::RenderTarget &renderTarget)
 {
 	if (currentElement != nullptr)
 	{
-		sf::Font font;
-		font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
-		// Text TEST
-		sf::Vector2f textPos(32.0f, 32.0f);
-		int charSize = 15;
-	
-		sf::Text speech;
-		speech.setFont(font);
-	
-		speech.setColor(sf::Color(currentElement->r, currentElement->g, currentElement->b));
-		speech.setCharacterSize(charSize);
-		speech.setPosition(textPos);
-	
-		sf::RectangleShape textRect;
-		textRect.setOutlineColor(sf::Color::White);
-		textRect.setOutlineThickness(2);
-		textRect.setPosition(textPos.x - 5, textPos.y - 5);
-		textRect.setSize(sf::Vector2f(gb::gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
-		textRect.setFillColor(sf::Color(0, 0, 250, 50));
-		renderTarget.draw(textRect);
-	
-		// zu Anfang:
+		// draw background
+		renderTarget.draw(_textRect);
+		
+		// draw text
 		if (currentElement->bold){
-			speech.setStyle(sf::Text::Bold);
+			_speech.setStyle(sf::Text::Bold);
 		}
 		else
 		{
-			speech.setStyle(sf::Text::Regular);
+			_speech.setStyle(sf::Text::Regular);
 		}
-		speech.setString(currentElement->text);
-		renderTarget.draw(speech);
+		_speech.setColor(sf::Color(currentElement->r, currentElement->g, currentElement->b));
+		_speech.setString(currentElement->text);
+		renderTarget.draw(_speech);
 	}
 }

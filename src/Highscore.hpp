@@ -27,3 +27,5 @@ private:
 	sf::Text _speech;
 	std::vector<HighscoreRow> _rows;
 };
+
+// TODO make this resolution independent

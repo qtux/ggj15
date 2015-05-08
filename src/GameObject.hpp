@@ -9,6 +9,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+class Level;
+
 namespace sf{
 	class Sprite;
 }
@@ -17,15 +19,17 @@ class GameObject {
 
 public:
 	sf::Sprite * mySprite;
-	sf::Sprite * doggieSprite;
 	
-	virtual bool intersects(const GameObject& cmp);
+	virtual bool intersects(const GameObject& cmp) const;
+	virtual bool intersects(const sf::Vector2f &testPos, const GameObject& cmp) const;
 	
 	const sf::Vector2f& getPosition() const;
 	
-	void setPosition(int x, int y);
 	void setPosition(float x, float y);
+	void setPosition(const sf::Vector2f &a);
 	
+	void checkTilesCollision(sf::Vector2f &testPos, const sf::Vector2f &previousPos, int chkColl[2]);
+
 	int getWidth() const;
 	
 	int getHeight() const;
@@ -36,6 +40,9 @@ public:
 	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader) = 0;
 	
 	virtual ~GameObject() {};
+
+protected:
+	Level* level;
 	
 /*
 public:

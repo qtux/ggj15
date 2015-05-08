@@ -3,18 +3,21 @@
  *
  *  Created on: 24.01.2015
  *      Author: sartz
+ * hack hier, ne doch nicht xD
  */
 
 #pragma once
 
 #include <SFML/System.hpp>
 #include <vector>
-#include "GameObject.hpp"
-#include "GUI.hpp"
-#include "Item.hpp"
-#include "TextBox.hpp"
-#include "Highscore.hpp"
 #include "Scene.hpp"
+class Highscore;
+#include "TextBox.hpp"
+class Item;
+#include "GUI.hpp"
+class Player;
+#include "GameObject.hpp"
+#include "NPC.hpp"
 
 struct TileFlightData
 {
@@ -28,39 +31,42 @@ struct TileFlightData
 
 class Level: public Scene {
 public:
-	Level(unsigned int number);
+	Level(unsigned int levelNumber);
+	const unsigned int levelNumber;
+	unsigned int restarts;
 	
-	GameObject* getTile(int x, int y);
-	void switchTile(int x1, int y1, int x2, int y2);
 	void reset();
-	
+	bool readyToLeave() const;
+	void leave();
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
 	Scene* update(sf::Time deltaT, sf::RenderWindow& window) override final;
 	void draw(sf::RenderTarget& target, bool focus) override final;
+	void switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second);
 	
-	void leave();
-	// hack hier, ne doch nicht xD
-	GameObject * player;
-	GUI* gui;
-	TextBox* textBox;
+	// to be removed:
+	GameObject* getTile(int x, int y);
 	const std::vector<GameObject*> & getGameBoard() const;
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
-	std::vector<Item*> items;
-	const unsigned int number;
-//private:
+	std::vector<NPC*> npcs;
+	//const unsigned int number;
+
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
 	float tileAnimationTime;
 	void updateTileAnimation(sf::Time deltaT);
-	bool readyToLeave() const;
-	void finishLevel();
-	unsigned int restarts;
+	
+	// move to private
+	GUI* gui;
+	TextBox* textBox;
+	std::vector<Item*> items;
+	Player* player;
+
 private:
 	sf::Uint32 createColorKey(sf::Color color);
-	bool leaved;
+	enum State {GAME, LEAVING, HIGHSCORE};
+	State _state;
 	Highscore *highscore;
-	bool fooexit;
-	sf::RectangleShape outline;
 	sf::Shader _fragmentShader;
+	sf::RectangleShape _outline;
 };

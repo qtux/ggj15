@@ -34,12 +34,7 @@ namespace gb {
 	static const int screenWidth = 800;
 	static const int screenHeight = 600;
 	
-	// define number of keyboards binding 
-	typedef std::bitset<INPUT_SIZE> InputType;
-	extern sf::Keyboard::Key keyboardBinding[INPUT_SIZE];
-	
+	// manager
 	extern SoundManager soundManager;
 	extern TextureManager textureManager;
-	
-	extern InputType input;
 }

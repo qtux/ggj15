@@ -15,15 +15,16 @@ Highscore::Highscore(unsigned int levelNumber, const sf::Vector2f& size):
 	
 	_textRectTwo.setOutlineColor(sf::Color::White);
 	_textRectTwo.setOutlineThickness(1);
-	_textRectTwo.setPosition(30, 99);
-	_textRectTwo.setSize(sf::Vector2f(size.x - 60, 15));
+	_textRectTwo.setPosition(30, 95);
+	_textRectTwo.setSize(sf::Vector2f(size.x - 60, 30));
 	_textRectTwo.setFillColor(sf::Color(0, 0, 250, 50));
 	
-	int charSize = 10;
+	int charSize = 32;
 	_speech.setFont(_font);
 	_speech.setColor(sf::Color(255,255,255));
 	_speech.setCharacterSize(charSize);
 	_speech.setStyle(sf::Text::Bold);
+	_speech.setPosition(sf::Vector2f(45,50));
 }
 
 void Highscore::draw(sf::RenderTarget& target)
@@ -32,33 +33,19 @@ void Highscore::draw(sf::RenderTarget& target)
 	target.draw(_textRectOne);
 	target.draw(_textRectTwo);
 	
-	// draw level number
-	_speech.setPosition(sf::Vector2f(45,50));
-	_speech.setString(" Highscore level " + std::to_string(levelNumber));
-	target.draw(_speech);
-	
-	// draw table header
-	_speech.setPosition(sf::Vector2f(45,80));
-	_speech.setString("Points         Trials            Coins         Time");
-	target.draw(_speech);
-	
-	// show up to 8 old entries
+	// draw table
+	std::string text = "Highscore\tLevel " + std::to_string(levelNumber);
+	text += "\nPoints\tTrials\tCoins\tTime";
 	for (auto i = 0; i < std::min<std::vector<HighscoreRow>::size_type>(_rows.size(), 8); ++i)
 	{
 		int points = ((1.0+_rows[i].coins)/((float)_rows[i].kills+1)) * ((_rows[i].time+1)/_rows[i].maxtime) * 1000;
-		_speech.setPosition(sf::Vector2f(45,100+(i * 30)));
-		_speech.setString(std::to_string(points));
-		target.draw(_speech);
-		_speech.setPosition(sf::Vector2f(112,100+(i * 30)));
-		_speech.setString(std::to_string(_rows[i].kills));
-		target.draw(_speech);
-		_speech.setPosition(sf::Vector2f(184,100+(i * 30)));
-		_speech.setString(std::to_string(_rows[i].coins));
-		target.draw(_speech);
-		_speech.setPosition(sf::Vector2f(247,100+(i * 30)));
-		_speech.setString(std::to_string((int)_rows[i].time)+"s");
-		target.draw(_speech);
+		text += "\n" + std::to_string(points);
+		text += "\t\t" + std::to_string(_rows[i].kills);
+		text += "\t\t" + std::to_string(_rows[i].coins);
+		text += "\t\t" + std::to_string((int)_rows[i].time) + "s";
 	}
+	_speech.setString(text);
+	target.draw(_speech);
 }
 
 void Highscore::save(unsigned int coins, unsigned int timeLeft, unsigned int timeoutSeconds, unsigned int restarts)

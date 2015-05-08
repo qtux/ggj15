@@ -10,6 +10,8 @@
 #include "global.hpp"
 #include "GUI.hpp"
 #include <math.h>
+#include "Highscore.hpp"
+#include "Item.hpp"
 #include "Player.hpp"
 #include "Menu.hpp"
 #include "Items/KeyItem.hpp"
@@ -20,14 +22,25 @@
 #include "ItemFactory.hpp"
 #include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
 
+
 // shader
 #include <iostream>
+#include "NPC.hpp"
 
-Level::Level(unsigned int number):
+
+Level::Level(unsigned int levelNumber):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
-	number(number),
-	restarts(-1)
+	levelNumber(levelNumber),
+	restarts(-1),
+	_state(GAME)
 {
+	_outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
+	_outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
+	_outline.setOutlineThickness(2.0f);
+	_outline.setPosition(0, 0);
+	_outline.setSize(sceneSize);
+	background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
+	
 	reset();
 	// load only the fragment shader
 	_fragmentShader.loadFromFile("src/shader/fragment_shader.frag", sf::Shader::Fragment);
@@ -37,23 +50,27 @@ Level::Level(unsigned int number):
 	}
 }
 
+sf::Uint32 Level::createColorKey(sf::Color color) {
+	
+	sf::Uint32 colorKey = 0;
+	
+	colorKey |= color.r << 3*8;
+	colorKey |= color.g << 2*8;
+	colorKey |= color.b << 1*8;
+	colorKey |= color.a << 0*8;
+	
+	return colorKey;
+}
+
 void Level::reset()
 {
 	restarts++;
-	//background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
-	// set background and outline
-	outline.setOutlineColor(sf::Color(0x90, 0x90, 0x00));
-	outline.setFillColor(sf::Color(0x00, 0x00, 0x00, 0x00));
-	outline.setOutlineThickness(2.0f);
-	outline.setPosition(0, 0);
-	outline.setSize(sf::Vector2f(gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY));
+	_state = GAME;
 	
 	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
 	gameBoard.resize(gb::sizeX * gb::sizeY * gb::largeTileSizeX * gb::largeTileSizeY);
 	textBox = new TextBox();
-	leaved = false;
-	highscore  = nullptr;
-	fooexit = false;
+	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
 	
 	// load and set timebar
 	gui = new GUI(this);
@@ -62,9 +79,9 @@ void Level::reset()
 	sf::Image levelImg;
 	
 	// try to load the file
-	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(number);
+	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(levelNumber);
 	if (!levelImg.loadFromFile(fileName+".png")) {
-		// TODO return to menu here?
+		// TODO return to menu here
 		return;
 	}
 	
@@ -127,67 +144,63 @@ void Level::reset()
 		}
 	}
 	
-	player = new Player(this);
-	sf::Sprite *playerSprite = new sf::Sprite();
-	sf::Sprite *doggieSprite = new sf::Sprite();
-	playerSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	playerSprite->setPosition(90,90);
-	doggieSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
-	doggieSprite->setPosition(90,90);
-	player->mySprite = playerSprite;
-	player->doggieSprite = doggieSprite;
-	
 	// read text file
 	std::ifstream infile(fileName + ".txt");
 	std::string line;
-	
-	sf::Sprite *itemSprite = new sf::Sprite();
-	itemSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
 	ItemFactory tmpFactory = ItemFactory();
-
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
 		std::string first;
 		iss >> first;
+		// TODO do a sanity check on items placed at the same coordinate
 		if (first == "Start")
 		{
-			int x,y;
-			iss >> x;
-			iss >> y;
-			startPos.x = x * gb::pixelSizeX;
-			startPos.y = y * gb::pixelSizeY;
-			player->setPosition(startPos.x, startPos.y);
-			player->doggieSprite->setPosition(startPos.x, startPos.y);
+			unsigned int x,y;
+			iss >> x >> y;
+			// TODO remove static_casts
+			player = new Player(
+				this,
+				{static_cast<float>(x * gb::pixelSizeX), static_cast<float>(y * gb::pixelSizeY)},
+				{static_cast<float>(gb::pixelSizeX), static_cast<float>(2 * gb::pixelSizeY)},
+				{static_cast<float>(gb::pixelSizeX), static_cast<float>(gb::pixelSizeY)}
+			);
 		}
 		if (first == "Portal")
 		{
-			int x,y;
-			iss >> x;
-			iss >> y;
-			portalPos.x = x * gb::pixelSizeX;
-			portalPos.y = y * gb::pixelSizeY;
+			unsigned int x,y;
+			iss >> x >> y;
 			Item *tmpItem = tmpFactory.getItem("PortalItem");
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items.push_back(tmpItem);
 		}
-		if (first == "Item")
-		{
-			std::string second;
-			iss >> second;
+		if (first == "NPC")
+		{ //TODO vorläufige Version, sollte verschönert werden
+			//std::string second;
+			//iss >> second;
 			int x,y;
 			iss >> x;
 			iss >> y;
+
+			NPC * tmpNPC = new NPC(this);
+			sf::Sprite *npcSprite = new sf::Sprite();
+			npcSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/npc.png", false));
+			tmpNPC->mySprite = npcSprite;
+			tmpNPC->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			//std::cout<<"NPC loaded"<<std::endl;
+			npcs.push_back(tmpNPC);
+		}
+		if (first == "Item")
+		{
+			std::string second;
+			unsigned int x,y;
+			iss >> second >> x >> y;
 			Item *tmpItem = 0;
 			if (second == "DecorationItem")
 			{
 				bool blocksPath;
 				int texPosX, texPosY, texW, texH;
-				iss >> blocksPath;
-				iss >> texPosX;
-				iss >> texPosY;
-				iss >> texW;
-				iss >> texH;
+				iss >> blocksPath >> texPosX >> texPosY >> texW >> texH;
 				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
 			}
 			else if (second == "DoorItem")
@@ -221,11 +234,7 @@ void Level::reset()
 		{
 			TextBox::TextElement* element = new TextBox::TextElement();
 			std::string boldText = "";
-			iss >> element->eventType;
-			iss >> boldText;
-			iss >> element->r;
-			iss >> element->g;
-			iss >> element->b;
+			iss >> element->eventType >> boldText >> element->r >> element->g >> element->b;
 			std::getline(infile, line);
 			element->text = line;
 			if (boldText=="bold")
@@ -236,13 +245,8 @@ void Level::reset()
 		}
 		if (first == "TriggerItem")
 		{
-			int x, y, x1, x2, y1, y2;
-			iss >> x;
-			iss >> y;
-			iss >> x1;
-			iss >> y1;
-			iss >> x2;
-			iss >> y2;
+			unsigned int x, y, x1, x2, y1, y2;
+			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
@@ -250,13 +254,8 @@ void Level::reset()
 		}
 		if (first == "TriggerTrapItem")
 		{
-			int x, y, x1, x2, y1, y2;
-			iss >> x;
-			iss >> y;
-			iss >> x1;
-			iss >> y1;
-			iss >> x2;
-			iss >> y2;
+			unsigned int x, y, x1, x2, y1, y2;
+			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
 			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
@@ -266,6 +265,148 @@ void Level::reset()
 	
 	// trigger text
 	textBox->triggerText("start");
+}
+
+Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
+{
+	if (_state == HIGHSCORE)
+	{
+		return this;
+	}
+	
+	if (_state == LEAVING  && !textBox->enabled())
+	{
+		highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
+		highscore->load();
+		_state = HIGHSCORE;
+	}
+	
+	updateTileAnimation(deltaT);
+	
+	for(auto& obj: gameBoard) {
+		obj->update(deltaT);
+	}
+	
+	for(auto& obj: items) {
+		obj->update(deltaT);
+	}
+	player->update(deltaT);
+	if (gui != 0)
+	{
+		gui->update(deltaT);
+	}
+	
+	for (auto& obj : npcs)
+	{
+		obj->update(deltaT);
+	}
+
+	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
+		if (player->intersects(**itIt))
+		{
+			if ((*itIt)->applyEffect(*this))
+			{
+				return this;
+			}
+			if ((*itIt)->collectable)
+			{
+				itIt = items.erase(itIt);
+			}
+			else
+			{
+				itIt ++;
+			}
+		}
+		else
+		{
+			itIt ++;
+		}
+	}
+	return this;
+}
+
+void Level::draw(sf::RenderTarget &renderTarget, bool focus)
+{
+	renderTarget.draw(background);
+	renderTarget.draw(_outline);
+	for(auto& obj: gameBoard) {
+		obj->draw(renderTarget, nullptr);
+	}
+
+	for(auto& obj: items) {
+		obj->draw(renderTarget, nullptr);
+	}
+	for (auto& obj: npcs) {
+		obj->draw(renderTarget, nullptr);
+	}
+
+	player->draw(renderTarget, nullptr);
+	gui->draw(renderTarget);
+	textBox->draw(renderTarget);
+	if (_state == HIGHSCORE)
+	{
+		highscore->draw(renderTarget);
+	}
+}
+
+bool Level::readyToLeave() const
+{
+	int size = items.size();
+	int keysInLevel = 0;
+	for(int i = 0;i < size;i++)
+	{
+		if (dynamic_cast<KeyItem*>(items[i]))
+		{
+			keysInLevel++;
+		}
+	}
+	return (keysInLevel == 0);
+}
+
+void Level::leave()
+{
+	if (!readyToLeave())
+	{
+		return;
+	}
+	_state = LEAVING;
+	textBox->triggerText("end");
+}
+
+Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
+{
+	// preprocessing key input (to enhance code readability)
+	sf::Keyboard::Key keyPressed = sf::Keyboard::Unknown;
+	if (event.type == sf::Event::KeyPressed)
+	{
+		keyPressed = event.key.code;
+	}
+	
+	// process events
+	if (keyPressed == sf::Keyboard::Escape)
+	{
+		return new Menu(Menu::Command::LEVEL);
+	}
+	if (keyPressed == sf::Keyboard::Space)
+	{
+		if (_state == HIGHSCORE)
+		{
+			return new Level(levelNumber + 1);
+		}
+		else
+		{
+			textBox->pushText();
+		}
+	}
+	if (keyPressed == sf::Keyboard::S)
+	{
+		if (_state != HIGHSCORE)
+		{
+			textBox->skip();
+		}
+	}
+	
+	return this;
 }
 
 GameObject* Level::getTile(int x, int y)
@@ -282,12 +423,12 @@ const std::vector<GameObject*> &Level::getGameBoard() const
 	return gameBoard;
 }
 
-void Level::switchTile(int x1, int y1, int x2, int y2)
+void Level::switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second)
 {
-	int startX1 = x1;
-	int startY1 = y1;
-	int startX2 = x2;
-	int startY2 = y2;
+	int startX1 = first.x;
+	int startY1 = first.y;
+	int startX2 = second.x;
+	int startY2 = second.y;
 
 	sf::Vector2f orthogonal, dir;
 	float length;
@@ -374,144 +515,4 @@ void Level::updateTileAnimation(sf::Time deltaT)
 		}
 }
 
-Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
-{
-	if (highscore != nullptr)		// TODO replace this with a state automaton
-	{
-		return this;
-	}
-	
-	if (leaved && !textBox->enabled())
-	{
-		finishLevel();
-	}
-	
-	updateTileAnimation(deltaT);
-	
-	for(auto& obj: gameBoard) {
-		obj->update(deltaT);
-	}
-	
-	for(auto& obj: items) {
-		obj->update(deltaT);
-	}
-	player->update(deltaT);
-	if (gui != 0)
-	{
-		gui->update(deltaT);
-	}
-	textBox->update();
-	
-	if (!fooexit){
-		for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
-			if (player->intersects(**itIt))
-			{
-				if ((*itIt)->applyEffect(*this))
-				{
-					fooexit = true;
-					return this;
-				}
-				if ((*itIt)->collectable)
-				{
-					itIt = items.erase(itIt);
-				}
-				else
-				{
-					itIt ++;
-				}
-			}
-			else
-			{
-				itIt ++;
-			}
-		}
-	}
-	return this;
-}
 
-void Level::draw(sf::RenderTarget &renderTarget, bool focus)
-{
-	//renderTarget.draw(background);	// TODO reenable me
-	renderTarget.draw(outline);
-	for(auto& obj: gameBoard) {
-		obj->draw(renderTarget, nullptr);
-	}
-
-	for(auto& obj: items) {
-		obj->draw(renderTarget, nullptr);
-	}
-	player->draw(renderTarget, nullptr);
-	gui->draw(renderTarget);
-	textBox->draw(renderTarget);
-	if (highscore != nullptr)
-	{
-		highscore->draw(renderTarget);
-	}
-}
-
-void Level::finishLevel()
-{
-	highscore = new Highscore(number, sf::Vector2f(gb::gridWidth, gb::gridHeight));
-	highscore->save(gui->coins, gui->timeLeft(), gui->timeoutSeconds, restarts);
-	highscore->load();
-}
-
-
-bool Level::readyToLeave() const
-{
-	int size = items.size();
-	int keysInLevel = 0;
-	for(int i = 0;i < size;i++)
-	{
-		if (dynamic_cast<KeyItem*>(items[i]))
-		{
-			keysInLevel++;
-		}
-	}
-	return (keysInLevel == 0);
-}
-
-
-void Level::leave()
-{
-	if (!readyToLeave()) return;
-	leaved = true;
-	textBox->triggerText("end");
-	if (!textBox->enabled())
-	{
-		finishLevel();
-	}
-}
-
-Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
-{
-	// preprocessing key input (to enhance code readability)
-	sf::Keyboard::Key keyPressed = sf::Keyboard::Unknown;
-	if (event.type == sf::Event::KeyPressed)
-	{
-		keyPressed = event.key.code;
-	}
-	
-	// process events
-	if (keyPressed == sf::Keyboard::Escape)
-	{
-		return new Menu(Menu::Command::LEVEL);
-	}
-	// TODO use statemachine instead of comparing to a null pointer
-	if (keyPressed == sf::Keyboard::Space && highscore != nullptr)
-	{
-		return new Level(number + 1);
-	}
-	return this;
-}
-sf::Uint32 Level::createColorKey(sf::Color color) {
-	
-	sf::Uint32 colorKey = 0;
-	
-	colorKey |= color.r << 3*8;
-	colorKey |= color.g << 2*8;
-	colorKey |= color.b << 1*8;
-	colorKey |= color.a << 0*8;
-	
-	return colorKey;
-}

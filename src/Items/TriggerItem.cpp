@@ -8,7 +8,7 @@ TriggerItem::TriggerItem(sf::Sprite* sprite):Item(sprite,0,6*16,16,16){
 bool TriggerItem::applyEffect(Level& level)
 {
 	gb::soundManager.playSound("sound/switch.ogg");
-	level.switchTile(switchPos1.x, switchPos1.y, switchPos2.x, switchPos2.y);
+	level.switchLargeTile(switchPos1, switchPos2);
 	level.textBox->triggerText("trigger");
 	return false;
 };

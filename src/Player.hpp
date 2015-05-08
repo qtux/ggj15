@@ -1,35 +1,30 @@
 #pragma once
 
-#include "GameObject.hpp"
-#include "global.hpp"
-#include "Level.hpp"
+class Level;
+class GameObject;
 #include <queue>
+#include <SFML/Graphics.hpp>
 
-class Player : public GameObject
+class Player
 {
 public:
-	Player(Level* level);
-	float animationStep;
-	int direction;
-	float doggieStep;
-	
-	virtual bool intersects(const GameObject& cmp);
-	virtual bool intersects(const sf::Vector2f &testPos, const GameObject& cmp);
-	
-	virtual void update(sf::Time deltaTime);
-	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
-	
-	// TODO put doggieSprite in here and not in GameObject
-	// TODO delete doggieSprites
-	
+	Player(Level* level, const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize);
+	bool intersects(const GameObject& cmp) const;
+	bool intersects(const sf::Vector2f &testPos, const GameObject& cmp) const;
+	void update(sf::Time deltaTime);
+	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
+	void checkTilesCollision(sf::Vector2f &testPos, const sf::Vector2f &previousPos, int chkColl[2]);
+	const sf::Vector2f& getPosition() const;
+
 private:
-	std::queue<sf::Vector2f> positionQueue;
-	std::queue<int> directionQueue;
-	Level* level;
-	float _currTime;
+	Level* _level;
+	float _animationStep;
+	int _direction;
+	sf::RectangleShape _shape;
+	sf::RectangleShape _doggieShape;
+	std::queue<sf::Vector2f> _positionQueue;
+	std::queue<int> _directionQueue;
 };
 
-const static int PlayerAnimState[] = {0, 1 , 1, 0, 2, 2};
-const static int DoggieAnimState[] = {0,2,1,3,1,4};
-
-const static int slowFactor = 15;
+const static int PlayerAnimState[] = {0, 1, 1, 0, 2, 2};
+const static int DoggieAnimState[] = {0, 2, 1, 3, 1, 4};

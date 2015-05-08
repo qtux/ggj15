@@ -18,9 +18,10 @@ bool PortalItem::applyEffect(Level& level)
 	{
 		gb::soundManager.playSound("sound/won.ogg");
 		neverAgain = true;
+		level.leave();
+		return true;
 	}
-	level.leave();
-	return true;
+	return false;
 };
 
 void PortalItem::update (sf::Time deltaTime)
