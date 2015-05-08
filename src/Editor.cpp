@@ -700,7 +700,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	{
 		if (infoText.getCharacterSize() == 0)
 		{
-			infoText.setCharacterSize(24);
+			infoText.setCharacterSize(21);
 		}
 		else
 		{
@@ -926,6 +926,11 @@ void Editor::saveLevel(bool overwrite)
 		{
 			outfile << currentLevel << "\n";
 		}
+		else
+		{
+			std::cout << "something went wrong saving to index file" << std::endl;
+			textOutput.setString("Could not save to index file.");
+		}
 	}
 	
 	// level name png
@@ -944,8 +949,9 @@ void Editor::saveLevel(bool overwrite)
 	}
 	if (!level.saveToFile(streamPNG.str()))
 	{
-		//TODO show user
 		std::cout << "something went wrong creating png file" << std::endl;
+		textOutput.setString("Could not save .png file.");
+		return;
 	}
 	
 	// level name txt
@@ -1015,8 +1021,9 @@ void Editor::saveLevel(bool overwrite)
 	}
 	else
 	{
-		//TODO show user
 		std::cout << "something went wrong creating txt file" << std::endl;
+		textOutput.setString("Could not save .txt file.");
+		return;
 	}
 	// tell user where the level was saved
 	textOutput.setString("Saved as Level " + std::to_string(currentLevel));
