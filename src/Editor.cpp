@@ -154,6 +154,7 @@ Editor::Editor():
 	activeItemIndex = -1;
 	tileChoices[0]->setOutlineColor(sf::Color::Red);
 	// initialize other variables
+	pensize = 1;
 	mousePressed = false;
 	shiftActive = false;
 	triggerMarkingActive = false;
@@ -185,9 +186,7 @@ Editor::~Editor()
 	}
 }
 
-// TODO: idea: change pen size
 // TODO make item properties changeable
-// TODO change pen size depending on item set (e.g. Portal, Door)
 Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 {
 	static sf::Vector2i markStart;
@@ -623,6 +622,25 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		}
 	}
 	
+	// TODO prefer add and delete but somehow it does not work for me
+	// increase pensize for drawing
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up)
+	{
+		if (pensize < 6)
+		{
+			++pensize;
+		}
+	}
+	
+	// decrease pensize for drawing
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
+	{
+		if (pensize > 1)
+		{
+			--pensize;
+		}
+	}
+	
 	// load when clicking l
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::L)
 	{
@@ -766,7 +784,18 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 			// if mouse in gameboard
 			if (mousePos.x >= lateralOffset && mousePos.y >= 0 && mousePos.x <= lateralOffset + mapWidth && mousePos.y <= mapHeight)
 			{
-				tiles[(mousePos.x - lateralOffset) / tileOffset][mousePos.y / tileOffset]->setFillColor(tileColors[activeColorIndex]);
+				int xPos = (mousePos.x - lateralOffset) / tileOffset;
+				int yPos = mousePos.y / tileOffset;
+				for (int x = xPos; x < xPos + pensize; ++x)
+				{
+					for (int y = yPos; y < yPos + pensize; ++y)
+					{
+						if (x < numTilesX && y < numTilesY)
+						{
+							tiles[x][y]->setFillColor(tileColors[activeColorIndex]);
+						}
+					}
+				}
 			}
 		}
 		
@@ -795,7 +824,8 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 				// if color active
 				if (activeColorIndex != -1)
 				{
-					mouseTile.setSize(sf::Vector2f(tileSize, tileSize));
+					int penTileSize = pensize * tileSize + (float)pensize*2;
+					mouseTile.setSize(sf::Vector2f(penTileSize, penTileSize));
 					mouseTile.setTexture(nullptr);
 					mouseTile.setFillColor(tileColors[activeColorIndex]);
 				}

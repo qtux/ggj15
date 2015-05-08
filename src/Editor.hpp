@@ -49,6 +49,8 @@ private:
 	// active bar choice (color currently chosen or item currently chosen)
 	int activeColorIndex;
 	int activeItemIndex;
+	// pen size when drawing
+	signed short int pensize;
 	// item texture
 	const sf::Texture& actionItemTexture;
 	// event active booleans
