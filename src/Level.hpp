@@ -49,7 +49,7 @@ public:
 	sf::Vector2i startPos;
 	sf::Vector2i portalPos;
 	std::vector<NPC*> npcs;
-	const unsigned int number;
+	//const unsigned int number;
 
 	std::vector<GameObject*> gameBoard;
 	std::vector<TileFlightData> tileAnimationPos;
@@ -60,11 +60,12 @@ public:
 	GUI* gui;
 	TextBox* textBox;
 	std::vector<Item*> items;
+	Player* player;
+
 private:
 	sf::Uint32 createColorKey(sf::Color color);
 	enum State {GAME, LEAVING, HIGHSCORE};
 	State _state;
-	Player* player;
 	Highscore *highscore;
 	sf::Shader _fragmentShader;
 	sf::RectangleShape _outline;

@@ -50,7 +50,7 @@ public:
 
 }
 
-
+class Player;
 
 class NPC: public GameObject {
 private:
@@ -67,8 +67,8 @@ private:
 	float jumpSpeed;
 
 	void expandNode(const std::vector<GameObject*> &myBoard, npc::step &current, std::vector<npc::step> &openList, std::vector<npc::step> &closedList, const sf::Vector2f &destPos);
-	void findPath(const GameObject &from, const GameObject &to, std::vector<sf::Vector2f> &path);
-	void findAvoidPath(const GameObject& from, const GameObject& avoid, std::vector<sf::Vector2f>& path);
+	void findPath(const GameObject &from, const Player &to, std::vector<sf::Vector2f> &path);
+	void findAvoidPath(const GameObject& from, const Player& avoid, std::vector<sf::Vector2f>& path);
 
 public:
 	NPC(Level* level);

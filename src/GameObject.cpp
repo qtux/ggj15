@@ -26,7 +26,7 @@ bool GameObject::intersects(const GameObject& cmp) const
 
 void GameObject::checkTilesCollision(sf::Vector2f& tmpPos,
 		const sf::Vector2f& oldPos, int chkColl[2]) {
-	for (std::vector<GameObject*>::const_iterator tileIt = _level->gameBoard.begin(); tileIt != _level->gameBoard.end(); tileIt++)
+	for (std::vector<GameObject*>::const_iterator tileIt = level->gameBoard.begin(); tileIt != level->gameBoard.end(); tileIt++)
 		{
 			sf::Vector2f distVec = ((*tileIt)->getPosition() - tmpPos);
 			sf::Vector2f distVecOld = ((*tileIt)->getPosition() - oldPos); // check also neighbours of old position in case screen was left on one side

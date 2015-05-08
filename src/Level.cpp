@@ -296,6 +296,11 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		gui->update(deltaT);
 	}
 	
+	for (auto& obj : npcs)
+	{
+		obj->update(deltaT);
+	}
+
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
@@ -331,6 +336,10 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	for(auto& obj: items) {
 		obj->draw(renderTarget, nullptr);
 	}
+	for (auto& obj: npcs) {
+		obj->draw(renderTarget, nullptr);
+	}
+
 	player->draw(renderTarget, nullptr);
 	gui->draw(renderTarget);
 	textBox->draw(renderTarget);

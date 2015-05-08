@@ -11,6 +11,9 @@
 #include "Tile.hpp"
 #include <math.h>
 #include <iostream>
+#include "Level.hpp"
+#include "Item.hpp"
+#include "Player.hpp"
 
 float mag2(const sf::Vector2f & a)
 {
@@ -60,7 +63,7 @@ void NPC::update(sf::Time deltaTime) {
 	animationStep += 120 * dT / NPCslowFactor;
 	if (animationStep >= 4.) animationStep -= 4;
 
-	GameObject * myPlayer = gb::sceneManager.getCurrentScene()->player;
+	Player * myPlayer = level->player;
 	if (myPlayer == 0) return;
 
 	sf::Vector2f moveVec;
@@ -189,7 +192,7 @@ void NPC::update(sf::Time deltaTime) {
 	int chkColl[] = {0, 0};
 	checkTilesCollision(myPos, oldPos, chkColl);
 
-	if (state == npc::state::attack && this->intersects(*myPlayer))
+	if (state == npc::state::attack && this->intersects(myPlayer->getPosition(), *this))
 	{
 		state = npc::state::withdraw;
 		jumpSpeed = -9999.;
@@ -222,7 +225,7 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 	{
 		if (!dynamic_cast<const Tile*>(tmp)->walkable) continue;
 
-		for (auto &itemIt : gb::sceneManager.getCurrentScene()->items)
+		for (auto &itemIt : level->items)
 		{
 			if (itemIt->blocksPath && tmp->mySprite->getGlobalBounds().intersects(itemIt->mySprite->getGlobalBounds())) continue; // nicht über blockierende Items laufen
 		}
@@ -268,11 +271,11 @@ void NPC::expandNode(const std::vector<GameObject*> &myBoard, npc::step &current
 }
 
 
-void NPC::findAvoidPath(const GameObject& from, const GameObject& avoid, std::vector<sf::Vector2f>& path)
+void NPC::findAvoidPath(const GameObject& from, const Player& avoid, std::vector<sf::Vector2f>& path)
 {
 	auto myEval = [] (const sf::Vector2f &from, const sf::Vector2f &tmpPos) -> double {return mag2(tmpPos - from);} ;
 
-	const std::vector<GameObject*> &myBoard = gb::sceneManager.getCurrentScene()->gameBoard; //TODO: define type (class or typedef) for board? (johannes)
+	const std::vector<GameObject*> &myBoard = level->gameBoard; //TODO: define type (class or typedef) for board? (johannes)
 
 	std::pair<sf::Vector2f, double> bestOption (sf::Vector2f(), -1.);
 	sf::Vector2f current(from.getPosition());
@@ -284,7 +287,7 @@ void NPC::findAvoidPath(const GameObject& from, const GameObject& avoid, std::ve
 		{
 			if (!dynamic_cast<const Tile*>(tmp)->walkable) continue;
 
-			for (auto &itemIt : gb::sceneManager.getCurrentScene()->items)
+			for (auto &itemIt : level->items)
 			{
 				if (itemIt->blocksPath && tmp->mySprite->getGlobalBounds().intersects(itemIt->mySprite->getGlobalBounds())) continue; // nicht über blockierende Items laufen
 			}
@@ -310,9 +313,9 @@ void NPC::findAvoidPath(const GameObject& from, const GameObject& avoid, std::ve
 }
 
 
-void NPC::findPath(const GameObject& from, const GameObject& to,
+void NPC::findPath(const GameObject& from, const Player& to,
 		std::vector<sf::Vector2f>& path) {
-	const std::vector<GameObject*> &myBoard = gb::sceneManager.getCurrentScene()->gameBoard; //TODO: define type (class or typedef) for board? (johannes)
+	const std::vector<GameObject*> &myBoard = level->gameBoard; //TODO: define type (class or typedef) for board? (johannes)
 
 	std::vector<npc::step> openList; //http://www.cplusplus.com/reference/algorithm/make_heap/
 
