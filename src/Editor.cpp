@@ -17,7 +17,7 @@ Editor::Editor():
 	// ---- normal items
 	{NOITEM, 0},
 	{START, 1},
-	{GOALPORTAL, 2},
+	{GOAL, 2},
 	{TRIGGER, 3},
 	{COIN, 4},
 	{CLOCK, 5},
@@ -111,7 +111,7 @@ Editor::Editor():
 	// ---- normal items
 	/*id[NOITEM] = 0;
 	id[START] = 1;
-	id[GOALPORTAL] = 2;
+	id[GOAL] = 2;
 	id[TRIGGER] = 3;
 	id[COIN] = 4;
 	id[CLOCK] = 5;
@@ -132,7 +132,7 @@ Editor::Editor():
 	
 	// large item texture parts
 	bigItemRects[id.at(START)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,4*16,16,16), sf::IntRect(16,4*16,16,16));
-	bigItemRects[id.at(GOALPORTAL)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,0,16,16), sf::IntRect(0,16,16,16));
+	bigItemRects[id.at(GOAL)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,0,16,16), sf::IntRect(0,16,16,16));
 	bigItemRects[id.at(DOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,7*16,16,16), sf::IntRect(3*16,7*16,16,16));
 	bigItemRects[id.at(VERTICALDOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,4*16,16,16), sf::IntRect(2*16,5*16,16,16));
 	
@@ -370,7 +370,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						setTexture(currentX, currentY, tileItemRects[activeItemIndex]);
 						
 						// apply necessary additions
-						if (activeItemIndex == id.at(START) || activeItemIndex == id.at(GOALPORTAL)) // portal and start item
+						if (activeItemIndex == id.at(START) || activeItemIndex == id.at(GOAL)) // portal and start item
 						{
 							// if item would not fit, don't place it
 							if (currentY + 1 >= numTilesY)
@@ -388,8 +388,8 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 								}
 								else
 								{
-									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id.at(GOALPORTAL)].first);
-									setTexture(currentX, currentY+1, bigItemRects[id.at(GOALPORTAL)].second);
+									itemTiles[currentX][currentY]->setTextureRect(bigItemRects[id.at(GOAL)].first);
+									setTexture(currentX, currentY+1, bigItemRects[id.at(GOAL)].second);
 								}
 							}
 						}
@@ -819,7 +819,7 @@ Scene* Editor::update(sf::Time deltaT, sf::RenderWindow& window)
 						mouseTile.setSize(sf::Vector2f(2*tileSize + 2.0f, tileSize));
 						infoText.setString("Use right click to toggle door orientation before placing.");
 					}
-					else if (activeItemIndex == id.at(START) || activeItemIndex == id.at(GOALPORTAL) || activeItemIndex == id.at(DOOR))
+					else if (activeItemIndex == id.at(START) || activeItemIndex == id.at(GOAL) || activeItemIndex == id.at(DOOR))
 					{
 						mouseTile.setSize(sf::Vector2f(tileSize, 2*tileSize + 2.0f));
 						if (activeItemIndex == id.at(DOOR))
@@ -937,7 +937,7 @@ void Editor::resetTriggers()
 void Editor::deleteBigItem(int x, int y)
 {
 	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(START)].first 		||
-		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOALPORTAL)].first 	||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOAL)].first 	||
 		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(VERTICALDOOR)].first		)
 	{
 		setTexture(x, y+1, tileItemRects[id.at(NOITEM)]);
@@ -947,7 +947,7 @@ void Editor::deleteBigItem(int x, int y)
 		setTexture(x+1, y, tileItemRects[id.at(NOITEM)]);
 	}
 	if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(START)].second 		||
-		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOALPORTAL)].second 	||
+		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOAL)].second 	||
 		itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(VERTICALDOOR)].second	)
 	{
 		setTexture(x, y-1, tileItemRects[id.at(NOITEM)]);
@@ -1019,7 +1019,7 @@ void Editor::saveLevel(bool overwrite)
 				{
 					txtfile << "Start " << x << " " << y << "\n";
 				}
-				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOALPORTAL)].first)
+				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOAL)].first)
 				{
 					txtfile << "Portal " << x << " " << y << "\n";
 				}
@@ -1125,8 +1125,8 @@ void Editor::loadLevel(int level)
 			int x,y;
 			iss >> x;
 			iss >> y;
-			setTexture(x, y, bigItemRects[id.at(GOALPORTAL)].first);
-			setTexture(x, y+1, bigItemRects[id.at(GOALPORTAL)].second);
+			setTexture(x, y, bigItemRects[id.at(GOAL)].first);
+			setTexture(x, y+1, bigItemRects[id.at(GOAL)].second);
 		}
 		if (first == "TriggerItem")
 		{
