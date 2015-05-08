@@ -1,4 +1,5 @@
 #include "Player.hpp"
+#include "Player.hpp"
 #include "global.hpp"
 
 Player::Player(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize):
@@ -26,13 +27,14 @@ bool Player::intersects(const sf::Vector2u& tilePosition, const sf::Vector2f& ti
 
 void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vector2f& sceneSize)
 {
-	sf::Vector2f offset = moveDir * 240.0f * deltaTime.asSeconds();
+	//sf::Vector2f offset = moveDir * 240.0f * deltaTime.asSeconds();
+	sf::Vector2f offset = moveDir;
 	// update player position
 	sf::Vector2f nextPos = _shape.getPosition() + offset;
-	sf::Vector2f size = _shape.getSize();
+	//sf::Vector2f size = _shape.getSize();
 	
 	// check for level wrap
-	if (nextPos.x > sceneSize.x - 8)
+	/*if (nextPos.x > sceneSize.x - 8)
 	{
 		nextPos.x -= sceneSize.x;
 	}
@@ -47,9 +49,10 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 	if (nextPos.y < 8 - size.y)
 	{ 
 		nextPos.y += sceneSize.y;
-	}
+	}*/
 	// set new position
-	_shape.setPosition(nextPos);
+	//_shape.setPosition(nextPos);
+	_shape.setPosition(moveDir);
 	
 	// doggie follows the hero and update animationStep while it is moving
 	int dir = (offset.x < 0) ? 3 : (offset.x > 0) ? 2 : (offset.y < 0) ? 1 : (offset.y > 0) ? 0 : -1;

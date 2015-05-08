@@ -11,10 +11,11 @@ public:
 	void move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vector2f& sceneSize);
 	void update(sf::Time deltaTime);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
+	// TODO move to private
+	sf::RectangleShape _shape;
 private:
 	float _animationStep;
 	int _direction;
-	sf::RectangleShape _shape;
 	sf::RectangleShape _doggieShape;
 	std::queue<sf::Vector2f> _positionQueue;
 	std::queue<int> _directionQueue;

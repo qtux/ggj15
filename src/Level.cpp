@@ -301,7 +301,9 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 			moveDir.y += 1;
 		}
-		player->move(deltaT, moveDir, sceneSize);
+		moveDir *= 240.0f * deltaT.asSeconds();
+		sf::Vector2f movement = getTarget(player->_shape.getPosition() + sf::Vector2f(0, 16), moveDir);
+		player->move(deltaT, movement - sf::Vector2f(0, 16), sceneSize);
 		// get neighbouring collision data
 		// move collider (apply moving beyond level border) and check for collision with tilemap
 		// TODO implement collision with items --> Box2D?
@@ -364,28 +366,41 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	}
 }
 
+// wrap arround and discrete collision check (only check target position)
 sf::Vector2f Level::getTarget(const sf::Vector2f& start, const sf::Vector2f& offset)
 {
 	if (std::hypot(offset.x, offset.y) < 0.001)
 	{
 		return start;
 	}
-	sf::FloatRect area(/*TODO position of tilemap*/ {0,0}, /* TODO size of tilemap*/ sceneSize);
+	// area in respect to the left/top point of the collider of size 32/32
+	sf::FloatRect area(/*TODO position of tilemap minus half of gridSize*/ {-16,-16}, /* TODO size of tilemap*/ sceneSize);
 	sf::Vector2f target = start + offset;
 	// get a point inside the area (includes borders, e.g. intersection points)
 	sf::Vector2f nextTarget;
 	nextTarget.x = std::max(area.left, std::min(area.left + area.width, target.x));
 	nextTarget.y = std::max(area.top, std::min(area.top + area.height, target.y));
 	
-	// do collision check between start and nextTarget and determine where to move (i.e. the real nextTarget)
-	
+	// TODO do collision check between start and nextTarget and determine where to move (i.e. the real nextTarget)
+	// TODO check collision against immobile objects (tilemap and items)
+	// TODO check collison against mobile objects (npcs and player --> dont check with itself)
 	
 	// get the wrapped starting point
 	sf::Vector2f nextStart;
-	nextStart.x = (target.x - area.left) - area.width * std::floor((target.x - area.left) / area.width);
-	nextStart.y = (target.y - area.top) - area.height * std::floor((target.y - area.top) / area.height);
+	nextStart.x = (target.x - area.left) - area.width * std::floor((target.x - area.left) / area.width) + area.left;
+	nextStart.y = (target.y - area.top) - area.height * std::floor((target.y - area.top) / area.height) + area.top;
+	
+	std::cout << "start: " << start.x << " | " << start.y << std::endl;
+	std::cout << "offset: " << offset.x << " | " << offset.y << std::endl;
+	std::cout << "target: " << target.x << " | " << target.y << std::endl;
+	std::cout << "nextTarget: " << nextTarget.x << " | " << nextTarget.y << std::endl;
+	std::cout << "nextStart: " << nextStart.x << " | " << nextStart.y << std::endl;
+	std::cout << "newOffset: " << (offset - (nextTarget - start)).x << " | " << (offset - (nextTarget - start)).y << std::endl;
+	std::cout << std::endl;
+	
 	// do recursion
 	return getTarget(nextStart, offset - (nextTarget - start));
+	//return nextTarget;
 }
 
 bool Level::readyToLeave() const
