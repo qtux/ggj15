@@ -138,9 +138,9 @@ Editor::Editor():
 	textOutput.setString("");
 	infoText.setFont(font);
 	infoText.setColor(sf::Color::Black);
-	infoText.setCharacterSize(24);
-	infoText.setPosition(lateralOffset/2, mapHeight + 45);
-	standardHelpText = "Draw/Place Item: Left Click, Draw Color Box: Shift, Load Level: l, Save Level: s, Exit: ESC, Hide Help: h";
+	infoText.setCharacterSize(21);
+	infoText.setPosition(lateralOffset/4, mapHeight + 45);
+	standardHelpText = "Draw/Place Item: Left Click, Pen Size: Scroll, Fill Area: Middle Click, Box: Shift, Load: l, Save: s, Exit: ESC, Toggle Help: h";
 	infoText.setString(standardHelpText);
 	
 	// create drag tile
@@ -530,6 +530,39 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 		}
 	}
 	
+	// fill area of same color with another color on middle click
+	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Middle)
+	{
+		int xPos = getX(window);
+		int yPos = getY(window);
+			
+		if (activeColorIndex != -1)
+		{
+			floodFill(xPos, yPos, tiles[xPos][yPos]->getFillColor(), tileColors[activeColorIndex]);
+		}
+	}
+	
+	// change pensize when scrolling
+	if (event.type == sf::Event::MouseWheelMoved)
+	{	
+		// increase pensize for drawing
+		if (event.mouseWheel.delta < 0)
+		{
+			if (pensize < 6)
+			{
+				++pensize;
+			}
+		}
+		// decrease pensize for drawing
+		else
+		{
+			if (pensize > 1)
+			{
+				--pensize;
+			}
+		}
+	}
+	
 	// box coloring on shift click (only activate here and set start tile)
 	if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::LShift || event.key.code == sf::Keyboard::RShift))
 	{
@@ -618,25 +651,6 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			textOutput.setString("");
 			exit = false;
 			infoText.setString(standardHelpText);
-		}
-	}
-	
-	// TODO prefer add and delete but somehow it does not work for me
-	// increase pensize for drawing
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up)
-	{
-		if (pensize < 6)
-		{
-			++pensize;
-		}
-	}
-	
-	// decrease pensize for drawing
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
-	{
-		if (pensize > 1)
-		{
-			--pensize;
 		}
 	}
 	
@@ -1151,6 +1165,34 @@ int Editor::nextPos(int pos, int size, bool clockWise)
 	auto backward = (pos > 0) ? pos - 1 : size - 1;
 	return clockWise ? forward : backward;
 }
+
+// Floodfill Algorithmus zum Austauschen von Farben aus Wikipedia
+void Editor::floodFill(int x, int y, sf::Color oldColor, sf::Color newColor)
+{
+	if (tiles[x][y]->getFillColor() == oldColor) {
+		
+		tiles[x][y]->setFillColor(newColor);
+		
+		if (y+1 < numTilesY)
+		{
+			floodFill(x, y + 1, oldColor, newColor);	// unten
+		}
+		if (y-1 >= 0)
+		{
+			floodFill(x, y - 1, oldColor, newColor);	// oben
+		}
+		if (x-1 >= 0)
+		{
+			floodFill(x - 1, y, oldColor, newColor);	// links 
+		}
+		if (x+1 < numTilesX)
+		{
+			floodFill(x + 1, y, oldColor, newColor);	// rechts
+		}
+	}
+	return;
+}
+
 
 sf::Vector2f Editor::getMouseWorldPos(sf::RenderWindow& window)
 {

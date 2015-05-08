@@ -97,6 +97,8 @@ private:
 	int getY(sf::RenderWindow& window);
 	// check whether mouse is in gameboard
 	bool mouseInGameboard(sf::RenderWindow& window);
+	// floodfill algorithm
+	void floodFill(int x, int y, sf::Color oldColor, sf::Color newColor);
 	// get mousePos in world
 	sf::Vector2f getMouseWorldPos(sf::RenderWindow& window);
 public:
