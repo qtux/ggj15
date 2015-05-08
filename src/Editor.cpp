@@ -9,6 +9,7 @@
 #include <sstream>
 #include <string>
 
+// TODO make time changeable
 Editor::Editor():
 	Scene({mapWidth + 2 * lateralOffset, mapHeight + lateralOffset}),
 	actionItemTexture(gb::textureManager.getTexture("./img/items.png", false))
@@ -23,7 +24,8 @@ Editor::Editor():
 	tileColors[6] = sf::Color(0, 0, 171);//0x0000abff;
 	tileColors[7] = sf::Color(00, 62, 4);//0x003E04ff;
 	
-	// create tiles and itemTiles
+	
+	// create tiles and itemTiles (gameboard)
 	for (int x = 0; x < numTilesX; ++x)
 	{
 		for (int y = 0; y < numTilesY; ++y)
@@ -45,6 +47,7 @@ Editor::Editor():
 		}
 	}
 	
+	
 	// create color/tile choices bar
 	for (int y = 0; y < tileChoices.size(); ++y)
 	{
@@ -57,6 +60,7 @@ Editor::Editor():
 		tileChoices[y] = tileChoice;
 	}
 	
+	
 	// load item rects
 	// ---- normal items
 	tileItemRects[1] = sf::IntRect(0,4*16,32,16);		// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
@@ -68,16 +72,20 @@ Editor::Editor():
 	tileItemRects[7] = sf::IntRect(2*16,7*16,32,16);	// 7.  door
 	// put in new items here (and adjust numbers below)
 	// ---- deco item border
-	tileItemRects[8] = sf::IntRect(16,5*16,16,16);		// 8.  mushroom (deco)
-	tileItemRects[9] = sf::IntRect(16,6*16,16,16);		// 9.  flower (deco)
-	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 10. crystals (deco)
-	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 11. rock (deco)
+	tileItemRects[8] = sf::IntRect(16,5*16,16,16);		// 1.(deco)	mushroom
+	tileItemRects[9] = sf::IntRect(16,6*16,16,16);		// 2.(deco)	flower
+	tileItemRects[10] = sf::IntRect(0,7*16,16,16);		// 3.(deco)	crystals
+	tileItemRects[11] = sf::IntRect(16,7*16,16,16);		// 4.(deco)	rock
 	// put in new deco items here
-	// ---- displayed item border
-	tileItemRects[12] = sf::IntRect(2*16,4*16,16,32);	// 12. vertical door (not shown)
+	// ---- npc border
+	tileItemRects[12] = sf::IntRect(3*16,0,16,16);		// 1.(npc)	slime
+	// put in new npcs here (and adjust numbers below)
+	// ---- non-displayed item border
+	tileItemRects[13] = sf::IntRect(2*16,4*16,16,32);	// vertical door (not shown)
 	// TODO more
 	// TODO deco dialog with one item shown?	
 	
+	// ---- normal items
 	id[NOITEM] = 0;
 	id[START] = 1;
 	id[GOALPORTAL] = 2;
@@ -93,8 +101,11 @@ Editor::Editor():
 	id[DECO3] = 10;
 	id[DECO4] = 11;
 	// put in new deco items here
-	// ---- displayed item border
-	id[VERTICALDOOR] = 12;
+	// ---- npc border
+	id[SLIME] = 12;
+	// put in new npcs here (and adjust numbers below)
+	// ---- non-displayed item border
+	id[VERTICALDOOR] = 13;
 	
 	// large item texture parts
 	bigItemRects[id[START]] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,4*16,16,16), sf::IntRect(16,4*16,16,16));
@@ -115,6 +126,7 @@ Editor::Editor():
 		itemChoices[y] = itemChoice;
 	}
 	
+	
 	// read level numbers from file
 	std::ifstream indexFile("levels/index.txt");
 	if (indexFile.is_open())
@@ -127,6 +139,7 @@ Editor::Editor():
 	}
 	std::sort(levels.begin(), levels.end());
 	std::unique(levels.begin(), levels.end());
+	
 	
 	// load font
 	font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
@@ -143,11 +156,13 @@ Editor::Editor():
 	standardHelpText = "Draw/Place Item: Left Click, Pen Size: Scroll, Fill Area: Middle Click, Box: Shift, Load: l, Save: s, Exit: ESC, Toggle Help: h";
 	infoText.setString(standardHelpText);
 	
+	
 	// create drag tile
 	mouseTile.setOutlineColor(sf::Color::Blue);
 	mouseTile.setOutlineThickness(1.0f);
 	mouseTile.setSize(sf::Vector2f(tileSize, tileSize));
 	mouseTile.setPosition(0.5 * tileOffset, 1.0f);
+	
 	
 	// initialize color editing with color 0 (mark in red)
 	activeColorIndex = 0;
@@ -494,9 +509,9 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 			
 			// toggle blocking for deco items
 			if (itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO1]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO2]]		||
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO2]]	||
 				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO3]]	||
-				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO4]]			)
+				itemTiles[xPos][yPos]->getTextureRect() == tileItemRects[id[DECO4]]		)
 			{
 				if (decoItemBlocking[Key(xPos,yPos)] == 1)
 				{
@@ -884,8 +899,11 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 			target.draw(*tiles[x][y]);
 		}
 	}
-	// draw tile shown below the mouse
-	target.draw(mouseTile);
+	// draw tile shown below the mouse if color chosen
+	if (activeColorIndex != -1)
+	{
+		target.draw(mouseTile);
+	}
 	// draw itemTiles
 	for (int x = 0; x < numTilesX; ++x)
 	{
@@ -893,6 +911,11 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 		{
 			target.draw(*itemTiles[x][y]);
 		}
+	}
+	// draw tile shown below the mouse if item chosen
+	if (activeItemIndex != -1)
+	{
+		target.draw(mouseTile);
 	}
 	// draw color/tile choices
 	for (int y = 0; y < tileChoices.size(); ++y)
@@ -1016,6 +1039,10 @@ void Editor::saveLevel(bool overwrite)
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 112 16 16\n";
 				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id[SLIME]])
+				{
+					txtfile << "NPC " << x << " " << y << "\n";
+				}
 			}
 		}
 	}
@@ -1087,6 +1114,13 @@ void Editor::loadLevel(int level)
 			setTexture(x, y, tileItemRects[id[TRIGGER]]);
 			triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
 			triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
+		}
+		if (first == "NPC")
+		{
+			int x, y;
+			iss >> x;
+			iss >> y;
+			setTexture(x, y, tileItemRects[id[SLIME]]);
 		}
 		if (first == "Item")
 		{

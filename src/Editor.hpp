@@ -8,7 +8,7 @@ class Editor: public Scene
 private:
 	enum ActionItemType
 	{
-		NOITEM, START, GOALPORTAL, TRIGGER, COIN, CLOCK, KEY, DOOR, VERTICALDOOR, DECO1, DECO2, DECO3, DECO4
+		NOITEM, START, GOALPORTAL, TRIGGER, COIN, CLOCK, KEY, DOOR, SLIME, VERTICALDOOR, DECO1, DECO2, DECO3, DECO4
 	};
 	struct Key
 	{
@@ -45,7 +45,7 @@ private:
 	std::array<std::array<sf::RectangleShape*, numTilesY>, numTilesX> itemTiles;
 	// bar tiles arrays (for color and item choice)
 	std::array<sf::RectangleShape*, 8> tileChoices; //TODO 7 = number enums
-	std::array<sf::RectangleShape*, 12> itemChoices;
+	std::array<sf::RectangleShape*, 13> itemChoices;
 	// active bar choice (color currently chosen or item currently chosen)
 	int activeColorIndex;
 	int activeItemIndex;
