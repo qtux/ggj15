@@ -293,9 +293,10 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 			moveDir.y += 1;
 		}
-		moveDir *= 240.0f * deltaT.asSeconds();
-		sf::Vector2f target = getTarget(player->_shape.getPosition() + sf::Vector2f(0, 32), moveDir);
-		player->move(deltaT, target - sf::Vector2f(0, 32), sceneSize);
+		player->move(deltaT, moveDir, sceneSize, map);
+		//moveDir *= 240.0f * deltaT.asSeconds();
+		//sf::Vector2f target = getTarget(player->_shape.getPosition() + sf::Vector2f(0, 32), moveDir);
+		//player->move(deltaT, target - sf::Vector2f(0, 32), sceneSize);
 		// get neighbouring collision data
 		// move collider (apply moving beyond level border) and check for collision with tilemap
 		// TODO implement collision with items --> Box2D?
