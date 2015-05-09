@@ -358,6 +358,16 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	}
 }
 
+
+// TODO
+// separate path into two paths (A to B and C to D) if wrapping arround
+// - go from A to B
+// - check collision on B and do resolution
+// - determine if wrapping still occurs --> determine C
+// - determine collision on C
+// - move to C
+// - go from C to D
+// - check collision on D and do resolution
 // wrap arround and discrete collision check (only check target position)
 sf::Vector2f Level::getTarget(const sf::Vector2f& start, const sf::Vector2f& offset)
 {
@@ -384,40 +394,37 @@ sf::Vector2f Level::getTarget(const sf::Vector2f& start, const sf::Vector2f& off
 	{
 		for (auto j = gridPos.y; j < gridPos.y + 2; ++j)
 		{
-			if (map->isSolid({i, j}))
+			sf::FloatRect tile(i * 32, j * 32, 32, 32);
+			sf::FloatRect intersection;
+			// do collision resolution
+			if (map->isSolid({i, j}) && tile.intersects(collider, intersection))
 			{
-				// do collision resolution
-				sf::FloatRect tile(i * 32, j * 32, 32, 32);
-				sf::FloatRect intersection;
-				if (tile.intersects(collider, intersection))
+				if (intersection.width < intersection.height)
 				{
-					if (intersection.width < intersection.height)
+					// correct horizontal
+					if (collider.left < intersection.left)
 					{
-						// correct horizontal
-						if (collider.left < intersection.left)
-						{
-							// move left
-							nextTarget.x -= intersection.width;
-						}
-						else
-						{
-							// move right
-							nextTarget.x += intersection.width;
-						}
+						// move left
+						nextTarget.x -= intersection.width;
 					}
 					else
 					{
-						// correct vertical
-						if (collider.top < intersection.top)
-						{
-							// move up
-							nextTarget.y -= intersection.height;
-						}
-						else
-						{
-							// move down
-							nextTarget.y += intersection.height;
-						}
+						// move right
+						nextTarget.x += intersection.width;
+					}
+				}
+				else
+				{
+					// correct vertical
+					if (collider.top < intersection.top)
+					{
+						// move up
+						nextTarget.y -= intersection.height;
+					}
+					else
+					{
+						// move down
+						nextTarget.y += intersection.height;
 					}
 				}
 			}
