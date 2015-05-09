@@ -81,14 +81,14 @@ void Level::reset()
 	}
 	
 	// create a tileset
-	std::map<sf::Uint32, bool> walkableTileState;
-	walkableTileState[0x000100ff] = false;	// wall
-	walkableTileState[0x5f5f5fff] = true;	// wet stone
-	walkableTileState[0x9b6d27ff] = true;	// dirt
-	walkableTileState[0x969896ff] = true;	// stone
-	walkableTileState[0x11941bff] = true;	// grass
-	walkableTileState[0x003E04ff] = false;	// trees
-	walkableTileState[0x0000abff] = false;	// water
+	std::map<sf::Uint32, bool> colorToSolid;
+	colorToSolid[0x000100ff] = true;	// wall
+	colorToSolid[0x5f5f5fff] = false;	// wet stone
+	colorToSolid[0x9b6d27ff] = false;	// dirt
+	colorToSolid[0x969896ff] = false;	// stone
+	colorToSolid[0x11941bff] = false;	// grass
+	colorToSolid[0x003E04ff] = true;	// trees
+	colorToSolid[0x0000abff] = true;	// water
 	
 	std::map<sf::Uint32, unsigned int> colorToInt;
 	colorToInt[0x000100ff] = 6;	// wall
@@ -105,22 +105,14 @@ void Level::reset()
 	const sf::Vector2f scale(0.5f, 0.5f);
 	
 	std::vector<unsigned int> mapping;
-	for (int x = 0; x < gridSize.y; ++x)
-	{
-		for (int y = 0; y < gridSize.x; ++y)
-		{
-			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
-			mapping.push_back(colorToInt[colorKey]);
-		}
-	}
-	
 	std::vector<bool> collision;
 	for (int x = 0; x < gridSize.y; ++x)
 	{
 		for (int y = 0; y < gridSize.x; ++y)
 		{
 			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
-			collision.push_back(walkableTileState[colorKey]);
+			mapping.push_back(colorToInt[colorKey]);
+			collision.push_back(colorToSolid[colorKey]);
 		}
 	}
 	
@@ -302,8 +294,8 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 			moveDir.y += 1;
 		}
 		moveDir *= 240.0f * deltaT.asSeconds();
-		sf::Vector2f movement = getTarget(player->_shape.getPosition() + sf::Vector2f(0, 16), moveDir);
-		player->move(deltaT, movement - sf::Vector2f(0, 16), sceneSize);
+		sf::Vector2f target = getTarget(player->_shape.getPosition() + sf::Vector2f(0, 16), moveDir);
+		player->move(deltaT, target - sf::Vector2f(0, 16), sceneSize);
 		// get neighbouring collision data
 		// move collider (apply moving beyond level border) and check for collision with tilemap
 		// TODO implement collision with items --> Box2D?
