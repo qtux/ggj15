@@ -15,6 +15,7 @@
 #include "Player.hpp"
 #include "Menu.hpp"
 #include "Items/KeyItem.hpp"
+#include "Items/DoorItem.hpp"
 
 // parser
 #include <fstream>
@@ -218,6 +219,15 @@ void Level::reset()
 			items.push_back(tmpItem);
 		}
 		
+		if (first == "DoorSwitch")
+		{
+			unsigned int x,y;
+			iss >> x >> y;
+			Item *tmpItem = tmpFactory.getItem(first, false, -1, -1, -1, -1, false);
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			items.push_back(tmpItem);
+		}
+		
 		if (first == "Timeout")
 		{
 			int time;
@@ -304,6 +314,7 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	for(std::vector<Item*>::iterator itIt = items.begin() ; itIt != items.end() ; ) {
 		if (player->intersects(**itIt))
 		{
+			// make applyEffect return nothing (void)
 			if ((*itIt)->applyEffect(*this))
 			{
 				return this;
@@ -515,4 +526,13 @@ void Level::updateTileAnimation(sf::Time deltaT)
 		}
 }
 
-
+void Level::toggleDoors()
+{
+	for(auto& item: items)
+	{
+		if (dynamic_cast<DoorItem*>(item))
+		{
+			dynamic_cast<DoorItem*>(item)->toggle();
+		}
+	}
+}

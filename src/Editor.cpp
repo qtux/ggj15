@@ -23,18 +23,19 @@ Editor::Editor():
 	{CLOCK, 5},
 	{KEY, 6},
 	{DOOR, 7},
+	{DOORSWITCH, 8},
 	// put in new items here (and adjust numbers below)
 	// ---- deco item border
-	{DECO1, 8},
-	{DECO2, 9},
-	{DECO3, 10},
-	{DECO4, 11},
+	{DECO1, 9},
+	{DECO2, 10},
+	{DECO3, 11},
+	{DECO4, 12},
 	// put in new deco items here
 	// ---- npc border
-	{SLIME, 12},
+	{SLIME, 13},
 	// put in new npcs here (and adjust numbers below)
 	// ---- non-displayed item border
-	{VERTICALDOOR, 13}
+	{VERTICALDOOR, 14}
 	})
 {
 	// fill color choices array
@@ -93,6 +94,7 @@ Editor::Editor():
 	tileItemRects[id.at(CLOCK)] = sf::IntRect(0,3*16,16,16);			// 5.  clock
 	tileItemRects[id.at(KEY)] = sf::IntRect(0,2*16,16,16);				// 6.  key
 	tileItemRects[id.at(DOOR)] = sf::IntRect(2*16,7*16,32,16);			// 7.  door
+	tileItemRects[id.at(DOORSWITCH)] = sf::IntRect(2*16,3*16,16,16);	// 8.  doorswitch
 	// put in new items here (and adjust numbers above)
 	// ---- deco item border
 	tileItemRects[id.at(DECO1)] = sf::IntRect(16,5*16,16,16);			// 1.(deco)	mushroom
@@ -1049,6 +1051,10 @@ void Editor::saveLevel(bool overwrite)
 					// vertical door
 					txtfile << "Item DoorItem " << x << " " << y << " 1\n";
 				}
+				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DOORSWITCH)])
+				{
+					txtfile << "DoorSwitch " << x << " " << y << "\n";
+				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO1)])
 				{
 					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 80 16 16\n";
@@ -1147,6 +1153,13 @@ void Editor::loadLevel(int level)
 			iss >> x;
 			iss >> y;
 			setTexture(x, y, tileItemRects[id.at(SLIME)]);
+		}
+		if (first == "DoorSwitch")
+		{
+			int x, y;
+			iss >> x;
+			iss >> y;
+			setTexture(x, y, tileItemRects[id.at(DOORSWITCH)]);
 		}
 		if (first == "Item")
 		{

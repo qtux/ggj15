@@ -5,6 +5,7 @@
 #include "Items/PortalItem.hpp"
 #include "Items/KeyItem.hpp"
 #include "Items/DoorItem.hpp"
+#include "Items/DoorSwitchItem.hpp"
 #include "global.hpp"
 #include <SFML/Graphics.hpp>
 #include "Items/DecorationItem.hpp"
@@ -60,6 +61,11 @@ Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int t
 	if (name == "DoorItem")
 	{
 		return new DoorItem(sprite, vertical, true);
+	}
+	
+	if (name == "DoorSwitch")
+	{
+		return new DoorSwitchItem(sprite, false);
 	}
 
 	if (name == "DecorationItem")

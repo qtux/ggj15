@@ -56,6 +56,8 @@ public:
 	float tileAnimationTime;
 	void updateTileAnimation(sf::Time deltaT);
 	
+	void toggleDoors();
+	
 	// move to private
 	GUI* gui;
 	TextBox* textBox;

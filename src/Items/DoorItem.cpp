@@ -76,3 +76,8 @@ void DoorItem::update(sf::Time deltaTime) {
 		}
 	}
 }
+
+void DoorItem::toggle()
+{
+	blocksPath = !blocksPath;
+}
