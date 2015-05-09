@@ -376,23 +376,73 @@ sf::Vector2f Level::getTarget(const sf::Vector2f& start, const sf::Vector2f& off
 	// TODO do collision check between start and nextTarget and determine where to move (i.e. the real nextTarget)
 	// TODO check collision against immobile objects (tilemap and items)
 	// TODO check collison against mobile objects (npcs and player --> dont check with itself)
+	sf::Vector2u gridPos(nextTarget.x/ 32, nextTarget.y / 32);
+	std::cout << gridPos.x << " | " << gridPos.y << std::endl;
+	
+	sf::FloatRect collider(nextTarget, {32.0f, 32.0f});
+	for (auto i = gridPos.x; i < gridPos.x + 2; ++i)
+	{
+		for (auto j = gridPos.y; j < gridPos.y + 2; ++j)
+		{
+			if (map->isSolid({i, j}))
+			{
+				// do collision resolution
+				sf::FloatRect tile(i * 32, j * 32, 32, 32);
+				sf::FloatRect intersection;
+				if (tile.intersects(collider, intersection))
+				{
+					if (intersection.width < intersection.height)
+					{
+						// correct horizontal
+						if (collider.left < intersection.left)
+						{
+							// move left
+							nextTarget.x -= intersection.width;
+						}
+						else
+						{
+							// move right
+							nextTarget.x += intersection.width;
+						}
+					}
+					else
+					{
+						// correct vertical
+						if (collider.top < intersection.top)
+						{
+							// move up
+							nextTarget.y -= intersection.height;
+						}
+						else
+						{
+							// move down
+							nextTarget.y += intersection.height;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return nextTarget;
+	
+	// || map->isSolid(gridPos + sf::Vector2u(1,0)) || map->isSolid(gridPos + sf::Vector2u(1,1)) || map->isSolid(gridPos + sf::Vector2u(0,1)))
 	
 	// get the wrapped starting point
 	sf::Vector2f nextStart;
 	nextStart.x = (target.x - area.left) - area.width * std::floor((target.x - area.left) / area.width) + area.left;
 	nextStart.y = (target.y - area.top) - area.height * std::floor((target.y - area.top) / area.height) + area.top;
 	
-	std::cout << "start: " << start.x << " | " << start.y << std::endl;
+	/*std::cout << "start: " << start.x << " | " << start.y << std::endl;
 	std::cout << "offset: " << offset.x << " | " << offset.y << std::endl;
 	std::cout << "target: " << target.x << " | " << target.y << std::endl;
 	std::cout << "nextTarget: " << nextTarget.x << " | " << nextTarget.y << std::endl;
 	std::cout << "nextStart: " << nextStart.x << " | " << nextStart.y << std::endl;
-	std::cout << "newOffset: " << (offset - (nextTarget - start)).x << " | " << (offset - (nextTarget - start)).y << std::endl;
+	std::cout << "newOffset: " << (offset - (nextTarget - start)).x << " | " << (offset - (nextTarget - start)).y << std::endl;*/
 	std::cout << std::endl;
 	
 	// do recursion
 	return getTarget(nextStart, offset - (nextTarget - start));
-	//return nextTarget;
 }
 
 bool Level::readyToLeave() const
