@@ -363,6 +363,13 @@ void NPC::findPath(const GameObject& from, const Player& to,
 		}
 		path.push_back(curr->pos);
 	}
+	// if no path to goal exists
+	else
+	{
+		path.clear();
+		path.push_back(origPos);
+		destPos = origPos;
+	}
 
 }
 
