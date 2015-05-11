@@ -1,6 +1,6 @@
 #include "Player.hpp"
-#include "Player.hpp"
 #include "global.hpp"
+#include <cassert>
 
 // TODO test - remove the following includes
 #include <iostream>
@@ -20,8 +20,8 @@ Player::Player(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vect
 	_doggieShape.setTexture(&gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
 	_doggieShape.setPosition(pos);
 	// TODO improve following code
-	/*_colliderPos.y += 32;
-	_colliderSize.y -=32;*/
+	_colliderPos.y += 32;
+	_colliderSize.y -=32;
 }
 
 bool Player::intersects(const sf::Vector2u& tilePosition, const sf::Vector2f& tileSize)
@@ -38,93 +38,78 @@ bool Player::intersects(const sf::Vector2u& tilePosition, const sf::Vector2f& ti
 // TODO use integer positions (do not use unsigned integer)
 // TODO add a grid of collision/gameobject data (replace map)
 // TODO add a method to move more than one tile wide
+// TODO remove oneself from the grid data and add again
 void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vector2f& sceneSize, TileMap* map)
 {
 	// define lambdas for cleaner code
-	auto mod = [] (int x, int y) {return (x < 0) ? x % y + y : x % y;};
+	auto mod = [] (int a, int b) {return (a < 0) ? a % b + b : a % b;};
+	auto ceilDiv = [] (int a, int b) {return (a % b) ? a / b + 1 : a / b;};
+	auto floorDiv = [] (int a, int b) {return (a - ((a < 0) ? b - 1 : 0)) / b;};
 	// determine grid and tile size TODO move elsewhere?
 	sf::Vector2i gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
 	sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
 	
-	// TODO remove oneself from the grid data
-	
-	// determine an integer offset (avoid jittery movements)
+	// TODO normalize moveDir?
 	sf::Vector2i offset;
 	offset.x = std::round(moveDir.x * velocity * deltaTime.asSeconds());
 	offset.y = std::round(moveDir.y * velocity * deltaTime.asSeconds());
-	//  set target position to the current positon
-	sf::Vector2i target = _colliderPos;
 	
-	// 1. try to move horizontally
-	target.x += offset.x;
+	// first move the collider horizontally (avoid jittery movement by rounding) and resolve
+	assert(offset.x < tileSize.x && offset.y < tileSize.y);
+	_colliderPos.x += offset.x;
+	int penetration = 0;
 	// do collision resolution for every neighbour (dependend on collider size)
-	for (int i = 0; i <= std::ceil(_colliderSize.x / tileSize.x); ++i)
+	for (int i = 0; i <= ceilDiv(_colliderSize.x, tileSize.x); ++i)
 	{
-		for (int j = 0; j <= std::ceil(_colliderSize.y / tileSize.y); ++j)
+		for (int j = 0; j <= ceilDiv(_colliderSize.y, tileSize.y); ++j)
 		{
 			// determine current tile position
-			sf::Vector2i tilePos(i, j);
-			//std::cout << tilePos.x + target.x / tileSize.x << " | " << tilePos.y + target.y / tileSize.y << std::endl;
-			tilePos.x += mod(target.x / tileSize.x, gridSize.x);		// asume integer division
-			tilePos.y += mod(target.y / tileSize.y, gridSize.y);		// asume integer division
-			//std::cout << tilePos.x << " | " << tilePos.y << std::endl;
-			// resolve collision if there is one
-			if (map->isSolid(tilePos))
+			sf::Vector2i tileCoord;
+			tileCoord.x = mod(i + floorDiv(_colliderPos.x, tileSize.x), gridSize.x);
+			tileCoord.y = mod(j + floorDiv(_colliderPos.y, tileSize.y), gridSize.y);
+			// detect collision if there is one and the collider intersects with the tile
+			if (map->isSolid(tileCoord) && (i + _colliderPos.x / tileSize.x) * tileSize.x - _colliderPos.x  < _colliderSize.x && (j + _colliderPos.y / tileSize.y) * tileSize.y - _colliderPos.y  < _colliderSize.y)
 			{
-				// if target is left compared to the current tile
-				if (target.x < tilePos.x * tileSize.x)
-				{
-					target.x = tilePos.x * tileSize.x - _colliderSize.x;
-				}
-				// if target is right compared to the current tile
-				else
-				{
-					target.x = tilePos.x * tileSize.x + tileSize.x;
-				}
+				// TODO determine the penetration value
+				penetration = offset.x;
 			}
 		}
 	}
-	// warp collider (centered)
-	//target.x = mod(target.x + _colliderSize.x / 2, gridSize.x * tileSize.x) - _colliderSize.x / 2;
-	target.x = mod(target.x, gridSize.x * tileSize.x);
-	//std::cout << std::endl;
+	// resolve a vertical collision subtracting the penetration value
+	_colliderPos.x -= penetration;
+	// and the warp the collider relating to its center
+	_colliderPos.x = mod(_colliderPos.x + _colliderSize.x / 2, gridSize.x * tileSize.x) - _colliderSize.x / 2;
 	
-	// 2. try to move vertically
-	target.y += offset.y;
+	// then move the collider vertically (avoid jittery movement by rounding) and resolve
+	_colliderPos.y += offset.y;
+	penetration = 0;
 	// do collision resolution for every neighbour (dependend on collider size)
-	for (auto i = 0; i <= std::ceil(_colliderSize.x / tileSize.x); ++i)
+	for (int i = 0; i <= ceilDiv(_colliderSize.x, tileSize.x); ++i)
 	{
-		for (auto j = 0; j <= std::ceil(_colliderSize.y / tileSize.y); ++j)
+		for (int j = 0; j <= ceilDiv(_colliderSize.y, tileSize.y); ++j)
 		{
 			// determine current tile position
-			sf::Vector2i tilePos(i, j);
-			tilePos.x += mod(target.x / tileSize.x, gridSize.x);		// asume integer division
-			tilePos.y += mod(target.y / tileSize.y, gridSize.y);		// asume integer division
-			// resolve collision if there is one
-			if (map->isSolid(tilePos))
+			sf::Vector2i tileCoord;
+			tileCoord.x = mod(i + floorDiv(_colliderPos.x, tileSize.x), gridSize.x);
+			tileCoord.y = mod(j + floorDiv(_colliderPos.y, tileSize.y), gridSize.y);
+			// detect collision if there is one and the collider intersects with the tile
+			if (map->isSolid(tileCoord) && (i + _colliderPos.x / tileSize.x) * tileSize.x - _colliderPos.x  < _colliderSize.x && (j + _colliderPos.y / tileSize.y) * tileSize.y - _colliderPos.y  < _colliderSize.y)
 			{
-				// if target is top compared to the current tile
-				if (target.y < tilePos.y * tileSize.y)
-				{
-					target.y = tilePos.y * tileSize.y - _colliderSize.y;
-				}
-				// if target is bottom compared to the current tile
-				else
-				{
-					target.y = tilePos.y * tileSize.y + tileSize.y;
-				}
+				
+				// TODO determine the penetration value
+				penetration = offset.y;
 			}
 		}
 	}
-	// warp collider (centered)
-	//target.y = mod(target.y + _colliderSize.y / 2, gridSize.y * tileSize.y) - _colliderSize.y / 2;
-	target.y = mod(target.y, gridSize.y * tileSize.y);
+	// resolve a vertical collision subtracting the penetration value
+	_colliderPos.y -= penetration;
+	// and the warp the collider relating to its center
+	_colliderPos.y = mod(_colliderPos.y + _colliderSize.y / 2, gridSize.y * tileSize.y) - _colliderSize.y / 2;
 	
-	// TODO add oneself on the new position to the grid data
+	
 	
 	// move the shape
-	_colliderPos = target;
-	_shape.setPosition(target.x, target.y);
+	_shape.setPosition(_colliderPos.x, _colliderPos.y - 32);
 	
 	// update animation steps and push movement data to allow doggie following the hero
 	int dir = (moveDir.x < 0) ? 3 : (moveDir.x > 0) ? 2 : (moveDir.y < 0) ? 1 : (moveDir.y > 0) ? 0 : -1;
