@@ -7,9 +7,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
 
-// TODO make time changeable
+// TODO make time changeable -> Timeout (Timebuff -> apply for every clock?)
+// TODO include text
 Editor::Editor():
 	Scene({mapWidth + 2 * lateralOffset, mapHeight + lateralOffset}),
 	actionItemTexture(gb::textureManager.getTexture("./img/items.png", false)),
@@ -181,6 +181,15 @@ Editor::Editor():
 	standardHelpText = "Draw/Place Item: Left Click, Pen Size: Scroll, Fill Area: Middle Click, Box: Shift, Load: l, Save: s, Exit: ESC, Toggle Help: h";
 	infoText.setString(standardHelpText);
 	
+	// button	
+	int xPosButton = lateralOffset + mapWidth + tileOffset/2;
+	int yPosButton = mapHeight - tileOffset*3;
+	textB.setPos(xPosButton, yPosButton);
+	textB.setSize(2*tileSize, tileSize);
+	textB.setCaption("Text");
+	timeB.setPos(xPosButton, yPosButton+tileOffset*1.5);
+	timeB.setSize(2*tileSize, tileSize);
+	timeB.setCaption("Time");
 	
 	// create drag tile
 	mouseTile.setOutlineColor(sf::Color::Blue);
@@ -314,6 +323,33 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					activeItemIndex = -1;
 					activeColorIndex = getY(window);
 					tileChoices[activeColorIndex]->setOutlineColor(sf::Color::Red);
+				}
+				// if button is clicked
+				if (textB.isClicked(mousePos.x, mousePos.y))
+				{
+					if (!textB.isHighlighted())
+					{
+						infoText.setString("Please choose an item for which to apply a text.");
+						textB.highlight();
+					}
+					else
+					{
+						infoText.setString(standardHelpText);
+						textB.unhighlight();
+					}
+				}
+				if (timeB.isClicked(mousePos.x, mousePos.y))
+				{
+					if (!timeB.isHighlighted())
+					{
+						infoText.setString("Please choose a timeout in seconds using left and right keys.");
+						timeB.highlight();
+					}
+					else
+					{
+						infoText.setString(standardHelpText);
+						timeB.unhighlight();
+					}
 				}
 			}
 			
@@ -883,6 +919,9 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 	{
 		target.draw(*itemChoices[y]);
 	}
+	// draw Button
+	textB.draw(target);
+	timeB.draw(target);
 	// draw text
 	target.draw(textOutput);
 	target.draw(infoText);
