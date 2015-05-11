@@ -15,7 +15,8 @@ public:
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	const float velocity;
 private:
-	sf::FloatRect _collider;
+	sf::Vector2i _colliderPos;
+	sf::Vector2i _colliderSize;
 	float _animationStep;
 	int _direction;
 	sf::RectangleShape _shape;

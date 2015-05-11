@@ -12,7 +12,7 @@ public:
 	void switchRange(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Vector2u& size, const sf::Time& duration);
 	void update(const sf::Time& deltaT);
 	void draw(sf::RenderTarget& target);
-	bool isSolid(sf::Vector2u pos)
+	bool isSolid(sf::Vector2i pos)
 	{
 		return _solid[pos.x + pos.y * gridSize.x];
 	}
