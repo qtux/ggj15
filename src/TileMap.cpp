@@ -70,8 +70,8 @@ void TileMap::switchTile(const sf::Vector2u& first, const sf::Vector2u& second, 
 		second
 	);
 	
-	// swap collision data and uv coordinates TODO remove comment
-	//std::swap(_solid[firstIndex], _solid[secondIndex]);
+	// swap collision data and uv coordinates
+	std::swap(_solid[firstIndex], _solid[secondIndex]);
 	std::swap(firstQuad[0].texCoords, secondQuad[0].texCoords);
 	std::swap(firstQuad[1].texCoords, secondQuad[1].texCoords);
 	std::swap(firstQuad[2].texCoords, secondQuad[2].texCoords);
