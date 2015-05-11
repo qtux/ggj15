@@ -956,7 +956,7 @@ void Editor::draw(sf::RenderTarget& target, bool focus)
 		target.draw(*itemChoices[y]);
 	}
 	// draw Button
-	textB.draw(target);
+	//textB.draw(target);
 	timeB.draw(target);
 	// draw text
 	target.draw(textOutput);
