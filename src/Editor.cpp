@@ -202,6 +202,9 @@ Editor::Editor():
 	activeColorIndex = 0;
 	activeItemIndex = -1;
 	tileChoices[0]->setOutlineColor(sf::Color::Red);
+	// set default timeout
+	timeout = 20;
+	timebuff = 0;
 	// initialize other variables
 	pensize = 1;
 	mousePressed = false;
@@ -325,6 +328,7 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 					tileChoices[activeColorIndex]->setOutlineColor(sf::Color::Red);
 				}
 				// if button is clicked
+				// set text button
 				if (textB.isClicked(mousePos.x, mousePos.y))
 				{
 					if (!textB.isHighlighted())
@@ -338,17 +342,23 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 						textB.unhighlight();
 					}
 				}
+				// set time button
 				if (timeB.isClicked(mousePos.x, mousePos.y))
 				{
+					static int timeoutNow;
 					if (!timeB.isHighlighted())
 					{
-						infoText.setString("Please choose a timeout in seconds using left and right keys.");
+						textOutput.setString(std::to_string(timeout));
+						infoText.setString("Please choose a timeout in seconds using left and right keys and hit enter.");
 						timeB.highlight();
+						timeoutNow = timeout;
 					}
 					else
 					{
+						textOutput.setString("Timeout unchanged (" + std::to_string(timeoutNow) + " seconds)");
 						infoText.setString(standardHelpText);
 						timeB.unhighlight();
+						timeout = timeoutNow;
 					}
 				}
 			}
@@ -747,28 +757,54 @@ Scene* Editor::processEvent(sf::Event event, sf::RenderWindow& window)
 	// load level on enter
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return)
 	{
-		if (loadLevelActive)
+		if (loadLevelActive && !timeB.isHighlighted())
 		{
 			loadLevel(currentLevel);
 			loadLevelActive = false;
 			textOutput.setString("");
 			infoText.setString(standardHelpText);
 		}
+		if (!loadLevelActive && timeB.isHighlighted())
+		{
+			textOutput.setString("Timeout set to " + std::to_string(timeout) + " seconds");
+			infoText.setString(standardHelpText);
+			timeB.unhighlight();
+		}
 	}
 	
-	// select level
+	// select level and timeout
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
 	{
-		if (loadLevelActive)
+		// choose level
+		if (loadLevelActive && !timeB.isHighlighted())
 		{
 			currentLevel = levels[nextPos(currentLevel, levels.size(), false)];
+		}
+		// choose timeout
+		if (!loadLevelActive && timeB.isHighlighted())
+		{
+			// cap for 10 seconds
+			if (timeout > 10) {
+				timeout -= 10;
+			}
+			textOutput.setString(std::to_string(timeout));
 		}
 	}
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
 	{
-		if (loadLevelActive)
+		// choose level
+		if (loadLevelActive && !timeB.isHighlighted())
 		{
 			currentLevel = levels[nextPos(currentLevel, levels.size(), true)];
+		}
+		// choose timeout
+		if (!loadLevelActive && timeB.isHighlighted())
+		{
+			// cap for 500 seconds
+			if (timeout < 500) {
+				timeout += 10;
+			}
+			textOutput.setString(std::to_string(timeout));
 		}
 	}
 	
@@ -1052,6 +1088,10 @@ void Editor::saveLevel(bool overwrite)
 	std::ofstream txtfile(streamTXT.str());
 	if (txtfile.is_open())
 	{
+		txtfile << "Timeout " << timeout << "\n";
+		if (timebuff > 0) {
+			txtfile << "Timebuff " << timebuff << "\n";
+		}
 		for (int x = 0; x < numTilesX; ++x)
 		{
 			for (int y = 0; y < numTilesY; ++y)
@@ -1114,6 +1154,16 @@ void Editor::saveLevel(bool overwrite)
 				{
 					txtfile << "NPC " << x << " " << y << "\n";
 				}
+			}
+		}
+		// write text
+		for (auto& element : texts)
+		{
+			while (!element.second.empty())
+			{
+				txtfile << "Text " << element.first << " " << std::get<0>(element.second.front()) << " " << std::get<1>(element.second.front()) << " " << std::get<2>(element.second.front()) << " " << std::get<3>(element.second.front()) << "\n" << std::get<4>(element.second.front()) << "\n";
+				std::cout << element.first << std::endl;
+				element.second.pop();
 			}
 		}
 	}
@@ -1267,6 +1317,28 @@ void Editor::loadLevel(int level)
 					setTexture(x, y, tileItemRects[id.at(DECO4)]);
 				}
 			}
+		}
+		if (first == "Timeout")
+		{
+			iss >> timeout;
+		}
+		if (first == "Timebuff")
+		{
+			iss >> timebuff;
+		}
+		if (first == "Text")
+		{
+			std::string key = "";
+			int bold;
+			int r;
+			int g;
+			int b;
+			std::string text = "";
+			iss >> key >> bold >> r >> g >> b;
+			std::getline(infile, line);
+			text = line;
+			texts[key].emplace(std::tuple<int, int, int, int, std::string>(bold, r, g, b, text));
+			//event: key, coin, loose, end, start, smalltime
 		}
 	}
 }

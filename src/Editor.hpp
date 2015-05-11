@@ -1,8 +1,9 @@
 #pragma once
 #include <map>
 #include <stack>
-#include "Scene.hpp"
+#include <queue>
 #include <string>
+#include "Scene.hpp"
 
 class Editor: public Scene
 {
@@ -187,6 +188,13 @@ private:
 	const std::map<ActionItemType, int> id;
 	// big item IntRects
 	std::map<int, std::pair<sf::IntRect, sf::IntRect>> bigItemRects;
+	// timeout value
+	int timeout;
+	// mysterious timebuff variable (not used, just for load and save to prevent deleting it from levels)
+	int timebuff;
+	// list of all texts
+	std::map<std::string, std::queue<std::tuple<int, int, int, int, std::string>>> texts;
+	
 	// mark area (e.g. for trigger)
 	void markArea(int xPos, int yPos, sf::Color color, int quadrantSize);
 	// reset map when triggers were activated
