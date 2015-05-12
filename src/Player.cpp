@@ -45,6 +45,7 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 	auto mod = [] (int a, int b) {return (a < 0) ? a % b + b : a % b;};
 	auto ceilDiv = [] (int a, int b) {return (a % b) ? a / b + 1 : a / b;};
 	auto floorDiv = [] (int a, int b) {return (a - ((a < 0) ? b - 1 : 0)) / b;};
+	auto signum = [] (int a) {return (0 < a) - (a < 0);};
 	// determine grid and tile size TODO move elsewhere?
 	sf::Vector2i gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
 	sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
@@ -53,9 +54,9 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 	sf::Vector2i offset;
 	offset.x = std::round(moveDir.x * velocity * deltaTime.asSeconds());
 	offset.y = std::round(moveDir.y * velocity * deltaTime.asSeconds());
+	assert(offset.x < tileSize.x && offset.y < tileSize.y);
 	
 	// first move the collider horizontally (avoid jittery movement by rounding) and resolve
-	assert(offset.x < tileSize.x && offset.y < tileSize.y);
 	_colliderPos.x += offset.x;
 	int penetration = 0;
 	// do collision resolution for every neighbour (dependend on collider size)
@@ -63,16 +64,20 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 	{
 		for (int j = 0; j <= ceilDiv(_colliderSize.y, tileSize.y); ++j)
 		{
-			// determine current tile position
+			// determine rects to be tested for intersection
+			sf::IntRect tile((i + floorDiv(_colliderPos.x, tileSize.x)) * tileSize.x, (j + floorDiv(_colliderPos.y, tileSize.y)) * tileSize.y, tileSize.x, tileSize.y);
+			sf::IntRect collider(_colliderPos, _colliderSize);
+			sf::IntRect intersection;
+			// determine current warped tile coordinates
 			sf::Vector2i tileCoord;
 			tileCoord.x = mod(i + floorDiv(_colliderPos.x, tileSize.x), gridSize.x);
 			tileCoord.y = mod(j + floorDiv(_colliderPos.y, tileSize.y), gridSize.y);
 			// detect collision if there is one and the collider intersects with the tile
-			if (map->isSolid(tileCoord) && (i + _colliderPos.x / tileSize.x) * tileSize.x - _colliderPos.x  < _colliderSize.x && (j + _colliderPos.y / tileSize.y) * tileSize.y - _colliderPos.y  < _colliderSize.y)
+			if (map->isSolid(tileCoord) && collider.intersects(tile, intersection))
 			{
-				// TODO determine the penetration value
-				penetration = offset.x;
+				penetration = intersection.width * signum(tile.left - collider.left);
 			}
+			//std::cout << "collider: " << collider.left << "|" << collider.top << " tile: " << tile.left << "|" << tile.top << " (solid: " << map->isSolid(tileCoord) << " intersection: " << collider.intersects(tile) << " and: " << (collider.intersects(tile) && map->isSolid(tileCoord)) << ")" << std::endl;
 		}
 	}
 	// resolve a vertical collision subtracting the penetration value
@@ -88,17 +93,20 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 	{
 		for (int j = 0; j <= ceilDiv(_colliderSize.y, tileSize.y); ++j)
 		{
-			// determine current tile position
+			// determine rects to be tested for intersection
+			sf::IntRect tile((i + floorDiv(_colliderPos.x, tileSize.x)) * tileSize.x, (j + floorDiv(_colliderPos.y, tileSize.y)) * tileSize.y, tileSize.x, tileSize.y);
+			sf::IntRect collider(_colliderPos, _colliderSize);
+			sf::IntRect intersection;
+			// determine current warped tile coordinates
 			sf::Vector2i tileCoord;
 			tileCoord.x = mod(i + floorDiv(_colliderPos.x, tileSize.x), gridSize.x);
 			tileCoord.y = mod(j + floorDiv(_colliderPos.y, tileSize.y), gridSize.y);
 			// detect collision if there is one and the collider intersects with the tile
-			if (map->isSolid(tileCoord) && (i + _colliderPos.x / tileSize.x) * tileSize.x - _colliderPos.x  < _colliderSize.x && (j + _colliderPos.y / tileSize.y) * tileSize.y - _colliderPos.y  < _colliderSize.y)
+			if (map->isSolid(tileCoord) && collider.intersects(tile, intersection))
 			{
-				
-				// TODO determine the penetration value
-				penetration = offset.y;
+				penetration = intersection.height * signum(tile.top - collider.top);
 			}
+			//std::cout << "collider: " << collider.left << "|" << collider.top << " tile: " << tileCoord.x << "|" << tileCoord.y << " (solid: " << map->isSolid(tileCoord) << " intersection: " << collider.intersects(tile) << " and: " << (collider.intersects(tile) && map->isSolid(tileCoord)) << ")" << std::endl;
 		}
 	}
 	// resolve a vertical collision subtracting the penetration value
@@ -116,7 +124,7 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 	if (dir > -1)
 	{
 		_animationStep += 8 * deltaTime.asSeconds();
-		//_positionQueue.push(nextPos);	// TODO reenable me using offset instead of positions
+		_positionQueue.push(_shape.getPosition());
 		_directionQueue.push(_direction);
 		_direction = dir;
 	}
