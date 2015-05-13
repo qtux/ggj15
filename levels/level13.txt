@@ -1,0 +1,25 @@
+TriggerItem 1 1 24 0 12 17
+Item TimeItem 1 12
+TriggerItem 1 22 24 8 12 9
+Item DecorationItem 5 13 1 16 96 16 16
+Item DecorationItem 7 19 1 16 112 16 16
+Item DecorationItem 8 3 1 16 96 16 16
+Item CoinItem 10 11
+Item DecorationItem 10 19 1 16 96 16 16
+NPC 12 8
+NPC 12 14
+DoorSwitch 14 7
+Item DoorItem 15 8 0
+Portal 15 10
+Item DoorItem 15 14 0
+Item CoinItem 15 16
+Item TimeItem 16 16
+NPC 19 8
+NPC 19 14
+Item CoinItem 21 11
+Item DecorationItem 24 2 1 16 96 16 16
+Item DecorationItem 25 17 1 16 96 16 16
+Item DecorationItem 26 13 1 16 112 16 16
+Start 27 10
+TriggerItem 28 1 22 0 3 17
+TriggerItem 28 22 22 8 3 9

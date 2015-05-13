@@ -10,6 +10,7 @@
 #include <math.h>
 #include "Menu.hpp"
 #include "Items/KeyItem.hpp"
+#include "Items/DoorItem.hpp"
 #include "Highscore.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
@@ -21,8 +22,11 @@
 #include "ItemFactory.hpp"
 #include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
 
+
 // shader
 #include <iostream>
+//#include "NPC.hpp"
+
 
 Level::Level(unsigned int levelNumber):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
@@ -150,6 +154,22 @@ void Level::reset()
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
 		}
+		/*if (first == "NPC")
+		{ //TODO vorläufige Version, sollte verschönert werden
+			//std::string second;
+			//iss >> second;
+			int x,y;
+			iss >> x;
+			iss >> y;
+
+			NPC * tmpNPC = new NPC(this);
+			sf::Sprite *npcSprite = new sf::Sprite();
+			npcSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/npc.png", false));
+			tmpNPC->mySprite = npcSprite;
+			tmpNPC->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			//std::cout<<"NPC loaded"<<std::endl;
+			npcs.push_back(tmpNPC);
+		}*/
 		if (first == "Item")
 		{
 			std::string second;
@@ -174,6 +194,15 @@ void Level::reset()
 			{
 				tmpItem = tmpFactory.getItem(second);
 			}
+			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			items[Key(x, y)] = tmpItem;
+		}
+		
+		if (first == "DoorSwitch")
+		{
+			unsigned int x,y;
+			iss >> x >> y;
+			Item *tmpItem = tmpFactory.getItem(first, false, -1, -1, -1, -1, false);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
 		}
@@ -303,6 +332,11 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		// (normalize the movement) moveVector /= hypot(moveVector.x, moveVector.y);
 		// apply movement to the player
 		
+		// update npcs
+		/*for (auto& obj : npcs)
+		{
+			obj->update(deltaT);
+		}*/
 		
 		// check if the player activated an item while moving on it
 		for (auto& kv: items)
@@ -311,6 +345,7 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 			const sf::Vector2f tileSize(gb::pixelSizeX, gb::pixelSizeY);
 			if (player->intersects(tilePos, tileSize))
 			{
+				// make applyEffect return nothing (void)
 				if (kv.second->applyEffect(*this))
 				{
 					// portal reached
@@ -349,6 +384,10 @@ void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 	{
 		kv.second->draw(renderTarget, nullptr);
 	}
+	/*for (auto& obj: npcs) {
+		obj->draw(renderTarget, nullptr);
+	}*/
+	
 	player->draw(renderTarget, nullptr);
 	gui->draw(renderTarget);
 	textBox->draw(renderTarget);
@@ -385,4 +424,15 @@ void Level::leave()
 void Level::switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second)
 {
 	map->switchRange(first, second, {gb::largeTileSizeX, gb::largeTileSizeY}, sf::seconds(0.5f));
+}
+
+void Level::toggleDoors()
+{
+	for(auto& kv: items)
+	{
+		if (dynamic_cast<DoorItem*>(kv.second))
+		{
+			dynamic_cast<DoorItem*>(kv.second)->toggle();
+		}
+	}
 }

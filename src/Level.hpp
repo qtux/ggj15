@@ -17,6 +17,7 @@ class Item;
 #include "GUI.hpp"
 class Player;
 class TileMap;
+//#include "NPC.hpp"
 
 class Level: public Scene {
 public:
@@ -27,6 +28,7 @@ public:
 	void reset();
 	bool readyToLeave() const;
 	void leave();
+	void toggleDoors();
 	Scene* processEvent(sf::Event event, sf::RenderWindow& window) override final;
 	Scene* update(sf::Time deltaT, sf::RenderWindow& window) override final;
 	void draw(sf::RenderTarget& target, bool focus) override final;
@@ -35,6 +37,7 @@ public:
 	// move to private
 	GUI* gui;
 	TextBox* textBox;
+	//std::vector<NPC*> npcs;
 private:
 	sf::Uint32 createColorKey(sf::Color color);
 	sf::Vector2f getTarget(const sf::Vector2f& start, const sf::Vector2f& offset);
