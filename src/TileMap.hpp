@@ -1,23 +1,44 @@
 #pragma once
 
 #include <vector>
+#include <set>
 #include <forward_list>
 #include <SFML/Graphics.hpp>
+class Entity;
 
 class TileMap
 {
 public:
+	const sf::Vector2u tileSize;			// pixels x pixels
+	const sf::Vector2u gridSize;			// tiles x tiles
 	TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Texture& texture, std::vector<bool> solid);
 	void switchTile(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Time& duration);
 	void switchRange(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Vector2u& size, const sf::Time& duration);
 	void update(const sf::Time& deltaT);
 	void draw(sf::RenderTarget& target);
-	bool isSolid(sf::Vector2i pos)
+	bool isSolid(sf::Vector2i pos) const
 	{
 		return _solid[pos.x + pos.y * gridSize.x];
 	}
-	const sf::Vector2u tileSize;			// pixels x pixels
-	const sf::Vector2u gridSize;			// tiles x tiles
+	void add(Entity* entity, const sf::Vector2i& pos)
+	{
+		_entities[pos.x + pos.y * gridSize.x].insert(entity);
+	}
+	void remove(Entity* entity, const sf::Vector2i& pos)
+	{
+		_entities[pos.x + pos.y * gridSize.x].erase(entity);
+	}
+	void removeAll(Entity* entity)
+	{
+		for (auto& tile: _entities)
+		{
+			tile.erase(entity);
+		}
+	}
+	const std::set<Entity*>& getEntities(const sf::Vector2i& pos) const
+	{
+		return _entities[pos.x + pos.y * gridSize.x];
+	}
 private:
 	struct TileAnimation
 	{
@@ -84,6 +105,6 @@ private:
 	sf::VertexArray _vertices;
 	const sf::Texture& _texture;
 	std::vector<bool> _solid;
+	std::vector<std::set<Entity*>> _entities;
 	std::forward_list<TileAnimation> _movingTiles;
-	
 };

@@ -72,6 +72,31 @@ void Player::move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vec
 			sf::Vector2i tileCoord;
 			tileCoord.x = mod(i + floorDiv(_colliderPos.x, tileSize.x), gridSize.x);
 			tileCoord.y = mod(j + floorDiv(_colliderPos.y, tileSize.y), gridSize.y);
+			// TODO get collision information at tileCoord
+			// TODO define width
+			/*auto& coll = colliderGrid[tileCoord.x + tileCoord.y * width]
+			if (coll.first)
+			{
+				coll.second.erase(this);	// O(m * log(n)) if using a set, O(m * n) if using forward list
+				// do collision check as before
+			}
+			else
+			{
+				for (auto& entity: coll.second)
+				{
+					if (entity == this)
+					{
+						// erase this --> O(m)
+					}
+					else
+					{
+						// check for collision --> collider of entites intersecting and do resolution
+					}
+				}
+			}*/
+			// TODO get new tileCoords and insert this (up to m times) --> O(m * log(n)) with set, O(m) with forward_list
+			
+			
 			// detect collision if there is one and the collider intersects with the tile
 			if (map->isSolid(tileCoord) && collider.intersects(tile, intersection))
 			{
