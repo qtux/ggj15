@@ -339,10 +339,11 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		}*/
 		
 		// check if the player activated an item while moving on it
+		// TODO get items situated on the same place as the player and iterate only over them
 		for (auto& kv: items)
 		{
-			const sf::Vector2u tilePos(kv.first.x, kv.first.y);
-			const sf::Vector2f tileSize(gb::pixelSizeX, gb::pixelSizeY);
+			const sf::Vector2i tilePos(kv.first.x, kv.first.y);
+			const sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
 			if (player->intersects(tilePos, tileSize))
 			{
 				// make applyEffect return nothing (void)

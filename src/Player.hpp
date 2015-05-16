@@ -2,21 +2,18 @@
 
 #include <queue>
 #include <SFML/Graphics.hpp>
+#include "Entity.hpp"
 
 class TileMap;
 
-class Player
+class Player: public Entity
 {
 public:
 	Player(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vector2f& doggieSize);
-	bool intersects(const sf::Vector2u& tilePosition, const sf::Vector2f& tileSize);
-	void move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vector2f& sceneSize, TileMap* map);
+	void move(sf::Time deltaTime, const sf::Vector2f& moveDir, const sf::Vector2f& sceneSize, TileMap* map);	// TODO override final?
 	void update(sf::Time deltaTime);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
-	const float velocity;
 private:
-	sf::Vector2i _colliderPos;
-	sf::Vector2i _colliderSize;
 	float _animationStep;
 	int _direction;
 	sf::RectangleShape _shape;
