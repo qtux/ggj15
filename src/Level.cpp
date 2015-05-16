@@ -305,7 +305,7 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 	// update game logic while in GAME state
 	if (_state == GAME && !textBox->enabled())
 	{
-		// determine the movement vector based on input
+		// determine the movement vector based on input and move the player appropriately
 		sf::Vector2f moveDir(0, 0);
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
@@ -323,14 +323,6 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 			moveDir.y += 1;
 		}
 		player->move(deltaT, moveDir, sceneSize, map);
-		//moveDir *= 240.0f * deltaT.asSeconds();
-		//player->move(deltaT, target - sf::Vector2f(0, 32), sceneSize);
-		// get neighbouring collision data
-		// move collider (apply moving beyond level border) and check for collision with tilemap
-		// TODO implement collision with items --> Box2D?
-		// set collider to be at the right position
-		// (normalize the movement) moveVector /= hypot(moveVector.x, moveVector.y);
-		// apply movement to the player
 		
 		// update npcs
 		/*for (auto& obj : npcs)
