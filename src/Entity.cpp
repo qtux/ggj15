@@ -15,6 +15,16 @@ bool Entity::intersects(const sf::Vector2i& tilePosition, const sf::Vector2i& ti
 	return _collider.intersects(tileRect);
 }
 
+bool Entity::intersects(const Entity& other, sf::IntRect& intersection)
+{
+	return _collider.intersects(other._collider, intersection);
+}
+
+bool Entity::intersects(const Entity& other)
+{
+	return _collider.intersects(other._collider);
+}
+
 // TODO use integer positions everywhere (do not use unsigned integer)
 // TODO add a grid of collision/gameobject data (replace map)
 // TODO add a method to move more than one tile wide
