@@ -24,6 +24,15 @@ Item::~Item()
 {
 }
 
+const sf::Vector2f& Item::getPosition() const
+{
+	return mySprite->getPosition();
+}
+
+void Item::setPosition(float x, float y)
+{
+	mySprite->setPosition(x, y);
+}
 
 void Item::update (sf::Time deltaTime) {
 //	if (mySprite != 0)
