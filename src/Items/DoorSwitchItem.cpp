@@ -13,11 +13,10 @@ DoorSwitchItem::DoorSwitchItem(sf::Sprite* sprite, bool toggled):
 }
 
 // TODO make applyEffect always only once!
-bool DoorSwitchItem::applyEffect(Level& level)
+void DoorSwitchItem::applyEffect(Level& level)
 {
 	toggled = !toggled;
 	level.toggleDoors();
-	return false;
 }
 
 

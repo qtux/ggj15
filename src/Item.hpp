@@ -10,7 +10,7 @@ public:
 	virtual ~Item(){}
 	virtual void update(sf::Time deltaTime);
 	virtual void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
-	virtual bool applyEffect(Level& level);
+	virtual void applyEffect(Level& level) {}
 	const sf::Vector2f& getPosition() const;
 	void setPosition(float x, float y);
 	sf::Sprite * mySprite;

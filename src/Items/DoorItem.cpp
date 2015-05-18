@@ -28,10 +28,6 @@ DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed):
 	}
 }
 
-bool DoorItem::applyEffect(Level& level) {
-	return false;
-}
-
 void DoorItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 {
 	if (mySprite != 0)

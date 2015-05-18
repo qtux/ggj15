@@ -12,7 +12,7 @@ private:
 	sf::IntRect doorSwitchRightTextureRect;
 public:
 	DoorSwitchItem(sf::Sprite* sprite, bool toggled = false);
-	virtual bool applyEffect(Level& level);
+	void applyEffect(Level& level);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	virtual void update(sf::Time deltaTime);
 };

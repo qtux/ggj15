@@ -36,9 +36,3 @@ void Item::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 		renderTarget.draw(*mySprite, renderShader);
 	}
 }
-
-bool Item::applyEffect(Level& level)
-{
-	return false;
-}
-

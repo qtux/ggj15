@@ -8,5 +8,5 @@ class KeyItem : public Item
 {
 public:
 	KeyItem(sf::Sprite* sprite);
-	bool applyEffect(Level& level);
+	void applyEffect(Level& level);
 };

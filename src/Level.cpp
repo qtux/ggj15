@@ -338,12 +338,7 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 			const sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
 			if (player->intersects(tilePos, tileSize))
 			{
-				// make applyEffect return nothing (void)
-				if (kv.second->applyEffect(*this))
-				{
-					// portal reached
-					return this;
-				}
+				kv.second->applyEffect(*this);
 				if (kv.second->collectable)
 				{
 					items.erase(kv.first);

@@ -8,5 +8,5 @@ class TimeItem : public Item
 {
 public:
 	TimeItem(sf::Sprite* sprite);
-	bool applyEffect(Level& level);
+	void applyEffect(Level& level);
 };

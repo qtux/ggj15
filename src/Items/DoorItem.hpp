@@ -19,7 +19,6 @@ private:
 	sf::IntRect closedDoorTextureRect;
 public:
 	DoorItem(sf::Sprite* sprite, bool vertical_, bool closed = true);
-	virtual bool applyEffect(Level& level);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	virtual void update(sf::Time deltaTime);
 	void toggle();

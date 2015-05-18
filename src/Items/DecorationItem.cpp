@@ -9,11 +9,6 @@ DecorationItem::DecorationItem(sf::Sprite* sprite, bool blocksPath_, int texPosX
 	collectable = false;
 }
 
-bool DecorationItem::applyEffect(Level& level)
-{
-	return false;
-}
-
 void DecorationItem::update (sf::Time deltaTime) {}
 
 void DecorationItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
