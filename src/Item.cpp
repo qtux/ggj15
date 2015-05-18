@@ -4,14 +4,13 @@
 #include "Level.hpp"
 
 Item::Item(sf::Sprite* sprite,int x,int y,int w,int h):
+	mySprite(sprite),
 	collectable(true),
-	blocksPath(false)
+	blocksPath(false),
+	offset(rand()),
+	waveClock(sf::Clock())
 {
-	mySprite = sprite;
 	sprite->setScale(2,2);	// hack to allow 32x32 pixel per tile TODO replace sprites with rectangle and set size to pixelSize
-	waveClock = sf::Clock();
-	waveClock.restart();
-	offset = rand();
 	mySprite->setTextureRect(sf::IntRect(x, y, w, h));
 }
 

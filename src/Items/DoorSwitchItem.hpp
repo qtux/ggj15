@@ -8,8 +8,8 @@ class DoorSwitchItem: public Item
 {
 private:
 	bool toggled;
-	sf::IntRect doorSwitchLeftTexture;
-	sf::IntRect doorSwitchRightTexture;
+	sf::IntRect doorSwitchLeftTextureRect;
+	sf::IntRect doorSwitchRightTextureRect;
 public:
 	DoorSwitchItem(sf::Sprite* sprite, bool toggled = false);
 	virtual bool applyEffect(Level& level);

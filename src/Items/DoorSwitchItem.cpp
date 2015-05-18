@@ -6,18 +6,10 @@ DoorSwitchItem::DoorSwitchItem(sf::Sprite* sprite, bool toggled):
 	Item(sprite, 0, 0, 0, 0),
 	toggled(toggled)
 {
-	this->blocksPath = false;
-	this->collectable = false;
-	
-	doorSwitchLeftTexture.height = 16;
-	doorSwitchLeftTexture.width = 16;
-	doorSwitchLeftTexture.left = 2*16;
-	doorSwitchLeftTexture.top = 3*16;
-
-	doorSwitchRightTexture.height = 16;
-	doorSwitchRightTexture.width = 16;
-	doorSwitchRightTexture.left = 3*16;
-	doorSwitchRightTexture.top = 3*16;
+	blocksPath = false;
+	collectable = false;
+	doorSwitchLeftTextureRect = sf::IntRect(2*16, 3*16, 16, 16);
+	doorSwitchRightTextureRect = sf::IntRect(3*16, 3*16, 16, 16);
 }
 
 // TODO make applyEffect always only once!
@@ -43,11 +35,11 @@ void DoorSwitchItem::update(sf::Time deltaTime)
 	{
 		if (toggled)
 		{
-			mySprite->setTextureRect(doorSwitchRightTexture);
+			mySprite->setTextureRect(doorSwitchRightTextureRect);
 		}
 		else
 		{
-			mySprite->setTextureRect(doorSwitchLeftTexture);
+			mySprite->setTextureRect(doorSwitchLeftTextureRect);
 		}
 	}
 }

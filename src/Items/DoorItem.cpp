@@ -14,31 +14,17 @@ DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed):
 	wasClosed(closed),
 	vertical(vertical_)
 {
-	this->blocksPath = closed;
-	this->collectable = false;
+	blocksPath = closed;
+	collectable = false;
 	if (vertical)
 	{
-		openDoorTexture.height = 32;
-		openDoorTexture.width = 16;
-		openDoorTexture.left = 48;
-		openDoorTexture.top = 64;
-
-		closedDoorTexture.height = 32;
-		closedDoorTexture.width = 16;
-		closedDoorTexture.left = 32;
-		closedDoorTexture.top = 64;
+		openDoorTextureRect = sf::IntRect(48, 64, 16, 32);
+		closedDoorTextureRect = sf::IntRect(32, 64, 16, 32);
 	}
 	else
 	{
-		openDoorTexture.height = 16;
-		openDoorTexture.width = 32;
-		openDoorTexture.left = 32;
-		openDoorTexture.top = 96;
-
-		closedDoorTexture.height = 16;
-		closedDoorTexture.width = 32;
-		closedDoorTexture.left = 32;
-		closedDoorTexture.top = 112;
+		openDoorTextureRect = sf::IntRect(32, 96, 32, 16);
+		closedDoorTextureRect = sf::IntRect(32, 112, 32, 16);
 	}
 }
 
@@ -61,12 +47,12 @@ void DoorItem::update(sf::Time deltaTime) {
 	{
 		if (blocksPath)
 		{
-			mySprite->setTextureRect(closedDoorTexture);
+			mySprite->setTextureRect(closedDoorTextureRect);
 			wasClosed = true;
 		}
 		else
 		{
-			mySprite->setTextureRect(openDoorTexture);
+			mySprite->setTextureRect(openDoorTextureRect);
 			if (wasClosed) gb::soundManager.playSound("sound/door.ogg");
 			wasClosed = false;
 		}

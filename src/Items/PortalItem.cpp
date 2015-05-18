@@ -4,12 +4,11 @@
 #include "../Level.hpp"
 
 PortalItem::PortalItem(sf::Sprite* sprite):
-	Item(sprite,0,0,16,32)
+	Item(sprite,0,0,16,32),
+	animClock(sf::Clock()),
+	neverAgain(false)
 {
-	neverAgain=false;
 	collectable = false;
-	animClock = sf::Clock();
-	animClock.restart();
 }
 
 bool PortalItem::applyEffect(Level& level)

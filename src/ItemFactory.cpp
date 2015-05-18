@@ -44,11 +44,6 @@ Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int t
 	{
 		return new KeyItem(sprite);
 	}
-
-	/*if (name == "TriggerItem")
-	{
-		return new TriggerItem(sprite);
-	}*/
 	if (name == "PortalItem")
 	{
 		return new PortalItem(sprite);

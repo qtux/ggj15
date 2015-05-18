@@ -15,8 +15,8 @@ class DoorItem: public Item {
 private:
 	bool wasClosed;
 	bool vertical;
-	sf::IntRect openDoorTexture;
-	sf::IntRect closedDoorTexture;
+	sf::IntRect openDoorTextureRect;
+	sf::IntRect closedDoorTextureRect;
 public:
 	DoorItem(sf::Sprite* sprite, bool vertical_, bool closed = true);
 	virtual bool applyEffect(Level& level);
