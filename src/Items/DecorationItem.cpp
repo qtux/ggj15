@@ -10,8 +10,7 @@ DecorationItem::DecorationItem(sf::Sprite* sprite, bool blocksPath_, int texPosX
 bool DecorationItem::applyEffect(Level& level)
 {
 	return false;
-};
-
+}
 
 void DecorationItem::update (sf::Time deltaTime) {
 	if (mySprite != nullptr)
@@ -21,7 +20,7 @@ void DecorationItem::update (sf::Time deltaTime) {
 		//setPosition(vec.x,vec.y+(std::sin((waveClock.getElapsedTime().asSeconds() * 1000 +offset)/300)+0)*0.05);
 		
 	}
-};
+}
 
 void DecorationItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 {

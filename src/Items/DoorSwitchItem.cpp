@@ -3,7 +3,7 @@
 #include "../Level.hpp"
 
 DoorSwitchItem::DoorSwitchItem(sf::Sprite* sprite, bool toggled):
-	Item(sprite),
+	Item(sprite, 0, 0, 0, 0),
 	toggled(toggled)
 {
 	this->blocksPath = false;
@@ -18,11 +18,6 @@ DoorSwitchItem::DoorSwitchItem(sf::Sprite* sprite, bool toggled):
 	doorSwitchRightTexture.width = 16;
 	doorSwitchRightTexture.left = 3*16;
 	doorSwitchRightTexture.top = 3*16;
-}
-
-DoorSwitchItem::~DoorSwitchItem()
-{
-	
 }
 
 // TODO make applyEffect always only once!

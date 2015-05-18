@@ -3,13 +3,13 @@
 #include <cmath>
 #include "../Level.hpp"
 
-PortalItem::PortalItem(sf::Sprite* sprite):Item(sprite,0,0,16,32) {
+PortalItem::PortalItem(sf::Sprite* sprite):
+	Item(sprite,0,0,16,32)
+{
 	neverAgain=false;
 	collectable = false;
 	animClock = sf::Clock();
 	animClock.restart();
-}
-PortalItem::~PortalItem(){
 }
 
 bool PortalItem::applyEffect(Level& level)
@@ -22,7 +22,7 @@ bool PortalItem::applyEffect(Level& level)
 		return true;
 	}
 	return false;
-};
+}
 
 void PortalItem::update (sf::Time deltaTime)
 {
@@ -31,7 +31,7 @@ void PortalItem::update (sf::Time deltaTime)
 		int index = (1+std::sin(animClock.getElapsedTime().asSeconds() * 3.14)*2);
 		mySprite->setTextureRect(sf::IntRect(16*index,0,16,32));
 	}
-};
+}
 
 void PortalItem::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
 {

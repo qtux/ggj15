@@ -2,8 +2,9 @@
 #include "TriggerItem.hpp"
 #include "../Level.hpp"
 
-TriggerItem::TriggerItem(sf::Sprite* sprite):Item(sprite,0,6*16,16,16){
-}
+TriggerItem::TriggerItem(sf::Sprite* sprite):
+	Item(sprite,0,6*16,16,16)
+{}
 
 bool TriggerItem::applyEffect(Level& level)
 {
@@ -11,7 +12,7 @@ bool TriggerItem::applyEffect(Level& level)
 	level.switchLargeTile(switchPos1, switchPos2);
 	level.textBox->triggerText("trigger");
 	return false;
-};
+}
 
 void TriggerItem::setSwitchPos(int x1, int y1, int x2, int y2)
 {

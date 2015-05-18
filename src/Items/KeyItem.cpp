@@ -2,8 +2,9 @@
 #include "KeyItem.hpp"
 #include "../Level.hpp"
 
-KeyItem::KeyItem(sf::Sprite* sprite):Item(sprite,0,32,16,16){
-}
+KeyItem::KeyItem(sf::Sprite* sprite):
+	Item(sprite,0,32,16,16)
+{}
 
 bool KeyItem::applyEffect(Level& level)
 {
@@ -11,4 +12,4 @@ bool KeyItem::applyEffect(Level& level)
 	level.gui->addKeys(1);
 	level.textBox->triggerText("key");
 	return false;
-};
+}

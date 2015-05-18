@@ -2,8 +2,9 @@
 #include "CoinItem.hpp"
 #include "../Level.hpp"
 
-CoinItem::CoinItem(sf::Sprite* sprite):Item(sprite,0,80,16,16){
-}
+CoinItem::CoinItem(sf::Sprite* sprite):
+	Item(sprite,0,80,16,16)
+{}
 
 bool CoinItem::applyEffect(Level& level)
 {
@@ -11,4 +12,4 @@ bool CoinItem::applyEffect(Level& level)
 	level.gui->addCoins(1);
 	level.textBox->triggerText("coin");
 	return false;
-};
+}

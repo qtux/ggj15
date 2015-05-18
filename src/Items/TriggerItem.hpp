@@ -10,6 +10,5 @@ public:
 	TriggerItem(sf::Sprite* sprite);
 	bool applyEffect(Level& level);
 	void setSwitchPos(int x1, int y1, int x2, int y2);
-
 	sf::Vector2u switchPos1, switchPos2;
 };

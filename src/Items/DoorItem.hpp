@@ -5,8 +5,7 @@
  *      Author: johannes
  */
 
-#ifndef DOORITEM_H_
-#define DOORITEM_H_
+#pragma once
 
 #include "../Item.hpp"
 
@@ -20,12 +19,8 @@ private:
 	sf::IntRect closedDoorTexture;
 public:
 	DoorItem(sf::Sprite* sprite, bool vertical_, bool closed = true);
-	virtual ~DoorItem();
-
 	virtual bool applyEffect(Level& level);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	virtual void update(sf::Time deltaTime);
 	void toggle();
 };
-
-#endif /* DOORITEM_H_ */
