@@ -16,10 +16,6 @@ public:
 	sf::Sprite * mySprite;
 	bool collectable;
 	bool blocksPath;
-	int drawX;
-	int drawY;
-	int drawW;
-	int drawH;
 private:
 	float offset;
 	sf::Clock waveClock;

@@ -37,11 +37,7 @@ Item* ItemFactory::getItem(std::string name, bool blocksPath, int texPosX, int t
 	{
 		sprite->setTextureRect(sf::IntRect(0,0,1,1));
 		TriggerItem *tmp = new TriggerItem(sprite);
-		tmp->drawX = 3*16;
-		tmp->drawY = 6*16;
-		tmp->drawW = 16;
-		tmp->drawH = 16;
-		tmp->mySprite->setTextureRect(sf::IntRect(tmp->drawX,tmp->drawY,tmp->drawW,tmp->drawH));
+		tmp->mySprite->setTextureRect(sf::IntRect(3 * 16, 6 * 16, 16, 16));
 		return tmp;
 	}
 	if (name == "KeyItem")
