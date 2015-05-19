@@ -1,7 +1,7 @@
 Timebuff 5
 Timeout 5
 Start 7 14
-Portal 11 9
+Item Portal 11 9
 Item CoinItem 7 7
 Item CoinItem 19 2
 Item CoinItem 29 14
@@ -19,5 +19,5 @@ Item DecorationItem 27 18 1 0 112 16 16     Kristall
 Item DecorationItem 11 13 1 16 112 16 16    Fels
 Item DecorationItem 15 20 0 16 80 16 16     Pilz
 Item DecorationItem 6 22 0 16 80 16 16
-#TriggerItem 21 17 18 0 0 18
-#TriggerItem 28 18 18 0 12 0
+#Item TriggerItem 21 17 18 0 0 18
+#Item TriggerItem 28 18 18 0 12 0

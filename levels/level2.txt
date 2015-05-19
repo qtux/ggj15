@@ -1,5 +1,5 @@
 Start 3 20
-Portal 23 17
+Item Portal 23 17
 Timeout 25
 Item CoinItem 19 12
 Item CoinItem 21 12
@@ -8,7 +8,7 @@ Item KeyItem 5 12
 Item KeyItem 22 3
 #Item DecorationItem 26 3 1 0 112 16 16
 #Item DecorationItem 13 5 1 0 112 16 16
-I#tem DecorationItem 4 14 1 0 112 16 16
+#Item DecorationItem 4 14 1 0 112 16 16
 #Item DecorationItem 16 3 1 16 112 16 16
 #Item DecorationItem 3 22 1 16 112 16 16
-TriggerItem 5 2 12 12 18 0
+Item TriggerItem 5 2 12 12 18 0

@@ -150,16 +150,6 @@ void Level::reset()
 				{static_cast<float>(gb::pixelSizeX), static_cast<float>(gb::pixelSizeY)}
 			);
 		}
-		if (first == "Portal")
-		{
-			unsigned int x,y;
-			iss >> x >> y;
-			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-			Item *tmpItem = new PortalItem(sprite);
-			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items[Key(x, y)] = tmpItem;
-		}
 		/*if (first == "NPC")
 		{ //TODO vorläufige Version, sollte verschönert werden
 			//std::string second;
@@ -211,6 +201,33 @@ void Level::reset()
 			{
 				tmpItem = new KeyItem(sprite);
 			}
+			else if (itemType == "DoorSwitch")
+			{
+				tmpItem = new DoorSwitchItem(sprite, false);
+				items[Key(x, y)] = tmpItem;
+			}
+			else if (itemType == "TriggerItem")
+			{
+				unsigned int x1, x2, y1, y2;
+				iss >> x1 >> y1 >> x2 >> y2;
+				tmpItem = new TriggerItem(sprite);
+				static_cast<TriggerItem*>(tmpItem)->setSwitchPos(x1, y1, x2, y2);
+				items[Key(x, y)] = tmpItem;
+			}
+			else if (itemType == "TriggerTrapItem")
+			{
+				unsigned int x1, x2, y1, y2;
+				iss >> x1 >> y1 >> x2 >> y2;
+				sprite->setTextureRect(sf::IntRect(3 * 16, 6 * 16, 16, 16));
+				tmpItem = new TriggerItem(sprite);
+				static_cast<TriggerItem*>(tmpItem)->setSwitchPos(x1, y1, x2, y2);
+				items[Key(x, y)] = tmpItem;
+			}
+			else if (itemType == "Portal")
+			{
+				tmpItem = new PortalItem(sprite);
+				items[Key(x, y)] = tmpItem;
+			}
 			
 			if (tmpItem != nullptr)
 			{
@@ -218,18 +235,6 @@ void Level::reset()
 				items[Key(x, y)] = tmpItem;
 			}
 		}
-		
-		if (first == "DoorSwitch")
-		{
-			unsigned int x,y;
-			iss >> x >> y;
-			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-			Item *tmpItem = new DoorSwitchItem(sprite, false);
-			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items[Key(x, y)] = tmpItem;
-		}
-		
 		if (first == "Timeout")
 		{
 			int time;
@@ -254,31 +259,6 @@ void Level::reset()
 				element->bold = true;
 			}
 			textBox->appendText(element);
-		}
-		if (first == "TriggerItem")
-		{
-			unsigned int x, y, x1, x2, y1, y2;
-			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
-			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-			//sprite->setPosition(10, gb::gridHeight - 30);
-			TriggerItem *tmpItem = new TriggerItem(sprite);
-			tmpItem->setSwitchPos(x1, y1, x2, y2);
-			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items[Key(x, y)] = tmpItem;
-		}
-		if (first == "TriggerTrapItem")
-		{
-			unsigned int x, y, x1, x2, y1, y2;
-			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
-			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-			//sprite->setPosition(10, gb::gridHeight - 30);
-			sprite->setTextureRect(sf::IntRect(3 * 16, 6 * 16, 16, 16));
-			TriggerItem *tmpItem = new TriggerItem(sprite);
-			tmpItem->setSwitchPos(x1, y1, x2, y2);
-			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items[Key(x, y)] = tmpItem;
 		}
 	}
 	

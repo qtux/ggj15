@@ -1,7 +1,7 @@
 Start 24 3
-Portal 4 17
+Item Portal 4 17
 NPC 4 4
-DoorSwitch 19 4
+Item DoorSwitch 19 4
 Item CoinItem 5 10
 Item KeyItem 10 15
 Item TimeItem 5 15
@@ -11,8 +11,8 @@ Item DecorationItem 7 7 1 16 96 16 16
 Item DecorationItem 18 15 1 16 112 16 16
 Item DecorationItem 13 6 1 16 96 16 16
 Item DecorationItem 26 11 0 16 80 16 16
-TriggerItem 5 5 12 12 12 18
-TriggerItem 7 4 18 12 12 6
+Item TriggerItem 5 5 12 12 12 18
+Item TriggerItem 7 4 18 12 12 6
 Text start 0 210 210 255
 ... (Press SPACE to continue, S to skip)
 Text start 0 210 210 255

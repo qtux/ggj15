@@ -1,15 +1,15 @@
 Start 1 2
-TriggerItem 2 18 20 11 8 0
+Item TriggerItem 2 18 20 11 8 0
 Item CoinItem 6 9
 Item CoinItem 9 1
 Item TimeItem 9 4
 Item DecorationItem 10 12 1 16 96 16 16
 Item DecorationItem 10 22 1 16 80 16 16
-TriggerItem 11 2 6 6 9 18
+Item TriggerItem 11 2 6 6 9 18
 Item CoinItem 12 17
 Item DecorationItem 17 8 0 16 80 16 16
 Item DecorationItem 19 19 1 0 112 16 16
 Item KeyItem 22 4
-Portal 23 14
+Item Portal 23 14
 Item DecorationItem 25 22 1 16 112 16 16
 Item DecorationItem 26 5 1 0 112 16 16

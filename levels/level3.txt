@@ -1,5 +1,5 @@
 Start 4 20
-Portal 24 3
+Item Portal 24 3
 Timeout 8
 Timebuff 3
 #Item TimeItem 4 16

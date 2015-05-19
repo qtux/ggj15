@@ -1102,11 +1102,11 @@ void Editor::saveLevel(bool overwrite)
 				}
 				if (itemTiles[x][y]->getTextureRect() == bigItemRects[id.at(GOAL)].first)
 				{
-					txtfile << "Portal " << x << " " << y << "\n";
+					txtfile << "Item Portal " << x << " " << y << "\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(TRIGGER)])
 				{
-					txtfile << "TriggerItem " << x << " " << y << " " << triggerSwapPositionsX[x].first << " " << triggerSwapPositionsY[y].first << " " << triggerSwapPositionsX[x].second << " " << triggerSwapPositionsY[y].second << "\n";
+					txtfile << "Item TriggerItem " << x << " " << y << " " << triggerSwapPositionsX[x].first << " " << triggerSwapPositionsY[y].first << " " << triggerSwapPositionsX[x].second << " " << triggerSwapPositionsY[y].second << "\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(COIN)])
 				{
@@ -1132,7 +1132,7 @@ void Editor::saveLevel(bool overwrite)
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DOORSWITCH)])
 				{
-					txtfile << "DoorSwitch " << x << " " << y << "\n";
+					txtfile << "Item DoorSwitch " << x << " " << y << "\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO1)])
 				{
@@ -1215,40 +1215,12 @@ void Editor::loadLevel(int level)
 			setTexture(x, y, bigItemRects[id.at(START)].first);
 			setTexture(x, y+1, bigItemRects[id.at(START)].second);
 		}
-		if (first == "Portal")
-		{
-			int x,y;
-			iss >> x;
-			iss >> y;
-			setTexture(x, y, bigItemRects[id.at(GOAL)].first);
-			setTexture(x, y+1, bigItemRects[id.at(GOAL)].second);
-		}
-		if (first == "TriggerItem")
-		{
-			int x, y, x1, x2, y1, y2;
-			iss >> x;
-			iss >> y;
-			iss >> x1;
-			iss >> y1;
-			iss >> x2;
-			iss >> y2;
-			setTexture(x, y, tileItemRects[id.at(TRIGGER)]);
-			triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
-			triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
-		}
 		if (first == "NPC")
 		{
 			int x, y;
 			iss >> x;
 			iss >> y;
 			setTexture(x, y, tileItemRects[id.at(SLIME)]);
-		}
-		if (first == "DoorSwitch")
-		{
-			int x, y;
-			iss >> x;
-			iss >> y;
-			setTexture(x, y, tileItemRects[id.at(DOORSWITCH)]);
 		}
 		if (first == "Item")
 		{
@@ -1316,6 +1288,26 @@ void Editor::loadLevel(int level)
 					decoItemBlocking[Key(x,y)] = blocksPath;
 					setTexture(x, y, tileItemRects[id.at(DECO4)]);
 				}
+			}
+			if (second == "Portal")
+			{
+				setTexture(x, y, bigItemRects[id.at(GOAL)].first);
+				setTexture(x, y+1, bigItemRects[id.at(GOAL)].second);
+			}
+			if (second == "TriggerItem")
+			{
+				int x1, x2, y1, y2;
+				iss >> x1;
+				iss >> y1;
+				iss >> x2;
+				iss >> y2;
+				setTexture(x, y, tileItemRects[id.at(TRIGGER)]);
+				triggerSwapPositionsX[x] = std::pair<int, int>(x1,x2);
+				triggerSwapPositionsY[y] = std::pair<int, int>(y1,y2);
+			}
+			if (second == "DoorSwitch")
+			{
+				setTexture(x, y, tileItemRects[id.at(DOORSWITCH)]);
 			}
 		}
 		if (first == "Timeout")

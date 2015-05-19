@@ -7,12 +7,12 @@ Item CoinItem 5 17
 Item CoinItem 5 20
 Item CoinItem 6 20
 Item CoinItem 7 13
-Portal 8 4
+Item Portal 8 4
 Item DecorationItem 8 20 0 16 80 16 16
 Item DecorationItem 9 19 0 16 80 16 16
 Item DecorationItem 11 20 0 16 80 16 16
 Item DecorationItem 12 11 1 16 112 16 16
-DoorSwitch 14 5
+Item DoorSwitch 14 5
 Item DecorationItem 14 14 0 16 80 16 16
 Item DoorItem 14 16 1
 Item DoorItem 15 19 1
