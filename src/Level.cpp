@@ -156,7 +156,6 @@ void Level::reset()
 			iss >> x >> y;
 			sf::Sprite* sprite = new sf::Sprite();
 			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-			//sprite->setPosition(10, gb::gridHeight - 30);
 			Item *tmpItem = new PortalItem(sprite);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
@@ -179,49 +178,37 @@ void Level::reset()
 		}*/
 		if (first == "Item")
 		{
-			std::string second;
+			std::string itemType;
 			unsigned int x,y;
-			iss >> second >> x >> y;
+			iss >> itemType >> x >> y;
 			Item* tmpItem = nullptr;
-			if (second == "DecorationItem")
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+			
+			if (itemType == "DecorationItem")
 			{
 				bool blocksPath;
 				int texPosX, texPosY, texW, texH;
 				iss >> blocksPath >> texPosX >> texPosY >> texW >> texH;
-				sf::Sprite* sprite = new sf::Sprite();
-				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-				//sprite->setPosition(10, gb::gridHeight - 30);
 				tmpItem = new DecorationItem(sprite, blocksPath, texPosX, texPosY, texW, texH);
 			}
-			else if (second == "DoorItem")
+			else if (itemType == "DoorItem")
 			{
 				bool vertical = false;
 				bool closed = true;
 				iss >> vertical >> closed;
-				sf::Sprite* sprite = new sf::Sprite();
-				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-				//sprite->setPosition(10, gb::gridHeight - 30);
 				tmpItem = new DoorItem(sprite, vertical, true);
 			}
-			else if (second == "TimeItem")
+			else if (itemType == "TimeItem")
 			{
-				sf::Sprite* sprite = new sf::Sprite();
-				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-				//sprite->setPosition(10, gb::gridHeight - 30);
 				tmpItem = new TimeItem(sprite);
 			}
-			else if (second == "CoinItem")
+			else if (itemType == "CoinItem")
 			{
-				sf::Sprite* sprite = new sf::Sprite();
-				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-				//sprite->setPosition(10, gb::gridHeight - 30);
 				tmpItem = new CoinItem(sprite);
 			}
-			else if (second == "KeyItem")
+			else if (itemType == "KeyItem")
 			{
-				sf::Sprite* sprite = new sf::Sprite();
-				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-				//sprite->setPosition(10, gb::gridHeight - 30);
 				tmpItem = new KeyItem(sprite);
 			}
 			
@@ -238,7 +225,6 @@ void Level::reset()
 			iss >> x >> y;
 			sf::Sprite* sprite = new sf::Sprite();
 			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
-			//sprite->setPosition(10, gb::gridHeight - 30);
 			Item *tmpItem = new DoorSwitchItem(sprite, false);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
