@@ -19,9 +19,14 @@
 // parser
 #include <fstream>
 #include <sstream>
-#include "ItemFactory.hpp"
-#include "Items/TriggerItem.hpp"	// --> move to ItemFactory?
-
+#include "Items/TimeItem.hpp"
+#include "Items/CoinItem.hpp"
+#include "Items/TriggerItem.hpp"
+#include "Items/PortalItem.hpp"
+#include "Items/KeyItem.hpp"
+#include "Items/DoorItem.hpp"
+#include "Items/DoorSwitchItem.hpp"
+#include "Items/DecorationItem.hpp"
 
 // shader
 #include <iostream>
@@ -128,7 +133,6 @@ void Level::reset()
 	// read text file
 	std::ifstream infile(fileName + ".txt");
 	std::string line;
-	ItemFactory tmpFactory = ItemFactory();
 	while (std::getline(infile, line))
 	{
 		std::istringstream iss(line);
@@ -150,7 +154,10 @@ void Level::reset()
 		{
 			unsigned int x,y;
 			iss >> x >> y;
-			Item *tmpItem = tmpFactory.getItem("PortalItem");
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+			//sprite->setPosition(10, gb::gridHeight - 30);
+			Item *tmpItem = new PortalItem(sprite);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
 		}
@@ -175,34 +182,64 @@ void Level::reset()
 			std::string second;
 			unsigned int x,y;
 			iss >> second >> x >> y;
-			Item *tmpItem = 0;
+			Item* tmpItem = nullptr;
 			if (second == "DecorationItem")
 			{
 				bool blocksPath;
 				int texPosX, texPosY, texW, texH;
 				iss >> blocksPath >> texPosX >> texPosY >> texW >> texH;
-				tmpItem = tmpFactory.getItem(second, blocksPath, texPosX, texPosY, texW, texH);
+				sf::Sprite* sprite = new sf::Sprite();
+				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+				//sprite->setPosition(10, gb::gridHeight - 30);
+				tmpItem = new DecorationItem(sprite, blocksPath, texPosX, texPosY, texW, texH);
 			}
 			else if (second == "DoorItem")
 			{
 				bool vertical = false;
 				bool closed = true;
 				iss >> vertical >> closed;
-				tmpItem = tmpFactory.getItem(second, closed, -1, -1, -1, -1, vertical);
+				sf::Sprite* sprite = new sf::Sprite();
+				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+				//sprite->setPosition(10, gb::gridHeight - 30);
+				tmpItem = new DoorItem(sprite, vertical, true);
 			}
-			else
+			else if (second == "TimeItem")
 			{
-				tmpItem = tmpFactory.getItem(second);
+				sf::Sprite* sprite = new sf::Sprite();
+				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+				//sprite->setPosition(10, gb::gridHeight - 30);
+				tmpItem = new TimeItem(sprite);
 			}
-			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
-			items[Key(x, y)] = tmpItem;
+			else if (second == "CoinItem")
+			{
+				sf::Sprite* sprite = new sf::Sprite();
+				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+				//sprite->setPosition(10, gb::gridHeight - 30);
+				tmpItem = new CoinItem(sprite);
+			}
+			else if (second == "KeyItem")
+			{
+				sf::Sprite* sprite = new sf::Sprite();
+				sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+				//sprite->setPosition(10, gb::gridHeight - 30);
+				tmpItem = new KeyItem(sprite);
+			}
+			
+			if (tmpItem != nullptr)
+			{
+				tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+				items[Key(x, y)] = tmpItem;
+			}
 		}
 		
 		if (first == "DoorSwitch")
 		{
 			unsigned int x,y;
 			iss >> x >> y;
-			Item *tmpItem = tmpFactory.getItem(first, false, -1, -1, -1, -1, false);
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+			//sprite->setPosition(10, gb::gridHeight - 30);
+			Item *tmpItem = new DoorSwitchItem(sprite, false);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
 		}
@@ -236,7 +273,10 @@ void Level::reset()
 		{
 			unsigned int x, y, x1, x2, y1, y2;
 			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
-			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerItem");
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+			//sprite->setPosition(10, gb::gridHeight - 30);
+			TriggerItem *tmpItem = new TriggerItem(sprite);
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
@@ -245,7 +285,11 @@ void Level::reset()
 		{
 			unsigned int x, y, x1, x2, y1, y2;
 			iss >> x >> y >> x1 >> y1 >> x2 >> y2;
-			TriggerItem *tmpItem = (TriggerItem*) tmpFactory.getItem("TriggerTrapItem");
+			sf::Sprite* sprite = new sf::Sprite();
+			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+			//sprite->setPosition(10, gb::gridHeight - 30);
+			sprite->setTextureRect(sf::IntRect(3 * 16, 6 * 16, 16, 16));
+			TriggerItem *tmpItem = new TriggerItem(sprite);
 			tmpItem->setSwitchPos(x1, y1, x2, y2);
 			tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			items[Key(x, y)] = tmpItem;
