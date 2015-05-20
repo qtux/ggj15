@@ -7,10 +7,7 @@
 
 #include "Level.hpp"
 #include "global.hpp"
-#include <math.h>
 #include "Menu.hpp"
-#include "Items/KeyItem.hpp"
-#include "Items/DoorItem.hpp"
 #include "Highscore.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
@@ -31,7 +28,6 @@
 // shader
 #include <iostream>
 //#include "NPC.hpp"
-
 
 Level::Level(unsigned int levelNumber):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
@@ -56,62 +52,56 @@ Level::Level(unsigned int levelNumber):
 }
 
 sf::Uint32 Level::createColorKey(sf::Color color) {
-	
 	sf::Uint32 colorKey = 0;
-	
 	colorKey |= color.r << 3*8;
 	colorKey |= color.g << 2*8;
 	colorKey |= color.b << 1*8;
 	colorKey |= color.a << 0*8;
-	
 	return colorKey;
 }
 
-void Level::reset()
+bool Level::colorToSolid(sf::Uint32 color)
 {
-	restarts++;
-	_state = GAME;
-	
-	// TODO implement reset of the level (new init) --> contains a bug that adds items to the list everytime the level will be restarted
-	textBox = new TextBox();
-	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
-	
-	// load and set timebar
-	gui = new GUI(this);
-	gui->setTimeout(20);
+	switch (color)
+	{
+		case 0x000100ff: return true;	// wall
+		case 0x5f5f5fff: return false;	// wet stone
+		case 0x9b6d27ff: return false;	// dirt
+		case 0x969896ff: return false;	// stone
+		case 0x11941bff: return false;	// grass
+		case 0x003E04ff: return true;	// trees
+		case 0x0000abff: return true;	// water
+		default: return true;			// water
+	}
+}
+
+int Level::colorToInt(sf::Uint32 color)
+{
+	switch (color)
+	{
+		case 0x000100ff: return 6;	// wall
+		case 0x5f5f5fff: return 4;	// wet stone
+		case 0x9b6d27ff: return 3;	// dirt
+		case 0x969896ff: return 2;	// stone
+		case 0x11941bff: return 1;	// grass
+		case 0x003E04ff: return 5;	// trees
+		case 0x0000abff: return 0;	// water
+		default: return 0;			// water
+	}
+}
+
+bool Level::parseLevel(std::string fileName)
+{
 	// load image bitmapt file
 	sf::Image levelImg;
-	
-	// try to load the file
-	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(levelNumber);
-	if (!levelImg.loadFromFile(fileName+".png")) {
+	if (!levelImg.loadFromFile(fileName + ".png")) {
 		// TODO return to menu here
-		return;
+		return false;
 	}
 	
 	// create a tileset
-	std::map<sf::Uint32, bool> colorToSolid;
-	colorToSolid[0x000100ff] = true;	// wall
-	colorToSolid[0x5f5f5fff] = false;	// wet stone
-	colorToSolid[0x9b6d27ff] = false;	// dirt
-	colorToSolid[0x969896ff] = false;	// stone
-	colorToSolid[0x11941bff] = false;	// grass
-	colorToSolid[0x003E04ff] = true;	// trees
-	colorToSolid[0x0000abff] = true;	// water
-	
-	std::map<sf::Uint32, unsigned int> colorToInt;
-	colorToInt[0x000100ff] = 6;	// wall
-	colorToInt[0x5f5f5fff] = 4;	// wet stone
-	colorToInt[0x9b6d27ff] = 3;	// dirt
-	colorToInt[0x969896ff] = 2;	// stone
-	colorToInt[0x11941bff] = 1;	// grass
-	colorToInt[0x003E04ff] = 5;	// trees
-	colorToInt[0x0000abff] = 0;	// water
-	
 	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
-	// TODO determine the following two variables in another way
 	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
-	const sf::Vector2f scale(0.5f, 0.5f);
 	
 	std::vector<unsigned int> mapping;
 	std::vector<bool> collision;
@@ -120,8 +110,8 @@ void Level::reset()
 		for (int y = 0; y < gridSize.x; ++y)
 		{
 			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
-			mapping.push_back(colorToInt[colorKey]);
-			collision.push_back(colorToSolid[colorKey]);
+			mapping.push_back(colorToInt(colorKey));
+			collision.push_back(colorToSolid(colorKey));
 		}
 	}
 	
@@ -204,29 +194,23 @@ void Level::reset()
 			else if (itemType == "DoorSwitch")
 			{
 				tmpItem = new DoorSwitchItem(sprite, false);
-				items[Key(x, y)] = tmpItem;
 			}
 			else if (itemType == "TriggerItem")
 			{
 				unsigned int x1, x2, y1, y2;
 				iss >> x1 >> y1 >> x2 >> y2;
-				tmpItem = new TriggerItem(sprite);
-				static_cast<TriggerItem*>(tmpItem)->setSwitchPos(x1, y1, x2, y2);
-				items[Key(x, y)] = tmpItem;
+				tmpItem = new TriggerItem(sprite, {x1, y1}, {x2, y2});
 			}
 			else if (itemType == "TriggerTrapItem")
 			{
 				unsigned int x1, x2, y1, y2;
 				iss >> x1 >> y1 >> x2 >> y2;
 				sprite->setTextureRect(sf::IntRect(3 * 16, 6 * 16, 16, 16));
-				tmpItem = new TriggerItem(sprite);
-				static_cast<TriggerItem*>(tmpItem)->setSwitchPos(x1, y1, x2, y2);
-				items[Key(x, y)] = tmpItem;
+				tmpItem = new TriggerItem(sprite, {x1, y1}, {x2, y2});
 			}
 			else if (itemType == "Portal")
 			{
 				tmpItem = new PortalItem(sprite);
-				items[Key(x, y)] = tmpItem;
 			}
 			
 			if (tmpItem != nullptr)
@@ -260,6 +244,27 @@ void Level::reset()
 			}
 			textBox->appendText(element);
 		}
+	}
+	return true;
+}
+
+void Level::reset()
+{
+	restarts++;
+	_state = GAME;
+	
+	textBox = new TextBox();
+	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+	
+	// load and set timebar
+	gui = new GUI(this);
+	gui->setTimeout(20);
+	
+	// try to load the file
+	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(levelNumber);
+	if (!parseLevel(fileName))
+	{
+		// TODO return to menu
 	}
 	
 	// trigger text
