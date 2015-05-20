@@ -11,9 +11,9 @@ Player::Player(const sf::Vector2f& pos, const sf::Vector2f& size, const sf::Vect
 	_shape(size),
 	_doggieShape(doggieSize)
 {
-	_shape.setTexture(&gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	_shape.setTexture(&gb::ressourceManager.getTexture(std::string(PATH) + "img/player.png", false));
 	_shape.setPosition(pos);
-	_doggieShape.setTexture(&gb::textureManager.getTexture(std::string(PATH) + "img/player.png", false));
+	_doggieShape.setTexture(&gb::ressourceManager.getTexture(std::string(PATH) + "img/player.png", false));
 	_doggieShape.setPosition(pos);
 }
 

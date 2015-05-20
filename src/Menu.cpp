@@ -44,7 +44,7 @@ Menu::Menu(Menu::Command initialCmd):
 		}
 		rotate(true);
 	}
-	//background.setTexture(gb::textureManager.getTexture("./img/background.png", true));
+	//background.setTexture(gb::ressourceManager.getTexture("./img/background.png", true));
 	overlay.setFillColor(sf::Color(0, 0, 0, 200));
 }
 

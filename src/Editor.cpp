@@ -12,7 +12,7 @@
 // TODO include text
 Editor::Editor():
 	Scene({mapWidth + 2 * lateralOffset, mapHeight + lateralOffset}),
-	actionItemTexture(gb::textureManager.getTexture("./img/items.png", false)),
+	actionItemTexture(gb::ressourceManager.getTexture("./img/items.png", false)),
 	id ({
 	// ---- normal items
 	{NOITEM, 0},

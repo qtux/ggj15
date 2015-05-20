@@ -6,15 +6,15 @@ GUI::GUI(Level* level):
 	level(level)
 {
 	timeSprite = new sf::Sprite();
-	timeSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/timeBar.png" , true));
+	timeSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/timeBar.png" , true));
 	timeSprite->setPosition(10, gb::gridHeight-20);
 
 	coinSprite = new sf::Sprite();
-	coinSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+	coinSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
 	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
 
 	keySprite = new sf::Sprite();
-	keySprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+	keySprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
 	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
 
 	timeoutClock = sf::Clock();

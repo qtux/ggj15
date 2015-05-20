@@ -4,7 +4,7 @@
 #include <bitset>
 #include <string>
 #include "SoundManager.hpp"
-#include "TextureManager.hpp"
+#include "RessourceManager.hpp"
 
 #define PATH "./"
 #define INPUT_SIZE 6
@@ -36,5 +36,5 @@ namespace gb {
 	
 	// manager
 	extern SoundManager soundManager;
-	extern TextureManager textureManager;
+	extern RessourceManager ressourceManager;
 }

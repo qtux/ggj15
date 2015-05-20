@@ -4,7 +4,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-class TextureManager
+class RessourceManager
 {
 public:
 	const sf::Texture& getTexture(std::string fileName, bool repeat, bool smooth = false);

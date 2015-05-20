@@ -40,7 +40,7 @@ Level::Level(unsigned int levelNumber):
 	_outline.setOutlineThickness(2.0f);
 	_outline.setPosition(0, 0);
 	_outline.setSize(sceneSize);
-	background.setTexture(&gb::textureManager.getTexture("img/background.png", true));
+	background.setTexture(&gb::ressourceManager.getTexture("img/background.png", true));
 	
 	reset();
 	// load only the fragment shader
@@ -115,9 +115,9 @@ bool Level::parseLevel(std::string fileName)
 		}
 	}
 	
-	const sf::Texture& baseTileSet = gb::textureManager.getTexture(std::string(PATH) + "img/tileset.png", false);
+	const sf::Texture& baseTileSet = gb::ressourceManager.getTexture(std::string(PATH) + "img/tileset.png", false);
 	sf::Vector2f offset(-6, -6);
-	const sf::Texture& tileSet = gb::textureManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
+	const sf::Texture& tileSet = gb::ressourceManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
 	map = new TileMap(tileSize, {gb::largeTileSizeX * gb::sizeX, gb::largeTileSizeY * gb::sizeY}, tileSet, collision);
 	
 	// read text file
@@ -150,7 +150,7 @@ bool Level::parseLevel(std::string fileName)
 
 			NPC * tmpNPC = new NPC(this);
 			sf::Sprite *npcSprite = new sf::Sprite();
-			npcSprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/npc.png", false));
+			npcSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/npc.png", false));
 			tmpNPC->mySprite = npcSprite;
 			tmpNPC->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			//std::cout<<"NPC loaded"<<std::endl;
@@ -163,7 +163,7 @@ bool Level::parseLevel(std::string fileName)
 			iss >> itemType >> x >> y;
 			Item* tmpItem = nullptr;
 			sf::Sprite* sprite = new sf::Sprite();
-			sprite->setTexture(gb::textureManager.getTexture(std::string(PATH) + "img/items.png", false));
+			sprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
 			
 			if (itemType == "DecorationItem")
 			{

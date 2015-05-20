@@ -5,7 +5,7 @@
 Credits::Credits():
 	Scene({800, 600})
 {
-	background.setTexture(&gb::textureManager.getTexture("./img/credits.png", true));
+	background.setTexture(&gb::ressourceManager.getTexture("./img/credits.png", true));
 	font.loadFromFile("fonts/LiberationSerif-Regular.ttf");
 	speech.setFont(font);
 	speech.setColor(sf::Color(0x00, 0x00, 0x00));
