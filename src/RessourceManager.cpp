@@ -1,6 +1,17 @@
 #include "RessourceManager.hpp"
 #include <algorithm>
 
+const sf::Font& RessourceManager::getFont(std::string fileName)
+{
+	auto search = _fonts.find(fileName);
+	if (search == _fonts.end())
+	{
+		_fonts.emplace(fileName, sf::Font());
+		_fonts[fileName].loadFromFile(fileName);
+	}
+	return _fonts[fileName];
+}
+
 const sf::Texture& RessourceManager::getTexture(std::string fileName, bool repeat, bool smooth)
 {
 	Key key = Key(fileName, repeat, smooth);

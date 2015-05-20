@@ -33,6 +33,5 @@ private:
 	float buffFactor;
 	int keys;
 	Level* level;
-	sf::Font font;
 	sf::Text levelNumber;
 };

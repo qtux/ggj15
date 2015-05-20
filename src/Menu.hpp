@@ -14,7 +14,7 @@ public:
 	const std::map<Command, std::string> cmdMap;
 	struct Entry
 	{
-		Entry(std::string name, sf::Font& font, sf::Color color, unsigned int charSize, sf::Vector2f center, float angle, float radius, Command cmd):
+		Entry(std::string name, const sf::Font& font, sf::Color color, unsigned int charSize, sf::Vector2f center, float angle, float radius, Command cmd):
 			center(center),
 			rotAngle(0),
 			angle(angle),
@@ -63,7 +63,6 @@ public:
 private:
 	unsigned int nextPos(unsigned int pos, unsigned int size, bool clockWise);
 	void rotate(bool clockWise);
-	sf::Font _font;
 	std::vector<Entry> _entries;
 	unsigned int _currentEntry;
 	std::vector<unsigned int> _levels;

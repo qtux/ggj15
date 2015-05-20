@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 #include "Scene.hpp"
+#include "global.hpp"
 
 class Editor: public Scene
 {
@@ -33,11 +34,9 @@ private:
 		float width;
 		float height;
 		std::string caption;
-		sf::Font font;
 		Button():
 			x(0), y(0), width(0), height(0), caption("")
 		{
-			font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
 			buttonOutside.setOutlineColor(sf::Color(90, 90, 90));
 			buttonOutside.setOutlineThickness(2.0f);
 			buttonOutside.setFillColor(sf::Color(122, 122, 122));
@@ -47,7 +46,7 @@ private:
 			buttonInside.setOutlineThickness(1.0f);
 			buttonInside.setPosition(x + 0.3, y + 0.3);
 			buttonInside.setSize(sf::Vector2f(0, 0));
-			buttonText.setFont(font);
+			buttonText.setFont(gb::ressourceManager.getFont("./fonts/LiberationSerif-Regular.ttf"));
 			buttonText.setColor(sf::Color::Black);
 			buttonText.setCharacterSize(26);
 			buttonText.setPosition(x + 2, y);
@@ -173,7 +172,6 @@ private:
 	// deco item blocking map
 	std::map<Key, int> decoItemBlocking;
 	// text
-	sf::Font font;
 	sf::Text textOutput;
 	sf::Text infoText;
 	std::string standardHelpText;

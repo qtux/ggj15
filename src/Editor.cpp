@@ -165,16 +165,13 @@ Editor::Editor():
 	std::sort(levels.begin(), levels.end());
 	std::unique(levels.begin(), levels.end());
 	
-	
-	// load font
-	font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
 	// initialize text
-	textOutput.setFont(font);
+	textOutput.setFont(gb::ressourceManager.getFont("./fonts/LiberationSerif-Regular.ttf"));
 	textOutput.setColor(sf::Color::Black);
 	textOutput.setCharacterSize(32);
 	textOutput.setPosition(mapWidth/2, mapHeight + 5); // x = Lateraloffset?
 	textOutput.setString("");
-	infoText.setFont(font);
+	infoText.setFont(gb::ressourceManager.getFont("./fonts/LiberationSerif-Regular.ttf"));
 	infoText.setColor(sf::Color::Black);
 	infoText.setCharacterSize(21);
 	infoText.setPosition(lateralOffset/4, mapHeight + 45);

@@ -6,8 +6,7 @@ TextBox::TextBox():
 {
 	int charSize = gb::pixelSizeY;
 	sf::Vector2f textPos(32.0f, 32.0f);
-	_font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
-	_speech.setFont(_font);
+	_speech.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
 	_speech.setCharacterSize(charSize);
 	_speech.setPosition(textPos);
 	_textRect.setOutlineColor(sf::Color::White);

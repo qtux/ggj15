@@ -6,8 +6,7 @@ Credits::Credits():
 	Scene({800, 600})
 {
 	background.setTexture(&gb::ressourceManager.getTexture("./img/credits.png", true));
-	font.loadFromFile("fonts/LiberationSerif-Regular.ttf");
-	speech.setFont(font);
+	speech.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
 	speech.setColor(sf::Color(0x00, 0x00, 0x00));
 	speech.setCharacterSize(16);
 	speech.setPosition(sf::Vector2f(16, 16));

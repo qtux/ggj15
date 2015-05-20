@@ -27,7 +27,6 @@ private:
 	std::vector<TextElement*> elements;
 	std::string currentEvent;
 	TextElement* currentElement;
-	sf::Font _font;
 	sf::Text _speech;
 	sf::RectangleShape _textRect;
 };

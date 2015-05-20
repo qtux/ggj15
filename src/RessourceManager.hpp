@@ -7,6 +7,7 @@
 class RessourceManager
 {
 public:
+	const sf::Font& getFont(std::string fileName);
 	const sf::Texture& getTexture(std::string fileName, bool repeat, bool smooth = false);
 	const sf::Texture& getTileSet(const sf::Texture& baseTileSet, const std::vector<unsigned int>& mapping, const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Vector2f& offset, bool smooth = false);
 private:
@@ -26,6 +27,7 @@ private:
 		}
 	};
 	std::map<Key, sf::Texture> _textures;
+	std::map<std::string, sf::Font> _fonts;
 	sf::RenderTexture renderTex;
 };
 

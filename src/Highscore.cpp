@@ -6,7 +6,6 @@
 Highscore::Highscore(unsigned int levelNumber, const sf::Vector2f& size):
 	levelNumber(levelNumber)
 {
-	_font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
 	_textRectOne.setOutlineColor(sf::Color::White);
 	_textRectOne.setOutlineThickness(2);
 	_textRectOne.setPosition(30, 30);
@@ -20,7 +19,7 @@ Highscore::Highscore(unsigned int levelNumber, const sf::Vector2f& size):
 	_textRectTwo.setFillColor(sf::Color(0, 0, 250, 50));
 	
 	int charSize = 32;
-	_speech.setFont(_font);
+	_speech.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
 	_speech.setColor(sf::Color(255,255,255));
 	_speech.setCharacterSize(charSize);
 	_speech.setStyle(sf::Text::Bold);

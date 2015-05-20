@@ -26,13 +26,12 @@ Menu::Menu(Menu::Command initialCmd):
 	// TODO use a set instead of a vector to keep track of all levels
 	
 	// create entries
-	_font.loadFromFile("./fonts/LiberationSerif-Regular.ttf");
 	sf::Vector2f center(sceneSize / 2.0f);
 	float radius = sceneSize.x / 4.0f;
 	float angle = M_PI;
 	for (auto& kv: cmdMap)
 	{
-		_entries.push_back(Entry(kv.second, _font, sf::Color(0x00, 0x00, 0x00), 32, center, angle, radius, kv.first));
+		_entries.push_back(Entry(kv.second, gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"), sf::Color(0x00, 0x00, 0x00), 32, center, angle, radius, kv.first));
 		angle += 2.0f * M_PI / cmdMap.size();
 	}
 	// set first entry on top

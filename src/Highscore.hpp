@@ -21,7 +21,6 @@ public:
 	void load();
 	const unsigned int levelNumber;
 private:
-	sf::Font _font;
 	sf::RectangleShape _textRectOne;
 	sf::RectangleShape _textRectTwo;
 	sf::Text _speech;

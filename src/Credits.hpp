@@ -11,5 +11,4 @@ public:
 	void draw(sf::RenderTarget& target, bool focus) override final;
 private:
 	sf::Text speech;
-	sf::Font font;
 };

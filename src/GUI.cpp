@@ -29,8 +29,7 @@ GUI::GUI(Level* level):
 	buffFactor = 20;
 	
 	// level number
-	font.loadFromFile(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf");
-	levelNumber.setFont(font);
+	levelNumber.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
 	levelNumber.setPosition(gb::gridWidth + 2, gb::gridHeight - 32);
 	levelNumber.setString(std::to_string(level->levelNumber));
 }
