@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cmath>
 
 class Menu: public Scene
 {
@@ -32,7 +33,7 @@ public:
 		}
 		void update(float percentage)
 		{
-			if (fabs(rotAngle) < 0.005f)
+			if (std::fabs(rotAngle) < 0.005f)
 			{
 				angle += rotAngle;
 				rotAngle = 0.0f;
@@ -44,7 +45,7 @@ public:
 			}
 			
 			sf::Vector2f textSize(text.getLocalBounds().width, text.getLocalBounds().height);
-			sf::Vector2f dir(sin(angle), cos(angle));
+			sf::Vector2f dir(std::sin(angle), std::cos(angle));
 			sf::Vector2f pos = center + dir * radius - textSize / 2.0f;
 			text.setPosition(pos);
 		}

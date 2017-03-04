@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <vector>
 #include <set>
 #include <forward_list>
@@ -94,7 +95,7 @@ private:
 	private:
 		float getLength(const sf::Vector2f& vec)
 		{
-			return hypot(vec.x, vec.y);
+			return std::hypot(vec.x, vec.y);
 		}
 		const sf::Vector2f _startPos;
 		const sf::Vector2f _targetPos;
