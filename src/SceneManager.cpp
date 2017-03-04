@@ -49,13 +49,16 @@ void SceneManager::update()
 		}
 	}
 	
-	// reset clock and determine elapsed time since last frame
-	sf::Time deltaT = _clock.restart();
-	
 	// call update once on current scene
 	if (_focus)
-	{	
-		_nextScene = _currentScene->update(deltaT, _window);
+	{
+		// determine elapsed time since last frame
+		if (_clock.getElapsedTime() > sf::seconds(1.0f / 60.0f))
+		{
+			// reset clock if more than a 1/60 seconds have passed
+			sf::Time deltaT = _clock.restart();
+			_nextScene = _currentScene->update(deltaT, _window);
+		}
 		// immediately set currentScene to _nextScene if it is different from the _nextScene
 		if (_currentScene != _nextScene)
 		{
