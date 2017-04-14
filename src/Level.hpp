@@ -39,9 +39,6 @@ public:
 	TextBox* textBox;
 	//std::vector<NPC*> npcs;
 private:
-	sf::Uint32 createColorKey(sf::Color color);
-	bool colorToSolid(sf::Uint32 color);
-	int colorToInt(sf::Uint32 color);
 	bool parseLevel(std::string fileName);
 	enum State {GAME, LEAVING, HIGHSCORE};
 	State _state;

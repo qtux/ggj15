@@ -1,13 +1,68 @@
 #include "TileMap.hpp"
 #include "global.hpp"
 
-TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Texture& texture, std::vector<bool> solid):
+bool colorToSolid(sf::Uint32 color)
+{
+	switch (color)
+	{
+		case 0x000100ff: return true;	// wall
+		case 0x5f5f5fff: return false;	// wet stone
+		case 0x9b6d27ff: return false;	// dirt
+		case 0x969896ff: return false;	// stone
+		case 0x11941bff: return false;	// grass
+		case 0x003E04ff: return true;	// trees
+		case 0x0000abff: return true;	// water
+		default: return true;			// water
+	}
+}
+
+int colorToInt(sf::Uint32 color)
+{
+	switch (color)
+	{
+		case 0x000100ff: return 6;	// wall
+		case 0x5f5f5fff: return 4;	// wet stone
+		case 0x9b6d27ff: return 3;	// dirt
+		case 0x969896ff: return 2;	// stone
+		case 0x11941bff: return 1;	// grass
+		case 0x003E04ff: return 5;	// trees
+		case 0x0000abff: return 0;	// water
+		default: return 0;			// water
+	}
+}
+
+TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const std::string fileName):
 	tileSize(tileSize),
 	gridSize(gridSize),
-	_vertices(sf::VertexArray(sf::Quads, gridSize.x * gridSize.y * 4)),
-	_texture(texture),
-	_solid(std::move(solid))
+	_vertices(sf::VertexArray(sf::Quads, gridSize.x * gridSize.y * 4))
 {
+	// try to load the image bitmap file
+	sf::Image levelImg;
+	if (!levelImg.loadFromFile(fileName + ".png")) {
+		levelImg.create(gridSize.y, gridSize.x);
+	}
+	
+	// define the _solid and _texture vectors
+	std::vector<unsigned int> mapping;
+	for (int x = 0; x < gridSize.y; ++x)
+	{
+		for (int y = 0; y < gridSize.x; ++y)
+		{
+			sf::Color color = levelImg.getPixel(y, x);
+			sf::Uint32 colorKey = 0;
+			colorKey |= color.r << 3*8;
+			colorKey |= color.g << 2*8;
+			colorKey |= color.b << 1*8;
+			colorKey |= color.a << 0*8;
+			mapping.push_back(colorToInt(colorKey));
+			_solid.push_back(colorToSolid(colorKey));
+		}
+	}
+	const sf::Texture& baseTileSet = gb::ressourceManager.getTexture(std::string(PATH) + "img/tileset.png", false);
+	sf::Vector2f offset(-6, -6);
+	_texture = &gb::ressourceManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
+	
+	// create quadfs for every tile
 	for (auto i = 0; i < gridSize.x; ++i)
 	{
 		for (auto j = 0; j < gridSize.y; ++j)
@@ -40,7 +95,7 @@ void TileMap::switchTile(const sf::Vector2u& first, const sf::Vector2u& second, 
 	// smoothly interchange tiles: create two TileAnimation and add it to the list of animations
 	_movingTiles.emplace_front(
 		new sf::Sprite(
-			_texture,
+			*_texture,
 			sf::IntRect(
 				firstQuad[0].texCoords.x,
 				firstQuad[0].texCoords.y,
@@ -56,7 +111,7 @@ void TileMap::switchTile(const sf::Vector2u& first, const sf::Vector2u& second, 
 	
 	_movingTiles.emplace_front(
 		new sf::Sprite(
-			_texture,
+			*_texture,
 			sf::IntRect(
 				secondQuad[0].texCoords.x,
 				secondQuad[0].texCoords.y,
@@ -125,7 +180,7 @@ void TileMap::update(const sf::Time& deltaT)
 
 void TileMap::draw(sf::RenderTarget& target)
 {
-	target.draw(_vertices, &_texture);
+	target.draw(_vertices, _texture);
 	for (auto& ani: _movingTiles)
 	{
 		target.draw(*ani.sprite);

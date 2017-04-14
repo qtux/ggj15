@@ -51,74 +51,11 @@ Level::Level(unsigned int levelNumber):
 	}
 }
 
-sf::Uint32 Level::createColorKey(sf::Color color) {
-	sf::Uint32 colorKey = 0;
-	colorKey |= color.r << 3*8;
-	colorKey |= color.g << 2*8;
-	colorKey |= color.b << 1*8;
-	colorKey |= color.a << 0*8;
-	return colorKey;
-}
-
-bool Level::colorToSolid(sf::Uint32 color)
-{
-	switch (color)
-	{
-		case 0x000100ff: return true;	// wall
-		case 0x5f5f5fff: return false;	// wet stone
-		case 0x9b6d27ff: return false;	// dirt
-		case 0x969896ff: return false;	// stone
-		case 0x11941bff: return false;	// grass
-		case 0x003E04ff: return true;	// trees
-		case 0x0000abff: return true;	// water
-		default: return true;			// water
-	}
-}
-
-int Level::colorToInt(sf::Uint32 color)
-{
-	switch (color)
-	{
-		case 0x000100ff: return 6;	// wall
-		case 0x5f5f5fff: return 4;	// wet stone
-		case 0x9b6d27ff: return 3;	// dirt
-		case 0x969896ff: return 2;	// stone
-		case 0x11941bff: return 1;	// grass
-		case 0x003E04ff: return 5;	// trees
-		case 0x0000abff: return 0;	// water
-		default: return 0;			// water
-	}
-}
-
 bool Level::parseLevel(std::string fileName)
 {
-	// load image bitmapt file
-	sf::Image levelImg;
-	if (!levelImg.loadFromFile(fileName + ".png")) {
-		// TODO return to menu here
-		return false;
-	}
-	
-	// create a tileset
 	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
 	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
-	
-	std::vector<unsigned int> mapping;
-	std::vector<bool> collision;
-	for (int x = 0; x < gridSize.y; ++x)
-	{
-		for (int y = 0; y < gridSize.x; ++y)
-		{
-			sf::Uint32 colorKey = createColorKey(levelImg.getPixel(y, x));
-			mapping.push_back(colorToInt(colorKey));
-			collision.push_back(colorToSolid(colorKey));
-		}
-	}
-	
-	const sf::Texture& baseTileSet = gb::ressourceManager.getTexture(std::string(PATH) + "img/tileset.png", false);
-	sf::Vector2f offset(-6, -6);
-	const sf::Texture& tileSet = gb::ressourceManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
-	map = new TileMap(tileSize, {gb::largeTileSizeX * gb::sizeX, gb::largeTileSizeY * gb::sizeY}, tileSet, collision);
+	map = new TileMap(tileSize, gridSize, fileName);
 	
 	// read text file
 	std::ifstream infile(fileName + ".txt");
