@@ -6,10 +6,13 @@
 #include <sstream>
 
 Menu::Menu(Menu::Command initialCmd):
-	Scene({800, 600}),
+	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
 	cmdMap({{EDITOR, "Editor"}, {LEVEL, "Level"}, {EXIT, "Exit"}, {OPTIONS, "Options"}, {CREDITS, "Credits"}}),
 	_currentEntry(0),
-	_currentLevel(0)
+	_currentLevel(0),
+	_gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY),
+	_tileSize(gb::pixelSizeX, gb::pixelSizeY),
+	_levelMap(TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(0))
 {
 	// read level number from file
 	std::ifstream indexFile("levels/index.txt");
@@ -31,7 +34,7 @@ Menu::Menu(Menu::Command initialCmd):
 	float angle = M_PI;
 	for (auto& kv: cmdMap)
 	{
-		_entries.push_back(Entry(kv.second, gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"), sf::Color(0x00, 0x00, 0x00), 32, center, angle, radius, kv.first));
+		_entries.push_back(Entry(kv.second, gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"), sf::Color(0xcc, 0x22, 0x22), 42, center, angle, radius, kv.first));
 		angle += 2.0f * M_PI / cmdMap.size();
 	}
 	// set first entry on top
@@ -43,7 +46,6 @@ Menu::Menu(Menu::Command initialCmd):
 		}
 		rotate(true);
 	}
-	//background.setTexture(gb::ressourceManager.getTexture("./img/background.png", true));
 	overlay.setFillColor(sf::Color(0, 0, 0, 200));
 	_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
 }
@@ -93,6 +95,7 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 			{
 				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), true)];
 				_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
+				_levelMap = TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(_currentLevel));
 			}
 			break;
 		case sf::Keyboard::Down:
@@ -100,6 +103,7 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 			{
 				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), false)];
 				_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
+				_levelMap = TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(_currentLevel));
 			}
 			break;
 		case sf::Keyboard::Return:
@@ -140,7 +144,7 @@ Scene* Menu::update(sf::Time deltaT, sf::RenderWindow& window)
 
 void Menu::draw(sf::RenderTarget& target, bool focus)
 {
-	target.draw(background);
+	_levelMap.draw(target);
 	for (auto& entry: _entries)
 	{
 		target.draw(entry.text);

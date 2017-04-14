@@ -10,8 +10,8 @@ class Entity;
 class TileMap
 {
 public:
-	const sf::Vector2u tileSize;			// pixels x pixels
-	const sf::Vector2u gridSize;			// tiles x tiles
+	sf::Vector2u tileSize;			// pixels x pixels
+	sf::Vector2u gridSize;			// tiles x tiles
 	TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const std::string fileName);
 	void switchTile(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Time& duration);
 	void switchRange(const sf::Vector2u& first, const sf::Vector2u& second, const sf::Vector2u& size, const sf::Time& duration);

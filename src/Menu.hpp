@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <cmath>
+#include "TileMap.hpp"
 
 class Menu: public Scene
 {
@@ -24,8 +25,11 @@ public:
 			cmd(cmd)
 		{
 			text.setFont(font);
+			text.setStyle(sf::Text::Bold);
 			text.setCharacterSize(charSize);
 			text.setFillColor(color);
+			text.setOutlineColor(sf::Color(0x00, 0x00, 0x00));
+			text.setOutlineThickness(2.0f);
 			text.setString(name);
 		}
 		void rotate(float angle)
@@ -74,4 +78,6 @@ private:
 	unsigned int _currentEntry;
 	std::vector<unsigned int> _levels;
 	unsigned int _currentLevel;
+	const sf::Vector2u _gridSize, _tileSize;
+	TileMap _levelMap;
 };
