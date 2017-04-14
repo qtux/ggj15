@@ -40,6 +40,11 @@ void Entity::atomicMove(sf::Time deltaTime, const sf::Vector2f& moveDir, const s
 	sf::Vector2i gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
 	sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
 	
+	// determine the initial collider coordinate
+	sf::Vector2i colliderCoord;
+	colliderCoord.x = floorDiv(_collider.left, tileSize.x);
+	colliderCoord.y = floorDiv(_collider.top, tileSize.y);
+	
 	// TODO normalize moveDir?
 	sf::Vector2i offset;
 	offset.x = std::round(moveDir.x * _velocity * deltaTime.asSeconds());
@@ -87,7 +92,7 @@ void Entity::atomicMove(sf::Time deltaTime, const sf::Vector2f& moveDir, const s
 			
 			
 			// detect collision if there is one and the collider intersects with the tile
-			if (map->isSolid(tileCoord) && _collider.intersects(tile, intersection))
+			if (tileCoord != colliderCoord && map->isSolid(tileCoord) && _collider.intersects(tile, intersection))
 			{
 				penetration = intersection.width * signum(tile.left - _collider.left);
 			}
@@ -115,7 +120,7 @@ void Entity::atomicMove(sf::Time deltaTime, const sf::Vector2f& moveDir, const s
 			tileCoord.x = mod(i + floorDiv(_collider.left, tileSize.x), gridSize.x);
 			tileCoord.y = mod(j + floorDiv(_collider.top, tileSize.y), gridSize.y);
 			// detect collision if there is one and the collider intersects with the tile
-			if (map->isSolid(tileCoord) && _collider.intersects(tile, intersection))
+			if (tileCoord != colliderCoord && map->isSolid(tileCoord) && _collider.intersects(tile, intersection))
 			{
 				penetration = intersection.height * signum(tile.top - _collider.top);
 			}
