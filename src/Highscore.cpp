@@ -20,7 +20,7 @@ Highscore::Highscore(unsigned int levelNumber, const sf::Vector2f& size):
 	
 	int charSize = 32;
 	_speech.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
-	_speech.setColor(sf::Color(255,255,255));
+	_speech.setFillColor(sf::Color(255,255,255));
 	_speech.setCharacterSize(charSize);
 	_speech.setStyle(sf::Text::Bold);
 	_speech.setPosition(sf::Vector2f(45,50));

@@ -47,7 +47,7 @@ private:
 			buttonInside.setPosition(x + 0.3, y + 0.3);
 			buttonInside.setSize(sf::Vector2f(0, 0));
 			buttonText.setFont(gb::ressourceManager.getFont("./fonts/LiberationSerif-Regular.ttf"));
-			buttonText.setColor(sf::Color::Black);
+			buttonText.setFillColor(sf::Color::Black);
 			buttonText.setCharacterSize(26);
 			buttonText.setPosition(x + 2, y);
 			buttonText.setString(caption);
@@ -65,7 +65,7 @@ private:
 			buttonInside.setPosition(x, y);
 			buttonInside.setSize(sf::Vector2f(width, height));
 			buttonText.setFont(font);
-			buttonText.setColor(sf::Color::Black);
+			buttonText.setFillColor(sf::Color::Black);
 			buttonText.setCharacterSize(26);
 			buttonText.setPosition(x + 2, y);
 			buttonText.setString(caption);

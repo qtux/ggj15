@@ -90,7 +90,7 @@ void TextBox::draw(sf::RenderTarget &renderTarget)
 		{
 			_speech.setStyle(sf::Text::Regular);
 		}
-		_speech.setColor(sf::Color(currentElement->r, currentElement->g, currentElement->b));
+		_speech.setFillColor(sf::Color(currentElement->r, currentElement->g, currentElement->b));
 		_speech.setString(currentElement->text);
 		renderTarget.draw(_speech);
 	}

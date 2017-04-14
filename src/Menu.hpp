@@ -24,7 +24,7 @@ public:
 		{
 			text.setFont(font);
 			text.setCharacterSize(charSize);
-			text.setColor(color);
+			text.setFillColor(color);
 			text.setString(name);
 		}
 		void rotate(float angle)

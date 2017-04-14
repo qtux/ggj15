@@ -167,12 +167,12 @@ Editor::Editor():
 	
 	// initialize text
 	textOutput.setFont(gb::ressourceManager.getFont("./fonts/LiberationSerif-Regular.ttf"));
-	textOutput.setColor(sf::Color::Black);
+	textOutput.setFillColor(sf::Color::Black);
 	textOutput.setCharacterSize(32);
 	textOutput.setPosition(mapWidth/2, mapHeight + 5); // x = Lateraloffset?
 	textOutput.setString("");
 	infoText.setFont(gb::ressourceManager.getFont("./fonts/LiberationSerif-Regular.ttf"));
-	infoText.setColor(sf::Color::Black);
+	infoText.setFillColor(sf::Color::Black);
 	infoText.setCharacterSize(21);
 	infoText.setPosition(lateralOffset/4, mapHeight + 45);
 	standardHelpText = "Draw/Place Item: Left Click, Pen Size: Scroll, Fill Area: Middle Click, Box: Shift, Load: l, Save: s, Exit: ESC, Toggle Help: h";
