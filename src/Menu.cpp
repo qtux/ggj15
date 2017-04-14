@@ -45,6 +45,7 @@ Menu::Menu(Menu::Command initialCmd):
 	}
 	//background.setTexture(gb::ressourceManager.getTexture("./img/background.png", true));
 	overlay.setFillColor(sf::Color(0, 0, 0, 200));
+	_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
 }
 
 unsigned int Menu::nextPos(unsigned int pos, unsigned int size, bool clockWise)
@@ -91,12 +92,14 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 			if (levelSelected)
 			{
 				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), true)];
+				_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
 			}
 			break;
 		case sf::Keyboard::Down:
 			if (levelSelected)
 			{
 				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), false)];
+				_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
 			}
 			break;
 		case sf::Keyboard::Return:

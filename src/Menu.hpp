@@ -16,6 +16,7 @@ public:
 	struct Entry
 	{
 		Entry(std::string name, const sf::Font& font, sf::Color color, unsigned int charSize, sf::Vector2f center, float angle, float radius, Command cmd):
+			name(name),
 			center(center),
 			rotAngle(0),
 			angle(angle),
@@ -49,7 +50,12 @@ public:
 			sf::Vector2f pos = center + dir * radius - textSize / 2.0f;
 			text.setPosition(pos);
 		}
+		void appendText(std::string appendix)
+		{
+			text.setString(name + appendix);
+		}
 		sf::Text text;
+		const std::string name;
 		const sf::Vector2f center;
 		float rotAngle;
 		float angle;
