@@ -18,12 +18,10 @@ Item CoinItem 20 14
 Item CoinItem 8 20
 Item CoinItem 13 17
 Item TimeItem 2 13
-#Item DecorationItem 14 14 1 0 112 16 16 #crystal
-Item DecorationItem 1 1 1 16 96 16 16 #tiberium
-Item DecorationItem 7 11 1 16 96 16 16 #tiberium
-Item DecorationItem 20 16 1 16 96 16 16 #tiberium
-Item DecorationItem 19 14 1 16 112 16 16 #rock
-#Item DecorationItem 26 11 0 16 80 16 16 #mushroom
+Item DecorationItem 1 1 1 crystal_1
+Item DecorationItem 7 11 1 crystal_1
+Item DecorationItem 20 16 1 crystal_1
+Item DecorationItem 19 14 1 rock_0
 Item TriggerItem 15 16 18 18 18 12
 Item TriggerItem 22 22 24 18 24 12
 Item TriggerItem 28 21 24 18 24 12

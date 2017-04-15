@@ -8,13 +8,15 @@
 #pragma once
 
 #include "../Item.hpp"
+#include <map>
 
 class Level;
 
 class DecorationItem : public Item
 {
 public:
-	DecorationItem(sf::Sprite* sprite, bool blocksPath, int texPosX, int texPosY, int texW, int texH);
+	DecorationItem(sf::Sprite* sprite, bool blocksPath, std::string type);
 	void draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader);
 	void update(sf::Time deltaTime);
+	static const std::map<std::string, sf::Vector2i> typeMap;
 };

@@ -1140,19 +1140,19 @@ void Editor::saveLevel(bool overwrite)
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO1)])
 				{
-					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 80 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " mushroom_0\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO2)])
 				{
-					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 96 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " crystal_1\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO3)])
 				{
-					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 0 112 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " crystal_0\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(DECO4)])
 				{
-					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " 16 112 16 16\n";
+					txtfile << "Item DecorationItem " << x << " " << y << " " << decoItemBlocking[Key(x,y)] << " rock_0\n";
 				}
 				if (itemTiles[x][y]->getTextureRect() == tileItemRects[id.at(SLIME)])
 				{

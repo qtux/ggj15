@@ -10,12 +10,12 @@ Item CoinItem 17 22
 Item CoinItem 27 2
 Item KeyItem 24 5
 #Item TimeItem 3 9
-Item DecorationItem 1 7 1 16 112 16 16
-Item DecorationItem 12 13 0 16 80 16 16
-Item DecorationItem 26 23 0 16 80 16 16
-Item DecorationItem 14 21 1 16 112 16 16
-Item DecorationItem 13 4 1 16 112 16 16
-Item DecorationItem 28 8 0 16 80 16 16
+Item DecorationItem 1 7 1 rock_0
+Item DecorationItem 12 13 0 mushroom_0
+Item DecorationItem 26 23 0 mushroom_0
+Item DecorationItem 14 21 1 rock_0
+Item DecorationItem 13 4 1 rock_0
+Item DecorationItem 28 8 0 mushroom_0
 #Item TriggerItem 9 15 6 6 24 6
 
 Text start 0 0 255 0

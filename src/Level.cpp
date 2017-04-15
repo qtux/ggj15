@@ -108,9 +108,9 @@ bool Level::parseLevel(std::string fileName)
 			if (itemType == "DecorationItem")
 			{
 				bool blocksPath;
-				int texPosX, texPosY, texW, texH;
-				iss >> blocksPath >> texPosX >> texPosY >> texW >> texH;
-				tmpItem = new DecorationItem(sprite, blocksPath, texPosX, texPosY, texW, texH);
+				std::string type;
+				iss >> blocksPath >> type;
+				tmpItem = new DecorationItem(sprite, blocksPath, type);
 			}
 			else if (itemType == "DoorItem")
 			{

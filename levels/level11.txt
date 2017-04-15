@@ -3,9 +3,9 @@
 #
 # Licensed under the MIT license. See the LICENSE file for details.
 
-Item DecorationItem 0 14 1 16 112 16 16
-Item DecorationItem 1 17 0 0 112 16 16
-Item DecorationItem 3 3 1 16 96 16 16
+Item DecorationItem 0 14 1 rock_0
+Item DecorationItem 1 17 0 crystal_0
+Item DecorationItem 3 3 1 crystal_1
 Item CoinItem 4 19
 Item CoinItem 5 14
 Item CoinItem 5 17
@@ -13,20 +13,20 @@ Item CoinItem 5 20
 Item CoinItem 6 20
 Item CoinItem 7 13
 Item Portal 8 4
-Item DecorationItem 8 20 0 16 80 16 16
-Item DecorationItem 9 19 0 16 80 16 16
-Item DecorationItem 11 20 0 16 80 16 16
-Item DecorationItem 12 11 1 16 112 16 16
+Item DecorationItem 8 20 0 mushroom_0
+Item DecorationItem 9 19 0 mushroom_0
+Item DecorationItem 11 20 0 mushroom_0
+Item DecorationItem 12 11 1 rock_0
 Item DoorSwitch 14 5
-Item DecorationItem 14 14 0 16 80 16 16
+Item DecorationItem 14 14 0 mushroom_0
 Item DoorItem 14 16 1
 Item DoorItem 15 19 1
 Item DoorItem 17 13 1
 Start 20 4
-Item DecorationItem 20 17 0 16 80 16 16
+Item DecorationItem 20 17 0 mushroom_0
 Item KeyItem 20 23
-Item DecorationItem 22 23 0 0 112 16 16
-Item DecorationItem 26 5 1 16 112 16 16
+Item DecorationItem 22 23 0 crystal_0
+Item DecorationItem 26 5 1 rock_0
 Item DoorItem 27 12 0
-Item DecorationItem 27 21 1 16 112 16 16
-Item DecorationItem 28 1 1 16 96 16 16
+Item DecorationItem 27 21 1 rock_0
+Item DecorationItem 28 1 1 crystal_1
