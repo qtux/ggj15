@@ -220,7 +220,7 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 	// process events
 	if (keyPressed == sf::Keyboard::Escape)
 	{
-		return new Menu(Menu::Command::LEVEL);
+		return new Menu(Menu::Command::LEVEL, levelNumber);
 	}
 	if (keyPressed == sf::Keyboard::Space)
 	{

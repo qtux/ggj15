@@ -5,14 +5,14 @@
 #include <fstream>
 #include <sstream>
 
-Menu::Menu(Menu::Command initialCmd):
+Menu::Menu(Menu::Command initialCmd, unsigned int currentLevel):
 	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
 	cmdMap({{EDITOR, "Editor"}, {LEVEL, "Level"}, {EXIT, "Exit"}, {OPTIONS, "Options"}, {CREDITS, "Credits"}}),
 	_currentEntry(0),
-	_currentLevel(0),
+	_currentLevel(currentLevel),
 	_gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY),
 	_tileSize(gb::pixelSizeX, gb::pixelSizeY),
-	_levelMap(TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(0))
+	_levelMap(TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(currentLevel)))
 {
 	// read level number from file
 	std::ifstream indexFile("levels/index.txt");
