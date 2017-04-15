@@ -55,7 +55,7 @@ void TextBox::pushText()
 			currentElement->text = (*itIt)->text;
 			itIt = elements.erase(itIt);
 			return;
-		} 
+		}
 	}
 	currentElement = nullptr;
 }
@@ -72,7 +72,7 @@ void TextBox::skip()
 		if ((*itIt)->eventType == currentEvent)
 		{
 			itIt = elements.erase(itIt);
-		} 
+		}
 	}
 	currentElement = nullptr;
 }
