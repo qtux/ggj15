@@ -31,5 +31,5 @@ Item TriggerItem 3 14 0 12 0 6
 Item TriggerItem 9 13 12 12 12 18
 Item TriggerItem 27 5 24 6 0 6
 Item TriggerItem 18 1 6 0 12 0
-Item TriggerItem 1 8 24 6 0 6
+Item TriggerItem 1 9 24 6 0 6
 #Item TriggerTrapItem 16 21 24 6 0 6
