@@ -24,6 +24,8 @@ Highscore::Highscore(unsigned int levelNumber, const sf::Vector2f& size):
 	_speech.setCharacterSize(charSize);
 	_speech.setStyle(sf::Text::Bold);
 	_speech.setPosition(sf::Vector2f(45,50));
+	_speech.setOutlineColor(sf::Color::Black);
+	_speech.setOutlineThickness(1.0f);
 }
 
 void Highscore::draw(sf::RenderTarget& target)

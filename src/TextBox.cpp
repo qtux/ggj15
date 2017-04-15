@@ -9,6 +9,8 @@ TextBox::TextBox():
 	_speech.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
 	_speech.setCharacterSize(charSize);
 	_speech.setPosition(textPos);
+	_speech.setOutlineColor(sf::Color::Black);
+	_speech.setOutlineThickness(1.0f);
 	_textRect.setOutlineColor(sf::Color::White);
 	_textRect.setOutlineThickness(2);
 	_textRect.setPosition(textPos.x - 5, textPos.y - 5);
