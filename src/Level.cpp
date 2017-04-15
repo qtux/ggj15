@@ -101,6 +101,7 @@ bool Level::parseLevel(std::string fileName)
 			Item* tmpItem = nullptr;
 			sf::Sprite* sprite = new sf::Sprite();
 			sprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
+			sprite->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 			
 			if (itemType == "DecorationItem")
 			{
@@ -152,7 +153,6 @@ bool Level::parseLevel(std::string fileName)
 			
 			if (tmpItem != nullptr)
 			{
-				tmpItem->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
 				items[Key(x, y)] = tmpItem;
 			}
 		}

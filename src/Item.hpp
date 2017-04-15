@@ -17,6 +17,7 @@ public:
 	bool collectable;
 	bool blocksPath;
 private:
-	float offset;
+	float phaseOffset;
 	sf::Clock waveClock;
+	sf::Vector2f position;
 };

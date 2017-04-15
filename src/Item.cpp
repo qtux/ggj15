@@ -7,8 +7,9 @@ Item::Item(sf::Sprite* sprite,int x,int y,int w,int h):
 	mySprite(sprite),
 	collectable(true),
 	blocksPath(false),
-	offset(rand()),
-	waveClock(sf::Clock())
+	phaseOffset(rand()),
+	waveClock(sf::Clock()),
+	position(mySprite->getPosition())
 {
 	sprite->setScale(2,2);	// hack to allow 32x32 pixel per tile TODO replace sprites with rectangle and set size to pixelSize
 	mySprite->setTextureRect(sf::IntRect(x, y, w, h));
@@ -25,8 +26,9 @@ void Item::setPosition(float x, float y)
 }
 
 void Item::update (sf::Time deltaTime) {
-	sf::Vector2f vec = getPosition();
-	setPosition(vec.x,vec.y+(std::sin((waveClock.getElapsedTime().asSeconds() * 1000 + offset)/300)+0)*0.05);
+	float t = waveClock.getElapsedTime().asSeconds();
+	float offset = 6.0f * std::sin(0.75f * M_PI * t + phaseOffset);
+	mySprite->setPosition(position.x, position.y + offset);
 }
 
 void Item::draw(sf::RenderTarget &renderTarget, sf::Shader *renderShader)
