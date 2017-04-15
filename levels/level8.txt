@@ -27,8 +27,8 @@ Item DecorationItem 8 5 0 16 80 16 16
 Item TriggerItem 8 1 12 0 0 18
 Item TriggerItem 17 16 18 18 0 18
 
-Text start
+Text start 0 0 255 0
 It's all about islands. And rivers. And Rocks. :D
 
-Text end
+Text end 0 0 255 0
 Congratulations! You have solved the puzzle of the twisting islands!
