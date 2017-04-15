@@ -10,7 +10,7 @@
 #include "../Level.hpp"
 
 TimeItem::TimeItem(sf::Sprite* sprite):
-	Item(sprite,0,48,16,16)
+	Item(sprite, 0, 3*32, 32, 32)
 {}
 
 void TimeItem::applyEffect(Level& level)

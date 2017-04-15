@@ -18,11 +18,11 @@ GUI::GUI(Level* level):
 
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
-	coinSprite->setTextureRect(sf::IntRect(0,80,16,16));
+	coinSprite->setTextureRect(sf::IntRect(0, 5*32, 32, 32));
 
 	keySprite = new sf::Sprite();
 	keySprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
-	keySprite->setTextureRect(sf::IntRect(0,32,16,16));
+	keySprite->setTextureRect(sf::IntRect(0, 2*32, 32, 32));
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();
@@ -118,13 +118,13 @@ void GUI::draw(sf::RenderTarget &renderTarget)
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(gb::gridWidth, i * 16);
+		coinSprite->setPosition(gb::gridWidth, i * 32);
 		renderTarget.draw(*coinSprite);
 	}
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(gb::gridWidth, gb::gridHeight - 42 - i*16);
+		keySprite->setPosition(gb::gridWidth, gb::gridHeight - 58 - i * 32);
 		renderTarget.draw(*keySprite);
 	}
 	renderTarget.draw(levelNumber);

@@ -18,7 +18,6 @@ Item::Item(sf::Sprite* sprite,int x,int y,int w,int h):
 	waveClock(sf::Clock()),
 	position(mySprite->getPosition())
 {
-	sprite->setScale(2,2);	// hack to allow 32x32 pixel per tile TODO replace sprites with rectangle and set size to pixelSize
 	mySprite->setTextureRect(sf::IntRect(x, y, w, h));
 }
 

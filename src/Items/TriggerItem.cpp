@@ -10,7 +10,7 @@
 #include "../Level.hpp"
 
 TriggerItem::TriggerItem(sf::Sprite* sprite, sf::Vector2u switchPos1, sf::Vector2u switchPos2):
-	Item(sprite,0,6*16,16,16),
+	Item(sprite, 0, 6*32, 32, 32),
 	switchPos1(switchPos1),
 	switchPos2(switchPos2)
 {}

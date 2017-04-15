@@ -18,13 +18,13 @@ DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed):
 	collectable = false;
 	if (vertical)
 	{
-		openDoorTextureRect = sf::IntRect(48, 64, 16, 32);
-		closedDoorTextureRect = sf::IntRect(32, 64, 16, 32);
+		openDoorTextureRect = sf::IntRect(3*32, 4*32, 32, 64);
+		closedDoorTextureRect = sf::IntRect(2*32, 4*32, 32, 64);
 	}
 	else
 	{
-		openDoorTextureRect = sf::IntRect(32, 96, 32, 16);
-		closedDoorTextureRect = sf::IntRect(32, 112, 32, 16);
+		openDoorTextureRect = sf::IntRect(2*32, 6*32, 64, 32);
+		closedDoorTextureRect = sf::IntRect(2*32, 7*32, 64, 32);
 	}
 }
 

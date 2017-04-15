@@ -10,7 +10,7 @@
 #include "../Level.hpp"
 
 CoinItem::CoinItem(sf::Sprite* sprite):
-	Item(sprite,0,80,16,16)
+	Item(sprite, 0, 5*32, 32, 32)
 {}
 
 void CoinItem::applyEffect(Level& level)
