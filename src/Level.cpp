@@ -53,12 +53,14 @@ Level::Level(unsigned int levelNumber):
 
 bool Level::parseLevel(std::string fileName)
 {
-	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
-	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
-	map = new TileMap(tileSize, gridSize, fileName);
+	// check text file
+	std::ifstream infile(fileName + ".txt");
+	if (!infile.good())
+	{
+		return false;
+	}
 	
 	// read text file
-	std::ifstream infile(fileName + ".txt");
 	std::string line;
 	while (std::getline(infile, line))
 	{
@@ -182,6 +184,11 @@ bool Level::parseLevel(std::string fileName)
 			textBox->appendText(element);
 		}
 	}
+	
+	// load tilemap
+	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
+	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
+	map = new TileMap(tileSize, gridSize, fileName);
 	return true;
 }
 
@@ -201,7 +208,7 @@ void Level::reset()
 	std::string fileName = std::string(PATH) + "levels/level" + std::to_string(levelNumber);
 	if (!parseLevel(fileName))
 	{
-		// TODO return to menu
+		_state = ABORT;
 	}
 	
 	// trigger text
@@ -246,6 +253,9 @@ Scene* Level::processEvent(sf::Event event, sf::RenderWindow& window)
 
 Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 {
+	if (_state == ABORT) {
+		return new Menu(Menu::Command::LEVEL);
+	}
 	// load highscore once
 	if (_state == LEAVING && !textBox->enabled())
 	{

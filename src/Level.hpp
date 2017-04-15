@@ -40,7 +40,7 @@ public:
 	//std::vector<NPC*> npcs;
 private:
 	bool parseLevel(std::string fileName);
-	enum State {GAME, LEAVING, HIGHSCORE};
+	enum State {GAME, LEAVING, HIGHSCORE, ABORT};
 	State _state;
 	struct Key
 	{
