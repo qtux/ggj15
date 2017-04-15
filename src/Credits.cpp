@@ -23,7 +23,6 @@ Credits::Credits():
 		"\nSPACE key - proceed with dialogue" +
 		"\nS key- skip dialogue" +
 		"\nESC key- return to menu" +
-		"\n(You may use a gamepad instead)" +
 		"\n\n\nDeveloped by:\nAnnemarie Mattmann,\nJohannes Mattmann,\nMatthias Gazzari,\nMoritz Hagemann and\nSebastian Artz."
 	);
 	gb::soundManager.playMusic("sound/backgroundFast.ogg");
