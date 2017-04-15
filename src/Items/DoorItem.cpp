@@ -1,8 +1,8 @@
 /*
- * DoorItem.cpp
- *
- *  Created on: 28.02.2015
- *      Author: johannes
+ * Copyright (c) 2015-2017 Annemarie Mattmann, Johannes Mattmann,
+ * Matthias Gazzari, Moritz Hagemann, Sebastian Artz
+ * 
+ * Licensed under the MIT license. See the LICENSE file for details.
  */
 
 #include "DoorItem.hpp"

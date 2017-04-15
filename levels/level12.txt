@@ -1,3 +1,8 @@
+# Copyright (c) 2015-2017 Annemarie Mattmann, Johannes Mattmann,
+# Matthias Gazzari, Moritz Hagemann, Sebastian Artz
+#
+# Licensed under the MIT license. See the LICENSE file for details.
+
 Item DecorationItem 0 4 1 16 112 16 16
 Item DecorationItem 0 17 1 16 96 16 16
 Item CoinItem 1 14

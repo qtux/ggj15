@@ -1,9 +1,8 @@
 /*
- * Level.hpp
- *
- *  Created on: 24.01.2015
- *      Author: sartz
- * hack hier, ne doch nicht xD
+ * Copyright (c) 2015-2017 Annemarie Mattmann, Johannes Mattmann,
+ * Matthias Gazzari, Moritz Hagemann, Sebastian Artz
+ * 
+ * Licensed under the MIT license. See the LICENSE file for details.
  */
 
 #pragma once
