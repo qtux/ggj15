@@ -91,29 +91,29 @@ Editor::Editor():
 		tileChoices[y] = tileChoice;
 	}
 	
-	
+	// TODO use the predefined items instead of the custom sprites!!!
 	// load item rects
 	// ---- normal items
-	tileItemRects[id.at(START)] = sf::IntRect(0,4*16,32,16);			// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
-	tileItemRects[id.at(GOAL)] = sf::IntRect(0,0,16,32);				// 2.  portal (goal)
-	tileItemRects[id.at(TRIGGER)] = sf::IntRect(0,6*16,16,16);			// 3.  trigger
-	tileItemRects[id.at(COIN)] = sf::IntRect(0,5*16,16,16);				// 4.  coin
-	tileItemRects[id.at(CLOCK)] = sf::IntRect(0,3*16,16,16);			// 5.  clock
-	tileItemRects[id.at(KEY)] = sf::IntRect(0,2*16,16,16);				// 6.  key
-	tileItemRects[id.at(DOOR)] = sf::IntRect(2*16,7*16,32,16);			// 7.  door
-	tileItemRects[id.at(DOORSWITCH)] = sf::IntRect(2*16,3*16,16,16);	// 8.  doorswitch
+	tileItemRects[id.at(START)] = sf::IntRect(6*32, 0, 64, 32);			// 1.  start (einmalig, nicht mehr auswaehlbar wenn schon gesetzt oder wird versetzt <- besser nicht einmalig wegen Mehrspieler? oder zwei Startitems)
+	tileItemRects[id.at(GOAL)] = sf::IntRect(0, 0, 32, 64);				// 2.  portal (goal)
+	tileItemRects[id.at(TRIGGER)] = sf::IntRect(7*32, 2*32, 32, 32);			// 3.  trigger
+	tileItemRects[id.at(COIN)] = sf::IntRect(3*32, 2*32, 32, 32);				// 4.  coin
+	tileItemRects[id.at(CLOCK)] = sf::IntRect(5*32, 2*32, 32, 32);			// 5.  clock
+	tileItemRects[id.at(KEY)] = sf::IntRect(1*32, 2*32, 32, 32);				// 6.  key
+	tileItemRects[id.at(DOOR)] = sf::IntRect(3*32, 15*32, 64, 32);			// 7.  door
+	tileItemRects[id.at(DOORSWITCH)] = sf::IntRect(0*32, 3*32, 32, 32);	// 8.  doorswitch
 	// put in new items here (and adjust numbers above)
 	// ---- deco item border
-	tileItemRects[id.at(DECO1)] = sf::IntRect(16,5*16,16,16);			// 1.(deco)	mushroom
-	tileItemRects[id.at(DECO2)] = sf::IntRect(16,6*16,16,16);			// 2.(deco)	flower
-	tileItemRects[id.at(DECO3)] = sf::IntRect(0,7*16,16,16);			// 3.(deco)	crystals
-	tileItemRects[id.at(DECO4)] = sf::IntRect(16,7*16,16,16);			// 4.(deco)	rock
+	tileItemRects[id.at(DECO1)] = sf::IntRect(1*32, 9*32, 32, 32);			// 1.(deco)	mushroom
+	tileItemRects[id.at(DECO2)] = sf::IntRect(2*32, 8*32, 32, 32);			// 2.(deco)	flower
+	tileItemRects[id.at(DECO3)] = sf::IntRect(0*32, 8*32, 32, 32);			// 3.(deco)	crystals
+	tileItemRects[id.at(DECO4)] = sf::IntRect(0*32, 10*32, 32, 32);			// 4.(deco)	rock
 	// put in new deco items here
 	// ---- npc border
-	tileItemRects[id.at(SLIME)] = sf::IntRect(3*16,0,16,16);			// 1.(npc)	slime
+	tileItemRects[id.at(SLIME)] = sf::IntRect(15*16, 1*32, 32, 32);			// 1.(npc)	slime
 	// put in new npcs here (and adjust numbers above)
 	// ---- non-displayed item border
-	tileItemRects[id.at(VERTICALDOOR)] = sf::IntRect(2*16,4*16,16,32);	// vertical door (not shown)
+	tileItemRects[id.at(VERTICALDOOR)] = sf::IntRect(1*32, 4*32, 32, 64);	// vertical door (not shown)
 	// TODO more
 	// TODO deco dialog with one item shown?	
 	
@@ -140,10 +140,10 @@ Editor::Editor():
 	id[VERTICALDOOR] = 13;*/
 	
 	// large item texture parts
-	bigItemRects[id.at(START)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,4*16,16,16), sf::IntRect(16,4*16,16,16));
-	bigItemRects[id.at(GOAL)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0,0,16,16), sf::IntRect(0,16,16,16));
-	bigItemRects[id.at(DOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,7*16,16,16), sf::IntRect(3*16,7*16,16,16));
-	bigItemRects[id.at(VERTICALDOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(2*16,4*16,16,16), sf::IntRect(2*16,5*16,16,16));
+	bigItemRects[id.at(START)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(6*32, 0, 32, 32), sf::IntRect(7*32, 0, 32, 32));
+	bigItemRects[id.at(GOAL)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(0, 0, 32, 32), sf::IntRect(2*32, 32, 32, 32));
+	bigItemRects[id.at(DOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(3*32, 15*32, 32, 32), sf::IntRect(4*32, 15*32, 32, 32));
+	bigItemRects[id.at(VERTICALDOOR)] = std::pair<sf::IntRect,sf::IntRect>(sf::IntRect(1*32, 4*32, 32, 32), sf::IntRect(1*32, 5*32, 32, 32));
 	
 	// create item choices bar
 	for (int y = 0; y < itemChoices.size(); ++y)

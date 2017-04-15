@@ -33,7 +33,7 @@ void PortalItem::update (sf::Time deltaTime)
 	if (mySprite != nullptr)
 	{
 		int index = (1+std::sin(animClock.getElapsedTime().asSeconds() * 3.14)*2);
-		mySprite->setTextureRect(sf::IntRect(32*index,0,32,64));
+		mySprite->setTextureRect(sf::IntRect(32*index*2,0,32,64));
 	}
 }
 

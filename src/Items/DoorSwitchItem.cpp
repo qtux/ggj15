@@ -16,8 +16,8 @@ DoorSwitchItem::DoorSwitchItem(sf::Sprite* sprite, bool toggled):
 	blocksPath = false;
 	collectable = false;
 	int size = 32;
-	doorSwitchLeftTextureRect = sf::IntRect(2*size, 3*size, size, size);
-	doorSwitchRightTextureRect = sf::IntRect(3*size, 3*size, size, size);
+	doorSwitchLeftTextureRect = sf::IntRect(0*size, 3*size, size, size);
+	doorSwitchRightTextureRect = sf::IntRect(2*size, 3*size, size, size);
 }
 
 // TODO make applyEffect always only once!

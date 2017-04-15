@@ -18,11 +18,11 @@ GUI::GUI(Level* level):
 
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
-	coinSprite->setTextureRect(sf::IntRect(0, 5*32, 32, 32));
+	coinSprite->setTextureRect(sf::IntRect(3*32, 2*32, 32, 32));
 
 	keySprite = new sf::Sprite();
 	keySprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
-	keySprite->setTextureRect(sf::IntRect(0, 2*32, 32, 32));
+	keySprite->setTextureRect(sf::IntRect(1*32, 2*32, 32, 32));
 
 	timeoutClock = sf::Clock();
 	timeoutClock.restart();

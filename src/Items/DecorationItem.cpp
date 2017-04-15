@@ -10,10 +10,10 @@
 #include "../Level.hpp"
 
 const std::map<std::string, sf::Vector2i> DecorationItem::typeMap = {
-		{"crystal_0", sf::Vector2i(0*32, 7*32)},
-		{"crystal_1", sf::Vector2i(1*32, 6*32)},
-		{"mushroom_0", sf::Vector2i(1*32, 5*32)},
-		{"rock_0", sf::Vector2i(1*32, 7*32)},
+		{"crystal_0", sf::Vector2i(0*32, 8*32)},
+		{"crystal_1", sf::Vector2i(2*32, 8*32)},
+		{"mushroom_0", sf::Vector2i(1*32, 9*32)},
+		{"rock_0", sf::Vector2i(0*32, 10*32)},
 	};
 
 DecorationItem::DecorationItem(sf::Sprite* sprite, bool blocksPath_, std::string type):

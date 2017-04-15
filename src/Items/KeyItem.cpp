@@ -10,7 +10,7 @@
 #include "../Level.hpp"
 
 KeyItem::KeyItem(sf::Sprite* sprite):
-	Item(sprite, 0, 2*32, 32, 32)
+	Item(sprite, 1*32, 2*32, 32, 32)
 {}
 
 void KeyItem::applyEffect(Level& level)

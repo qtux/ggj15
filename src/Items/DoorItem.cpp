@@ -16,15 +16,12 @@ DoorItem::DoorItem(sf::Sprite* sprite, bool vertical_, bool closed):
 {
 	blocksPath = closed;
 	collectable = false;
-	if (vertical)
+	openDoorTextureRect = sf::IntRect(3*32, 4*32, 32, 64);
+	closedDoorTextureRect = sf::IntRect(1*32, 4*32, 32, 64);
+	if (!vertical)
 	{
-		openDoorTextureRect = sf::IntRect(3*32, 4*32, 32, 64);
-		closedDoorTextureRect = sf::IntRect(2*32, 4*32, 32, 64);
-	}
-	else
-	{
-		openDoorTextureRect = sf::IntRect(2*32, 6*32, 64, 32);
-		closedDoorTextureRect = sf::IntRect(2*32, 7*32, 64, 32);
+		sprite->setRotation(-90);
+		sprite->move(0, 32);
 	}
 }
 
