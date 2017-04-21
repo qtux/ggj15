@@ -111,7 +111,8 @@ private:
 		float _t;
 	};
 	sf::VertexArray _vertices;
-	const sf::Texture* _texture;
+	const sf::Texture* _baseTileSet, *_texture;
+	std::vector<unsigned int> _mapping;
 	std::vector<bool> _solid;
 	std::vector<std::set<Entity*>> _entities;
 	std::forward_list<TileAnimation> _movingTiles;

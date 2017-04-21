@@ -50,7 +50,6 @@ TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, con
 	}
 	
 	// define the _solid and _texture vectors
-	std::vector<unsigned int> mapping;
 	for (int x = 0; x < gridSize.y; ++x)
 	{
 		for (int y = 0; y < gridSize.x; ++y)
@@ -61,13 +60,12 @@ TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, con
 			colorKey |= color.g << 2*8;
 			colorKey |= color.b << 1*8;
 			colorKey |= color.a << 0*8;
-			mapping.push_back(colorToInt(colorKey));
+			_mapping.push_back(colorToInt(colorKey));
 			_solid.push_back(colorToSolid(colorKey));
 		}
 	}
-	const sf::Texture& baseTileSet = gb::ressourceManager.getTexture(std::string(PATH) + "img/tileset.png", false);
-	sf::Vector2f offset(-6, -6);
-	_texture = &gb::ressourceManager.getTileSet(baseTileSet, mapping, tileSize, gridSize, offset);
+	_baseTileSet = &gb::ressourceManager.getTexture(std::string(PATH) + "img/tileset.png", false);
+	_texture = &gb::ressourceManager.getTileSet(*_baseTileSet, _mapping, tileSize, gridSize, sf::Vector2f(-6, -6));
 	
 	// create quadfs for every tile
 	for (auto i = 0; i < gridSize.x; ++i)
@@ -132,12 +130,9 @@ void TileMap::switchTile(const sf::Vector2u& first, const sf::Vector2u& second, 
 		second
 	);
 	
-	// swap collision data and uv coordinates
+	// swap collision data and tile mapping data
 	std::swap(_solid[firstIndex], _solid[secondIndex]);
-	std::swap(firstQuad[0].texCoords, secondQuad[0].texCoords);
-	std::swap(firstQuad[1].texCoords, secondQuad[1].texCoords);
-	std::swap(firstQuad[2].texCoords, secondQuad[2].texCoords);
-	std::swap(firstQuad[3].texCoords, secondQuad[3].texCoords);
+	std::swap(_mapping[firstIndex], _mapping[secondIndex]);
 	
 	// move both quads out of view TODO to minus infinity?
 	sf::Vector2f outside = sf::Vector2f(-tileSize.x, -tileSize.y);
@@ -182,7 +177,12 @@ void TileMap::update(const sf::Time& deltaT)
 		return false;
 	};
 	// iterate over movingTiles and remove an animation if finished
+	bool wasEmpty = _movingTiles.empty();
 	_movingTiles.remove_if(lambda);
+	// regenerate texture if the last moving tile was removed
+	if (!wasEmpty && _movingTiles.empty()) {
+		_texture = &gb::ressourceManager.getTileSet(*_baseTileSet, _mapping, tileSize, gridSize, sf::Vector2f(-6, -6));
+	}
 }
 
 void TileMap::draw(sf::RenderTarget& target)
