@@ -30,7 +30,7 @@
 //#include "NPC.hpp"
 
 Level::Level(unsigned int levelNumber):
-	Scene({gb::sizeX * gb::largeTileSizeX * gb::pixelSizeX, gb::sizeY * gb::largeTileSizeY * gb::pixelSizeY}),
+	Scene({gb::gridWidth, gb::gridHeight}),
 	levelNumber(levelNumber),
 	restarts(-1),
 	_state(GAME)
@@ -186,7 +186,7 @@ bool Level::parseLevel(std::string fileName)
 	}
 	
 	// load tilemap
-	const sf::Vector2u gridSize(gb::sizeX * gb::largeTileSizeX, gb::sizeY * gb::largeTileSizeY);
+	const sf::Vector2u gridSize(gb::sizeX, gb::sizeY);
 	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
 	map = new TileMap(tileSize, gridSize, fileName);
 	return true;
@@ -373,7 +373,7 @@ void Level::leave()
 // TODO remove this and register switchRange in a scripting language
 void Level::switchLargeTile(const sf::Vector2u& first, const sf::Vector2u& second)
 {
-	map->switchRange(first, second, {gb::largeTileSizeX, gb::largeTileSizeY}, sf::seconds(0.5f));
+	map->switchRange(first, second, {6, 6}, sf::seconds(0.5f));
 }
 
 void Level::toggleDoors()

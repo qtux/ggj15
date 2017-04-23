@@ -32,12 +32,10 @@ namespace gb {
 	// window properties
 	static const int pixelSizeX = 32;
 	static const int pixelSizeY = 32;
-	static const int sizeX = 5;
-	static const int sizeY = 4;
-	static const int largeTileSizeX = 6;
-	static const int largeTileSizeY = 6;
-	static const int gridWidth = largeTileSizeX * sizeX * pixelSizeX;
-	static const int gridHeight = largeTileSizeY * sizeY * pixelSizeY;
+	static const int sizeX = 5*6;
+	static const int sizeY = 4*6;
+	static const int gridWidth = sizeX * pixelSizeX;
+	static const int gridHeight = sizeY * pixelSizeY;
 	static const int screenWidth = 800;
 	static const int screenHeight = 600;
 	
