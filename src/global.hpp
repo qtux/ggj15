@@ -36,8 +36,6 @@ namespace gb {
 	static const int sizeY = 4*6;
 	static const int gridWidth = sizeX * pixelSizeX;
 	static const int gridHeight = sizeY * pixelSizeY;
-	static const int screenWidth = 800;
-	static const int screenHeight = 600;
 	
 	// manager
 	extern SoundManager soundManager;
