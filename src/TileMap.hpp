@@ -110,6 +110,7 @@ private:
 		sf::Vector2f _velocity;
 		float _t;
 	};
+	unsigned int _seed;
 	sf::VertexArray _vertices;
 	const sf::Texture* _baseTileSet, *_texture;
 	std::vector<unsigned int> _mapping;

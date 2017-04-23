@@ -33,8 +33,9 @@ const sf::Texture& RessourceManager::getTexture(std::string fileName, bool repea
 	return _textures[key];
 }
 
-const sf::Texture& RessourceManager::getTileSet(const sf::Texture& baseTileSet, const std::vector<unsigned int>& mapping, const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Vector2f& offset, bool smooth)
+const sf::Texture& RessourceManager::getTileSet(const sf::Texture& baseTileSet, const std::vector<unsigned int>& mapping, const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Vector2f& offset, unsigned int seed, bool smooth)
 {
+	srand(seed);
 	// increase the size of the render texture by one in each direction
 	// this is required to re-center the tiles (the tiles appear to be
 	// shifted due to adding a border on the right and bottom side)

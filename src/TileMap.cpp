@@ -7,6 +7,7 @@
 
 #include "TileMap.hpp"
 #include "global.hpp"
+#include "time.h"
 
 bool colorToSolid(sf::Uint32 color)
 {
@@ -41,6 +42,7 @@ int colorToInt(sf::Uint32 color)
 TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const std::string fileName):
 	tileSize(tileSize),
 	gridSize(gridSize),
+	_seed(time(nullptr)),
 	_vertices(sf::VertexArray(sf::Quads, gridSize.x * gridSize.y * 4))
 {
 	// try to load the image bitmap file
@@ -65,7 +67,7 @@ TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, con
 		}
 	}
 	_baseTileSet = &gb::ressourceManager.getTexture(std::string(PATH) + "img/tileset.png", false);
-	_texture = &gb::ressourceManager.getTileSet(*_baseTileSet, _mapping, tileSize, gridSize, sf::Vector2f(-6, -6));
+	_texture = &gb::ressourceManager.getTileSet(*_baseTileSet, _mapping, tileSize, gridSize, sf::Vector2f(-6, -6), _seed);
 	
 	// create quadfs for every tile
 	for (auto i = 0; i < gridSize.x; ++i)
@@ -181,7 +183,7 @@ void TileMap::update(const sf::Time& deltaT)
 	_movingTiles.remove_if(lambda);
 	// regenerate texture if the last moving tile was removed
 	if (!wasEmpty && _movingTiles.empty()) {
-		_texture = &gb::ressourceManager.getTileSet(*_baseTileSet, _mapping, tileSize, gridSize, sf::Vector2f(-6, -6));
+		_texture = &gb::ressourceManager.getTileSet(*_baseTileSet, _mapping, tileSize, gridSize, sf::Vector2f(-6, -6), _seed);
 	}
 }
 
