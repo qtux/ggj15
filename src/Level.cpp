@@ -324,6 +324,10 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 
 void Level::draw(sf::RenderTarget &renderTarget, bool focus)
 {
+	if (_state == ABORT)
+	{
+		return;
+	}
 	renderTarget.draw(background);
 	renderTarget.draw(_outline);
 	map->draw(renderTarget);
