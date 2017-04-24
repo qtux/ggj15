@@ -16,7 +16,7 @@ class RessourceManager
 public:
 	const sf::Font& getFont(std::string fileName);
 	const sf::Texture& getTexture(std::string fileName, bool repeat, bool smooth = false);
-	const sf::Texture& getTileSet(const sf::Texture& baseTileSet, const std::vector<unsigned int>& mapping, const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const sf::Vector2f& offset, unsigned int seed, bool smooth = false);
+	const sf::Texture& getTileSet(const sf::Texture& baseTileSet, const std::vector<unsigned int>& mapping, const sf::Vector2i& tileSize, const sf::Vector2u& gridSize, const sf::Vector2f& offset, unsigned int seed, bool smooth = false);
 private:
 	struct Key
 	{

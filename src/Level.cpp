@@ -30,7 +30,7 @@
 //#include "NPC.hpp"
 
 Level::Level(unsigned int levelNumber):
-	Scene({gb::gridWidth, gb::gridHeight}),
+	Scene(gb::sceneSize),
 	levelNumber(levelNumber),
 	restarts(-1),
 	_state(GAME)
@@ -74,9 +74,9 @@ bool Level::parseLevel(std::string fileName)
 			iss >> x >> y;
 			// TODO remove static_casts
 			player = new Player(
-				{static_cast<float>(x * gb::pixelSizeX), static_cast<float>(y * gb::pixelSizeY)},
-				{static_cast<float>(gb::pixelSizeX), static_cast<float>(2 * gb::pixelSizeY)},
-				{static_cast<float>(gb::pixelSizeX), static_cast<float>(gb::pixelSizeY)}
+				{static_cast<float>(x * gb::tileSize.x), static_cast<float>(y * gb::tileSize.y)},
+				{static_cast<float>(gb::tileSize.x), static_cast<float>(2 * gb::tileSize.y)},
+				{static_cast<float>(gb::tileSize.x), static_cast<float>(gb::tileSize.y)}
 			);
 		}
 		/*if (first == "NPC")
@@ -91,7 +91,7 @@ bool Level::parseLevel(std::string fileName)
 			sf::Sprite *npcSprite = new sf::Sprite();
 			npcSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/npc.png", false));
 			tmpNPC->mySprite = npcSprite;
-			tmpNPC->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			tmpNPC->setPosition(x * gb::tileSize.x, y * gb::tileSize.y);
 			//std::cout<<"NPC loaded"<<std::endl;
 			npcs.push_back(tmpNPC);
 		}*/
@@ -103,7 +103,7 @@ bool Level::parseLevel(std::string fileName)
 			Item* tmpItem = nullptr;
 			sf::Sprite* sprite = new sf::Sprite();
 			sprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
-			sprite->setPosition(x * gb::pixelSizeX, y * gb::pixelSizeY);
+			sprite->setPosition(x * gb::tileSize.x, y * gb::tileSize.y);
 			
 			if (itemType == "DecorationItem")
 			{
@@ -186,9 +186,7 @@ bool Level::parseLevel(std::string fileName)
 	}
 	
 	// load tilemap
-	const sf::Vector2u gridSize(gb::sizeX, gb::sizeY);
-	const sf::Vector2u tileSize(gb::pixelSizeX, gb::pixelSizeY);
-	map = new TileMap(tileSize, gridSize, fileName);
+	map = new TileMap(gb::tileSize, gb::gridSize, fileName);
 	return true;
 }
 
@@ -197,11 +195,11 @@ void Level::reset()
 	restarts++;
 	_state = GAME;
 	
-	textBox = new TextBox();
-	highscore = new Highscore(levelNumber, sf::Vector2f(gb::gridWidth, gb::gridHeight));
+	textBox = new TextBox(gb::sceneSize);
+	highscore = new Highscore(levelNumber, gb::sceneSize);
 	
 	// load and set timebar
-	gui = new GUI(this);
+	gui = new GUI(this, gb::sceneSize);
 	gui->setTimeout(20);
 	
 	// try to load the file
@@ -297,8 +295,7 @@ Scene* Level::update(sf::Time deltaT, sf::RenderWindow& window)
 		for (auto& kv: items)
 		{
 			const sf::Vector2i tilePos(kv.first.x, kv.first.y);
-			const sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
-			if (player->intersects(tilePos, tileSize))
+			if (player->intersects(tilePos, gb::tileSize))
 			{
 				kv.second->applyEffect(*this);
 				if (kv.second->collectable)

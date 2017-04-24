@@ -39,7 +39,7 @@ int colorToInt(sf::Uint32 color)
 	}
 }
 
-TileMap::TileMap(const sf::Vector2u& tileSize, const sf::Vector2u& gridSize, const std::string fileName):
+TileMap::TileMap(const sf::Vector2i& tileSize, const sf::Vector2u& gridSize, const std::string fileName):
 	tileSize(tileSize),
 	gridSize(gridSize),
 	_seed(time(nullptr)),

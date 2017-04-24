@@ -85,6 +85,5 @@ private:
 	unsigned int _currentEntry;
 	std::vector<unsigned int> _levels;
 	unsigned int _currentLevel;
-	const sf::Vector2u _gridSize, _tileSize;
 	TileMap _levelMap;
 };

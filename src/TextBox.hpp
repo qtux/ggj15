@@ -23,7 +23,7 @@ public:
 		int b;
 		std::string text;
 	};
-	TextBox();
+	TextBox(const sf::Vector2f& sceneSize);
 	void appendText(TextElement* item);
 	void triggerText(std::string eventType);
 	bool enabled();

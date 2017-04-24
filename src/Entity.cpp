@@ -34,8 +34,8 @@ void Entity::atomicMove(sf::Time deltaTime, const sf::Vector2f& moveDir, const s
 	auto floorDiv = [] (int a, int b) {return (a - ((a < 0) ? b - 1 : 0)) / b;};
 	auto signum = [] (int a) {return (0 < a) - (a < 0);};
 	// determine grid and tile size TODO move elsewhere?
-	sf::Vector2i gridSize(gb::sizeX, gb::sizeY);
-	sf::Vector2i tileSize(gb::pixelSizeX, gb::pixelSizeY);
+	sf::Vector2u gridSize = map->gridSize;
+	sf::Vector2i tileSize = map->tileSize;
 	
 	// determine the initial collider coordinate
 	sf::Vector2i colliderCoord;

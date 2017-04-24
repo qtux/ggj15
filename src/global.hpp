@@ -29,13 +29,10 @@
 
 namespace gb {
 	
-	// window properties
-	static const int pixelSizeX = 32;
-	static const int pixelSizeY = 32;
-	static const int sizeX = 5*6;
-	static const int sizeY = 4*6;
-	static const int gridWidth = sizeX * pixelSizeX;
-	static const int gridHeight = sizeY * pixelSizeY;
+	// window properties TODO move them into Level.cpp/Level.hpp
+	static const sf::Vector2i tileSize(32, 32);
+	static const sf::Vector2u gridSize(30, 24);
+	static const sf::Vector2f sceneSize(gridSize.x * tileSize.x, gridSize.y * tileSize.y);
 	
 	// manager
 	extern SoundManager soundManager;

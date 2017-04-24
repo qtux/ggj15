@@ -9,12 +9,13 @@
 #include "global.hpp"
 #include "Level.hpp"
 
-GUI::GUI(Level* level):
-	level(level)
+GUI::GUI(Level* level, const sf::Vector2f& sceneSize):
+	level(level),
+	sceneSize(sceneSize)
 {
 	timeSprite = new sf::Sprite();
 	timeSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/timeBar.png" , true));
-	timeSprite->setPosition(10, gb::gridHeight-20);
+	timeSprite->setPosition(10, sceneSize.y-20);
 
 	coinSprite = new sf::Sprite();
 	coinSprite->setTexture(gb::ressourceManager.getTexture(std::string(PATH) + "img/items.png", false));
@@ -37,7 +38,7 @@ GUI::GUI(Level* level):
 	
 	// level number
 	levelNumber.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
-	levelNumber.setPosition(gb::gridWidth + 2, gb::gridHeight - 32);
+	levelNumber.setPosition(sceneSize.x + 2, sceneSize.y - 32);
 	levelNumber.setString(std::to_string(level->levelNumber));
 }
 void GUI::setTimeout(int seconds)
@@ -107,9 +108,9 @@ void GUI::update (sf::Time deltaTime) {
 		}
 		smallTime = true;
 	}
-	int height = (1 - progress) * (gb::gridHeight);
+	int height = (1 - progress) * (sceneSize.y);
 	timeSprite->setPosition(-15 , height);
-	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, gb::gridHeight - height));
+	timeSprite->setTextureRect(sf::IntRect(0, int(elapsedSeconds) % 45 + 2 * height, 10, sceneSize.y - height));
 }
 
 void GUI::draw(sf::RenderTarget &renderTarget)
@@ -118,13 +119,13 @@ void GUI::draw(sf::RenderTarget &renderTarget)
 	for (int i = 0;i < coins;i++)
 	{
 		//TODO: Draw coins
-		coinSprite->setPosition(gb::gridWidth, i * 32);
+		coinSprite->setPosition(sceneSize.x, i * 32);
 		renderTarget.draw(*coinSprite);
 	}
 	for (int i = 0;i < keys;i++)
 	{
 		//TODO: Draw coins
-		keySprite->setPosition(gb::gridWidth, gb::gridHeight - 58 - i * 32);
+		keySprite->setPosition(sceneSize.x, sceneSize.y - 58 - i * 32);
 		renderTarget.draw(*keySprite);
 	}
 	renderTarget.draw(levelNumber);

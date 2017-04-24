@@ -13,7 +13,7 @@ class Level;
 class GUI
 {
 public:
-	GUI(Level* level);
+	GUI(Level* level, const sf::Vector2f& sceneSize);
 	void setTimeout(int seconds);
 	void applyTimeBufff(float progress);
 	void update(sf::Time deltaTime);
@@ -41,4 +41,5 @@ private:
 	int keys;
 	Level* level;
 	sf::Text levelNumber;
+	const sf::Vector2f sceneSize;
 };

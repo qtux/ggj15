@@ -13,13 +13,11 @@
 #include <sstream>
 
 Menu::Menu(Menu::Command initialCmd, unsigned int currentLevel):
-	Scene({gb::gridWidth, gb::gridHeight}),
+	Scene(gb::sceneSize),
 	cmdMap({{EDITOR, "Editor"}, {LEVEL, "Level"}, {EXIT, "Exit"}, {OPTIONS, "Options"}, {CREDITS, "Credits"}}),
 	_currentEntry(0),
 	_currentLevel(currentLevel),
-	_gridSize(gb::sizeX, gb::sizeY),
-	_tileSize(gb::pixelSizeX, gb::pixelSizeY),
-	_levelMap(TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(currentLevel)))
+	_levelMap(TileMap(gb::tileSize, gb::gridSize, std::string(PATH) + "levels/level" + std::to_string(currentLevel)))
 {
 	// read level number from file
 	std::ifstream indexFile("levels/index.txt");
@@ -102,7 +100,7 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 			{
 				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), true)];
 				_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
-				_levelMap = TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(_currentLevel));
+				_levelMap = TileMap(gb::tileSize, gb::gridSize, std::string(PATH) + "levels/level" + std::to_string(_currentLevel));
 			}
 			break;
 		case sf::Keyboard::Down:
@@ -110,7 +108,7 @@ Scene* Menu::processEvent(sf::Event event, sf::RenderWindow& window)
 			{
 				_currentLevel = _levels[nextPos(_currentLevel, _levels.size(), false)];
 				_entries[LEVEL].appendText(" "  + std::to_string(_currentLevel));
-				_levelMap = TileMap(_tileSize, _gridSize, std::string(PATH) + "levels/level" + std::to_string(_currentLevel));
+				_levelMap = TileMap(gb::tileSize, gb::gridSize, std::string(PATH) + "levels/level" + std::to_string(_currentLevel));
 			}
 			break;
 		case sf::Keyboard::Return:

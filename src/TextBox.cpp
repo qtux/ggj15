@@ -8,10 +8,10 @@
 #include "TextBox.hpp"
 #include "global.hpp"
 
-TextBox::TextBox():
+TextBox::TextBox(const sf::Vector2f& sceneSize):
 	currentElement(nullptr)
 {
-	int charSize = gb::pixelSizeY;
+	int charSize = 32;
 	sf::Vector2f textPos(32.0f, 32.0f);
 	_speech.setFont(gb::ressourceManager.getFont(std::string(PATH) + "fonts/LiberationSerif-Regular.ttf"));
 	_speech.setCharacterSize(charSize);
@@ -21,7 +21,7 @@ TextBox::TextBox():
 	_textRect.setOutlineColor(sf::Color::White);
 	_textRect.setOutlineThickness(2);
 	_textRect.setPosition(textPos.x - 5, textPos.y - 5);
-	_textRect.setSize(sf::Vector2f(gb::gridWidth - 2* textPos.x + 10, 2 * charSize + 30));
+	_textRect.setSize(sf::Vector2f(sceneSize.x - 2 * textPos.x + 10, 2 * charSize + 30));
 	_textRect.setFillColor(sf::Color(0, 0, 250, 50));
 }
 
